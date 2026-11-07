@@ -25,6 +25,8 @@ build/
 # (Must ignore docs/* rather than docs/ — git cannot re-include inside an excluded directory.)
 docs/*
 !docs/reference/
+# Digimon fork: design and research notes for the Digimon companion live here.
+!docs/digimon/
 
 # Agent worktrees / local state
 .claude/*

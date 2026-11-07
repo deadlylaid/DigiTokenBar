@@ -1,366 +1,116 @@
 <div align="center">
 
-<img src="assets/icon.png" width="128" alt="PokeTokenBar icon">
+# DigiTokenBar
 
-# PokeTokenBar
-
-**Your AI coding tokens, hatched into Pokémon — right in your menu bar.**
-
-[![Release](https://img.shields.io/github/v/release/chattymin/PokeTokenBar?color=444d56&label=release)](https://github.com/chattymin/PokeTokenBar/releases)
-[![macOS](https://img.shields.io/badge/macOS-14%2B-0969da)](https://www.apple.com/macos/)
-[![Swift](https://img.shields.io/badge/Swift-6-f05138)](https://swift.org)
-[![Homebrew](https://img.shields.io/badge/Homebrew-cask-8957e5)](#homebrew)
-[![License](https://img.shields.io/badge/license-MIT-3fb950)](LICENSE)
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%99%A5-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/chattymin)
-
-<a href="https://trendshift.io/repositories/84522?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-84522" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/84522" alt="chattymin%2FPokeTokenBar | Trendshift" width="250" height="55"/></a>
-<a href="https://trendshift.io/repositories/84522?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-84522" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/84522/daily?language=Swift" alt="chattymin%2FPokeTokenBar | Trendshift" width="250" height="55"/></a>
+**Raise a Digimon with your AI coding tokens, right in your macOS menu bar.**
 
 **English** · [한국어](README.ko.md) · [日本語](README.ja.md)
 
 </div>
 
-PokeTokenBar turns the AI coding tokens you're already burning — Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code & Devin CLI — into a growing **Pokémon companion** in your macOS menu bar. Spend tokens, hatch an egg, evolve it through its real evolution line, graduate it into your Pokédex, and start again. Underneath the companion it's a precise usage tracker — today's spend, cost, and official 5-hour / weekly limits, read straight from your local logs.
+> **Status:** a personal fork of [PokeTokenBar](https://github.com/chattymin/PokeTokenBar), in development.
+> There is no release yet: build it from source (below).
 
-> Token usage is read directly from local Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code, and Devin CLI data (`totalTokens` = input + output + cache, local date) — no external CLI needed. Unofficial, non-commercial Pokémon fan project — see [License & disclaimer](#license--disclaimer).
-
-## Why
-
-- **The usage tracker you actually enjoy opening.** Your spend raises a Pokémon that hatches, evolves, graduates, and fills a Pokédex — and every shiny is a reason to check back.
-- See today's token spend & cost at a glance — no dashboard, no browser tab.
-- Track official provider limits and reset countdowns, including OpenCode Go allowances and Grok CLI subscription credits; a burn-rate forecast helps with supported 5-hour windows.
-
-<div align="center">
-<img src="assets/screenshot-home.png" width="420" alt="Popover home — companion, today's tokens, daily chart">
-</div>
+DigiTokenBar reads the AI coding tokens you already use (Claude Code, Codex, Gemini CLI and the
+other tools below) from local logs and turns them into experience for a Digimon companion.
+Underneath, it is PokeTokenBar's usage tracker: today's tokens, cost, and official 5-hour / weekly
+limits.
 
 ## How it works
 
-1. 🥚 **Code as usual.** The tokens you burn in Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code, or Devin CLI incubate an egg — nothing extra to run.
-2. 🐣 **Hatch.** Eggs hatch into Pokémon with real evolution lines from [PokéAPI](https://pokeapi.co/) — any Gen 1–5 line (329 possible starts), weighted by the official capture rate: commons hatch often, a legendary is a 1-in-129 event. It appears in your **Pokédex** immediately while you raise it. Every hatch rolls one of 25 natures — and once in a rare while, the egg hatches **✨ Shiny**.
-3. ⚡ **Evolve.** Keep coding and it grows through its actual evolution tree (1/2/3 stages, branching), with a little flash celebration at each step.
-4. 🎓 **Graduate & collect.** Final form + threshold permanently archives it in your **Pokédex** — rarer takes longer (≈3 days common → ≈24 days legendary at heavy use) — and a fresh egg arrives.
-5. 🍬 **Max out, get a candy.** Fill a 5-hour or weekly usage limit and you earn **Rare Candy** — spend it from the **Bag** to grow your current Pokémon.
-6. 🛒 **Spend at the Shop.** Every token you've used is spendable currency — buy **Rare Candy**, a **Mint** that re-rolls your Pokémon's nature, a **Shiny Charm** that permanently raises your shiny odds, or an egg to send off your current companion and start over. Eggs come in three grades: a plain **Pokémon Egg**, an **Uncommon Egg** guaranteed to hatch Uncommon or better, and a **Rare Egg** guaranteed to hatch Rare or better.
+1. **Pick an egg.** Three eggs are drawn at random from the lines you have not raised yet. A line you
+   have raised to graduation can always be picked again. Without a pick, one is chosen after a day.
+2. **Code as usual.** 200,000 tokens make 1 experience point, up to 150 a day. A whole life, from
+   egg to graduation, takes at least about a week.
+3. **Evolve.** Each line is a Vital Bracelet card: 40 lines and 614 Digimon, Baby I to Ultimate.
+   Growth follows the card's own routes. The card's requirements open them: Vital Values count your
+   coding hours a day, trophies your good days (coding, staying within limits, using two tools), and
+   battles and win ratio your battles.
+   Among the open routes, how you code picks one: steady daytime use leans Vaccine, many tools over
+   many days Data, more late nights or full limits Virus. With nothing met, it takes the easy route.
+   A few forms are hidden (catch 20 bugs, or fill 3 usage limits).
+4. **Jogress with a friend.** When a stage that has a Jogress on its card is full, your Digimon waits
+   up to 24 hours for a friend's code (the same code as for battles). If the friend's Digimon fits a
+   partner the card names ("a Virus Perfect", or "Angemon"), they merge, and the scene shows the
+   friend's Digimon walking in. Without a code, or with "Evolve without it", it grows as usual; EXP
+   earned while waiting carries over. Named Ultimate merges (War Greymon + Metal Garurumon = Omegamon,
+   and ten more) also need the partner raised before.
+5. **Graduate.** A full Ultimate graduates into your dex, and a new egg arrives.
 
-## Tour
+## Features
 
-<table>
-<tr>
-<td width="45%" align="center"><img src="assets/floating-pet.gif" width="340" alt="Floating desktop pet with a hover callout and right-click menu"></td>
-<td width="55%" valign="middle">
-<h3>🐾 Let it live on your desktop</h3>
-Move your companion out of the menu bar and onto the desktop, at any size from 48 to 384px. Hover for today's usage, right-click for a menu, and drag it wherever you like. Click an egg to pray or a hatched Pokémon to open the popover; <b>right-click → Open</b> always opens it. Limit alerts can appear as speech bubbles.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-pet-interactions.png" width="300" alt="Separate native pet samples for prayer, petting, sulking, and agent waiting"><br><small>Native UI components · sample states</small></td>
-<td width="55%" valign="middle">
-<h3>A companion with a little personality</h3>
-Move the pointer over your floating pet to pet it, click an egg to pray, and watch for small reactions, sulking, and occasional event bubbles. These interactions are cosmetic: praying does not change hatch odds or growth rewards. Every 30 prayers, a quip can accompany a usage refresh. Agent activity can add working, waiting, and done reactions after <a href="#agent-activity">manual setup</a>.
-</td>
-</tr>
-<tr>
-<td width="55%" valign="middle">
-<h3>In your menu bar</h3>
-An animated Gen-V sprite lives next to today's total tokens (compact, e.g. <code>200.7M</code>). Add today's cost (<code>$</code>) or official limit <code>%</code> — or turn everything off for a character-only bar.
-Enable <b>Settings → Show in menu bar → Pokémon growth %</b> to see your egg's hatch progress or your companion's progress toward its next evolution or graduation. It updates immediately after Rare Candy use and follows the companion being raised even if a representative Pokémon is pinned.
-</td>
-<td width="45%" align="center"><img src="assets/menubar.gif" width="240" alt="Menu bar"><br><img src="assets/screenshot-menu-growth.png" width="240" alt="Menu bar with Pokémon growth progress"></td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/shiny-banner.gif" width="340" alt="Normal vs shiny"></td>
-<td width="55%" valign="middle">
-<h3>✨ Once in a rare while — Shiny</h3>
-Shiny hatches keep their distinct colors through every evolution — menu bar, home card, evolution line. In the Pokédex, species you own shiny show their shiny colors and a ✨ marker; the detail page lets you switch between owned normal and shiny appearances. Unown keeps its A icon in the grid, with letter and color choices in its details. A dedicated notification makes sure you don't miss the moment.
-</td>
-</tr>
-<tr>
-<td width="55%" valign="middle">
-<h3>A Pokédex worth filling</h3>
-The <b>Pokédex</b> folds every species you've owned into one cell — 16 per page in a 4×4 grid. Search by name or number, filter by rarity or shiny appearance, and change the sort order. Turn pages with the scroll wheel or trackpad, or use the larger arrow hit areas. Click a collected Pokémon on Home, its evolution line, or the <b>Catch log</b> to open its details; Back returns to its Pokédex page or the log row you opened. The log keeps each individual's full evolution line, rarity, nature, and capture date.
-</td>
-<td width="45%" align="center"><img src="assets/screenshot-collection-pokedex.png" width="300" alt="Pokédex — one cell per species"><br><br><img src="assets/screenshot-collection-catchlog.png" width="300" alt="Catch log — one row per Pokémon raised"></td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-regional-dex.png" width="300" alt="Native regional collection counts and completion-badge component samples"><br><small>Native UI components · sample states</small></td>
-<td width="55%" valign="middle">
-<h3>Complete a region, keep a badge</h3>
-Filter the Pokédex to <b>Kanto, Johto, Hoenn, Sinnoh, or Unova</b> and check each region's owned and shiny counts. Collect completion badges for a region, its shiny set, all 28 Unown forms, or the national collection of 649 species. Badges record collection milestones and do not change hatch odds or growth.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-pokemon-forms.png" width="300" alt="Rotom form picker and form-specific individuals"><br><small>Production UI rendered locally with sample Pokémon.</small></td>
-<td width="55%" valign="middle">
-<h3>Collect more than one look</h3>
-Collect Rotom appliances, Shaymin's Land and Sky Formes, Deerling seasons, Unown letters, and other supported Gen 1–5 forms. The Pokédex shows your form count and the individuals in each form. Choose an owned form as your menu-bar and floating-pet representative. An East Sea Shellos keeps its appearance when it becomes Gastrodon, and forms stay in saves and exports. Types, stats, abilities, and moves use the default form’s data.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-provider-settings.png" width="300" alt="Provider switches in Settings with individual tools enabled and disabled"></td>
-<td width="55%" valign="middle">
-<h3>Tune it your way</h3>
-Choose which tools to track in <b>Settings → Tracked providers</b>. Turning one off stops reading that provider and excludes it from tabs, totals, Pokémon growth, and official-limit requests. Configure menu-bar items, refresh interval (1–15 min or manual), launch at login, and usage or companion alerts. Full <b>KO / EN / JA / ES / FR / PT / DE / RU</b> UI; Pokémon names and metadata fall back to English when a translation is unavailable.
-</td>
-</tr>
-<tr>
-<td width="55%" valign="middle">
-<h3>🍬 Fill a limit, earn a Rare Candy</h3>
-Max out a 5-hour or weekly usage limit and you're handed a <b>Rare Candy</b> — one per 5-hour cap, five per weekly. Spend it from the new <b>Bag</b> tab to grow your current Pokémon: the moment you're rate-limited becomes the moment you level up.
-</td>
-<td width="45%" align="center"><img src="assets/screenshot-bag.png" width="300" alt="Rare Candy and Mint in the Bag"></td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-shop.png" width="300" alt="Token Shop — Mint, Rare Candy, Pokémon Egg, Uncommon Egg, Shiny Charm, Rare Egg"></td>
-<td width="55%" valign="middle">
-<h3>🛒 A shop that runs on your usage</h3>
-The tokens you've already used are your currency. Buy several consumables at once with a quantity selector and total-price preview: <b>Rare Candy</b> grows your Pokémon, and a <b>Mint</b> re-rolls its nature. A <b>Shiny Charm</b> permanently raises your shiny hatch odds. Eggs send off your companion and start over: a plain <b>Pokémon Egg</b>, an <b>Uncommon Egg</b> guaranteed to hatch Uncommon or better, or a <b>Rare Egg</b> guaranteed to hatch Rare or better. Legendaries stay in both graded pools. An empty Bag links straight to the Shop.
-</td>
-</tr>
-<tr>
-<td width="55%" valign="middle">
-<h3>📊 Official limits, now for Antigravity too</h3>
-Antigravity 2.0 and the IDE report real quota, not an estimate. Gemini models and Claude &amp; GPT models each get their own <b>5-hour</b> and <b>weekly</b> buckets with reset countdowns, alongside Claude Code and Codex. Background reads use the token file and can refresh OAuth credentials automatically; a manual refresh may still access the Keychain.
-</td>
-<td width="45%" align="center"><img src="assets/screenshot-antigravity-limits.png" width="300" alt="Antigravity official limits — 5-hour and weekly buckets per model group"></td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-scan-folders.png" width="300" alt="Additional scan folders in Settings → Advanced"></td>
-<td width="55%" valign="middle">
-<h3>📁 Logs somewhere unusual? Point at them</h3>
-If a tool keeps its sessions outside the built-in paths, add your own roots under <b>Settings → Advanced</b> — comma or newline separated, <code>*</code> wildcards, with a live count of how many extra folders currently match. Every provider keeps its own list, so one tool's folders are never handed to another tool's parser, and your custom roots are added to the built-in ones rather than replacing them.
-</td>
-</tr>
-<tr>
-<td width="55%" valign="middle">
-<h3>🔑 Official limits without the Keychain</h3>
-If the cached limit token expires, official Claude limits used to freeze until a refresh — and that press could raise a Keychain password prompt. Paste a <b>claude.ai session key</b> under <b>Settings → Advanced</b> instead: limits then come straight from claude.ai with no Keychain access at all, auto-polling keeps them fresh, and the key is validated the moment you save it.
-</td>
-<td width="45%" align="center"><img src="assets/screenshot-session-key.png" width="300" alt="claude.ai session key in Settings → Advanced"></td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-model-breakdown.png" width="300" alt="Per-model token breakdown for Pi"></td>
-<td width="55%" valign="middle">
-<h3>🧮 One session log, several models</h3>
-Pi can route more than one model through a single session log. Usage is now attributed to the <b>real model id</b> instead of a flat "pi", and when a day spans several models the popover breaks today's tokens down per model, biggest first.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-pokemon-profile.png" width="300" alt="Every Pokémon has its own profile"></td>
-<td width="55%" valign="middle">
-<h3>Every Pokémon has its own profile</h3>
-Open a species in the <b>Pokédex</b> to inspect each individual: level, gender, nature, ability, IVs, calculated stats, and learned moves. Species descriptions, abilities, and moves use your selected language, with English as the fallback when PokéAPI has no translation.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-difficulty.png" width="300" alt="Choose your growth pace"></td>
-<td width="55%" valign="middle">
-<h3>Choose your growth pace</h3>
-Set growth thresholds and shop prices independently from <b>10% to 200%</b>, with Easy/Hard and Cheap/Expensive labels at the slider ends. Dragging only edits a draft; press <b>Save</b> to apply it. Changing growth difficulty preserves your current stage progress instead of triggering an evolution. A hatch from an evolution line you have already graduated grows <b>2× faster</b>. Hover the hatch or growth bar on Home to see used tokens, the target, and progress as a percentage.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-activity-views.png" width="300" alt="Activity views with selectable bar periods and a 16-week grid"></td>
-<td width="55%" valign="middle">
-<h3>Choose your activity view</h3>
-Choose <b>7, 14, or 21 days, or this month</b> from the bar-chart title. Bars stack by provider when several tools are used; hover for daily totals and the per-tool breakdown. <b>Click the chart</b> to switch to a <b>16-week activity grid</b>, which keeps its own range regardless of the selected bar period. History already stored locally and the labeled recap shortcut stay available on quiet days; a flame badge marks a usage streak of at least two days.
-</td>
-</tr>
-<tr>
-<td width="45%" align="center"><img src="assets/screenshot-quota-alignment.png" width="300" alt="Limits you can scan at a glance"></td>
-<td width="55%" valign="middle">
-<h3>Limits you can scan at a glance</h3>
-Reset countdowns include the clock time, and the colored percentage stays aligned at the right edge across all quota rows. Choose used or remaining in Settings: both the number and the bar follow that choice.
-</td>
-</tr>
-</table>
+- **Scene:** the Digimon walks, sleeps and attacks bugs with its signature move. Big bugs take
+  three hits. It looks sick while a usage limit is full and sleepy late at night.
+- **Dex:** every line by stage. Digimon you have raised are shown; the rest are silhouettes, with
+  hints for hidden forms and for the Jogress partners of merge-only forms.
+- **Desktop pet and menu bar:** the Digimon on your desktop (Settings → Desktop pet) and in the
+  menu bar, with its growth %. Settings → Digimon → Stay in place keeps it in the middle instead of
+  walking around.
+- **Agent activity:** the desktop pet reacts to Claude Code: dots while it works, a bubble when it
+  needs you, a cheer when it is done. Set it up once with `sh tools/digimon/install-agent-hooks.sh`
+  (it backs up `~/.claude/settings.json` and keeps your existing hooks). Any other agent can open
+  `digitokenbar://agent?state=<working|waiting|done|idle>&label=<name>`.
+- **Battles:** battle other DigiTokenBar users with battle codes. Copy your code, send it in any
+  chat, and paste theirs: both apps play the same battle, no server needed. Five practice battles a
+  day against wild Digimon count too. Battles give no EXP; they fill the card's battle and
+  win-ratio requirements. Friends use the same code for a Jogress. The code holds only a random player
+  number and your Digimon.
+- **Today:** every day has a fortune (clear, bug swarm, fighting spirit, busy day, meteor shower), and
+  visiting Digimon drop by. Most come from your dex; one in a hundred is a Digimon you have never seen,
+  which then stays in the dex as "met". Visitors add surprise points. Each day you code adds a stamp;
+  seven bring a very rare Digimon you have never seen, at once. Luck does not grow with usage and cannot
+  be rerolled.
+- **Saves:** automatic backups (at launch and every 12 hours, newest 10 kept), and export / import to
+  move your Digimon to another Mac.
+- **Fast growth (testing):** a tenth of the experience per stage, to try the app out.
 
-## Also in the box
-
-- **Menu-bar shortcuts** — right-click or Control-click for today's summary, Refresh, Pokédex, Settings, floating-pet visibility, and Quit.
-- **Low Power Mode** — menu-bar animation continues at Power saver quality.
-- **Reconnect refresh** — usage and limits refresh when the network comes back.
-- **Representative Pokémon** — pin any owned Pokédex species to the menu bar and optional floating pet, independently of the companion you're raising. While pinned, the menu bar stops following egg, hatch, and evolution changes; raising progress remains visible on Home.
-- **Animation quality** — pick how smoothly the menu bar sprite and the floating pet animate (Power saver / Balanced / Smooth). Both always-visible surfaces share the setting. Power saver is the default and keeps the frame rate the app used before this setting existed; Balanced and Smooth trade battery for smoothness (measured idle CPU ~1.8% and ~5.1%).
-- **Interactive floating pet** — hover for today's usage, pet it with the pointer, click an egg to pray or a hatched Pokémon to open the popover, and right-click for the menu. Alerts and small events appear as bubbles.
-- **Per-service tabs** — when two or more of Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code, and Devin CLI are detected, compact tabs switch between them; today's total stays combined.
-- **Official limits** — Claude, Codex, and Antigravity limits with reset countdowns; OpenCode Go 5-hour / weekly / monthly allowances; and Grok CLI weekly subscription credits. Available limits depend on the provider login or subscription.
-- **Usage streak** — a flame beside the recap shortcut shows consecutive usage days, from two days onward. It stays gray until today's first usage extends the streak.
-- **Sprite recovery** — failed animated-sprite downloads retry automatically while the fallback remains visible.
-- **Additional scan folders** — per-provider extra scan roots for logs kept outside the built-in paths (Settings → Advanced).
-- **Several Claude accounts** — Claude Code logins kept in their own config folder (`CLAUDE_CONFIG_DIR`) each get a tab under the official limits, with their own gauges, Rare Candy, alerts, and today/month tokens. `~/.claude-*` folders and an exported `CLAUDE_CONFIG_DIR` are found automatically; add others in Settings → Advanced. The menu bar percentage, companion mood, and forecast follow the account you used last (Settings → General → Tracked Claude account). Each account can take its own claude.ai session key (Settings → Advanced), so its limits keep refreshing without the Keychain.
-- **Burn-rate forecast** — projects when the current 5h window hits 100%.
-- **In-app updates** — one-click update check; current version shown in Settings.
-- **Usage recap** — a Pokédex-style recap of any week, month, or year (total, meters, comparison, best day, best streak, graduations). Hover a meter for its date and full token count, and jump back to This week / This month / This year in one click. History is kept locally for this year and the last.
-
-- **Local save backups** — automatic snapshots and corruption recovery, with a restore screen in Settings. Backup history starts collapsed; expand it to browse snapshots. **Create snapshot** stays available outside the list.
-- **Pokémon forms** — collect Gen 1–5 alternate forms, inspect form-specific individuals, and pin an owned form to the menu bar and floating pet. An individual's form follows evolution and stays in saves and exports; existing Unown letter saves remain readable. See the [form catalog](docs/reference/pokemon-forms.md).
-- **Bulk Rare Candy** — use several candies at once and preview the growth before spending.
-- **Quota pace** — gauge markers show the elapsed share of a limit window; six color tiers indicate usage pace, and menu-bar limit percentages use the same colors.
-
-<img src="assets/screenshot-usage-recap.png" width="360" alt="Usage recap for a selected period">
-
-<small>The Home, Settings, form, Shop, Bag, difficulty, activity, regional Pokédex, pet-interaction, and recap images above are local renders of the production UI with sample data. The regional and pet boards combine separate native UI component renders. Animated GIFs are illustrative demonstrations and may show an earlier layout.</small>
-
-## Agent activity
-
-The floating pet can follow any AI coding agent: it bobs while the agent works, asks for you in a speech bubble when the agent needs input, and runs to your cursor when the agent finishes. The agent reports through a URL:
-
-Setup is manual and optional: PokeTokenBar does not install agent hooks or edit your agent settings. Enable the floating pet, leave **React to agent activity** on, and add the appropriate hook below.
-
-```text
-poketokenbar://agent?state=<working|waiting|done|idle>[&label=<name>][&message=<text>]
-```
-
-- `label` and `message` are optional, URL-encoded, and shown as plain text. `label` (up to 24 characters) names the agent so several can run at once, each with its own state. Without a label, all events belong to one agent.
-- `working` falls back to idle after 10 minutes without news. `done` shows for about 6 seconds, then the pet walks home. `waiting` stays until that agent's next event or until you click the pet.
-- With several agents, a question comes first: the bubble shows the latest waiting agent and how many more are waiting, and the pet keeps bobbing while any agent works. A `done` shows its label for a few seconds, then the earlier bubble comes back. Clicking the pet clears every question, then prays when an egg is shown or opens the popover for a hatched Pokémon. Use right-click → Open to open it while showing an egg. Up to 8 labels are tracked.
-- A limit alert bubble takes priority. With Reduce Motion or Low Power Mode on, the pet shows bubbles without moving.
-- Nothing happens while the floating pet is off. Turn the reactions off in **Settings → Floating Pet → React to agent activity**.
-
-**Claude Code** — save this as `~/.claude/poketokenbar.sh`. It labels each session with its project folder name, so two sessions in the same folder share one label. `pgrep` keeps a hook from relaunching the app after you quit it, and `open -g` keeps your terminal focused.
-
-```sh
-#!/bin/sh
-# PokeTokenBar agent hook: sh ~/.claude/poketokenbar.sh <working|waiting|done>
-# Labels the agent with the project folder name, percent-encoded (perl ships with macOS).
-pgrep -xq PokeTokenBar || exit 0
-label=$(printf %s "${CLAUDE_PROJECT_DIR##*/}" | perl -pe 's/([^A-Za-z0-9._~-])/sprintf("%%%02X", ord $1)/ge')
-open -g "poketokenbar://agent?state=$1&label=$label" >/dev/null 2>&1
-exit 0
-```
-
-Then add the hooks to `~/.claude/settings.json`. The `Notification` matcher skips Claude Code's idle reminder, which would otherwise leave a "waiting" bubble after every turn. `Stop` does not fire when you interrupt a turn (Esc), so the pet keeps working until the 10-minute timeout or an `idle` event.
-
-```json
-{
-  "hooks": {
-    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "sh ~/.claude/poketokenbar.sh working || true" }] }],
-    "PostToolUse": [{ "matcher": "*", "hooks": [{ "type": "command", "command": "sh ~/.claude/poketokenbar.sh working || true" }] }],
-    "PreToolUse": [{ "matcher": "AskUserQuestion", "hooks": [{ "type": "command", "command": "sh ~/.claude/poketokenbar.sh waiting || true" }] }],
-    "Notification": [{ "matcher": "permission_prompt|elicitation_dialog", "hooks": [{ "type": "command", "command": "sh ~/.claude/poketokenbar.sh waiting || true" }] }],
-    "Stop": [{ "hooks": [{ "type": "command", "command": "sh ~/.claude/poketokenbar.sh done || true" }] }]
-  }
-}
-```
-
-**Other agents** — open the URL from any hook or script, e.g. `pgrep -xq PokeTokenBar && open -g 'poketokenbar://agent?state=done&label=my-app&message=Build%20passed' >/dev/null 2>&1 || true`.
+The Digimon screens are in Korean and English.
 
 ## Works with
 
-| Tool | Tracked | Official limits |
-|---|---|---|
-| **Claude Code** | today · 5h block · week · month | ✅ 5h / weekly |
-| **Codex** | today · week · month | ✅ 5h / weekly |
-| **Gemini CLI** | today · week · month | — |
-| **Antigravity** | today · 5h block · week · month | ✅ 5h / weekly |
-| **OpenCode** | today · 5h block · week · month | ✅ 5h / weekly / monthly (OpenCode Go) |
-| **Hermes Agent** | today · 5h block · week · month | — |
-| **Cursor** | today · 5h block · week · month | — |
-| **Grok Build CLI** | today · 5h block · week · month | ✅ credit allowance (weekly) |
-| **Copilot CLI** | today · 5h block · week · month | — |
-| **Kiro CLI** | today · 5h block · week · month | — (estimated) |
-| **Pi Agent** | today · 5h block · week · month | — |
-| **omp** (oh-my-pi) | today · 5h block · week · month | — |
-| **omo** (senpi) | today · 5h block · week · month | — |
-| **Aside** | today · 5h block · week · month | — |
-| **Kimi Code** | today · 5h block · week · month | — |
-| **Devin CLI** | today · 5h block · week · month | — |
+Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok Build CLI,
+Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code and Devin CLI. Official limits for
+Claude Code, Codex, Antigravity, OpenCode Go and Grok. This part is unchanged from
+PokeTokenBar; see its [data sources](https://github.com/chattymin/PokeTokenBar#data-sources) for
+where each tool's usage is read from.
 
-Grok token usage comes from Grok Build CLI's local session logs; weekly subscription credits use the CLI's saved login. If that login expires, run Grok CLI once to refresh it. OpenCode Go limits use the Go API key already saved by OpenCode. Grok Bot cloud usage and its cloud subscription limits are not integrated.
+## Build and install
 
-All read locally — no external usage CLI required. Adding a tool is a provider implementation and registration (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+macOS 14 or later, Xcode with Swift 6.
 
-## Install
-
-### Requirements
-
-macOS 14+ (Apple Silicon or Intel). That's it — token usage is read directly from local Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code, and Devin CLI data, with no external usage CLI required.
-
-### Homebrew
-
-```bash
-brew install --cask chattymin/tap/poke-token-bar
+```sh
+bash scripts/create-signing-cert.sh            # once: a local signing identity, so Keychain "Always Allow" survives rebuilds
+PTB_NATIVE_ARCH_ONLY=1 bash scripts/build-app.sh  # builds and installs /Applications/DigiTokenBar.app
+swift test --parallel                          # tests
 ```
 
-ad-hoc/self-signed; the cask strips the quarantine attribute on install.
+## Where the Digimon data comes from
 
-### Manual install (without Homebrew)
+- **Species and evolutions:** [Wikimon](https://wikimon.net), text licensed CC BY-SA 3.0. Built by
+  `tools/digimon/build_data.py` and `gen_catalog.py`.
+- **Routes per card** (which evolutions a card has, which are a Jogress): fan documentation of the
+  devices, mainly humulos.com. Notes in `tools/digimon/research`.
+- **Moves and Korean names:** the official Korean Digimon reference (digimon.net/reference_ko).
+- **Sprites are not in this repository or the app.** The app downloads them from wikimon.net while
+  it runs and caches them in `~/Library/Application Support/DigiTokenBar/digimon-sprites`.
 
-Prefer not to use Homebrew? Download `PokeTokenBar.zip` from the [latest release](https://github.com/chattymin/PokeTokenBar/releases/latest), unzip it, and drag `PokeTokenBar.app` into `/Applications`.
+## Privacy
 
-Because the app is ad-hoc/self-signed (not notarized under an Apple Developer account), Gatekeeper shows an "unidentified developer" warning on first launch. Clear it once, either way:
+- Token usage is read on your Mac and never uploaded.
+- Outbound requests: wikimon.net for sprites, plus PokeTokenBar's official-limit and status
+  requests. The update check is off, and nothing is downloaded from PokéAPI.
+- Claude Code hooks are installed only when you run the installer yourself.
+- The Digimon save and its backups live in `~/Library/Application Support/DigiTokenBar/`.
 
-- **Finder:** right-click (or Control-click) `PokeTokenBar.app` → **Open** → **Open** again in the dialog.
-- **Terminal:** `xattr -dr com.apple.quarantine /Applications/PokeTokenBar.app`
+## Credits and license
 
-(The Homebrew cask strips quarantine for you, so it needs no extra step.)
-
-### Build from source
-
-```bash
-swift build                  # debug
-swift test                   # unit tests
-./scripts/build-app.sh       # release → PokeTokenBar.app → /Applications
-```
-
-## Data sources
-
-| Source | Used for | Notes |
-|---|---|---|
-| `~/.claude/projects/**/*.jsonl`, `<config folder>/projects/**/*.jsonl` | Claude Code daily/blocks/weekly/monthly | read directly; deduped by message id; cached incrementally |
-| `~/.claude.json`, `~/.claude-*/.claude.json` | Claude accounts: which config folders are logged in, and their names | only the `oauthAccount` block is used; folders from an exported `CLAUDE_CONFIG_DIR` or Settings → Advanced are added |
-| `~/.claude/history.jsonl`, `<config folder>/history.jsonl` | Claude tokens per account; the account used last | only session ids and prompt times are read, never the prompt text; only new lines are read |
-| `~/.gemini/tmp/**/chats/*.json(l)` | Gemini CLI daily/monthly | session records (`tokens` per message); weekly = daily sum |
-| `~/.gemini/antigravity/conversations/*.db`<br>`~/.gemini/antigravity-cli/conversations/*.db`<br>`~/.gemini/antigravity-ide/conversations/*.db` | Antigravity daily/blocks/weekly/monthly | SQLite read-only; per-call usage from the Cascade protobuf blob; supports Antigravity 2.0/Core, CLI & IDE; its own provider, not folded into Gemini; a subscription, so no cost is estimated |
-| `~/.codex/sessions/**/*.jsonl` | Codex daily/monthly | `token_count` events; weekly = daily sum |
-| `~/.local/share/opencode/opencode.db` | OpenCode daily/blocks/weekly/monthly | SQLite read-only (`message` on V1, `session_message` on V2); legacy `storage/message` JSON is also supported |
-| `~/.hermes/state.db` | Hermes Agent daily/blocks/weekly/monthly | SQLite read-only; session token totals and persisted cost |
-| `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb` | Cursor daily/blocks/weekly/monthly | SQLite read-only fallback (`cursorDiskKV` bubble `tokenCount`); when signed in, primary source is `cursor.com` dashboard API (see Privacy) |
-| `cursor.com` (dashboard API) | Cursor daily/blocks/weekly/monthly | unofficial JSON endpoint (`get-filtered-usage-events`); session from `cursorAuth/accessToken` in `state.vscdb` or `CURSOR_SESSION_TOKEN`; refetches when the provider reloads; on network error falls back to an account-scoped disk cache up to 6 h old; disable with `CURSOR_USAGE_API=0` |
-| `opencode.ai` (OpenCode Go usage API) | OpenCode Go official 5h / weekly / monthly usage | unofficial JSON endpoint the opencode.ai console uses (`/zen/go/v1/usage`); Bearer OpenCode Go API key from OpenCode's `credential` table in `opencode.db`, falling back to `auth.json`; only when a Go key exists, failure hides the limits only |
-| `cli-chat-proxy.grok.com` (Grok billing API) | Grok official credit allowance for the current period | unofficial JSON endpoint behind the Grok CLI `/usage` modal (`/v1/billing?format=credits`); Bearer access token from `$GROK_HOME/auth.json` (default `~/.grok`); never refreshes the token itself, so an expired login asks you to run Grok once; failure hides the limits only |
-| `api2.cursor.sh` (dashboard limits API) | Cursor official monthly included usage | Connect RPC `GetCurrentPeriodUsage`; Bearer JWT from `state.vscdb` or `CURSOR_SESSION_TOKEN`; same disable switch as usage events |
-| `~/.grok/sessions/**/updates.jsonl` | Grok Build CLI daily/blocks/weekly/monthly | `turn_completed` records (per-turn `usage`, server-reported cost); honours `$GROK_HOME`; subagent sessions are skipped because their tokens are already folded into the parent turn |
-| `~/.copilot/session-store.db` | Copilot CLI daily/blocks/weekly/monthly | SQLite read-only; one `assistant_usage_events` row per API call; honours `$COPILOT_HOME`; `input_tokens` already contains the cached prompt, so cache reads/writes are subtracted; premium-request billing, so no cost is estimated |
-| `~/Library/Application Support/kiro-cli/data.sqlite3`<br>`~/.kiro/sessions/cli/*.jsonl`<br>`~/.kiro/sessions/<ws>/<session>/messages.jsonl` | Kiro CLI daily/blocks/weekly/monthly | Pre-2.20 SQLite plus 2.20+ / `--v3` JSONL; neither store records real token counts, so input is a bytes÷4 **estimate** of accumulated conversation text resent on every turn; `usage_summary` credits are not converted to USD; a `/clear`d SQLite conversation's already-counted tokens stay counted until the app restarts; honours `$KIRO_CLI_HOME` and `$KIRO_HOME` |
-| `~/.pi/agent/sessions/**/*.jsonl` | Pi Agent daily/blocks/weekly/monthly | Direct persisted usage from all projects; `$PI_CODING_AGENT_DIR` and `$PI_CODING_AGENT_SESSION_DIR` overrides supported; output already includes reasoning (not counted twice); forked history deduplicated by entry ID; source-recorded costs are retained |
-| `~/.omp/agent/sessions/**/*.jsonl` | omp (oh-my-pi) daily/blocks/weekly/monthly | pi-format session JSONL; every assistant `usage` event is summed (rewound branches are already billed) and subagent session files count too, since their tokens are not folded into the parent; honours `$OMP_CODING_AGENT_DIR`; per-event `cost` is trusted when reported; `bridge/` conversion copies are skipped because their originals are already counted at the source |
-| `~/.omo/agent/sessions/**/*.jsonl`<br>`~/.senpi/agent/sessions/**/*.jsonl` | omo (senpi) daily/blocks/weekly/monthly | pi-format session JSONL from senpi `docs/session-format.md`; assistant usage, nested `toolResult.usage`, and compaction/branch-summary usage are summed; output already includes reasoning; `cacheWrite1h` is added to cache write; honours `$OMO_CODING_AGENT_DIR` and `$SENPI_CODING_AGENT_DIR`; recorded `usage.cost` is a price estimate, not a subscription invoice |
-| `~/.aside/u/*/state.db` | Aside daily/blocks/weekly/monthly | Read-only SQLite turn totals; deleted turns remain counted until the scan cache resets; only recorded costs are used |
-| `~/.kimi-code/sessions/**/agents/*/wire.jsonl` | Kimi Code daily/blocks/weekly/monthly | Every `usage.record` (per-request, `turn` and `session` scope) is summed across main and subagent wire files; honours `$KIMI_CODE_HOME` and the Kimi desktop runtime root; `/fork` copies are folded by record content; Kimi records no cost, so cost shows as unavailable |
-| `~/.local/share/devin/cli/sessions.db` | Devin CLI daily/blocks/weekly/monthly | Read-only SQLite `message_nodes` metrics joined to the session model; input and cache buckets are distinct; branch copies are deduplicated by message ID within each session; honours `$XDG_DATA_HOME` and additional scan folders; no cost is estimated |
-| Keychain (`Claude Code-credentials`, plus `Claude Code-credentials-<hash>` for each other config folder) / `<config folder>/.credentials.json` → `api.anthropic.com` | Claude official 5h/weekly % per account | unofficial endpoint; the Keychain is read **only when you press refresh** — auto-polling never reads it |
-| `codex app-server` | Codex official 5h/weekly % | local child process; account snapshot only, no model turn |
-| [PokéAPI](https://pokeapi.co/) — `pokeapi.co`, `graphql.pokeapi.co` | Pokémon species, stats, abilities, moves &amp; evolution | runtime fetch; cached locally, never bundled |
-| `raw.githubusercontent.com/PokeAPI/sprites` | Pokémon &amp; item sprites | runtime fetch; cached under Application Support, never bundled |
-| `status.claude.com`, `status.openai.com` | provider incident banner | statuspage summary; display only — turn it off in Settings |
-| `api.github.com` | update check | latest release tag; on launch and when the popover opens |
-
-If a provider's logs live **outside** those built-in paths, add the folder in **Settings → Advanced → Additional scan folders**. Pick the provider first — each folder is parsed only by that provider, so pointing a Gemini field at Claude logs would mis-attribute tokens. Extra folders are added to the built-in locations; they never replace them.
-
-## Privacy & permissions
-
-- **On-device first.** Token usage is read directly from local Claude Code, Codex, Gemini CLI, Antigravity, OpenCode, Hermes Agent, Cursor, Grok CLI, Copilot CLI, Kiro CLI, Pi Agent, omp, omo, Aside, Kimi Code, and Devin CLI data. The app never uploads usage or runs model turns. To split Claude usage between accounts, each config folder's `history.jsonl` is read for session ids and prompt times only; the prompt text is ignored and nothing leaves the Mac.
-- **Outbound requests.** The app is not fully offline. It talks to fifteen hosts: `pokeapi.co` and `graphql.pokeapi.co` (species/evolution), `raw.githubusercontent.com` (sprites), `api.anthropic.com` (Claude official limits), `claude.ai` (Claude official limits when you save an optional claude.ai session key in Settings — the key only, no prompts or project paths), `cursor.com` (Cursor usage summary when you are signed into Cursor locally — session credential only, no prompts or project paths), `api2.cursor.sh` (Cursor official monthly included usage — Bearer JWT only, same credential class as the IDE login), `opencode.ai` (OpenCode Go official limits when an OpenCode Go key is connected locally — the API key only), `cli-chat-proxy.grok.com` (Grok official credit allowance when you are signed into Grok CLI — its access token only), `cloudcode-pa.googleapis.com` and `daily-cloudcode-pa.googleapis.com` (Antigravity official limits) plus `oauth2.googleapis.com` (their token refresh), `status.claude.com` and `status.openai.com` (incident banner — off switch in Settings), and `api.github.com` (update check). **None of them carry your usage logs, prompts, or project paths** — only the request itself (Cursor sends your session cookie to fetch your own usage rows, same as the web dashboard).
-- **Keychain (optional).** The Claude OAuth credential is read **only when you press a refresh button** (Settings, or the limits row in the popover). Automatic polling never touches the Keychain, so it never raises a password prompt; when `~/.claude/.credentials.json` is present, each poll re-reads it, so an in-place `/login` to another account is picked up without pressing refresh. The token is held in memory only — the app creates no Keychain item of its own. If there is no credentials file, limits stay on the cached token until it expires or you refresh. Turn it off in Settings — the limits section simply hides. With several Claude accounts, a refresh also reads each other config folder's own item, once per folder, and a declined prompt stops the remaining ones.
-- **Pokémon data and assets** are fetched at runtime from PokéAPI and cached only under `~/Library/Application Support/PokeTokenBar/`. Generated individual values (such as IVs, gender, ability and known moves) are stored in the local companion save so they remain stable. The app binary and its release artifacts contain no Pokémon assets.
-
-## Contributors
-
-Contributions of all sizes are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test, and open a pull request.
-
-[![Contributors](https://contrib.rocks/image?repo=chattymin/PokeTokenBar)](https://github.com/chattymin/PokeTokenBar/graphs/contributors)
-
-## License & disclaimer
-
-**MIT** — see [LICENSE](LICENSE). The MIT license covers this project's original source code only; it grants no rights to any third-party trademarks, artwork, or data accessed through the app.
-
-PokeTokenBar is an **unofficial, non-commercial fan project**. It is **not affiliated with, endorsed, sponsored, or approved by Nintendo, Game Freak, Creatures Inc., or The Pokémon Company.** "Pokémon" and all related names, characters, and imagery are trademarks and copyrights of their respective owners. This project claims no ownership of, and asserts no rights over, any Pokémon intellectual property.
-
-- **The app binary and its release artifacts bundle no Pokémon assets.** Pokémon species data and sprites are fetched **at runtime** from the public [PokéAPI](https://pokeapi.co) and cached locally on the user's own device; sprite images served via PokéAPI remain the property of their respective owners.
-- Any Pokémon imagery in this repository's documentation (screenshots/GIFs) is shown solely to illustrate the app's functionality.
-- The app is provided free of charge for **personal, non-commercial use only.**
-- If you are a rights holder with any concern about this project, please open an issue or contact the maintainer, and we will respond promptly.
-
-*Provided "as is", without warranty of any kind. This notice is not legal advice.*
+- Forked from [PokeTokenBar](https://github.com/chattymin/PokeTokenBar) by chattymin. The usage
+  tracking, providers, limits and most of the app are theirs. PokeTokenBar's Pokémon features are
+  still in the source but turned off.
+- **MIT**, see [LICENSE](LICENSE); the original copyright notice is kept. The license covers this
+  project's source code only. It grants no rights to third-party trademarks, artwork or data.
+- DigiTokenBar is an **unofficial, non-commercial fan project**. It is not affiliated with, endorsed
+  or sponsored by Bandai, Toei Animation or Bandai Namco. "Digimon" and all related names,
+  characters and images belong to their owners. The app bundles no Digimon artwork.
+- `tools/digimon/research` keeps short quotes of third-party sites for checking. Review them before
+  making this repository public.
