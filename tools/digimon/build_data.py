@@ -202,6 +202,9 @@ def parse_digimon(title_key, text, nodes, edges):
     first = sorted((int(k[1:]), unlink(v)) for k, v in p.items() if re.fullmatch(r"l\d+", k) and unlink(v))
     if first:
         n["level"] = first[0][1]
+    first_attr = sorted((int(k[1:]), unlink(v)) for k, v in p.items() if re.fullmatch(r"a\d+", k) and unlink(v))
+    if first_attr:
+        n["attribute"] = first_attr[0][1]
     ko = re.search(r"\{\{KOR\}\}\s*\{\{j2\|([^|}]+)", p.get("ol", ""))
     if ko:
         n["ko"] = ko.group(1).strip()
@@ -322,7 +325,7 @@ def main():
         levels = sorted(n.get("levels", set()) | n.get("device_levels", set()),
                         key=lambda x: LEVEL_ORDER.index(x) if x in LEVEL_ORDER else 99)
         level = n.get("level") or next((lv for lv in LEVEL_ORDER if lv in n.get("device_levels", set())), "")
-        out_nodes[key] = {"name": n.get("name", key), "ko": n.get("ko", ""), "level": level, "levels": levels,
+        out_nodes[key] = {"name": n.get("name", key), "ko": n.get("ko", ""), "level": level, "attribute": n.get("attribute") or next(iter(sorted(n.get("attributes", set()))), ""), "levels": levels,
                           "attributes": sorted(n.get("attributes", set())), "sprites": sp}
     out_edges = []
     for (a, b), e in sorted(edges.items()):

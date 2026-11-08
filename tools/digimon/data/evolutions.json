@@ -10,6 +10,7 @@
    "name": "Achillesmon",
    "ko": "아킬레우스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -24,6 +25,7 @@
    "name": "Aegiochusmon",
    "ko": "아이기오투스몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -38,6 +40,7 @@
    "name": "Aegiomon",
    "ko": "아이기오몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -53,6 +56,7 @@
    "name": "Aegisdramon",
    "ko": "이지스드라몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -68,6 +72,7 @@
    "name": "Aero V-dramon",
    "ko": "에어로브이드라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -83,12 +88,13 @@
    "name": "Agnimon",
    "ko": "아그니몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Child",
     "Adult",
     "Perfect",
-    "No Level",
-    "Hybrid"
+    "Hybrid",
+    "No Level"
    ],
    "attributes": [
     "Free",
@@ -104,6 +110,7 @@
    "name": "Agumon",
    "ko": "아구몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -120,6 +127,7 @@
    "name": "Agumon (2006 Anime Version)",
    "ko": "",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -134,6 +142,7 @@
    "name": "Agumon (Black)",
    "ko": "아구몬(흑)",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -148,6 +157,7 @@
    "name": "Airdramon",
    "ko": "에어드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -163,6 +173,7 @@
    "name": "Ajatarmon",
    "ko": "아야타라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -177,6 +188,7 @@
    "name": "Albatusmon",
    "ko": "알바타스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -191,6 +203,7 @@
    "name": "Aldamon",
    "ko": "아루다몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -209,6 +222,7 @@
    "name": "Algomon (Adult)",
    "ko": "아르고몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -223,6 +237,7 @@
    "name": "Alphamon",
    "ko": "알파몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -237,6 +252,7 @@
    "name": "Alphamon: Ouryuken",
    "ko": "알파몬: 왕룡검",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -251,6 +267,7 @@
    "name": "Amaterasumon",
    "ko": "아마테라스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -265,6 +282,7 @@
    "name": "Ambromon",
    "ko": "",
    "level": "Perfect",
+   "attribute": "",
    "levels": [
     "Perfect"
    ],
@@ -277,6 +295,7 @@
    "name": "Amphimon",
    "ko": "안피몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -292,6 +311,7 @@
    "name": "Ancient Beatmon",
    "ko": "에이션트비트몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -306,6 +326,7 @@
    "name": "Ancient Garurumon",
    "ko": "에이션트가루몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -320,6 +341,7 @@
    "name": "Ancient Greymon",
    "ko": "에이션트그레이몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -334,6 +356,7 @@
    "name": "Ancient Irismon",
    "ko": "에이션트이리스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -348,6 +371,7 @@
    "name": "Ancient Megatheriumon",
    "ko": "에이션트메가테리우몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -362,6 +386,7 @@
    "name": "Ancient Mermaimon",
    "ko": "에이션트머메이몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -377,6 +402,7 @@
    "name": "Ancient Sphinxmon",
    "ko": "에이션트스핑크스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -391,6 +417,7 @@
    "name": "Ancient Troiamon",
    "ko": "에이션트트로이몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -405,6 +432,7 @@
    "name": "Ancient Volcamon",
    "ko": "에이션트볼케몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -421,6 +449,7 @@
    "name": "Ancient Wisemon",
    "ko": "에이션트와이즈몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -435,6 +464,7 @@
    "name": "Andiramon",
    "ko": "안티라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -450,6 +480,7 @@
    "name": "Andiramon (Deva)",
    "ko": "안티라몬(데바)",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -466,6 +497,7 @@
    "name": "Andromon",
    "ko": "안드로몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -483,6 +515,7 @@
    "name": "Angemon",
    "ko": "엔젤몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -499,6 +532,7 @@
    "name": "Angewomon",
    "ko": "엔젤우몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -516,6 +550,7 @@
    "name": "Angoramon",
    "ko": "앙고라몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -531,6 +566,7 @@
    "name": "Ankylomon",
    "ko": "황금아르마몬",
    "level": "Adult",
+   "attribute": "Free",
    "levels": [
     "Adult"
    ],
@@ -547,6 +583,7 @@
    "name": "Anomalocarimon",
    "ko": "스콜피오몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -562,6 +599,7 @@
    "name": "Anomalocarimon (X-Antibody)",
    "ko": "스콜피오몬(X항체)",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -576,6 +614,7 @@
    "name": "Anubimon",
    "ko": "아누비스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -592,6 +631,7 @@
    "name": "Apollomon",
    "ko": "아폴로몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -607,6 +647,7 @@
    "name": "Apollomon: Whispered",
    "ko": "아폴로몬:위스퍼드",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -622,6 +663,7 @@
    "name": "Aquilamon",
    "ko": "아큐라몬",
    "level": "Adult",
+   "attribute": "Free",
    "levels": [
     "Adult"
    ],
@@ -638,6 +680,7 @@
    "name": "Arbormon",
    "ko": "알볼몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -655,6 +698,7 @@
    "name": "Archnemon",
    "ko": "아라크네몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -669,6 +713,7 @@
    "name": "Arcturusmon",
    "ko": "아크투루스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -684,6 +729,7 @@
    "name": "Ariemon",
    "ko": "아리에몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -698,6 +744,7 @@
    "name": "Arkhai Angemon",
    "ko": "아르케엔젤몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -712,6 +759,7 @@
    "name": "Arma Lizamon",
    "ko": "아르마리자몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -726,6 +774,7 @@
    "name": "Armadimon",
    "ko": "아르마몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -742,6 +791,7 @@
    "name": "Armagemon",
    "ko": "아마게몬",
    "level": "Ultimate",
+   "attribute": "Unknown",
    "levels": [
     "Ultimate"
    ],
@@ -758,6 +808,7 @@
    "name": "Armamon",
    "ko": "아루마몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -774,6 +825,7 @@
    "name": "Armamon: Burst Mode",
    "ko": "아루마몬：버스트 모드",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate",
     "No Level"
@@ -789,6 +841,7 @@
    "name": "Arresterdramon",
    "ko": "아레스타드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "Ultimate",
@@ -809,6 +862,7 @@
    "name": "Artiomon",
    "ko": "아르티오몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -823,6 +877,7 @@
    "name": "Astamon",
    "ko": "알라우몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -837,6 +892,7 @@
    "name": "Asuramon",
    "ko": "아수라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -852,6 +908,7 @@
    "name": "Atlur Ballistamon",
    "ko": "아트라바리스타몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "No Level"
@@ -870,6 +927,7 @@
    "name": "Atlur Kabuterimon",
    "ko": "아트라캅테리몬(레드)",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -884,6 +942,7 @@
    "name": "Atlur Kabuterimon (Red)",
    "ko": "아트라캅테리몬(레드)",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -898,6 +957,7 @@
    "name": "Atratusmon",
    "ko": "아트라타스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -912,6 +972,7 @@
    "name": "Azhdarmon",
    "ko": "아즈다르몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -926,6 +987,7 @@
    "name": "BEMmon",
    "ko": "벰몬",
    "level": "Child",
+   "attribute": "Unknown",
    "levels": [
     "Child"
    ],
@@ -941,6 +1003,7 @@
    "name": "Baalmon",
    "ko": "바알몬",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "No Level"
@@ -959,6 +1022,7 @@
    "name": "Babydmon",
    "ko": "베이비드몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -974,6 +1038,7 @@
    "name": "Bacchusmon",
    "ko": "할매몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -988,6 +1053,7 @@
    "name": "Bagramon",
    "ko": "할매몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -1005,6 +1071,7 @@
    "name": "Bakemon",
    "ko": "고스몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -1020,6 +1087,7 @@
    "name": "Bakumon",
    "ko": "테이파몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -1034,6 +1102,7 @@
    "name": "Ballistamon",
    "ko": "알라우몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "No Level"
@@ -1053,6 +1122,7 @@
    "name": "Bancho Leomon",
    "ko": "반쵸레오몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -1067,6 +1137,7 @@
    "name": "Bancho Lilimon",
    "ko": "반쵸릴리몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1081,6 +1152,7 @@
    "name": "Bancho Mamemon",
    "ko": "반쵸콩알몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1095,6 +1167,7 @@
    "name": "Bancho Stingmon",
    "ko": "반쵸스팅몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -1111,6 +1184,7 @@
    "name": "Bastemon",
    "ko": "바스테몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -1125,6 +1199,7 @@
    "name": "Bearcatmon",
    "ko": "베어캣몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -1139,6 +1214,7 @@
    "name": "Bearmon",
    "ko": "베어몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -1154,6 +1230,7 @@
    "name": "Beelzebumon",
    "ko": "베르제브몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1168,6 +1245,7 @@
    "name": "Beelzebumon: Blast Mode",
    "ko": "베르제브몬: 블래스트 모드",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1182,6 +1260,7 @@
    "name": "Beelzebumon (2010 Anime Version)",
    "ko": "베르제브몬(2010)",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -1201,6 +1280,7 @@
    "name": "Belial Vamdemon",
    "ko": "베리얼묘티스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1217,6 +1297,7 @@
    "name": "Belphemon: Rage Mode",
    "ko": "벨페몬: 레이지 모드",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1231,6 +1312,7 @@
    "name": "Beowolfmon",
    "ko": "멧돼지몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -1249,6 +1331,7 @@
    "name": "Betamon",
    "ko": "베타몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -1263,6 +1346,7 @@
    "name": "Betel Gammamon",
    "ko": "베텔감마몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -1278,6 +1362,7 @@
    "name": "Bibimon",
    "ko": "비비몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -1293,6 +1378,7 @@
    "name": "Big Mamemon",
    "ko": "빅콩알몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -1309,6 +1395,7 @@
    "name": "Big Ukkomon",
    "ko": "빅웃코몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -1323,6 +1410,7 @@
    "name": "Birdramon",
    "ko": "버드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -1339,6 +1427,7 @@
    "name": "Black King Numemon",
    "ko": "블랙킹워매몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -1354,6 +1443,7 @@
    "name": "Black Tailmon Uver.",
    "ko": "블랙가트몬 Uver.",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -1368,6 +1458,7 @@
    "name": "Black War Greymon",
    "ko": "블랙워그레이몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1383,6 +1474,7 @@
    "name": "Black War Greymon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1397,6 +1489,7 @@
    "name": "Blade Kuwagamon",
    "ko": "블레이드쿠가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -1411,6 +1504,7 @@
    "name": "Blastmon",
    "ko": "블래스트몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate",
     "No Level"
@@ -1430,6 +1524,7 @@
    "name": "Blimpmon",
    "ko": "브링프몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -1444,6 +1539,7 @@
    "name": "Blitz Greymon",
    "ko": "블리츠그레이몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1459,6 +1555,7 @@
    "name": "Blitzmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -1476,6 +1573,7 @@
    "name": "Blizzarmon",
    "ko": "블리자몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -1493,6 +1591,7 @@
    "name": "Bloom Lordmon",
    "ko": "블룸로드몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -1508,6 +1607,7 @@
    "name": "Blossomon",
    "ko": "브롯사몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -1523,6 +1623,7 @@
    "name": "Blucomon",
    "ko": "블루코몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -1538,6 +1639,7 @@
    "name": "Bokomon",
    "ko": "보코몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -1553,6 +1655,7 @@
    "name": "Bolgmon",
    "ko": "보르그몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -1571,6 +1674,7 @@
    "name": "Boltmon",
    "ko": "볼트몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1586,6 +1690,7 @@
    "name": "Bombermon",
    "ko": "보머몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -1600,6 +1705,7 @@
    "name": "Bommon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -1615,6 +1721,7 @@
    "name": "Bosamon",
    "ko": "보사몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -1630,6 +1737,7 @@
    "name": "Botamon",
    "ko": "깜몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -1648,6 +1756,7 @@
    "name": "Boutmon",
    "ko": "바우트몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -1662,6 +1771,7 @@
    "name": "Bowmon",
    "ko": "바우몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -1677,6 +1787,7 @@
    "name": "Brachimon",
    "ko": "브라키몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -1691,6 +1802,7 @@
    "name": "Breakdramon",
    "ko": "브레이크드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1707,6 +1819,7 @@
    "name": "Brigadramon",
    "ko": "브리가드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1722,6 +1835,7 @@
    "name": "Bryweludramon",
    "ko": "브리웨루드라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1736,6 +1850,7 @@
    "name": "Bubbmon",
    "ko": "뽀글몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -1753,6 +1868,7 @@
    "name": "Bulkmon",
    "ko": "벌크몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -1767,6 +1883,7 @@
    "name": "Calamaramon",
    "ko": "카르마라몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -1784,6 +1901,7 @@
    "name": "Callismon",
    "ko": "칼리스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -1798,6 +1916,7 @@
    "name": "Candmon",
    "ko": "캔들몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -1812,6 +1931,7 @@
    "name": "Cannonbeemon",
    "ko": "캐논벌몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -1826,6 +1946,7 @@
    "name": "Cannondramon",
    "ko": "캐논드라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1840,6 +1961,7 @@
    "name": "Canoweissmon",
    "ko": "카노바이스몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -1855,6 +1977,7 @@
    "name": "Caprimon",
    "ko": "카프리몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -1872,6 +1995,7 @@
    "name": "Cargodramon",
    "ko": "카고드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -1887,6 +2011,7 @@
    "name": "Caturamon",
    "ko": "챠츠라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -1901,6 +2026,7 @@
    "name": "Centalmon",
    "ko": "켄터스몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -1916,6 +2042,7 @@
    "name": "Cerberumon",
    "ko": "케르베로스몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -1932,6 +2059,7 @@
    "name": "Ceresmon",
    "ko": "케레스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1946,6 +2074,7 @@
    "name": "Cernumon",
    "ko": "케르누몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -1960,6 +2089,7 @@
    "name": "Chackmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -1977,6 +2107,7 @@
    "name": "Chamblemon",
    "ko": "샴블몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -1991,6 +2122,7 @@
    "name": "Chaos Dukemon",
    "ko": "카오스듀크몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2005,6 +2137,7 @@
    "name": "Chaosdramon",
    "ko": "카오스드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2021,6 +2154,7 @@
    "name": "Chaosmon",
    "ko": "카오스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -2035,6 +2169,7 @@
    "name": "Cherubimon (Vice)",
    "ko": "케루비몬(악)",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -2050,6 +2185,7 @@
    "name": "Cherubimon (Virtue)",
    "ko": "케루비몬(선)",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -2064,6 +2200,7 @@
    "name": "Chibickmon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I",
     "No Level"
@@ -2080,6 +2217,7 @@
    "name": "Chibimon",
    "ko": "꼬마몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -2095,6 +2233,7 @@
    "name": "Chicomon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -2110,6 +2249,7 @@
    "name": "Chimairamon",
    "ko": "키메라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -2126,6 +2266,7 @@
    "name": "Chiropmon",
    "ko": "카이롭몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -2140,6 +2281,7 @@
    "name": "Choromon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -2157,6 +2299,7 @@
    "name": "Cho·Hakkaimon",
    "ko": "초핫카이몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2171,6 +2314,7 @@
    "name": "Climbmon",
    "ko": "클라이몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -2185,6 +2329,7 @@
    "name": "Clockmon",
    "ko": "타임몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -2200,6 +2345,7 @@
    "name": "Coatlmon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -2216,6 +2362,7 @@
    "name": "Cockatrimon",
    "ko": "꼬끼몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -2232,6 +2379,7 @@
    "name": "Coelamon",
    "ko": "실리컨몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -2247,6 +2395,7 @@
    "name": "Commandramon",
    "ko": "코만드라몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -2262,6 +2411,7 @@
    "name": "Coredramon (Blue)",
    "ko": "",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -2276,6 +2426,7 @@
    "name": "Coredramon (Green)",
    "ko": "코어드라몬(녹)",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2290,6 +2441,7 @@
    "name": "Coronamon",
    "ko": "코로나몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -2305,6 +2457,7 @@
    "name": "Corvumon",
    "ko": "",
    "level": "Adult",
+   "attribute": "",
    "levels": [
     "Adult"
    ],
@@ -2317,6 +2470,7 @@
    "name": "Cotsucomon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -2332,6 +2486,7 @@
    "name": "Cougarmon",
    "ko": "쿠거몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2346,6 +2501,7 @@
    "name": "Cres Garurumon",
    "ko": "크레스가루몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2362,6 +2518,7 @@
    "name": "Crescemon",
    "ko": "크레세몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -2378,6 +2535,7 @@
    "name": "Crys Paledramon",
    "ko": "크리스페일드라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2392,6 +2550,7 @@
    "name": "Cthyllamon",
    "ko": "쿠티라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2407,6 +2566,7 @@
    "name": "Curimon",
    "ko": "쿠리몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -2422,6 +2582,7 @@
    "name": "Cyberdramon",
    "ko": "사이버드라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -2437,6 +2598,7 @@
    "name": "Cyberdramon (2010 Anime Version)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "No Level"
@@ -2453,6 +2615,7 @@
    "name": "Cyclomon",
    "ko": "사이크로몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2467,6 +2630,7 @@
    "name": "DORUgamon",
    "ko": "도루가몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -2482,6 +2646,7 @@
    "name": "DORUgoramon",
    "ko": "도루고라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2497,6 +2662,7 @@
    "name": "DORUguremon",
    "ko": "도루그레몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2512,6 +2678,7 @@
    "name": "DORUmon",
    "ko": "도루몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -2527,6 +2694,7 @@
    "name": "Dagomon",
    "ko": "드라고몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -2542,6 +2710,7 @@
    "name": "Daipenmon",
    "ko": "왕펭귄몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -2562,6 +2731,7 @@
    "name": "Damemon",
    "ko": "다메몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -2579,6 +2749,7 @@
    "name": "Darcmon",
    "ko": "다르크몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -2593,6 +2764,7 @@
    "name": "Dark Knightmon",
    "ko": "다크나이트몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "Perfect",
@@ -2611,6 +2783,7 @@
    "name": "Dark Superstarmon",
    "ko": "다크슈퍼스타몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -2625,6 +2798,7 @@
    "name": "Dark Tyranomon",
    "ko": "다크티라노몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2640,6 +2814,7 @@
    "name": "Darkdramon",
    "ko": "다크드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2655,6 +2830,7 @@
    "name": "Darkness Bagramon",
    "ko": "다크네스바그라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -2672,6 +2848,7 @@
    "name": "Darumamon",
    "ko": "다루마몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -2686,6 +2863,7 @@
    "name": "Deadly Axemon",
    "ko": "데들리액스몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Child",
     "Adult",
@@ -2704,6 +2882,7 @@
    "name": "Death-X-DORUgamon",
    "ko": "데크스도루가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2718,6 +2897,7 @@
    "name": "Death-X-DORUgoramon",
    "ko": "데크스도루고라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2732,6 +2912,7 @@
    "name": "Death-X-DORUguremon",
    "ko": "데크스도루그레몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -2746,6 +2927,7 @@
    "name": "Death Meramon",
    "ko": "데드메라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2762,6 +2944,7 @@
    "name": "Deathmon",
    "ko": "데스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2777,6 +2960,7 @@
    "name": "Deathmon (Black)",
    "ko": "데스몬(흑)",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2792,6 +2976,7 @@
    "name": "Decker Greymon",
    "ko": "데커그레이몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -2809,6 +2994,7 @@
    "name": "Deckerdramon",
    "ko": "데커드라몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -2826,6 +3012,7 @@
    "name": "Deltamon",
    "ko": "델타몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2841,6 +3028,7 @@
    "name": "Delumon",
    "ko": "뿌띠몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2855,6 +3043,7 @@
    "name": "Demon",
    "ko": "마왕몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -2869,6 +3058,7 @@
    "name": "Destromon",
    "ko": "디스트로몬",
    "level": "Perfect",
+   "attribute": "Unknown",
    "levels": [
     "Perfect"
    ],
@@ -2885,6 +3075,7 @@
    "name": "Devidramon",
    "ko": "데블드라몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2900,6 +3091,7 @@
    "name": "Devimon",
    "ko": "데블몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -2917,6 +3109,7 @@
    "name": "Devitamamon",
    "ko": "데블타몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2931,6 +3124,7 @@
    "name": "Dianamon",
    "ko": "디아나몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -2946,6 +3140,7 @@
    "name": "Diarbbitmon",
    "ko": "딜비트몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -2961,6 +3156,7 @@
    "name": "Digitamamon",
    "ko": "디지타몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -2976,6 +3172,7 @@
    "name": "Digmon",
    "ko": "디그몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -2994,6 +3191,7 @@
    "name": "Dijiangmon",
    "ko": "디지앙몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3008,6 +3206,7 @@
    "name": "Dinobeemon",
    "ko": "다이노몬",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -3023,6 +3222,7 @@
    "name": "Dinomon",
    "ko": "다이너몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -3037,6 +3237,7 @@
    "name": "Dinorexmon",
    "ko": "다이노렉스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3051,6 +3252,7 @@
    "name": "Dinotigermon",
    "ko": "다이노타이거몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3065,6 +3267,7 @@
    "name": "Divemon",
    "ko": "다이브몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -3079,6 +3282,7 @@
    "name": "Dobermon",
    "ko": "도베르몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -3095,6 +3299,7 @@
    "name": "Dodomon",
    "ko": "도도몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3111,6 +3316,7 @@
    "name": "Dogmon",
    "ko": "도그몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -3125,6 +3331,7 @@
    "name": "Dokimon",
    "ko": "도키몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3140,6 +3347,7 @@
    "name": "Dokugumon",
    "ko": "스파이더몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -3155,6 +3363,7 @@
    "name": "Dominimon",
    "ko": "도미니몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -3170,6 +3379,7 @@
    "name": "Done Devimon",
    "ko": "단데블몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3184,6 +3394,7 @@
    "name": "Dorbickmon",
    "ko": "도르빅크몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -3201,6 +3412,7 @@
    "name": "Dorimon",
    "ko": "도리몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -3217,6 +3429,7 @@
    "name": "Dorulumon",
    "ko": "도루루몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -3236,6 +3449,7 @@
    "name": "Doumon",
    "ko": "도우몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -3250,6 +3464,7 @@
    "name": "Dracomon",
    "ko": "드라코몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -3264,6 +3479,7 @@
    "name": "Dracumon",
    "ko": "드라큐몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -3278,6 +3494,7 @@
    "name": "Drimogemon",
    "ko": "두리몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Child",
     "Adult"
@@ -3294,6 +3511,7 @@
    "name": "Dukemon",
    "ko": "듀크몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3308,6 +3526,7 @@
    "name": "Dukemon: Crimson Mode",
    "ko": "듀크몬: 크림슨 모드",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3323,6 +3542,7 @@
    "name": "Dukemon (X-Antibody)",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3338,6 +3558,7 @@
    "name": "Dullahamon",
    "ko": "듀라하몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3352,6 +3573,7 @@
    "name": "Duramon",
    "ko": "듀라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -3366,6 +3588,7 @@
    "name": "Durandamon",
    "ko": "듀란다몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -3380,6 +3603,7 @@
    "name": "Duskmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Child",
     "Adult",
@@ -3398,6 +3622,7 @@
    "name": "Dynasmon",
    "ko": "듀나스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3412,6 +3637,7 @@
    "name": "EBEmon",
    "ko": "이바몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3427,6 +3653,7 @@
    "name": "Ebidramon",
    "ko": "가재드라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "Perfect"
@@ -3444,6 +3671,7 @@
    "name": "El Doradimon",
    "ko": "엘도라디몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3458,6 +3686,7 @@
    "name": "Elecmon",
    "ko": "에렉몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -3472,6 +3701,7 @@
    "name": "Enbarrmon",
    "ko": "안바르몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -3486,6 +3716,7 @@
    "name": "Enmamon",
    "ko": "염마몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3500,6 +3731,7 @@
    "name": "Eosmon (Perfect)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Unknown",
    "levels": [
     "Perfect"
    ],
@@ -3515,6 +3747,7 @@
    "name": "Erlangmon",
    "ko": "이랑몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -3529,6 +3762,7 @@
    "name": "Erlangmon: Blast Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -3543,6 +3777,7 @@
    "name": "Espimon",
    "ko": "에스피몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -3557,6 +3792,7 @@
    "name": "Etemon",
    "ko": "에테몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -3572,6 +3808,7 @@
    "name": "Ex-Tyranomon",
    "ko": "엑스티라노몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -3588,6 +3825,7 @@
    "name": "Examon",
    "ko": "엑자몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -3602,6 +3840,7 @@
    "name": "Exermon",
    "ko": "엑서몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -3616,6 +3855,7 @@
    "name": "Fairimon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -3633,6 +3873,7 @@
    "name": "Falcomon (2006 Anime Version)",
    "ko": "",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -3647,6 +3888,7 @@
    "name": "Fantomon",
    "ko": "팬텀몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -3662,6 +3904,7 @@
    "name": "Fenriloogamon",
    "ko": "펜리루가몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3677,6 +3920,7 @@
    "name": "Fenriloogamon: Takemikazuchi",
    "ko": "펜리루가몬: 타케미 카즈치",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3691,6 +3935,7 @@
    "name": "Filmon",
    "ko": "필몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -3705,6 +3950,7 @@
    "name": "Firamon",
    "ko": "파이라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -3720,6 +3966,7 @@
    "name": "Fladramon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -3739,6 +3986,7 @@
    "name": "Flamon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Baby II",
     "Child",
@@ -3757,6 +4005,7 @@
    "name": "Flaremon",
    "ko": "플레어몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -3772,6 +4021,7 @@
    "name": "Floramon",
    "ko": "플로라몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -3786,6 +4036,7 @@
    "name": "Flymon",
    "ko": "플라이몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -3801,6 +4052,7 @@
    "name": "Frimon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -3816,6 +4068,7 @@
    "name": "Fros Velgrmon",
    "ko": "프로스베르그몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -3830,6 +4083,7 @@
    "name": "Frozomon",
    "ko": "프로조몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -3844,6 +4098,7 @@
    "name": "Fufumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3859,6 +4114,7 @@
    "name": "Fugamon",
    "ko": "푸가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -3873,6 +4129,7 @@
    "name": "Fujamon",
    "ko": "후자오몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -3887,6 +4144,7 @@
    "name": "Fukamon",
    "ko": "후카몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3902,6 +4160,7 @@
    "name": "Fumamon",
    "ko": "후우마몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -3917,6 +4176,7 @@
    "name": "Funbeemon",
    "ko": "아기벌몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -3931,6 +4191,7 @@
    "name": "Fusamon",
    "ko": "후사몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3946,6 +4207,7 @@
    "name": "Fuukashita Medal",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -3960,6 +4222,7 @@
    "name": "Gabumon",
    "ko": "파피몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -3977,6 +4240,7 @@
    "name": "Gabumon (Black)",
    "ko": "파피몬(흑)",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -3991,6 +4255,7 @@
    "name": "Gaioumon",
    "ko": "가이오몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -4006,6 +4271,7 @@
    "name": "Galemon",
    "ko": "게일몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -4020,6 +4286,7 @@
    "name": "Galgomon",
    "ko": "가르고몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4034,6 +4301,7 @@
    "name": "Gammamon",
    "ko": "감마몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -4049,6 +4317,7 @@
    "name": "Ganimon",
    "ko": "크랩몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -4063,6 +4332,7 @@
    "name": "Gankoomon",
    "ko": "간쿠몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -4077,6 +4347,7 @@
    "name": "Gaogamon",
    "ko": "가오가몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -4091,6 +4362,7 @@
    "name": "Gaomon",
    "ko": "가오몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -4105,6 +4377,7 @@
    "name": "Gaossmon",
    "ko": "가오스몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Baby II",
     "Child",
@@ -4123,6 +4396,7 @@
    "name": "Garudamon",
    "ko": "가루다몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4138,6 +4412,7 @@
    "name": "Garummon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Perfect",
@@ -4156,6 +4431,7 @@
    "name": "Garuru Metal",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -4170,6 +4446,7 @@
    "name": "Garurumon",
    "ko": "가루몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4186,6 +4463,7 @@
    "name": "Garurumon (Black)",
    "ko": "가루몬(흑)",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4201,6 +4479,7 @@
    "name": "Gasamon",
    "ko": "가사몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -4215,6 +4494,7 @@
    "name": "Gawappamon",
    "ko": "가와파몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -4229,6 +4509,7 @@
    "name": "Gazimon",
    "ko": "가지몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -4244,6 +4525,7 @@
    "name": "Gekkomon",
    "ko": "겟코몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -4258,6 +4540,7 @@
    "name": "Gekomon",
    "ko": "개굴몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4273,6 +4556,7 @@
    "name": "Geo Greymon",
    "ko": "지오그레이몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4287,6 +4571,7 @@
    "name": "Gerbemon",
    "ko": "가비지몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -4301,6 +4586,7 @@
    "name": "Gesomon",
    "ko": "연체몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4316,6 +4602,7 @@
    "name": "Ghostmon",
    "ko": "아이고스몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -4330,6 +4617,7 @@
    "name": "Giga Seadramon",
    "ko": "기가시드라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -4345,6 +4633,7 @@
    "name": "Gigadramon",
    "ko": "기가드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -4360,6 +4649,7 @@
    "name": "Gigasmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -4377,6 +4667,7 @@
    "name": "Gigimon",
    "ko": "기기몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -4392,6 +4683,7 @@
    "name": "Ginkakumon",
    "ko": "긴카쿠몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4406,6 +4698,7 @@
    "name": "Ginryumon",
    "ko": "긴류우몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4420,6 +4713,7 @@
    "name": "Giromon",
    "ko": "째리몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4435,6 +4729,7 @@
    "name": "Gizamon",
    "ko": "기자몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -4451,6 +4746,7 @@
    "name": "Gogmamon",
    "ko": "고그마몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4465,6 +4761,7 @@
    "name": "Gokimon",
    "ko": "고키몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4479,6 +4776,7 @@
    "name": "Gokumon",
    "ko": "고쿠몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -4493,6 +4791,7 @@
    "name": "Gokuwmon",
    "ko": "손오공몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -4507,6 +4806,7 @@
    "name": "Gold V-dramon",
    "ko": "골드브이드라몬",
    "level": "Armor",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "Perfect",
@@ -4523,6 +4823,7 @@
    "name": "Golemon",
    "ko": "록몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4537,6 +4838,7 @@
    "name": "Gomamon",
    "ko": "쉬라몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -4551,6 +4853,7 @@
    "name": "Gorimon",
    "ko": "고릴라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -4565,6 +4868,7 @@
    "name": "Goromon",
    "ko": "고로몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -4580,6 +4884,7 @@
    "name": "Gottsumon",
    "ko": "울퉁몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child",
     "Adult"
@@ -4596,6 +4901,7 @@
    "name": "Grace Novamon",
    "ko": "그레이스노바몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -4611,6 +4917,7 @@
    "name": "Grademon",
    "ko": "그레이드몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4625,6 +4932,7 @@
    "name": "Gran Kuwagamon",
    "ko": "그랜쿠가몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -4642,6 +4950,7 @@
    "name": "Grand Dracumon",
    "ko": "그란드라큐몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -4656,6 +4965,7 @@
    "name": "Grand Galemon",
    "ko": "그랑게일몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -4670,6 +4980,7 @@
    "name": "Grand Locomon",
    "ko": "그랜드로코몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -4686,6 +4997,7 @@
    "name": "Grandis Kuwagamon",
    "ko": "그랑디스쿠가몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -4700,6 +5012,7 @@
    "name": "Grappu Leomon",
    "ko": "아이언레오몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4714,6 +5027,7 @@
    "name": "Gravimon",
    "ko": "그라비몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -4731,6 +5045,7 @@
    "name": "Great Gryzmon",
    "ko": "그레이트 그리즈몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -4745,6 +5060,7 @@
    "name": "Grey Knightsmon",
    "ko": "그레이나이츠몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -4761,6 +5077,7 @@
    "name": "Grey Wars",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -4775,6 +5092,7 @@
    "name": "Greymon",
    "ko": "그레이몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4790,6 +5108,7 @@
    "name": "Greymon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4804,6 +5123,7 @@
    "name": "Greymon (2010 Anime Version)",
    "ko": "",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Child",
     "Adult",
@@ -4823,6 +5143,7 @@
    "name": "Greymon (Blue)",
    "ko": "그레이몬(청)",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4837,6 +5158,7 @@
    "name": "Griffomon",
    "ko": "그리포몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -4852,6 +5174,7 @@
    "name": "Grottemon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -4869,6 +5192,7 @@
    "name": "Groundramon",
    "ko": "그라운드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -4883,6 +5207,7 @@
    "name": "Growmon",
    "ko": "그라우몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4897,6 +5222,7 @@
    "name": "Growmon (Orange)",
    "ko": "그라우몬(황)",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -4911,6 +5237,7 @@
    "name": "Gryzmon",
    "ko": "그리즈몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -4926,6 +5253,7 @@
    "name": "Guardromon",
    "ko": "가드로몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4942,6 +5270,7 @@
    "name": "Guilmon",
    "ko": "길몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -4956,6 +5285,7 @@
    "name": "Gulus Gammamon",
    "ko": "그루스감마몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -4971,6 +5301,7 @@
    "name": "Gumdramon",
    "ko": "가무드라몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child",
     "No Level"
@@ -4990,6 +5321,7 @@
    "name": "Gummymon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -5005,6 +5337,7 @@
    "name": "Gundramon",
    "ko": "건드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -5019,6 +5352,7 @@
    "name": "Gurimon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -5034,6 +5368,7 @@
    "name": "Gusokumon",
    "ko": "기간테우스몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5048,6 +5383,7 @@
    "name": "Gyukimon",
    "ko": "규우키몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -5063,6 +5399,7 @@
    "name": "Habakirimon",
    "ko": "하바키리몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -5077,6 +5414,7 @@
    "name": "Hagurumon",
    "ko": "톱니몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -5093,6 +5431,7 @@
    "name": "Hakubamon",
    "ko": "백마몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -5107,6 +5446,7 @@
    "name": "Hangyomon",
    "ko": "다이버몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -5122,6 +5462,7 @@
    "name": "Hanimon",
    "ko": "하니와몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -5136,6 +5477,7 @@
    "name": "Hanumon",
    "ko": "에이프몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -5150,6 +5492,7 @@
    "name": "Harpymon",
    "ko": "하피몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -5166,6 +5509,7 @@
    "name": "Hawkmon",
    "ko": "호크몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -5182,6 +5526,7 @@
    "name": "Heavy Leomon",
    "ko": "헤비레오몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5196,6 +5541,7 @@
    "name": "Helios Boamon",
    "ko": "헬리오스보아몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -5210,6 +5556,7 @@
    "name": "Helloogarmon",
    "ko": "헬루가몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -5224,6 +5571,7 @@
    "name": "Herakle Kabuterimon",
    "ko": "헤라클레스캅테리몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -5241,6 +5589,7 @@
    "name": "Herissmon",
    "ko": "에리스몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -5256,6 +5605,7 @@
    "name": "Hexeblaumon",
    "ko": "헥세블라우몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -5270,6 +5620,7 @@
    "name": "Hi-Commandramon",
    "ko": "하이코만드라몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -5285,6 +5636,7 @@
    "name": "Hi Andromon",
    "ko": "하이안드로몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5300,6 +5652,7 @@
    "name": "Hippogriffomon",
    "ko": "히포그리포몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -5314,6 +5667,7 @@
    "name": "Hisyaryumon",
    "ko": "히샤류우몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5328,6 +5682,7 @@
    "name": "Hiyarimon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -5343,6 +5698,7 @@
    "name": "Holsmon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -5360,6 +5716,7 @@
    "name": "Holy Angemon",
    "ko": "홀리엔젤몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5375,6 +5732,7 @@
    "name": "Holydramon",
    "ko": "홀리드라몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -5392,6 +5750,7 @@
    "name": "Hopmon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -5407,6 +5766,7 @@
    "name": "Hououmon",
    "ko": "페닉스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -5423,6 +5783,7 @@
    "name": "Hover Espimon",
    "ko": "호버에스피몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -5437,6 +5798,7 @@
    "name": "Huanglongmon",
    "ko": "황룡몬",
    "level": "Ultimate",
+   "attribute": "No Data",
    "levels": [
     "Ultimate"
    ],
@@ -5453,6 +5815,7 @@
    "name": "Huankunmon",
    "ko": "환쿤몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5468,6 +5831,7 @@
    "name": "Hudiemon",
    "ko": "후디에몬",
    "level": "Adult",
+   "attribute": "Free",
    "levels": [
     "Adult"
    ],
@@ -5482,6 +5846,7 @@
    "name": "Hydramon",
    "ko": "히드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -5497,6 +5862,7 @@
    "name": "Hyemon",
    "ko": "하이에몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -5511,6 +5877,7 @@
    "name": "Hyougamon",
    "ko": "블루우가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -5525,6 +5892,7 @@
    "name": "Ice Devimon",
    "ko": "아이스데블몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -5541,6 +5909,7 @@
    "name": "Icemon",
    "ko": "아이스몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Child",
     "Adult"
@@ -5557,6 +5926,7 @@
    "name": "Igamon",
    "ko": "닌자몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -5572,6 +5942,7 @@
    "name": "Ikkakumon",
    "ko": "원뿔몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -5587,6 +5958,7 @@
    "name": "Imperialdramon: Dragon Mode",
    "ko": "황제드라몬: 드래곤 모드",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -5606,6 +5978,7 @@
    "name": "Imperialdramon: Fighter Mode",
    "ko": "황제드라몬: 파이터 모드",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -5623,6 +5996,7 @@
    "name": "Imperialdramon: Paladin Mode",
    "ko": "황제드라몬: 팔라딘 모드",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5638,6 +6012,7 @@
    "name": "Impmon",
    "ko": "임프몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -5652,6 +6027,7 @@
    "name": "Indaramon",
    "ko": "인다라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -5666,6 +6042,7 @@
    "name": "JESmon",
    "ko": "제스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -5680,6 +6057,7 @@
    "name": "Jazamon",
    "ko": "쟈자몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -5694,6 +6072,7 @@
    "name": "Jazarichmon",
    "ko": "쟈자리히몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -5708,6 +6087,7 @@
    "name": "Jellymon",
    "ko": "젤리몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -5723,6 +6103,7 @@
    "name": "Jet Silphymon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -5742,6 +6123,7 @@
    "name": "Jewelbeemon",
    "ko": "주엘비몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5756,6 +6138,7 @@
    "name": "Jokermon",
    "ko": "조커몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -5773,6 +6156,7 @@
    "name": "Jougamon",
    "ko": "상아몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5787,6 +6171,7 @@
    "name": "Jumbo Gamemon",
    "ko": "멧돼지몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -5801,6 +6186,7 @@
    "name": "Junomon",
    "ko": "유노몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -5815,6 +6201,7 @@
    "name": "Jupitermon",
    "ko": "유피테르몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5829,6 +6216,7 @@
    "name": "Justimon: Accel Arm",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5843,6 +6231,7 @@
    "name": "Justimon: Blitz Arm",
    "ko": "저스티몬: 블리츠 암",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5857,6 +6246,7 @@
    "name": "Justimon: Critical Arm",
    "ko": "저스티몬: 크리티컬 암",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -5871,6 +6261,7 @@
    "name": "Jyagamon",
    "ko": "쟈가몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -5886,6 +6277,7 @@
    "name": "Jyarimon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -5901,6 +6293,7 @@
    "name": "Jyureimon",
    "ko": "쥬레이몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -5916,6 +6309,7 @@
    "name": "Kabuterimon",
    "ko": "캅테리몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -5931,6 +6325,7 @@
    "name": "Kaguyamon",
    "ko": "카구야몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -5945,10 +6340,11 @@
    "name": "Kaiser Greymon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Ultimate",
-    "No Level",
-    "Hybrid"
+    "Hybrid",
+    "No Level"
    ],
    "attributes": [
     "Free",
@@ -5965,6 +6361,7 @@
    "name": "Kaiser Leomon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -5982,6 +6379,7 @@
    "name": "Kakamon",
    "ko": "카카몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -5996,6 +6394,7 @@
    "name": "Kakkinmon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -6011,6 +6410,7 @@
    "name": "Kamemon",
    "ko": "카메몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child",
     "No Level"
@@ -6027,6 +6427,7 @@
    "name": "Karakurumon",
    "ko": "카라쿠루몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6041,6 +6442,7 @@
    "name": "Karatenmon",
    "ko": "크로우몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -6055,6 +6457,7 @@
    "name": "Karatuki Numemon",
    "ko": "달팽이워매몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -6069,6 +6472,7 @@
    "name": "Kaus Gammamon",
    "ko": "카우스감마몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6084,6 +6488,7 @@
    "name": "Kazuchimon",
    "ko": "카즈치몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -6098,6 +6503,7 @@
    "name": "Keemon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -6113,6 +6519,7 @@
    "name": "Kekkomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -6127,6 +6534,7 @@
    "name": "Kekomon",
    "ko": "케코몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -6141,6 +6549,7 @@
    "name": "Ketomon",
    "ko": "케토몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -6157,6 +6566,7 @@
    "name": "King Etemon",
    "ko": "킹에테몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -6171,6 +6581,7 @@
    "name": "King Whamon",
    "ko": "킹고래몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -6187,6 +6598,7 @@
    "name": "Kinkakumon",
    "ko": "킨카쿠몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -6202,6 +6614,7 @@
    "name": "Kiwimon",
    "ko": "키위몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6216,6 +6629,7 @@
    "name": "Knightmon",
    "ko": "나이트몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6231,6 +6645,7 @@
    "name": "Koemon",
    "ko": "코에몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -6245,6 +6660,7 @@
    "name": "Kokabuterimon",
    "ko": "코캅테리몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -6259,6 +6675,7 @@
    "name": "Kokeshimon",
    "ko": "코케시몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6273,6 +6690,7 @@
    "name": "Kokuwamon",
    "ko": "코쿠와몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -6288,6 +6706,7 @@
    "name": "Komondomon",
    "ko": "코몬도몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6302,6 +6721,7 @@
    "name": "Kongoumon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -6320,6 +6740,7 @@
    "name": "Koromon",
    "ko": "코로몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -6339,6 +6760,7 @@
    "name": "Kudamon",
    "ko": "쿠다몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -6353,6 +6775,7 @@
    "name": "Kumbhiramon",
    "ko": "굼비라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -6367,6 +6790,7 @@
    "name": "Kunemon",
    "ko": "쿠네몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -6381,6 +6805,7 @@
    "name": "Kuwagamon",
    "ko": "쿠가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -6396,6 +6821,7 @@
    "name": "Kuzuhamon",
    "ko": "쿠즈하몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -6410,6 +6836,7 @@
    "name": "Kuzuhamon: Miko Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -6424,6 +6851,7 @@
    "name": "Kyokyomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -6439,6 +6867,7 @@
    "name": "Kyubimon",
    "ko": "구미호몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6453,6 +6882,7 @@
    "name": "Kyukimon",
    "ko": "큐우키몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -6467,6 +6897,7 @@
    "name": "Lady Devimon",
    "ko": "레이디데블몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -6482,6 +6913,7 @@
    "name": "Laeus Greymon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -6496,6 +6928,7 @@
    "name": "Lalamon",
    "ko": "라라몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -6510,6 +6943,7 @@
    "name": "Lamiamon",
    "ko": "라미아몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -6524,6 +6958,7 @@
    "name": "Lamortmon",
    "ko": "라모르몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -6539,6 +6974,7 @@
    "name": "Lavogaritamon",
    "ko": "라보가리타몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -6553,6 +6989,7 @@
    "name": "Lavorvomon",
    "ko": "라보보몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -6567,6 +7004,7 @@
    "name": "Leafmon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -6582,6 +7020,7 @@
    "name": "Lekismon",
    "ko": "레키스몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6597,6 +7036,7 @@
    "name": "Leomon",
    "ko": "레오몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -6612,6 +7052,7 @@
    "name": "Liamon",
    "ko": "라이아몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -6626,6 +7067,7 @@
    "name": "Lianpumon",
    "ko": "리엔푸몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -6640,6 +7082,7 @@
    "name": "Lighdramon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -6659,6 +7102,7 @@
    "name": "Lilamon",
    "ko": "라일라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6673,6 +7117,7 @@
    "name": "Lilimon",
    "ko": "릴리몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6688,6 +7133,7 @@
    "name": "Lilithmon",
    "ko": "리리스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -6704,6 +7150,7 @@
    "name": "Liollmon",
    "ko": "레오르몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -6718,6 +7165,7 @@
    "name": "Loader Leomon",
    "ko": "로더레오몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -6732,6 +7180,7 @@
    "name": "Locomon",
    "ko": "로코몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6746,6 +7195,7 @@
    "name": "Loogamon",
    "ko": "루가몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -6761,6 +7211,7 @@
    "name": "Loogarmon",
    "ko": "루갈몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -6776,6 +7227,7 @@
    "name": "Lord Knightmon",
    "ko": "로드나이트몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -6790,6 +7242,7 @@
    "name": "Lotusmon",
    "ko": "로터스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -6804,6 +7257,7 @@
    "name": "Lucemon: Falldown Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -6821,6 +7275,7 @@
    "name": "Lucemon: Satan Mode",
    "ko": "루체몬: 사탄 모드",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -6836,6 +7291,7 @@
    "name": "Ludomon",
    "ko": "루도몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -6851,6 +7307,7 @@
    "name": "Luminamon",
    "ko": "루미나몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -6866,6 +7323,7 @@
    "name": "Lunamon",
    "ko": "루나몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -6881,6 +7339,7 @@
    "name": "Luxmon",
    "ko": "럭스몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -6895,6 +7354,7 @@
    "name": "Lynxmon",
    "ko": "링스몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -6913,6 +7373,7 @@
    "name": "Löwemon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -6930,6 +7391,7 @@
    "name": "Mach Gaogamon",
    "ko": "마하가오가몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -6944,6 +7406,7 @@
    "name": "Machmon",
    "ko": "마하몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -6958,6 +7421,7 @@
    "name": "Mad Leomon",
    "ko": "매드레오몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -6976,6 +7440,7 @@
    "name": "Mad Leomon: Armed Mode",
    "ko": "매드레오몬: 암드 모드",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -6993,6 +7458,7 @@
    "name": "Magna Garurumon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Ultimate",
     "Hybrid"
@@ -7011,6 +7477,7 @@
    "name": "Magna Kidmon",
    "ko": "매그너키드몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7025,6 +7492,7 @@
    "name": "Magnamon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -7045,6 +7513,7 @@
    "name": "Mail Birdramon",
    "ko": "메일버드라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -7063,6 +7532,7 @@
    "name": "Majiramon",
    "ko": "마지라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7077,6 +7547,7 @@
    "name": "Makuramon",
    "ko": "마쿠라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7091,6 +7562,7 @@
    "name": "Mamemon",
    "ko": "콩알몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7106,6 +7578,7 @@
    "name": "Mametyramon",
    "ko": "콩알티라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7120,6 +7593,7 @@
    "name": "Mammon",
    "ko": "맘몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7136,6 +7610,7 @@
    "name": "Manbomon",
    "ko": "맘보몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -7152,6 +7627,7 @@
    "name": "Manekimon",
    "ko": "마네키몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -7166,6 +7642,7 @@
    "name": "Manticoremon",
    "ko": "만티코어몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7180,6 +7657,7 @@
    "name": "Marin Angemon",
    "ko": "마린엔젤몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -7197,6 +7675,7 @@
    "name": "Marin Bullmon",
    "ko": "마린불몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7211,6 +7690,7 @@
    "name": "Marin Chimairamon",
    "ko": "마린키메라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7225,6 +7705,7 @@
    "name": "Marin Devimon",
    "ko": "마린데블몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "Perfect",
@@ -7243,6 +7724,7 @@
    "name": "Marsmon",
    "ko": "마르스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -7259,6 +7741,7 @@
    "name": "Mastemon",
    "ko": "마스테몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -7273,6 +7756,7 @@
    "name": "Master Blimpmon",
    "ko": "마스터브링프몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7287,6 +7771,7 @@
    "name": "Master Tyranomon",
    "ko": "마스터티라노몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7303,6 +7788,7 @@
    "name": "Matadrmon",
    "ko": "마타돌몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7317,6 +7803,7 @@
    "name": "Mechanorimon",
    "ko": "메카노몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "Perfect"
@@ -7332,6 +7819,7 @@
    "name": "Medal",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7346,6 +7834,7 @@
    "name": "Medieval Dukemon",
    "ko": "메디벌듀크몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -7360,6 +7849,7 @@
    "name": "Mega Seadramon",
    "ko": "메가시드라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7375,6 +7865,7 @@
    "name": "Megadramon",
    "ko": "메가드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7390,6 +7881,7 @@
    "name": "Megalo Growmon",
    "ko": "메가로그라우몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7404,6 +7896,7 @@
    "name": "Megalo Growmon (Orange)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7418,6 +7911,7 @@
    "name": "Megidramon",
    "ko": "메기드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7432,6 +7926,7 @@
    "name": "Mephismon",
    "ko": "메피스몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7446,6 +7941,7 @@
    "name": "Meramon",
    "ko": "메라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -7463,6 +7959,7 @@
    "name": "Mercuremon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -7480,6 +7977,7 @@
    "name": "Mercurymon",
    "ko": "메르크리몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7495,6 +7993,7 @@
    "name": "Mermaimon",
    "ko": "인어몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7511,6 +8010,7 @@
    "name": "Metal Etemon",
    "ko": "메탈에테몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -7528,6 +8028,7 @@
    "name": "Metal Garurumon",
    "ko": "메탈가루몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -7545,6 +8046,7 @@
    "name": "Metal Garurumon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -7559,6 +8061,7 @@
    "name": "Metal Garurumon (Black)",
    "ko": "메탈가루몬(흑)",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7573,6 +8076,7 @@
    "name": "Metal Greymon",
    "ko": "메탈그레이몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7589,6 +8093,7 @@
    "name": "Metal Greymon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7603,6 +8108,7 @@
    "name": "Metal Greymon: Alterous Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7617,6 +8123,7 @@
    "name": "Metal Greymon (2010 Anime Version)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -7635,6 +8142,7 @@
    "name": "Metal Greymon (Virus)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7650,6 +8158,7 @@
    "name": "Metal Greymon (Virus): \"G\" Erosion Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7664,6 +8173,7 @@
    "name": "Metal Mamemon",
    "ko": "메탈콩알몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7681,6 +8191,7 @@
    "name": "Metal Seadramon",
    "ko": "메탈시드라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -7697,6 +8208,7 @@
    "name": "Metal Tyranomon",
    "ko": "메탈티라노몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7712,6 +8224,7 @@
    "name": "Metallicdramon",
    "ko": "메탈릭드라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -7726,6 +8239,7 @@
    "name": "Metallife Kuwagamon",
    "ko": "메탈리퍼쿠가몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -7740,6 +8254,7 @@
    "name": "Mihiramon",
    "ko": "미히라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7754,6 +8269,7 @@
    "name": "Millenniumon",
    "ko": "밀레니엄몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7768,6 +8284,7 @@
    "name": "Minervamon",
    "ko": "미네르바몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -7782,6 +8299,7 @@
    "name": "Minomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7797,6 +8315,7 @@
    "name": "Mirage Gaogamon",
    "ko": "미라쥬가오가몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -7811,6 +8330,7 @@
    "name": "Mirage Gaogamon: Burst Mode",
    "ko": "미라쥬가오가몬: 버스트 모드",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -7825,6 +8345,7 @@
    "name": "Missimon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7840,6 +8361,7 @@
    "name": "Mitamamon",
    "ko": "미타마몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -7855,6 +8377,7 @@
    "name": "Mochimon",
    "ko": "모티몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7873,6 +8396,7 @@
    "name": "Mococomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7888,6 +8412,7 @@
    "name": "Mojyamon",
    "ko": "모털몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -7903,6 +8428,7 @@
    "name": "Mokumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -7919,6 +8445,7 @@
    "name": "Monarch Lizamon",
    "ko": "모나크리자몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -7933,6 +8460,7 @@
    "name": "Monochromon",
    "ko": "모노크로몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -7948,6 +8476,7 @@
    "name": "Monodramon",
    "ko": "모노드라몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -7964,6 +8493,7 @@
    "name": "Monzaemon",
    "ko": "퍼펫몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -7979,6 +8509,7 @@
    "name": "Moonmon",
    "ko": "문몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -7993,6 +8524,7 @@
    "name": "Moosemon",
    "ko": "무스몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -8009,6 +8541,7 @@
    "name": "Morphomon",
    "ko": "모르포몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -8023,6 +8556,7 @@
    "name": "Mugendramon",
    "ko": "파워드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -8041,6 +8575,7 @@
    "name": "Mugendramon: MFS-3 Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8056,6 +8591,7 @@
    "name": "Mummymon",
    "ko": "미이라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8072,6 +8608,7 @@
    "name": "Murasamemon",
    "ko": "무라사메몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8086,6 +8623,7 @@
    "name": "Murmukusmon",
    "ko": "무르무크스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8100,6 +8638,7 @@
    "name": "Mushmon",
    "ko": "머슈몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -8114,6 +8653,7 @@
    "name": "Musyamon",
    "ko": "무사몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8129,6 +8669,7 @@
    "name": "Namakemon",
    "ko": "나마케몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8143,6 +8684,7 @@
    "name": "Nanimon",
    "ko": "모야몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8157,6 +8699,7 @@
    "name": "Nanomon",
    "ko": "데이터몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8172,6 +8715,7 @@
    "name": "Nefertimon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -8188,6 +8732,7 @@
    "name": "Neo Devimon",
    "ko": "네오데블몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8202,6 +8747,7 @@
    "name": "Neo Vamdemon",
    "ko": "네오묘티스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate",
     "No Level"
@@ -8220,6 +8766,7 @@
    "name": "Neptunemon",
    "ko": "넵튠몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -8236,6 +8783,7 @@
    "name": "Nezhamon",
    "ko": "나타몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -8250,6 +8798,7 @@
    "name": "Nezhamon: Crimson Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -8264,6 +8813,7 @@
    "name": "Nidhoggmon",
    "ko": "니즈헤그몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8278,6 +8828,7 @@
    "name": "Night Chiropmon",
    "ko": "나이트카이롭몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8292,6 +8843,7 @@
    "name": "Noble Pumpmon",
    "ko": "노블펌프몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -8307,6 +8859,7 @@
    "name": "Nosferamon",
    "ko": "노스페라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8321,6 +8874,7 @@
    "name": "Numemon",
    "ko": "워매몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8337,6 +8891,7 @@
    "name": "Nyaromon",
    "ko": "야옹몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -8353,6 +8908,7 @@
    "name": "Nyokimon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -8369,6 +8925,7 @@
    "name": "Oboromon",
    "ko": "오보로몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8384,6 +8941,7 @@
    "name": "Octmon",
    "ko": "옥토몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8400,6 +8958,7 @@
    "name": "Okuwamon",
    "ko": "왕쿠가몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8415,6 +8974,7 @@
    "name": "Oleamon",
    "ko": "올리아몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8429,6 +8989,7 @@
    "name": "Olegmon",
    "ko": "오레그몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate",
     "No Level"
@@ -8447,6 +9008,7 @@
    "name": "Omedamon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -8461,6 +9023,7 @@
    "name": "Omega Knight",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -8475,6 +9038,7 @@
    "name": "Omega Shoutmon",
    "ko": "오메가샤우트몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "Perfect",
@@ -8497,6 +9061,7 @@
    "name": "Omegamon",
    "ko": "오메가몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -8513,6 +9078,7 @@
    "name": "Omegamon: \"G\" Fusion Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -8527,6 +9093,7 @@
    "name": "Omegamon Alter-S",
    "ko": "오메가몬 alter-S",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8541,6 +9108,7 @@
    "name": "Omegamon Zwart",
    "ko": "오메가몬 즈왈트",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -8555,6 +9123,7 @@
    "name": "Onibimon",
    "ko": "오니비몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -8570,6 +9139,7 @@
    "name": "Orgemon",
    "ko": "우가몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8585,6 +9155,7 @@
    "name": "Orochimon",
    "ko": "오로치몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8599,6 +9170,7 @@
    "name": "Otamamon",
    "ko": "올챙몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Baby II",
     "Child"
@@ -8615,6 +9187,7 @@
    "name": "Ouryumon",
    "ko": "오류우몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -8629,6 +9202,7 @@
    "name": "Pagumon",
    "ko": "퍼그몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -8647,6 +9221,7 @@
    "name": "Paildramon",
    "ko": "파일드라몬",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -8664,6 +9239,7 @@
    "name": "Pajiramon",
    "ko": "파지라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8678,6 +9254,7 @@
    "name": "Paledramon",
    "ko": "페일드라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -8692,6 +9269,7 @@
    "name": "Palmon",
    "ko": "팔몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -8709,6 +9287,7 @@
    "name": "Pandamon",
    "ko": "팬더몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -8724,6 +9303,7 @@
    "name": "Panjyamon",
    "ko": "화이트레오몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "Perfect"
@@ -8740,6 +9320,7 @@
    "name": "Panjyamon (X-Antibody)",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -8754,6 +9335,7 @@
    "name": "Panoptemon",
    "ko": "",
    "level": "Perfect",
+   "attribute": "",
    "levels": [
     "Perfect"
    ],
@@ -8766,6 +9348,7 @@
    "name": "Parasaurmon",
    "ko": "파라사우몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -8780,6 +9363,7 @@
    "name": "Parasimon",
    "ko": "패러사이몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8794,6 +9378,7 @@
    "name": "Parrotmon",
    "ko": "패롯몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -8808,6 +9393,7 @@
    "name": "Patamon",
    "ko": "파닥몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -8825,6 +9411,7 @@
    "name": "Pawn Chessmon (White)",
    "ko": "",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -8840,6 +9427,7 @@
    "name": "Peacockmon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -8857,6 +9445,7 @@
    "name": "Peckmon",
    "ko": "펙크몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -8872,6 +9461,7 @@
    "name": "Pegasmon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -8890,6 +9480,7 @@
    "name": "Petaldramon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Unknown",
@@ -8908,6 +9499,7 @@
    "name": "Peti Meramon",
    "ko": "푸치메라몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby I",
     "Baby II",
@@ -8927,6 +9519,7 @@
    "name": "Petitmon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -8942,6 +9535,7 @@
    "name": "Pharaohmon",
    "ko": "파라오몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -8956,6 +9550,7 @@
    "name": "Phascomon",
    "ko": "파스코몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -8970,6 +9565,7 @@
    "name": "Phelesmon",
    "ko": "펠레스몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -8984,6 +9580,7 @@
    "name": "Piccolomon",
    "ko": "피콜몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -9001,6 +9598,7 @@
    "name": "Pickmon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II",
     "No Level"
@@ -9017,6 +9615,7 @@
    "name": "Pico Devimon",
    "ko": "피코데블몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -9031,6 +9630,7 @@
    "name": "Pidmon",
    "ko": "피드몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -9045,6 +9645,7 @@
    "name": "Piemon",
    "ko": "피에몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -9061,6 +9662,7 @@
    "name": "Pinochimon",
    "ko": "피노키몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -9076,6 +9678,7 @@
    "name": "Piranimon",
    "ko": "피라니몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -9090,6 +9693,7 @@
    "name": "Pistmon",
    "ko": "피스트몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -9104,6 +9708,7 @@
    "name": "Pitchmon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9120,6 +9725,7 @@
    "name": "Piyomon",
    "ko": "피요몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -9135,6 +9741,7 @@
    "name": "Platinum Numemon",
    "ko": "플래티넘워매몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9149,6 +9756,7 @@
    "name": "Plesiomon",
    "ko": "플레시오몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -9165,6 +9773,7 @@
    "name": "Plotmon",
    "ko": "플롯트몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -9180,6 +9789,7 @@
    "name": "Plutomon",
    "ko": "플루토몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9195,6 +9805,7 @@
    "name": "Pokomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -9210,6 +9821,7 @@
    "name": "Pomumon",
    "ko": "폼몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -9224,6 +9836,7 @@
    "name": "Popomon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9239,6 +9852,7 @@
    "name": "Porcupamon",
    "ko": "포큐파몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -9253,6 +9867,7 @@
    "name": "Poromon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -9268,6 +9883,7 @@
    "name": "Poyomon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9285,6 +9901,7 @@
    "name": "Pristimon",
    "ko": "프리스티몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -9299,6 +9916,7 @@
    "name": "Proximamon",
    "ko": "프록시마몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9314,6 +9932,7 @@
    "name": "Pteromon",
    "ko": "프테로몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -9328,6 +9947,7 @@
    "name": "Publimon",
    "ko": "퍼블리몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -9342,6 +9962,7 @@
    "name": "Pucchiemon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -9359,6 +9980,7 @@
    "name": "Pucchiemon (Green)",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -9376,6 +9998,7 @@
    "name": "Pukamon",
    "ko": "둥실몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -9394,6 +10017,7 @@
    "name": "Pukumon",
    "ko": "푸쿠몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9409,6 +10033,7 @@
    "name": "Pulsemon",
    "ko": "펄스몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -9423,6 +10048,7 @@
    "name": "Pumpmon",
    "ko": "펌프몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -9438,6 +10064,7 @@
    "name": "Punimon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9456,6 +10083,7 @@
    "name": "Pururumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9471,6 +10099,7 @@
    "name": "Puyomon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9486,6 +10115,7 @@
    "name": "Puyoyomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -9501,6 +10131,7 @@
    "name": "Pyocomon",
    "ko": "어니몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -9519,6 +10150,7 @@
    "name": "Pyonmon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9534,6 +10166,7 @@
    "name": "Quantumon",
    "ko": "퀀타몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -9548,6 +10181,7 @@
    "name": "Quartzmon",
    "ko": "쿼츠몬",
    "level": "Ultimate",
+   "attribute": "Unknown",
    "levels": [
     "Ultimate",
     "No Level"
@@ -9566,6 +10200,7 @@
    "name": "Rafflesimon",
    "ko": "라플레시몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -9581,6 +10216,7 @@
    "name": "Ragna Lordmon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9595,6 +10231,7 @@
    "name": "Ragnamon",
    "ko": "라그나몬",
    "level": "Ultimate",
+   "attribute": "Unknown",
    "levels": [
     "Ultimate"
    ],
@@ -9612,6 +10249,7 @@
    "name": "Raidenmon",
    "ko": "라이덴몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9627,6 +10265,7 @@
    "name": "Raihimon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -9645,6 +10284,7 @@
    "name": "Raiji Ludomon",
    "ko": "라이지루도몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -9659,6 +10299,7 @@
    "name": "Raijinmon",
    "ko": "뇌신몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9673,6 +10314,7 @@
    "name": "Ranamon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Hybrid"
@@ -9690,6 +10332,7 @@
    "name": "Rapidmon Armor",
    "ko": "래피드몬",
    "level": "Armor",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "Perfect",
@@ -9707,6 +10350,7 @@
    "name": "Rapidmon Perfect",
    "ko": "래피드몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -9721,6 +10365,7 @@
    "name": "Raptor Sparrowmon",
    "ko": "랩터스패로우몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -9738,6 +10383,7 @@
    "name": "Raptordramon",
    "ko": "라프타드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -9753,6 +10399,7 @@
    "name": "Rare Raremon",
    "ko": "레어레어몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -9767,6 +10414,7 @@
    "name": "Raremon",
    "ko": "레어몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -9782,6 +10430,7 @@
    "name": "Rasenmon",
    "ko": "라센몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -9796,6 +10445,7 @@
    "name": "Rasenmon: Fury Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -9810,6 +10460,7 @@
    "name": "Ravmon",
    "ko": "레이브몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -9825,6 +10476,7 @@
    "name": "Ravmon: Burst Mode",
    "ko": "레이브몬: 버스트 모드",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -9840,6 +10492,7 @@
    "name": "Rebellimon",
    "ko": "리벨리몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -9854,6 +10507,7 @@
    "name": "Regalecusmon",
    "ko": "레가렉스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -9868,6 +10522,7 @@
    "name": "Regulusmon",
    "ko": "레굴루스몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -9883,6 +10538,7 @@
    "name": "Relemon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -9899,6 +10555,7 @@
    "name": "Renamon",
    "ko": "레나몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -9914,6 +10571,7 @@
    "name": "Reppamon",
    "ko": "레파몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -9928,6 +10586,7 @@
    "name": "Revolmon",
    "ko": "카우보이몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -9942,6 +10601,7 @@
    "name": "Rhamphomon",
    "ko": "람포몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -9956,6 +10616,7 @@
    "name": "Rhino Kabuterimon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -9972,6 +10633,7 @@
    "name": "Rhinomon",
    "ko": "리노몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -9989,6 +10651,7 @@
    "name": "Rize Greymon",
    "ko": "라이즈그레이몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -10003,6 +10666,7 @@
    "name": "Rosemon",
    "ko": "로제몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -10019,6 +10683,7 @@
    "name": "Rosemon: Burst Mode",
    "ko": "로제몬: 버스트 모드",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10033,6 +10698,7 @@
    "name": "Rukamon",
    "ko": "루카몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -10048,6 +10714,7 @@
    "name": "Runnermon",
    "ko": "런너몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -10062,6 +10729,7 @@
    "name": "Rust Tyranomon",
    "ko": "러스트티라노몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -10076,6 +10744,7 @@
    "name": "Ryudamon",
    "ko": "류우다몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -10090,6 +10759,7 @@
    "name": "Ryugumon",
    "ko": "용궁몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10104,6 +10774,7 @@
    "name": "Saber Leomon",
    "ko": "샤벨레오몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -10121,6 +10792,7 @@
    "name": "Saberdramon",
    "ko": "블랙버드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -10136,6 +10808,7 @@
    "name": "Sagittarimon",
    "ko": "사수몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -10154,6 +10827,7 @@
    "name": "Sagomon",
    "ko": "사고몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -10168,6 +10842,7 @@
    "name": "Saint Galgomon",
    "ko": "세인트가르고몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -10182,6 +10857,7 @@
    "name": "Sakumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -10197,6 +10873,7 @@
    "name": "Sakuttomon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -10212,6 +10889,7 @@
    "name": "Sakuyamon",
    "ko": "샤크라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10226,6 +10904,7 @@
    "name": "Sakuyamon: Miko Mode",
    "ko": "샤크라몬: 무녀 모드",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10240,6 +10919,7 @@
    "name": "Sakuyamon (X-Antibody)",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10254,6 +10934,7 @@
    "name": "Sandiramon",
    "ko": "산티라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -10268,6 +10949,7 @@
    "name": "Sangloupmon",
    "ko": "상굴몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -10282,6 +10964,7 @@
    "name": "Sangomon",
    "ko": "산호몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child"
    ],
@@ -10296,6 +10979,7 @@
    "name": "Sanzomon",
    "ko": "삼장몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -10310,6 +10994,7 @@
    "name": "Scorpiomon",
    "ko": "전갈몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -10324,6 +11009,7 @@
    "name": "Scourge Chiropmon",
    "ko": "스커지처프몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -10338,6 +11024,7 @@
    "name": "Scumon",
    "ko": "스카몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -10352,6 +11039,7 @@
    "name": "Seadramon",
    "ko": "시드라몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -10367,6 +11055,7 @@
    "name": "Sealsdramon",
    "ko": "실즈드라몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -10381,6 +11070,7 @@
    "name": "Seiten Gokuwmon",
    "ko": "제천손오공몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -10396,6 +11086,7 @@
    "name": "Sekkamon",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -10410,6 +11101,7 @@
    "name": "Sephirothmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -10427,6 +11119,7 @@
    "name": "Seraphimon",
    "ko": "세라피몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -10443,6 +11136,7 @@
    "name": "Shadramon",
    "ko": "샤드라몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -10460,6 +11154,7 @@
    "name": "Shagaramon",
    "ko": "사가라몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10475,6 +11170,7 @@
    "name": "Shakamon",
    "ko": "샤카몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -10490,6 +11186,7 @@
    "name": "Shakkoumon",
    "ko": "토우몬",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -10507,6 +11204,7 @@
    "name": "Shakomon",
    "ko": "샤코몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child",
     "Perfect"
@@ -10522,6 +11220,7 @@
    "name": "Sharkmon",
    "ko": "샤크몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -10536,6 +11235,7 @@
    "name": "Shellmon",
    "ko": "쉘몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -10551,6 +11251,7 @@
    "name": "Shin Monzaemon",
    "ko": "신퍼펫몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -10566,6 +11267,7 @@
    "name": "Shine Greymon",
    "ko": "샤인그레이몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -10580,6 +11282,7 @@
    "name": "Shine Greymon: Burst Mode",
    "ko": "샤인그레이몬: 버스트 모드",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -10594,6 +11297,7 @@
    "name": "Shishimamon",
    "ko": "시시마몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -10608,6 +11312,7 @@
    "name": "Shivamon",
    "ko": "시바몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -10622,6 +11327,7 @@
    "name": "Shooting Starmon",
    "ko": "슈팅스타몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -10639,6 +11345,7 @@
    "name": "Shootmon",
    "ko": "슛몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -10653,6 +11360,7 @@
    "name": "Shoutmon",
    "ko": "샤우트몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child",
     "No Level"
@@ -10672,6 +11380,7 @@
    "name": "Shoutmon DX",
    "ko": "샤우트몬 DX",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate",
@@ -10692,6 +11401,7 @@
    "name": "Shoutmon EX6",
    "ko": "샤우트몬 EX6",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -10708,6 +11418,7 @@
    "name": "Shoutmon X2",
    "ko": "샤우트몬X2",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -10726,6 +11437,7 @@
    "name": "Shoutmon X3",
    "ko": "샤우트몬X3",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -10744,6 +11456,7 @@
    "name": "Shoutmon X3GM",
    "ko": "샤우트몬X3GM",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10760,6 +11473,7 @@
    "name": "Shoutmon X3SD",
    "ko": "샤우트몬X3SD",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10776,6 +11490,7 @@
    "name": "Shoutmon X4",
    "ko": "샤우트몬X4",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -10795,6 +11510,7 @@
    "name": "Shoutmon X4B",
    "ko": "샤우트몬X4B",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10812,6 +11528,7 @@
    "name": "Shoutmon X4K",
    "ko": "샤우트몬X4K",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10828,6 +11545,7 @@
    "name": "Shoutmon X4S",
    "ko": "샤우트몬X4S",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10844,6 +11562,7 @@
    "name": "Shoutmon X5",
    "ko": "샤우트몬X5",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -10862,6 +11581,7 @@
    "name": "Shoutmon X5B",
    "ko": "샤우트몬X5B",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -10879,6 +11599,7 @@
    "name": "Shoutmon X5S",
    "ko": "샤우트몬X5S",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -10895,6 +11616,7 @@
    "name": "Shoutmon X7",
    "ko": "샤우트몬x7",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -10914,6 +11636,7 @@
    "name": "Shoutmon X7: Superior Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -10931,6 +11654,7 @@
    "name": "Shroudmon",
    "ko": "슈라우드몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -10945,6 +11669,7 @@
    "name": "Shurimon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Child",
     "Adult",
@@ -10964,6 +11689,7 @@
    "name": "Shutumon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Perfect",
     "Hybrid"
@@ -10981,6 +11707,7 @@
    "name": "Siesamon",
    "ko": "시사몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -10996,6 +11723,7 @@
    "name": "Silphymon",
    "ko": "실피드몬",
    "level": "Perfect",
+   "attribute": "Free",
    "levels": [
     "Perfect"
    ],
@@ -11012,6 +11740,7 @@
    "name": "Sinduramon",
    "ko": "신드라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11026,6 +11755,7 @@
    "name": "Sirenmon",
    "ko": "세이렌몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11041,6 +11771,7 @@
    "name": "Siriusmon",
    "ko": "시리우스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11056,6 +11787,7 @@
    "name": "Skull Baluchimon",
    "ko": "스컬벌키몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11070,6 +11802,7 @@
    "name": "Skull Greymon",
    "ko": "스컬그레이몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -11085,6 +11818,7 @@
    "name": "Skull Greymon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -11100,6 +11834,7 @@
    "name": "Skull Knightmon",
    "ko": "스컬나이트몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Child",
     "Adult",
@@ -11119,6 +11854,7 @@
    "name": "Skull Mammon",
    "ko": "스컬맘몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11134,6 +11870,7 @@
    "name": "Skull Satamon",
    "ko": "스컬사탄몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -11149,6 +11886,7 @@
    "name": "Skull Seadramon",
    "ko": "스컬시드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -11163,6 +11901,7 @@
    "name": "Slash Angemon",
    "ko": "슬래쉬엔젤몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11178,6 +11917,7 @@
    "name": "Slayerdramon",
    "ko": "슬레이어드라몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11192,6 +11932,7 @@
    "name": "Snakemon",
    "ko": "",
    "level": "Child",
+   "attribute": "",
    "levels": [
     "Child"
    ],
@@ -11204,6 +11945,7 @@
    "name": "Snatchmon",
    "ko": "스내치몬",
    "level": "Adult",
+   "attribute": "Unknown",
    "levels": [
     "Adult"
    ],
@@ -11219,6 +11961,7 @@
    "name": "Snimon",
    "ko": "스나이몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -11233,6 +11976,7 @@
    "name": "Snow Goburimon",
    "ko": "스노우고부리몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -11247,6 +11991,7 @@
    "name": "Soloogarmon",
    "ko": "솔루가몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -11262,6 +12007,7 @@
    "name": "Spadamon",
    "ko": "스파다몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child",
     "No Level"
@@ -11277,6 +12023,7 @@
    "name": "Sparrowmon",
    "ko": "스패로우몬",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child",
     "No Level"
@@ -11295,6 +12042,7 @@
    "name": "Spinomon",
    "ko": "스피노몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11309,6 +12057,7 @@
    "name": "Splashmon",
    "ko": "스플래시몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -11327,6 +12076,7 @@
    "name": "Splashmon Darkness Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -11344,6 +12094,7 @@
    "name": "Starmon",
    "ko": "스타몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11359,6 +12110,7 @@
    "name": "Starmons",
    "ko": "스타몬즈",
    "level": "Child",
+   "attribute": "Data",
    "levels": [
     "Child",
     "No Level"
@@ -11377,6 +12129,7 @@
    "name": "Stiffilmon",
    "ko": "스티필몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11391,6 +12144,7 @@
    "name": "Stingmon",
    "ko": "스팅몬",
    "level": "Adult",
+   "attribute": "Free",
    "levels": [
     "Adult"
    ],
@@ -11408,6 +12162,7 @@
    "name": "Strabimon",
    "ko": "스트라비몬",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Child",
     "Hybrid"
@@ -11424,6 +12179,7 @@
    "name": "Strikedramon",
    "ko": "스트라이크드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -11439,6 +12195,7 @@
    "name": "Submarimon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Armor"
@@ -11456,6 +12213,7 @@
    "name": "Sunamon",
    "ko": "스나몬",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -11471,6 +12229,7 @@
    "name": "Sunarizamon",
    "ko": "샌드리자몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -11485,6 +12244,7 @@
    "name": "Sunflowmon",
    "ko": "해바라기몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11499,6 +12259,7 @@
    "name": "Sunmon",
    "ko": "썬몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -11513,6 +12274,7 @@
    "name": "Superstarmon",
    "ko": "슈퍼스타몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -11528,6 +12290,7 @@
    "name": "Susanoomon",
    "ko": "스사노오몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate",
     "Hybrid"
@@ -11544,6 +12307,7 @@
    "name": "Symbare Angoramon",
    "ko": "진바앙고라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -11559,6 +12323,7 @@
    "name": "Tactimon",
    "ko": "택티몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate",
     "No Level"
@@ -11576,6 +12341,7 @@
    "name": "Tailmon",
    "ko": "가트몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Child",
     "Adult"
@@ -11593,6 +12359,7 @@
    "name": "Takinmon",
    "ko": "타키몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -11607,6 +12374,7 @@
    "name": "Takutoumon",
    "ko": "탁탑몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11621,6 +12389,7 @@
    "name": "Takutoumon: Wrath Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -11635,6 +12404,7 @@
    "name": "Tanemon",
    "ko": "시드몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -11653,6 +12423,7 @@
    "name": "Tankdramon",
    "ko": "탱크드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -11667,6 +12438,7 @@
    "name": "Tankmon",
    "ko": "탱크몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11681,6 +12453,7 @@
    "name": "Taomon",
    "ko": "도사몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11695,6 +12468,7 @@
    "name": "Taotiemon",
    "ko": "타오티에몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11709,6 +12483,7 @@
    "name": "Taowumon",
    "ko": "타오우몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11723,6 +12498,7 @@
    "name": "Tempomon",
    "ko": "템포몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11737,6 +12513,7 @@
    "name": "Tengumon",
    "ko": "텐구몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11751,6 +12528,7 @@
    "name": "Tenkomon",
    "ko": "",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -11765,6 +12543,7 @@
    "name": "Tentomon",
    "ko": "텐타몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -11782,6 +12561,7 @@
    "name": "Terriermon",
    "ko": "테리어몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -11797,6 +12577,7 @@
    "name": "Tesla Jellymon",
    "ko": "테슬라젤리몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11812,6 +12593,7 @@
    "name": "Thetismon",
    "ko": "테티스몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -11827,6 +12609,7 @@
    "name": "Thunderballmon",
    "ko": "번개콩알몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11842,6 +12625,7 @@
    "name": "Thunderbirmon",
    "ko": "",
    "level": "Armor",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "Armor"
@@ -11857,6 +12641,7 @@
    "name": "Tia Ludomon",
    "ko": "티아루도몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11872,6 +12657,7 @@
    "name": "Tiger Vespamon",
    "ko": "타이거베스파몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11886,6 +12672,7 @@
    "name": "Tinkermon",
    "ko": "팅커몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -11900,6 +12687,7 @@
    "name": "Tinpet",
    "ko": "",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -11914,6 +12702,7 @@
    "name": "Titamon",
    "ko": "타이타몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11928,6 +12717,7 @@
    "name": "Titamon + Skull Baluchimon",
    "ko": "타이타몬 + 스컬벌키몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -11942,6 +12732,7 @@
    "name": "Tlalocmon",
    "ko": "틀랄록몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -11956,6 +12747,7 @@
    "name": "Tobiumon",
    "ko": "플라잉피쉬몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -11970,6 +12762,7 @@
    "name": "Togemon",
    "ko": "니드몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -11986,6 +12779,7 @@
    "name": "Tokomon",
    "ko": "토코몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -12003,6 +12797,7 @@
    "name": "Tomorimon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -12018,6 +12813,7 @@
    "name": "Tonosama Gekomon",
    "ko": "왕개굴몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12033,6 +12829,7 @@
    "name": "Toropiamon",
    "ko": "트로피아몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12047,6 +12844,7 @@
    "name": "Tortamon",
    "ko": "토타몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -12062,6 +12860,7 @@
    "name": "Toy Agumon",
    "ko": "토이아구몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -12077,6 +12876,7 @@
    "name": "Triceramon",
    "ko": "트리케라몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -12092,6 +12892,7 @@
    "name": "Troopmon",
    "ko": "트루프몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "No Level"
@@ -12109,6 +12910,7 @@
    "name": "Tsubumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -12124,6 +12926,7 @@
    "name": "Tunomon",
    "ko": "뿔몬",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -12142,6 +12945,7 @@
    "name": "Turuiemon",
    "ko": "토리에몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -12157,6 +12961,7 @@
    "name": "Tuskmon",
    "ko": "태스크몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -12171,6 +12976,7 @@
    "name": "Tuwarmon",
    "ko": "츠와몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "No Level"
@@ -12188,6 +12994,7 @@
    "name": "Tyilinmon",
    "ko": "치린몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12202,6 +13009,7 @@
    "name": "Tylomon",
    "ko": "티로몬",
    "level": "Armor",
+   "attribute": "Free",
    "levels": [
     "Adult",
     "Perfect",
@@ -12219,6 +13027,7 @@
    "name": "Tyranomon",
    "ko": "티라노몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -12235,6 +13044,7 @@
    "name": "Tyrant Kabuterimon",
    "ko": "타이런트캅테리몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -12249,6 +13059,7 @@
    "name": "Ukkomon",
    "ko": "웃코몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -12264,6 +13075,7 @@
    "name": "Ulforce V-dramon",
    "ko": "알포스브이드라몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -12279,6 +13091,7 @@
    "name": "Ultimate Brachimon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -12293,6 +13106,7 @@
    "name": "Unimon",
    "ko": "",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -12307,6 +13121,7 @@
    "name": "Upamon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -12322,6 +13137,7 @@
    "name": "V-dramon",
    "ko": "브이드라몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -12337,6 +13153,7 @@
    "name": "V-mon",
    "ko": "브이몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -12353,6 +13170,7 @@
    "name": "Vademon",
    "ko": "베이더몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12367,6 +13185,7 @@
    "name": "Vajramon",
    "ko": "바지라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12381,6 +13200,7 @@
    "name": "Valkyrimon",
    "ko": "발키리몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -12398,6 +13218,7 @@
    "name": "Valvemon",
    "ko": "밸브몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -12414,6 +13235,7 @@
    "name": "Vamdemon",
    "ko": "묘티스몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12429,6 +13251,7 @@
    "name": "Vegimon",
    "ko": "베지몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -12444,6 +13267,7 @@
    "name": "Velgrmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Perfect",
@@ -12461,6 +13285,7 @@
    "name": "Venom Vamdemon",
    "ko": "베놈묘티스몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -12477,6 +13302,7 @@
    "name": "Venusmon",
    "ko": "베누스몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -12491,6 +13317,7 @@
    "name": "Vermillimon",
    "ko": "버밀리몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Adult",
     "Perfect"
@@ -12507,6 +13334,7 @@
    "name": "Victory Greymon",
    "ko": "빅토리그레이몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -12521,6 +13349,7 @@
    "name": "Vikaralamon",
    "ko": "비가라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12535,6 +13364,7 @@
    "name": "Vikemon",
    "ko": "바이킹몬",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -12554,6 +13384,7 @@
    "name": "Vipmon",
    "ko": "",
    "level": "Adult",
+   "attribute": "",
    "levels": [
     "Adult"
    ],
@@ -12566,6 +13397,7 @@
    "name": "Volcamon",
    "ko": "볼케몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect"
    ],
@@ -12580,6 +13412,7 @@
    "name": "Volcanicdramon",
    "ko": "볼케닉드라몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -12594,6 +13427,7 @@
    "name": "Voltobautamon",
    "ko": "볼토바우타몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -12608,6 +13442,7 @@
    "name": "Volvemon",
    "ko": "볼브몬",
    "level": "Ultimate",
+   "attribute": "Unknown",
    "levels": [
     "Ultimate"
    ],
@@ -12622,6 +13457,7 @@
    "name": "Vorvomon",
    "ko": "보보몬",
    "level": "Child",
+   "attribute": "Virus",
    "levels": [
     "Child"
    ],
@@ -12636,6 +13472,7 @@
    "name": "Vritramon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Adult",
     "Perfect",
@@ -12654,6 +13491,7 @@
    "name": "Vulcanusmon",
    "ko": "불카누스몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -12668,6 +13506,7 @@
    "name": "Vulturemon",
    "ko": "벌처몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12682,6 +13521,7 @@
    "name": "Wankomon",
    "ko": "멍멍몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -12696,6 +13536,7 @@
    "name": "Wanyamon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -12712,6 +13553,7 @@
    "name": "War Greymon",
    "ko": "워그레이몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect",
     "Ultimate"
@@ -12728,6 +13570,7 @@
    "name": "War Greymon: \"G\" Erosion Mode",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -12742,6 +13585,7 @@
    "name": "Waru Monzaemon",
    "ko": "배드퍼펫몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12758,6 +13602,7 @@
    "name": "Waru Seadramon",
    "ko": "데블시드라몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12772,6 +13617,7 @@
    "name": "Waspmon",
    "ko": "말벌몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -12786,6 +13632,7 @@
    "name": "Wendimon",
    "ko": "웬디몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -12800,6 +13647,7 @@
    "name": "Were Garurumon",
    "ko": "워가루몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12816,6 +13664,7 @@
    "name": "Were Garurumon: Sagittarius Mode",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12830,6 +13679,7 @@
    "name": "Were Garurumon (Black)",
    "ko": "워가루몬(흑)",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12845,6 +13695,7 @@
    "name": "Wezen Gammamon",
    "ko": "웨즌감마몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -12860,6 +13711,7 @@
    "name": "Whamon",
    "ko": "고래몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult",
     "Perfect"
@@ -12875,6 +13727,7 @@
    "name": "Whamon Perfect",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12889,6 +13742,7 @@
    "name": "Wingdramon",
    "ko": "윙드라몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -12903,6 +13757,7 @@
    "name": "Wisemon",
    "ko": "와이즈몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -12917,6 +13772,7 @@
    "name": "Wizarmon",
    "ko": "위자몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -12932,6 +13788,7 @@
    "name": "Wolfmon",
    "ko": "",
    "level": "Hybrid",
+   "attribute": "Variable",
    "levels": [
     "Child",
     "Adult",
@@ -12950,6 +13807,7 @@
    "name": "Wolvermon",
    "ko": "울버몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -12964,6 +13822,7 @@
    "name": "Woodmon",
    "ko": "우드몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -12978,6 +13837,7 @@
    "name": "Wormmon",
    "ko": "추추몬",
    "level": "Child",
+   "attribute": "Free",
    "levels": [
     "Child"
    ],
@@ -12995,6 +13855,7 @@
    "name": "XV-mon",
    "ko": "엑스브이몬",
    "level": "Adult",
+   "attribute": "Free",
    "levels": [
     "Adult"
    ],
@@ -13012,6 +13873,7 @@
    "name": "Xiangpengmon",
    "ko": "샹펑몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -13027,6 +13889,7 @@
    "name": "Xingtianmon",
    "ko": "싱티안몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -13041,6 +13904,7 @@
    "name": "Xiquemon",
    "ko": "시취에몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -13057,6 +13921,7 @@
    "name": "Yaeger Dorulumon",
    "ko": "",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect",
     "No Level"
@@ -13075,6 +13940,7 @@
    "name": "Yarmon",
    "ko": "",
    "level": "Baby II",
+   "attribute": "None",
    "levels": [
     "Baby II"
    ],
@@ -13090,6 +13956,7 @@
    "name": "Yatagaramon (2006 Anime Version)",
    "ko": "야타가라몬(2006)",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -13105,6 +13972,7 @@
    "name": "Yihumon",
    "ko": "이후몬",
    "level": "Ultimate",
+   "attribute": "Vaccine",
    "levels": [
     "Ultimate"
    ],
@@ -13119,6 +13987,7 @@
    "name": "Youkomon",
    "ko": "요우코몬",
    "level": "Adult",
+   "attribute": "Data",
    "levels": [
     "Adult"
    ],
@@ -13133,6 +14002,7 @@
    "name": "Yukidarumon",
    "ko": "프리지몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -13149,6 +14019,7 @@
    "name": "Yukimi Botamon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -13165,6 +14036,7 @@
    "name": "Yukinamon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -13179,6 +14051,7 @@
    "name": "Yuramon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -13196,6 +14069,7 @@
    "name": "Z'd Garurumon",
    "ko": "지드가루몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -13210,6 +14084,7 @@
    "name": "Zamielmon",
    "ko": "자미엘몬",
    "level": "Perfect",
+   "attribute": "Data",
    "levels": [
     "Perfect",
     "No Level"
@@ -13227,6 +14102,7 @@
    "name": "Zanbamon",
    "ko": "황금무사몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -13242,6 +14118,7 @@
    "name": "Zanmetsumon",
    "ko": "잔메츠몬",
    "level": "Perfect",
+   "attribute": "Virus",
    "levels": [
     "Perfect"
    ],
@@ -13256,6 +14133,7 @@
    "name": "Zassoumon",
    "ko": "그린베지몬",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -13270,6 +14148,7 @@
    "name": "Zeke Greymon",
    "ko": "지크그레이몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Adult",
     "Ultimate",
@@ -13290,6 +14169,7 @@
    "name": "Zephagamon",
    "ko": "제퍼가몬",
    "level": "Ultimate",
+   "attribute": "Data",
    "levels": [
     "Ultimate"
    ],
@@ -13304,6 +14184,7 @@
    "name": "Zerimon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -13319,6 +14200,7 @@
    "name": "Zino Garurumon",
    "ko": "",
    "level": "Ultimate",
+   "attribute": "Free",
    "levels": [
     "Ultimate"
    ],
@@ -13333,6 +14215,7 @@
    "name": "Zombie Plutomon",
    "ko": "좀비플루토몬",
    "level": "Ultimate",
+   "attribute": "Virus",
    "levels": [
     "Ultimate"
    ],
@@ -13347,6 +14230,7 @@
    "name": "Zubaeagermon",
    "ko": "즈바이거몬",
    "level": "Adult",
+   "attribute": "Vaccine",
    "levels": [
     "Adult"
    ],
@@ -13361,6 +14245,7 @@
    "name": "Zubamon",
    "ko": "즈바몬",
    "level": "Child",
+   "attribute": "Vaccine",
    "levels": [
     "Child"
    ],
@@ -13375,6 +14260,7 @@
    "name": "Zudomon",
    "ko": "쥬드몬",
    "level": "Perfect",
+   "attribute": "Vaccine",
    "levels": [
     "Perfect"
    ],
@@ -13390,6 +14276,7 @@
    "name": "Zurumon",
    "ko": "",
    "level": "Baby I",
+   "attribute": "None",
    "levels": [
     "Baby I"
    ],
@@ -13406,6 +14293,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13418,6 +14306,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13430,6 +14319,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13442,6 +14332,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13454,6 +14345,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13466,6 +14358,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13478,6 +14371,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13490,6 +14384,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13502,6 +14397,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13514,6 +14410,7 @@
    "name": "Red Vegimon",
    "ko": "",
    "level": "Adult",
+   "attribute": "Virus",
    "levels": [
     "Adult"
    ],
@@ -13528,6 +14425,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
@@ -13540,6 +14438,7 @@
    "name": "Digitama",
    "ko": "",
    "level": "Digitama",
+   "attribute": "",
    "levels": [
     "Digitama"
    ],
