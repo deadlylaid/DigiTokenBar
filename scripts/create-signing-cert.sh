@@ -4,7 +4,7 @@
 # 개인키/인증서는 keychain 에만 저장되며 레포에 절대 커밋하지 않는다.
 set -euo pipefail
 
-IDENTITY="PokeTokenBar Local"
+IDENTITY="DigiTokenBar Local"   # must match SIGN_IDENTITY in build-app.sh
 KEYCHAIN="$HOME/Library/Keychains/login.keychain-db"
 
 identity_is_valid() {
