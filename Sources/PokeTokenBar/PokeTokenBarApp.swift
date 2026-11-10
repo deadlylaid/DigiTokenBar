@@ -23,7 +23,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private var store: UsageStore!
     private var companion: CompanionStore!
     private var updater: UpdateChecker!
-    private var floatingPet: FloatingPetController!
+    private var digimon: DigimonStore!
+    private var digimonHub: DigimonSceneHub!
+    private var deskPet: DigimonDeskPet!
+    /// The menu sprite being downloaded; `menuSpriteKey` is set only once it is shown.
+    private var menuLoadingKey: String?
     private let navigation = PopoverNavigation()
 
     // 메뉴바 캐릭터 애니메이션 — 단일 타이머로 프레임 순환.
@@ -69,7 +73,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
     @objc private func handleGetURL(_ event: NSAppleEventDescriptor, withReply reply: NSAppleEventDescriptor) {
         guard let url = Self.url(fromGetURLEvent: event), let agentEvent = AgentActivityEvent(url: url) else { return }
-        floatingPet?.handleAgentEvent(agentEvent)   // nil until launch finishes; the event is dropped
+        deskPet?.handleAgentEvent(agentEvent)   // nil until launch finishes; the event is dropped
     }
 
     nonisolated static func url(fromGetURLEvent event: NSAppleEventDescriptor) -> URL? {
@@ -104,16 +108,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             LoginItem.system.migrateFromLegacyAgentIfNeeded()
         }
         store = UsageStore()
+        // CompanionStore stays for the app language and settings; the Pokemon companion itself
+        // no longer grows (no PokeAPI downloads, no hatching, no candy).
         companion = CompanionStore()
-        Task { await companion.preparePokemonProfiles() }
+        digimon = DigimonStore()
+        digimonHub = DigimonSceneHub(digimon: digimon)
+        digimonHub.language = companion.language
+        digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
         updater = UpdateChecker()
         store.localizationLanguage = companion.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
-        floatingPet = FloatingPetController(
-            store: store, companion: companion,
-            onOpenPopover: { [weak self] in self?.openPopover() },
-            onHide: { [weak self] in self?.store.floatingPetEnabled = false }
-        )   // 데스크톱 플로팅 펫(옵트인)
+        deskPet = DigimonDeskPet(store: store, hub: digimonHub)   // desktop pet (opt-in "floating pet" setting)
         Task { await updater.check() }                    // 기동 시 1회 업데이트 확인
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -143,7 +148,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// (isStale 은 더 이상 추적 안 함 — 메뉴바 dim 제거로 시각 출력에 관여하지 않음.)
     private func observeStore() {
         withObservationTracking {
-            _ = MenuBarContent.lines(store: store, companion: companion)
+            _ = MenuBarContent.lines(store: store, digimon: digimon)
             _ = store.menuToolTip
             _ = store.alwaysFacesBack   // mirrored into the companion by `updateCompanion`
             // The mode and thresholds can change the colors while the text stays the same.
@@ -168,8 +173,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// (플로팅 펫은 `body` 에서 직접 읽어 SwiftUI 관찰이 처리한다.)
     private func observeCompanionSprite() {
         withObservationTracking {
-            _ = companion.representativeSubject
-            _ = companion.facesBack   // part of `menuSpriteKey`
+            _ = digimon.state.partner.speciesKey
+            _ = digimon.state.partner.lineID
             _ = store.animationQuality
         } onChange: { [weak self] in
             Task { @MainActor in
@@ -200,7 +205,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         guard let button = statusItem.button else { return }
         updateCompanion()
         // Recomputed on every refresh, so a tier that moves with the clock redraws even when the text doesn't.
-        Self.applyMenuText(MenuBarContent.lines(store: store, companion: companion),
+        Self.applyMenuText(MenuBarContent.lines(store: store, digimon: digimon),
                            to: button, colors: store.menuLimitColorRuns())
         button.toolTip = store.menuToolTip
         needsSpriteLayout = true   // 텍스트 길이가 바뀌면 버튼 폭이 변해 이미지 자리도 움직인다
@@ -268,24 +273,51 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
     }
 
-    /// UsageStore 값 → CompanionStore (사용량 적립 + 표시 상태). 매 관찰 변경 시 호출.
+    /// The Digimon sleeps after this long without new usage and wakes when it is fed.
+    static let digimonSleepAfter: TimeInterval = 30 * 60
+
+    /// UsageStore → DigimonStore (new tokens become experience). Runs on every observed change;
+    /// DigimonStore only writes when something changed, so this cannot loop with `observeStore`.
     private func updateCompanion() {
-        companion.alwaysFacesBack = store.alwaysFacesBack
-        companion.update(
-            todayTokensByProvider: store.todayTokensByProvider,
-            todayDate: LocalUsageReader.todayKey(),
-            monthTotal: store.monthTotalTokens,
-            burnTier: store.burnTier,
-            limitWarning: store.isLimitWarning,
-            hasUsageData: store.hasUsageData,
-            timeSinceLastUsage: store.timeSinceLastUsage())
+        digimon.update(todayTokensByProvider: store.todayTokensByProvider,
+                       todayDate: LocalUsageReader.todayKey(),
+                       hasUsageData: store.hasUsageData)
+        let sleeping = (store.timeSinceLastUsage() ?? .infinity) > Self.digimonSleepAfter
+        if sleeping != digimonHub.sleeping || companion.language != digimonHub.language {
+            digimonHub.sleeping = sleeping
+            digimonHub.language = companion.language
+            digimonHub.refresh()
+        }
     }
 
-    /// 매 refresh 완료 훅 — companion 갱신 + 사탕 지급(한도가 신선한 시점). 지급을 여기 묶는 이유는
-    /// UsageStore.onRefresh 주석 참조(observeStore 만으론 한도 변경이 companion 에 안 전달되는 케이스).
+    /// After each refresh, when limits are fresh: newly filled limits are care mistakes.
+    /// Tied here for the reason in the UsageStore.onRefresh comment.
     private func onStoreRefreshed() {
         updateCompanion()
-        companion.grantCandies(from: store.candyEligibleWindows, limitsReady: store.limitsReady)
+        digimon.recordLimitWindows(store.candyEligibleWindows, limitsReady: store.limitsReady)
+    }
+
+    /// Hatching, evolving and feeding play in every scene; milestones also notify.
+    private func digimonActivity(_ events: [DigimonEvent], fed: Int) {
+        digimonHub.play(events, fed: fed > 0)
+        let t = DigimonText(companion.language)
+        let catalog = digimon.engine.catalog
+        let name = { (key: String) in t.name(catalog.species(key)) }
+        for event in events {
+            switch event {
+            case .hatched(let species):
+                DigimonNotifier.post(t.hatchedTitle, name(species))
+            case .evolved(let from, let to):
+                DigimonNotifier.post(t.evolvedTitle, "\(name(from)) → \(name(to))")
+            case .choiceOffered(let candidates):
+                let hours = Int(digimon.engine.growth.choiceTimeout / 3600)
+                DigimonNotifier.post(t.chooseNotifyTitle, t.chooseNotifyBody(candidates.map(name), hours: hours))
+            case .graduated(_, let path):
+                DigimonNotifier.post(t.graduatedTitle, t.graduatedBody(path.last.map(name) ?? name("")))
+            case .newEgg:
+                break
+            }
+        }
     }
 
     // MARK: 메뉴바 애니메이션
@@ -317,46 +349,64 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// 프레임률만 낮춰, 애니메이션을 유지한 채 절전한다(bob 2회/s ↔ powerSaver ≤2.5회/s 로 근접).
     private func ensureMenuAnimation() {
         guard displayAwake else { return }
-        let subject = companion.representativeSubject
-        let id = subject.speciesID
-        let shiny = subject.isShiny
-        let form = subject.form
-        let back = companion.facesBack
-        let key = id.map { Self.menuSpriteKey(id: $0, shiny: shiny, floor: menuFrameFloor, form: form, back: back) }
-        if key == menuSpriteKey, !menuFrames.isEmpty { return }   // 이미 이 개체로 애니메이션 중
+        let partner = digimon.state.partner
+        let key = "\(DigimonSceneHub.sceneKey(partner))-\(menuFrameFloor)"
+        if key == menuSpriteKey, !menuFrames.isEmpty { return }   // already showing this one
+        if key == menuLoadingKey, menuLoadTask != nil { return }  // already downloading it
         menuLoadTask?.cancel()
         menuLoadTask = nil
-        menuSpriteKey = key
         menuLoadGen += 1
         let gen = menuLoadGen
+        let eggHex = digimon.line?.eggColorHex ?? "999999"
 
-        guard let id else {                  // 알: 2프레임 bob
-            setMenuFrames(Self.eggFrames())
+        guard let species = digimon.species else {   // egg: two wobble frames
+            menuLoadingKey = nil
+            menuSpriteKey = key
+            setMenuFrames(Self.digimonEggFrames(hex: eggHex))
             return
         }
-        // Seed from the PNG cache immediately; a missing PNG must not delay the first GIF request.
-        let cached = SpriteLoader.cachedImage(speciesID: id, shiny: shiny, form: form, back: back)
-        setMenuFrames(cached.map { Self.bobFrames(from: $0) } ?? Self.eggFrames())
-
-        // One owned task applies its static fallback before retrying GIFs. A late PNG response
-        // can no longer overwrite a successfully loaded animation.
+        // Keep showing the previous look while the new sprite downloads (an evolution shows the
+        // old form until the new one is ready); only an empty bar gets the egg.
+        if menuFrames.isEmpty { setMenuFrames(Self.digimonEggFrames(hex: eggHex)) }
+        menuLoadingKey = key
+        let sprites = digimonHub.sprites
         menuLoadTask = Task { @MainActor [weak self] in
-            guard let self, gen == self.menuLoadGen else { return }
-            defer { if gen == self.menuLoadGen { self.menuLoadTask = nil } }
-            let raw = await SpriteLoader.recoveringAnimationFrames(
-                speciesID: id, shiny: shiny, form: form, back: back,
-                onUnavailable: {
-                    guard cached == nil, !Task.isCancelled, gen == self.menuLoadGen else { return }
-                    let sprite = await SpriteLoader.image(speciesID: id, shiny: shiny, form: form, back: back)
-                    guard !Task.isCancelled, gen == self.menuLoadGen, let sprite else { return }
-                    self.setMenuFrames(Self.bobFrames(from: sprite))
-                })
-            guard !Task.isCancelled, raw.count > 1, gen == self.menuLoadGen else { return }
-            // fps 캡 = `menuFrameFloor`. 프레임마다 상태바 재합성(CA 커밋 → 디스플레이 사이클
-            // wakeup)이 붙으므로 네이티브 fps 로는 절대 돌리지 않는다(근거는 상수 주석).
-            // 솎아낸 **뒤** 22px 로 합성한다 — 버려질 프레임까지 합성하지 않게.
-            let capped = GIFDecoder.capFrameRate(raw, floor: self.menuFrameFloor)
-            self.setMenuFrames(capped.map { (Self.menuBarImage(from: $0.image, up: false), $0.delay) })
+            let frames = await sprites.menuFrames(file: species.colorSprite).compactMap { NSImage(data: $0) }
+            let fallback: NSImage? = frames.isEmpty
+                ? await sprites.menuFallback(file: species.vbSprite).flatMap { NSImage(data: $0) } : nil
+            guard let self, !Task.isCancelled, gen == self.menuLoadGen else { return }
+            self.menuLoadTask = nil
+            self.menuLoadingKey = nil
+            if frames.count > 1 {
+                self.setMenuFrames(frames.map { (Self.digimonMenuImage($0, up: false), 0.5) })
+            } else if let still = frames.first {
+                self.setMenuFrames([(Self.digimonMenuImage(still, up: false), 0.5), (Self.digimonMenuImage(still, up: true), 0.5)])
+            } else if let fallback {
+                self.setMenuFrames(Self.bobFrames(from: fallback))
+            } else {
+                return   // offline and not cached: keep what is shown, retry on the next refresh
+            }
+            self.menuSpriteKey = key
+        }
+    }
+
+    /// A 16 px color V-Pet frame drawn 1:1 in points (2x pixels on Retina), centered in the bar.
+    static func digimonMenuImage(_ sprite: NSImage, up: Bool) -> NSImage {
+        guard sprite.size.width <= 16, sprite.size.height <= 16 else { return menuBarImage(from: sprite, up: up) }
+        let img = NSImage(size: NSSize(width: 18, height: 22))
+        img.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .none
+        let x = 1 + (16 - sprite.size.width) / 2
+        sprite.draw(in: NSRect(x: x, y: 3 + (up ? 1 : 0), width: sprite.size.width, height: sprite.size.height),
+                    from: .zero, operation: .sourceOver, fraction: 1)
+        img.unlockFocus()
+        return img
+    }
+
+    private static func digimonEggFrames(hex: String) -> [(image: NSImage, delay: TimeInterval)] {
+        [0, 0.6].compactMap { wobble in
+            DigimonEggArt.png(size: 16, hex: hex, wobble: wobble).flatMap { NSImage(data: $0) }
+                .map { (digimonMenuImage($0, up: false), 0.5) }
         }
     }
 
@@ -588,7 +638,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private func buildPopoverContent() {
         popover.contentViewController = NSHostingController(
             rootView: PopoverView()
-                .environment(store).environment(companion).environment(updater).environment(navigation))
+                .environment(store).environment(companion).environment(updater).environment(navigation)
+                .environment(digimon).environment(digimonHub))
     }
 
     @objc private func statusItemClicked() {
@@ -607,6 +658,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             l: companion.l, todayTokens: store.todayTotalTokens,
             todayCost: store.showsCost ? store.todayUsageCost : nil,
             floatingPetEnabled: store.floatingPetEnabled, alwaysFacesBack: store.alwaysFacesBack)
+            .filter { $0?.action != .openDex && $0?.action != .toggleBackView }   // Pokemon-only items
         // Attaching the menu only for this click keeps left click on the popover. performClick
         // tracks the menu synchronously, with the button highlighted like any other status menu.
         statusItem.menu = StatusItemMenu.build(entries, target: self, selector: #selector(handleStatusMenu(_:)))
@@ -617,7 +669,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     @objc private func handleStatusMenu(_ item: NSMenuItem) {
         switch StatusItemMenu.action(of: item) {
         case .refresh: Task { await store.refresh() }
-        case .openDex: showPopover { $0.openRepresentativeDex() }
+        case .openDex: showPopover()
         case .openSettings: showPopover { $0.showSettings = true }
         case .toggleFloatingPet: store.floatingPetEnabled.toggle()
         case .toggleBackView: store.alwaysFacesBack.toggle()
@@ -707,7 +759,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             ensureMenuAnimation()
         }
         syncMenuAnimation()
-        floatingPet.setDisplayAwake(awake)   // 슬립 중엔 펫 호스팅 트리 해제(GIF 루프 정지)
+        deskPet.setDisplayAwake(awake)   // no desktop scene while the display sleeps
     }
 
     /// menuShouldAnimate 상태에 맞춰 애니메이션을 재개/정지한다(멱등 — 중복 호출 안전).

@@ -15,8 +15,9 @@ final class DigimonStore {
     }
 
     private(set) var saved: Saved
-    /// Events not yet shown by the UI (hatch, evolution, choice, graduation).
-    private(set) var pendingEvents: [DigimonEvent] = []
+    /// Called after every input with what happened (hatch, evolution, choice, graduation) and how
+    /// many new tokens were fed, so the scenes can play it. Not called when nothing happened.
+    @ObservationIgnored var onActivity: @MainActor (_ events: [DigimonEvent], _ fedTokens: Int) -> Void = { _, _ in }
 
     let engine: EvolutionEngine
     private let fileURL: URL
@@ -47,53 +48,65 @@ final class DigimonStore {
         (state.pendingChoice?.candidates ?? []).compactMap(engine.catalog.species)
     }
 
+    var expToday: Int { state.expDay == engine.dayKey(clock()) ? state.expToday : 0 }
+    /// Hours left before the engine picks for the user (at least 1 while a choice is open).
+    var choiceHoursLeft: Int? {
+        guard let pending = state.pendingChoice else { return nil }
+        let left = engine.growth.choiceTimeout - clock().timeIntervalSince(pending.offeredAt)
+        return max(1, Int((left / 3600).rounded(.up)))
+    }
+    var menuGrowthText: String { "\(Int(progress * 100))%" }
+
     // MARK: Inputs
+    //
+    // Every input works on a copy and writes `saved` back only when it changed. The menu bar
+    // observes this store and calls `update` from its own refresh. Mutating `saved` in place
+    // (`saved.ledger.observe(...)`) notifies observers even when nothing changes, which would make
+    // the two trigger each other forever (`testAnUpdateWithNothingNewDoesNotNotifyObservers`).
 
     /// Called on every usage refresh with today's per-provider totals.
     func update(todayTokensByProvider: [String: Int], todayDate: String, hasUsageData: Bool) {
-        let before = saved
-        let deltas = saved.ledger.observe(todayTokensByProvider: todayTokensByProvider,
-                                          todayDate: todayDate, hasUsageData: hasUsageData)
+        var next = saved
+        let deltas = next.ledger.observe(todayTokensByProvider: todayTokensByProvider,
+                                         todayDate: todayDate, hasUsageData: hasUsageData)
         let now = clock()
         var events: [DigimonEvent] = []
         for (provider, tokens) in deltas.sorted(by: { $0.key < $1.key }) {
-            events += engine.addUsage(&saved.digimon, tokens: tokens, provider: provider, at: now)
+            events += engine.addUsage(&next.digimon, tokens: tokens, provider: provider, at: now)
         }
-        events += engine.tick(&saved.digimon, now: now)
-        finish(events, changedFrom: before)
+        events += engine.tick(&next.digimon, now: now)
+        commit(next, events, fed: deltas.values.reduce(0, +))
     }
 
     /// Called after limits load: newly filled 5-hour / weekly windows count as care mistakes.
     func recordLimitWindows(_ windows: [CandyWindow], limitsReady: Bool) {
-        let before = saved
-        let hits = saved.limits.observe(windows, limitsReady: limitsReady)
-        for _ in 0..<hits { engine.recordLimitHit(&saved.digimon) }
-        finish([], changedFrom: before)
+        var next = saved
+        let hits = next.limits.observe(windows, limitsReady: limitsReady)
+        for _ in 0..<hits { engine.recordLimitHit(&next.digimon) }
+        commit(next, [])
     }
 
     func recordBugDefeated() {
-        let before = saved
-        engine.recordBugDefeated(&saved.digimon)
-        finish([], changedFrom: before)
+        var next = saved
+        engine.recordBugDefeated(&next.digimon)
+        commit(next, [])
     }
 
     func choose(_ key: String) {
-        let before = saved
-        let events = engine.choose(&saved.digimon, key, at: clock())
-        finish(events, changedFrom: before)
-    }
-
-    func consumeEvents() -> [DigimonEvent] {
-        defer { pendingEvents = [] }
-        return pendingEvents
+        var next = saved
+        let events = engine.choose(&next.digimon, key, at: clock())
+        commit(next, events)
     }
 
     // MARK: Saving
 
-    private func finish(_ events: [DigimonEvent], changedFrom before: Saved) {
-        pendingEvents += events
+    private func commit(_ next: Saved, _ events: [DigimonEvent], fed: Int = 0) {
         for event in events { AppLog.write("digimon \(event)") }
-        if saved != before { save() }
+        if next != saved {
+            saved = next
+            save()
+        }
+        if !events.isEmpty || fed > 0 { onActivity(events, fed) }
     }
 
     private func save() {

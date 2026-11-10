@@ -89,6 +89,9 @@ struct PopoverView: View {
     @Environment(CompanionStore.self) private var companion
     @Environment(UpdateChecker.self) private var updater
     @Environment(PopoverNavigation.self) private var nav
+    /// Optional so screens and tests that host the popover without the Digimon still render.
+    @Environment(DigimonStore.self) private var digimon: DigimonStore?
+    @Environment(DigimonSceneHub.self) private var digimonHub: DigimonSceneHub?
 
     private var l: L { companion.l }
     @State private var showingClaudeKeychainHelp = false
@@ -150,15 +153,10 @@ struct PopoverView: View {
         @Bindable var nav = nav
         return VStack(alignment: .leading, spacing: 12) {
             updateBanner
-            Picker("", selection: $nav.tab) {
-                Text(l.home).tag(PopoverTab.home)
-                Text(l.shop).tag(PopoverTab.shop)
-                Text(l.bag).tag(PopoverTab.bag)
-                Text(l.collection).tag(PopoverTab.collection)
+            // DigiTokenBar shows Home only: the Pokemon shop, bag and collection tabs are hidden.
+            if let digimonHub {
+                DigimonScenePanel(hub: digimonHub, language: companion.language)
             }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-
             if nav.tab == .collection {
                 CollectionView(store: companion, navigation: nav)
             } else if nav.tab == .bag {
@@ -166,10 +164,14 @@ struct PopoverView: View {
             } else if nav.tab == .shop {
                 ShopView(store: companion, nav: nav)
             } else {
-                // 고정 높이 — 상점/가방/컬렉션과 동일(팝오버가 화면을 넘어가는 것을 방지).
+                // Fixed height so the popover never grows past the screen.
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        CompanionHeader(store: companion) { nav.openDexEntry(collectionID: $0) }
+                        if let digimon, let digimonHub {
+                            DigimonStatusView(digimon: digimon, hub: digimonHub, language: companion.language)
+                        } else {
+                            CompanionHeader(store: companion) { nav.openDexEntry(collectionID: $0) }
+                        }
                         Divider()
                         header
                         Divider()
@@ -181,7 +183,7 @@ struct PopoverView: View {
                     }
                     .reservesScrollerLane()
                 }
-                .frame(height: 520)
+                .frame(height: digimonHub == nil ? 520 : 400)
             }
             footer
         }

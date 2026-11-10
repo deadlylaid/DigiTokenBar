@@ -96,6 +96,25 @@ enum PixelArt {
         return Bitmap(width: side, height: side, rgba: out)
     }
 
+    /// Cropped to the visible pixels (alpha > 0). A fully transparent bitmap is returned as is.
+    static func trimmed(_ b: Bitmap) -> Bitmap {
+        var minX = b.width, minY = b.height, maxX = -1, maxY = -1
+        for y in 0..<b.height {
+            for x in 0..<b.width where b.rgba[(y * b.width + x) * 4 + 3] > 0 {
+                minX = min(minX, x); maxX = max(maxX, x)
+                minY = min(minY, y); maxY = max(maxY, y)
+            }
+        }
+        guard maxX >= 0 else { return b }
+        let w = maxX - minX + 1, h = maxY - minY + 1
+        var out = [UInt8](repeating: 0, count: w * h * 4)
+        for y in 0..<h {
+            let s = ((y + minY) * b.width + minX) * 4, d = y * w * 4
+            out[d..<d + w * 4] = b.rgba[s..<s + w * 4]
+        }
+        return Bitmap(width: w, height: h, rgba: out)
+    }
+
     static func frames(_ data: Data) -> [CGImage] {
         guard let src = CGImageSourceCreateWithData(data as CFData, nil) else { return [] }
         return (0..<CGImageSourceGetCount(src)).compactMap { CGImageSourceCreateImageAtIndex(src, $0, nil) }
@@ -149,6 +168,13 @@ actor DigimonSpriteStore {
         }
     }
 
+    /// Menu bar fallback for species without a color sprite: the V-Pet sprite cropped to its pixels.
+    func menuFallback(file: String) async -> Data? {
+        guard let data = await original(file), let first = PixelArt.frames(data).first,
+              let bitmap = PixelArt.bitmap(first) else { return nil }
+        return PixelArt.image(PixelArt.trimmed(PixelArt.native(bitmap))).flatMap(PixelArt.png)
+    }
+
     /// The Wikimon file, from the cache when fresh enough.
     func original(_ file: String) async -> Data? {
         let local = directory.appendingPathComponent(file)
@@ -187,5 +213,56 @@ actor DigimonSpriteStore {
         f.timeZone = TimeZone(identifier: "GMT")
         f.dateFormat = "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
         return f.string(from: date)
+    }
+}
+
+/// The egg shown before hatching. It is a plain spotted egg drawn in code, not taken from any Digimon
+/// artwork, tinted with the line's color. 64 px for the scene, 16 px for the menu bar.
+enum DigimonEggArt {
+    typealias RGB = (r: UInt8, g: UInt8, b: UInt8)
+
+    static func colors(hex: String) -> (spot: RGB, rim: RGB) {
+        let v = UInt32(hex, radix: 16) ?? 0x808080
+        let spot: RGB = (UInt8(v >> 16 & 0xFF), UInt8(v >> 8 & 0xFF), UInt8(v & 0xFF))
+        func darker(_ c: UInt8) -> UInt8 { UInt8(Double(c) * 0.8) }
+        return (spot, (darker(spot.r), darker(spot.g), darker(spot.b)))
+    }
+
+    static func bitmap(size: Int, hex: String, wobble: Double = 0) -> PixelArt.Bitmap {
+        let (spot, rim) = colors(hex: hex)
+        let rx = size >= 32 ? 11 * Double(size) / 64 : 5.3
+        let ry = size >= 32 ? 14 * Double(size) / 64 : 7.2
+        let cx = Double(size - 1) / 2 + wobble
+        let cy = Double(size - 1) - ry + 0.5
+        func inside(_ px: Int, _ py: Int) -> Bool {
+            let dy = (Double(py) - cy) / ry
+            let k = Double(py) < cy ? 1 - 0.22 * -dy : 1
+            let dx = (Double(px) - cx) / (rx * k)
+            return dx * dx + dy * dy <= 1
+        }
+        // Spot centers in radius units and sizes in horizontal radius units.
+        let spots: [(Double, Double, Double)] = [(-0.41, -0.32, 0.25), (0.45, 0.21, 0.31), (-0.64, 0.46, 0.2), (0.5, -0.64, 0.18)]
+        var rgba = [UInt8](repeating: 0, count: size * size * 4)
+        for py in 0..<size {
+            for px in 0..<size where inside(px, py) {
+                let edge = !(inside(px - 1, py) && inside(px + 1, py) && inside(px, py - 1) && inside(px, py + 1))
+                let nx = (Double(px) - cx) / rx, ny = (Double(py) - cy) / ry
+                var col: RGB = nx * 0.6 + ny * 0.8 > 0.55 ? (231, 221, 199) : (251, 246, 234)
+                for (ox, oy, r) in spots {
+                    let d = hypot(Double(px) - (cx + ox * rx), Double(py) - (cy + oy * ry))
+                    let rr = max(r * rx, 1)
+                    if d <= rr { col = size >= 32 && d > rr - 1 ? rim : spot }
+                }
+                if -0.7 < nx, nx < -0.3, -0.75 < ny, ny < -0.3 { col = (255, 255, 255) }
+                if edge { col = (43, 43, 53) }
+                let i = (py * size + px) * 4
+                rgba[i] = col.r; rgba[i + 1] = col.g; rgba[i + 2] = col.b; rgba[i + 3] = 255
+            }
+        }
+        return PixelArt.Bitmap(width: size, height: size, rgba: rgba)
+    }
+
+    static func png(size: Int, hex: String, wobble: Double = 0) -> Data? {
+        PixelArt.image(bitmap(size: size, hex: hex, wobble: wobble)).flatMap(PixelArt.png)
     }
 }

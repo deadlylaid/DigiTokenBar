@@ -224,7 +224,7 @@ struct EvolutionEngine: Sendable {
         return [.graduated(lineID: line, path: path), .newEgg(lineID: line)]
     }
 
-    private func dayKey(_ date: Date) -> String {
+    func dayKey(_ date: Date) -> String {
         let c = calendar.dateComponents([.year, .month, .day], from: date)
         return String(format: "%04d-%02d-%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0)
     }

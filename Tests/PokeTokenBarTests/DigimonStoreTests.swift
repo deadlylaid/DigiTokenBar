@@ -1,3 +1,4 @@
+import Observation
 import XCTest
 @testable import PokeTokenBar
 
@@ -109,13 +110,36 @@ final class DigimonStoreTests: XCTestCase {
 
     func testNewTokensAfterInstallGrowTheEgg() {
         let store = makeStore()
+        var activity: [([DigimonEvent], Int)] = []
+        store.onActivity = { activity.append(($0, $1)) }
         store.update(todayTokensByProvider: ["claude_code": 50_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.stageExp, 0, "the install baseline is not counted")
+        XCTAssertTrue(activity.isEmpty, "seeding the baseline is not activity")
         store.update(todayTokensByProvider: ["claude_code": 54_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.stageExp, 0)
         XCTAssertEqual(store.state.partner.speciesKey, "botamon", "4M tokens = 20 exp hatches the egg")
-        XCTAssertEqual(store.consumeEvents(), [.hatched(species: "botamon")])
-        XCTAssertEqual(store.consumeEvents(), [], "events are handed out once")
+        XCTAssertEqual(activity.map(\.0), [[.hatched(species: "botamon")]])
+        XCTAssertEqual(activity.map(\.1), [4_000_000])
+        store.update(todayTokensByProvider: ["claude_code": 54_000_000], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(activity.count, 1, "nothing new, nothing reported")
+    }
+
+    /// The menu bar observes the store and calls `update` from its own refresh. An update with nothing
+    /// new must not notify observers, or the two would trigger each other forever.
+    func testAnUpdateWithNothingNewDoesNotNotifyObservers() {
+        let store = makeStore()
+        store.update(todayTokensByProvider: ["claude_code": 100], todayDate: "d1", hasUsageData: true)
+        final class Flag: @unchecked Sendable { var fired = false }
+        let flag = Flag()
+        withObservationTracking {
+            _ = store.progress
+            _ = store.state
+        } onChange: { flag.fired = true }
+        store.update(todayTokensByProvider: ["claude_code": 100], todayDate: "d1", hasUsageData: true)
+        store.recordLimitWindows([], limitsReady: false)
+        XCTAssertFalse(flag.fired)
+        store.update(todayTokensByProvider: ["claude_code": 300_100], todayDate: "d1", hasUsageData: true)
+        XCTAssertTrue(flag.fired, "a real change still notifies")
     }
 
     func testProgressSurvivesARestart() {
@@ -159,5 +183,25 @@ final class DigimonStoreTests: XCTestCase {
         store.choose(offered[1])
         XCTAssertEqual(store.state.partner.speciesKey, offered[1])
         XCTAssertEqual(makeStore().state.partner.speciesKey, offered[1])
+    }
+}
+
+/// The desktop pet once used a global mouse-moved monitor to know when the pointer was over it.
+/// macOS answered with an Input Monitoring permission prompt at launch (kTCCServiceListenEvent).
+/// Nothing in the Digimon code may watch input outside the app.
+final class DigimonPermissionTests: XCTestCase {
+    func testDigimonCodeNeverMonitorsInputOutsideTheApp() throws {
+        let dir = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .appendingPathComponent("../../Sources/PokeTokenBar/Digimon").standardizedFileURL
+        let files = try FileManager.default.contentsOfDirectory(at: dir, includingPropertiesForKeys: nil)
+            .filter { $0.pathExtension == "swift" }
+        XCTAssertGreaterThan(files.count, 5, "found the Digimon sources at \(dir.path)")
+        for file in files {
+            let text = try String(contentsOf: file, encoding: .utf8)
+            for line in text.split(separator: "\n") where !line.trimmingCharacters(in: .whitespaces).hasPrefix("//") {
+                XCTAssertFalse(line.contains("addGlobalMonitorForEvents"), "\(file.lastPathComponent): \(line)")
+                XCTAssertFalse(line.contains("CGEvent.tapCreate"), "\(file.lastPathComponent): \(line)")
+            }
+        }
     }
 }
