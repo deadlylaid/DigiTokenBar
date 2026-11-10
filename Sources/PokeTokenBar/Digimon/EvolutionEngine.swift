@@ -126,6 +126,13 @@ struct EvolutionEngine: Sendable {
         return events
     }
 
+    /// Re-checks thresholds after the growth rules change (e.g. fast growth turned on): a stage that
+    /// is now full evolves or offers its choice right away.
+    @discardableResult
+    func settle(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
+        advance(&state, at: date)
+    }
+
     /// Call periodically: auto-picks the top candidate after `choiceTimeout`.
     @discardableResult
     func tick(_ state: inout DigimonState, now: Date) -> [DigimonEvent] {

@@ -25,7 +25,7 @@ final class DigimonStore {
     /// name, read without a network lookup (`Host.current()` can block on DNS; backups run at launch).
     @ObservationIgnored var deviceName: () -> String = { (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? "Mac" }
 
-    let engine: EvolutionEngine
+    private(set) var engine: EvolutionEngine
     let backups: DigimonBackups
     private let fileURL: URL
     private let clock: () -> Date
@@ -108,6 +108,28 @@ final class DigimonStore {
     func choose(_ key: String) {
         var next = saved
         let events = engine.choose(&next.digimon, key, at: clock())
+        commit(next, events)
+    }
+
+    // MARK: Fast growth (for trying the app out)
+
+    /// UserDefaults key for the Settings switch.
+    static let fastGrowthKey = "digimonFastGrowth"
+    /// Fast growth needs a tenth of the experience per stage: a whole life fits in one busy day.
+    static let fastGrowthMultiplier = 0.1
+
+    var isFastGrowth: Bool { engine.growth.growthMultiplier < 1 }
+
+    /// Switches the stage thresholds. A stage that is already full under the new ones evolves (or
+    /// offers its choice) right away; progress is never taken back when switching off.
+    func setFastGrowth(_ fast: Bool) {
+        let multiplier = fast ? Self.fastGrowthMultiplier : 1.0
+        guard engine.growth.growthMultiplier != multiplier else { return }
+        var growth = engine.growth
+        growth.growthMultiplier = multiplier
+        engine = EvolutionEngine(catalog: engine.catalog, rules: engine.rules, growth: growth, calendar: engine.calendar)
+        var next = saved
+        let events = engine.settle(&next.digimon, at: clock())
         commit(next, events)
     }
 

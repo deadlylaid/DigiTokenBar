@@ -57,6 +57,13 @@ struct DigimonText {
     var basedOn: String { ko ? "원본: PokeTokenBar (MIT)" : "Based on PokeTokenBar (MIT)" }
 
     // Settings
+    var digimonSectionTitle: String { ko ? "디지몬" : "Digimon" }
+    var fastGrowthLabel: String { ko ? "빠른 성장 (테스트)" : "Fast growth (testing)" }
+    var fastGrowthHint: String {
+        ko ? "진화에 필요한 경험치가 1/10이 돼요. 바쁜 하루면 부화부터 졸업까지 볼 수 있어요"
+           : "Each stage needs a tenth of the experience: a busy day covers a whole life"
+    }
+    var fastGrowthOn: String { ko ? "빠른 성장 켜짐 (×10)" : "Fast growth on (×10)" }
     var growthPercent: String { ko ? "디지몬 성장률" : "Digimon growth %" }
     var growthPercentHint: String {
         ko ? "부화, 다음 진화, 졸업까지의 진행률" : "Progress toward hatching, the next evolution or graduation"
@@ -213,10 +220,14 @@ struct DigimonStatusView: View {
             .font(.caption)
             .foregroundStyle(.secondary)
             ProgressView(value: digimon.progress)
-            Text(t.todayExp(digimon.expToday, cap: digimon.engine.growth.dailyExpCap))
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .monospacedDigit()
+            HStack {
+                Text(t.todayExp(digimon.expToday, cap: digimon.engine.growth.dailyExpCap))
+                    .foregroundStyle(.tertiary)
+                    .monospacedDigit()
+                Spacer()
+                if digimon.isFastGrowth { Text(t.fastGrowthOn).foregroundStyle(.orange) }
+            }
+            .font(.caption2)
         }
     }
 

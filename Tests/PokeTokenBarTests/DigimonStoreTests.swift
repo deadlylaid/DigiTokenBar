@@ -347,3 +347,40 @@ final class DigimonSaveIOTests: XCTestCase {
         XCTAssertEqual(store.state.partner.lineID, "gabumon", "too late once hatched")
     }
 }
+
+@MainActor
+final class DigimonFastGrowthTests: XCTestCase {
+    private var dir: URL!
+
+    override func setUp() async throws {
+        dir = FileManager.default.temporaryDirectory.appendingPathComponent("digimon-fast-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    }
+
+    override func tearDown() async throws {
+        try? FileManager.default.removeItem(at: dir)
+    }
+
+    func testFastGrowthNeedsATenthAndAFullStageMovesOnRightAway() {
+        let now = Date(timeIntervalSince1970: 1_793_000_000)
+        let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now })
+        var activity: [DigimonEvent] = []
+        store.onActivity = { events, _ in activity += events }
+        // One capped day: Agumon with 30 of 120 experience.
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(store.state.partner.speciesKey, "agumon")
+        XCTAssertEqual(store.threshold, 120)
+        XCTAssertNil(store.state.pendingChoice)
+
+        store.setFastGrowth(true)
+        XCTAssertTrue(store.isFastGrowth)
+        XCTAssertEqual(store.threshold, 12)
+        XCTAssertEqual(store.candidates.count, 3, "30 of 12: the choice is offered at once")
+        XCTAssertTrue(activity.contains { if case .choiceOffered = $0 { return true } else { return false } })
+
+        store.setFastGrowth(false)
+        XCTAssertEqual(store.threshold, 120)
+        XCTAssertEqual(store.candidates.count, 3, "switching back never takes the choice away")
+    }
+}

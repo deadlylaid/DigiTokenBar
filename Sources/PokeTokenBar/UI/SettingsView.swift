@@ -76,6 +76,7 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         generalGroup(store)
+                        if let digimon { digimonGroup(digimon) }
                         if !isDigimon { difficultyGroup }
                         menuBarGroup(store)
                         trackedProvidersGroup(store)
@@ -317,6 +318,18 @@ struct SettingsView: View {
                     .labelsHidden().toggleStyle(.switch).controlSize(.small)
                     .disabled(!isBundledApp)
             }
+        }
+    }
+
+    /// Digimon options. Fast growth is for trying the app out: it is saved per Mac in UserDefaults.
+    private func digimonGroup(_ digimon: DigimonStore) -> some View {
+        settingsSection(dt.digimonSectionTitle) {
+            toggleRow(dt.fastGrowthLabel, Binding(
+                get: { digimon.isFastGrowth },
+                set: {
+                    UserDefaults.standard.set($0, forKey: DigimonStore.fastGrowthKey)
+                    digimon.setFastGrowth($0)
+                }), hint: dt.fastGrowthHint)
         }
     }
 

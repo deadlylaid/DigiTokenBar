@@ -116,6 +116,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimonHub.language = companion.language
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
         digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }
+        digimon.setFastGrowth(UserDefaults.standard.bool(forKey: DigimonStore.fastGrowthKey))
         updater = UpdateChecker()
         store.localizationLanguage = companion.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
