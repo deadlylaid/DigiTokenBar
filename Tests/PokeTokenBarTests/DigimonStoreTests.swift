@@ -205,3 +205,145 @@ final class DigimonPermissionTests: XCTestCase {
         }
     }
 }
+
+@MainActor
+final class DigimonSaveIOTests: XCTestCase {
+    private var dir: URL!
+    private var now = Date(timeIntervalSince1970: 1_793_000_000)
+
+    override func setUp() async throws {
+        dir = FileManager.default.temporaryDirectory.appendingPathComponent("digimon-save-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    }
+
+    override func tearDown() async throws {
+        try? FileManager.default.removeItem(at: dir)
+    }
+
+    private func makeStore(in folder: URL? = nil) -> DigimonStore {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let store = DigimonStore(fileURL: (folder ?? dir).appendingPathComponent("digimon-state.json"),
+                                 engine: EvolutionEngine(calendar: calendar), clock: { [unowned self] in self.now })
+        store.deviceName = { "Test Mac" }
+        return store
+    }
+
+    /// Grows a store to Agumon with an open choice: two capped days.
+    private func grown(_ store: DigimonStore) {
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
+        now += 86_400
+        store.update(todayTokensByProvider: ["claude_code": 100_000_000], todayDate: "d2", hasUsageData: true)
+    }
+
+    func testExportThenImportOnAnotherMacKeepsTheDigimonButNotTheLedger() throws {
+        let source = makeStore()
+        grown(source)
+        let data = try source.exportData()
+
+        let otherMac = dir.appendingPathComponent("other")
+        try FileManager.default.createDirectory(at: otherMac, withIntermediateDirectories: true)
+        let target = makeStore(in: otherMac)
+        target.update(todayTokensByProvider: ["claude_code": 7_000_000], todayDate: "d2", hasUsageData: true)
+        try target.replace(with: DigimonSaveIO.decode(data), reason: "import")
+
+        XCTAssertEqual(target.state, source.state)
+        let exp = target.state.partner.stageExp
+        target.update(todayTokensByProvider: ["claude_code": 7_000_000], todayDate: "d2", hasUsageData: true)
+        XCTAssertEqual(target.state.partner.stageExp, exp, "usage seen before the import is not counted again")
+        XCTAssertTrue(target.backups.list().contains { $0.id.contains("before-import") }, "the old Digimon was backed up")
+    }
+
+    func testHugeOrNegativeCountsAreClampedAtTheBoundary() throws {
+        var state = DigimonState.newEgg(lineID: "agumon")
+        state.partner.speciesKey = "agumon"
+        state.partner.level = .ultimate          // wrong on purpose: the species decides
+        state.partner.stageExp = Int.max
+        state.expToday = -5
+        state.tokenRemainder = Int.max
+        state.lifetimeSignals.tokens = Int.max
+        state.lifetimeSignals.nightTokens = Int.max
+        state.lifetimeSignals.bugsDefeated = Int.min
+        state.lifetimeSignals.tokensByProvider = ["claude_code": Int.max]
+        state.dex = ["agumon", "someday-a-new-digimon"]
+        let engine = EvolutionEngine()
+        let clean = try DigimonSaveIO.sanitized(state, catalog: engine.catalog, growth: engine.growth)
+        XCTAssertEqual(clean.partner.level, .child)
+        XCTAssertEqual(clean.partner.stageExp, engine.growth.threshold(for: .child))
+        XCTAssertEqual(clean.expToday, 0)
+        XCTAssertLessThan(clean.tokenRemainder, engine.growth.tokensPerExp)
+        XCTAssertEqual(clean.lifetimeSignals.tokens, DigimonSaveIO.maxCount)
+        XCTAssertEqual(clean.lifetimeSignals.bugsDefeated, 0)
+        XCTAssertEqual(clean.dex, state.dex, "dex entries are never dropped, even unknown ones")
+        // The clamped state survives the arithmetic that would have trapped.
+        var grown = clean
+        _ = engine.addUsage(&grown, tokens: 1_000_000, provider: "claude_code", at: now)
+        engine.recordBugDefeated(&grown)
+    }
+
+    func testAPartnerThisVersionDoesNotKnowIsRejected() {
+        var state = DigimonState.newEgg(lineID: "agumon")
+        state.partner.speciesKey = "gabumon"     // not in the Agumon line
+        let engine = EvolutionEngine()
+        XCTAssertThrowsError(try DigimonSaveIO.sanitized(state, catalog: engine.catalog, growth: engine.growth)) {
+            XCTAssertEqual($0 as? DigimonSaveError, .unknownSpecies("gabumon"))
+        }
+        XCTAssertThrowsError(try DigimonSaveIO.decode(Data(#"{"version":1}"#.utf8))) {
+            XCTAssertEqual($0 as? DigimonSaveError, .notADigimonSave)
+        }
+    }
+
+    func testAHandEditedSaveFileIsClampedAtLaunchInsteadOfCrashing() throws {
+        let store = makeStore()
+        grown(store)
+        var saved = store.saved
+        saved.digimon.lifetimeSignals.tokens = Int.max
+        saved.ledger.claimedTodayByProvider["claude_code"] = Int.min
+        try JSONEncoder().encode(saved).write(to: dir.appendingPathComponent("digimon-state.json"))
+        let reopened = makeStore()
+        XCTAssertEqual(reopened.state.lifetimeSignals.tokens, DigimonSaveIO.maxCount)
+        XCTAssertEqual(reopened.saved.ledger.claimedTodayByProvider["claude_code"], 0)
+        reopened.update(todayTokensByProvider: ["claude_code": 5], todayDate: "d2", hasUsageData: true)
+    }
+
+    func testBackupsRunEvery12HoursAndKeepTheNewest10() throws {
+        let store = makeStore()
+        XCTAssertEqual(store.backups.list().count, 1, "one at launch")
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 400_001], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(store.backups.list().count, 1, "not again within 12 hours")
+        for i in 1...12 {
+            now += 12 * 3600
+            store.update(todayTokensByProvider: ["claude_code": 400_001 + i * 200_000], todayDate: "d1", hasUsageData: true)
+        }
+        let list = store.backups.list()
+        XCTAssertEqual(list.count, 10)
+        XCTAssertEqual(list.first?.file.savedAt, now, "newest first")
+        XCTAssertEqual(list.first?.file.digimon, store.state)
+    }
+
+    func testRestoringABackupBringsTheOldDigimonBack() throws {
+        let store = makeStore()
+        let eggBackup = try XCTUnwrap(store.backups.list().first)
+        grown(store)
+        XCTAssertEqual(store.state.partner.speciesKey, "agumon")
+        var changed = 0
+        store.onLookChanged = { changed += 1 }
+        try store.replace(with: eggBackup.file, reason: "restore")
+        XCTAssertTrue(store.isEgg)
+        XCTAssertEqual(changed, 1)
+        XCTAssertEqual(makeStore().state, store.state, "the restore is saved")
+    }
+
+    func testTheEggLineCanChangeOnlyWhileItIsAnEgg() {
+        let store = makeStore()
+        store.chooseEggLine("gabumon")
+        XCTAssertEqual(store.state.partner.lineID, "gabumon")
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 4_000_001], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(store.state.partner.speciesKey, "punimon", "a Gabumon-line egg hatches into Punimon")
+        store.chooseEggLine("agumon")
+        XCTAssertEqual(store.state.partner.lineID, "gabumon", "too late once hatched")
+    }
+}

@@ -37,8 +37,10 @@ const waiting = {};
 let COIN = null;
 let S = {key: null, line: 'agumon', stage: 0, sleeping: false, lang: 'ko'};
 
-// Move names: Korean from the official Korean Digimon reference (digimon.net/reference_ko),
-// English from the Japanese originals. Species without an entry use a plain attack.
+// Move names: Korean from the official Korean Digimon reference (digimon.net/reference_ko; Agumon
+// keeps 꼬마 불꽃 from its reference text and the Korean dub), English from the Japanese originals
+// (digimon.net/reference_en, or Wikimon where reference_en uses a dub name). Checked 2026-11-10.
+// The kind picks one of the five drawn attack shapes. Species without an entry use a plain attack.
 const MOVES = {
   agumon: {ko: '꼬마 불꽃', en: 'Baby Flame', kind: 'fire'},
   greymon: {ko: '메가파이어', en: 'Mega Flame', kind: 'fire'},
@@ -48,6 +50,30 @@ const MOVES = {
   garurumon: {ko: '푸른화염포', en: 'Fox Fire', kind: 'fire'},
   weregarurumon: {ko: '카이저 네일', en: 'Kaiser Nail', kind: 'claw'},
   metalgarurumon: {ko: '코큐토스 브레스', en: 'Cocytus Breath', kind: 'ice'},
+  botamon: {ko: '산성 거품', en: 'Acid Bubbles', kind: 'fire'},
+  koromon: {ko: '거품', en: 'Foam', kind: 'fire'},
+  punimon: {ko: '산성 거품', en: 'Acid Bubbles', kind: 'fire'},
+  tunomon: {ko: '산성 거품', en: 'Acid Bubbles', kind: 'fire'},
+  algomonadult: {ko: '임프리즈먼트', en: 'Imprisonment', kind: 'claw'},
+  orgemon: {ko: '패왕권', en: 'Supreme King Fist', kind: 'claw'},
+  coelamon: {ko: '베리어블 다트', en: 'Variable Darts', kind: 'claw'},
+  andromon: {ko: '개틀링 미사일', en: 'Gatling Missile', kind: 'missile'},
+  anomalocarimon: {ko: '스팅거 서프라이즈', en: 'Stinger Surprise', kind: 'fire'},
+  mamemon: {ko: '스마일리 봄', en: 'Smiley Bomb', kind: 'fire'},
+  neodevimon: {ko: '길티 크로우', en: 'Guilty Claw', kind: 'claw'},
+  metaltyranomon: {ko: '기가 디스트로이어 II', en: 'Giga Destroyer II', kind: 'missile'},
+  donedevimon: {ko: '디스트로이 크로우', en: 'Destroy Claw', kind: 'claw'},
+  blitzgreymon: {ko: '플라즈마 스테이크', en: 'Plasma Stake', kind: 'claw'},
+  omegamon: {ko: '가루루 캐논', en: 'Garuru Cannon', kind: 'ice'},
+  gorimon: {ko: '파워 어택', en: 'Power Attack', kind: 'fire'},
+  dokugumon: {ko: '스팅거 포레이션', en: 'Stinger Poration', kind: 'fire'},
+  parrotmon: {ko: '소닉 디스트로이어', en: 'Sonic Destroyer', kind: 'fire'},
+  valvemon: {ko: '매드 펌프', en: 'Mud Pump', kind: 'fire'},
+  bigmamemon: {ko: '빅 스마일리 보머', en: 'Big Smiley Bomber', kind: 'gaia'},
+  waruseadramon: {ko: '다크 스톰', en: 'Darkstrom', kind: 'gaia'},
+  orochimon: {ko: '술 브레스', en: 'Sake Breath', kind: 'fire'},
+  nidhoggmon: {ko: '어나이얼레이션', en: 'Annihilention', kind: 'fire'},
+  cresgarurumon: {ko: '황수언월도', en: 'Yellow Beast Crescent Blade', kind: 'claw'},
 };
 const moveOf = key => {
   const m = MOVES[key];

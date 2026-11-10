@@ -24,6 +24,9 @@ LEVEL = {"Baby I": "babyI", "Baby II": "babyII", "Child": "child", "Adult": "adu
          "Perfect": "perfect", "Ultimate": "ultimate"}
 ORDER = ["babyI", "babyII", "child", "adult", "perfect", "ultimate"]
 ATTR = {"Vaccine": "vaccine", "Data": "data", "Virus": "virus", "Free": "free"}
+# Korean names missing from data/evolutions.json, taken from the official Korean reference
+# (digimon.net/reference_ko, checked 2026-11-10).
+KO_OVERRIDES = {"punimon": "푸니몬"}
 
 
 def swift_str(s):
@@ -49,7 +52,7 @@ def main():
         sp = n["sprites"]
         if "vb" not in sp:
             raise SystemExit(f"{k}: no 64x64 Vital Bracelet sprite")
-        species.append((k, n["name"], n["ko"] or n["name"], level, ATTR.get(n.get("attribute", ""), "unknown"),
+        species.append((k, n["name"], KO_OVERRIDES.get(k) or n["ko"] or n["name"], level, ATTR.get(n.get("attribute", ""), "unknown"),
                         sp["vb"], sp.get("dmc") or sp.get("dpc") or ""))
 
     level_of = {s[0]: s[3] for s in species}

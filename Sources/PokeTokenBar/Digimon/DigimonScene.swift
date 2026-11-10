@@ -88,8 +88,11 @@ private final class ScriptRelay: NSObject, WKScriptMessageHandler {
 @MainActor
 @Observable
 final class DigimonSceneHub {
-    /// PNG data per scene key (species key, or "egg_<line>"). Observable so SwiftUI updates on load.
+    /// PNG data per scene key (species key, or "egg_<line>"): 64x64, standing on the bottom edge.
     private(set) var images: [String: Data] = [:]
+    /// The same sprites cropped to their pixels, for SwiftUI (dex, choices). Observable so views
+    /// update when a download finishes.
+    private(set) var icons: [String: Data] = [:]
 
     @ObservationIgnored let digimon: DigimonStore
     @ObservationIgnored let sprites: DigimonSpriteStore
@@ -173,7 +176,10 @@ final class DigimonSceneHub {
         loading[key] = task
         let data = await task.value
         loading[key] = nil
-        if let data { images[key] = data }
+        if let data {
+            images[key] = data
+            icons[key] = PixelArt.bitmap(from: data).map(PixelArt.trimmed).flatMap(PixelArt.image).flatMap(PixelArt.png) ?? data
+        }
         return data
     }
 

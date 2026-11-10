@@ -115,6 +115,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimonHub = DigimonSceneHub(digimon: digimon)
         digimonHub.language = companion.language
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
+        digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }
         updater = UpdateChecker()
         store.localizationLanguage = companion.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
@@ -658,7 +659,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             l: companion.l, todayTokens: store.todayTotalTokens,
             todayCost: store.showsCost ? store.todayUsageCost : nil,
             floatingPetEnabled: store.floatingPetEnabled, alwaysFacesBack: store.alwaysFacesBack)
-            .filter { $0?.action != .openDex && $0?.action != .toggleBackView }   // Pokemon-only items
+            .filter { $0?.action != .toggleBackView }   // Pokemon-only item
         // Attaching the menu only for this click keeps left click on the popover. performClick
         // tracks the menu synchronously, with the button highlighted like any other status menu.
         statusItem.menu = StatusItemMenu.build(entries, target: self, selector: #selector(handleStatusMenu(_:)))
@@ -669,7 +670,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     @objc private func handleStatusMenu(_ item: NSMenuItem) {
         switch StatusItemMenu.action(of: item) {
         case .refresh: Task { await store.refresh() }
-        case .openDex: showPopover()
+        case .openDex: showPopover { $0.tab = .collection }   // the Digimon dex tab
         case .openSettings: showPopover { $0.showSettings = true }
         case .toggleFloatingPet: store.floatingPetEnabled.toggle()
         case .toggleBackView: store.alwaysFacesBack.toggle()

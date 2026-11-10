@@ -34,6 +34,7 @@ final class DigimonDeskPet {
 
     /// Agent hooks (digitokenbar:// events): the pet reacts when a run finishes or waits for you.
     func handleAgentEvent(_ event: AgentActivityEvent) {
+        guard store.floatingPetAgentActivity else { return }
         switch event.activity {
         case .waiting, .done: scene?.command(["type": "notice"])
         case .working, .idle: break

@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import SystemConfiguration
 
 /// Owns the Digimon companion for the app: feeds usage into `EvolutionEngine`, keeps the save file,
 /// and hands new events to the UI. It plugs into the same two hooks the Pokemon companion used
@@ -18,18 +19,29 @@ final class DigimonStore {
     /// Called after every input with what happened (hatch, evolution, choice, graduation) and how
     /// many new tokens were fed, so the scenes can play it. Not called when nothing happened.
     @ObservationIgnored var onActivity: @MainActor (_ events: [DigimonEvent], _ fedTokens: Int) -> Void = { _, _ in }
+    /// Called when the Digimon changed without an event: an import, a restore, or a new egg line.
+    @ObservationIgnored var onLookChanged: @MainActor () -> Void = {}
+    /// Written into exports and backups so a file says which Mac it came from. The local computer
+    /// name, read without a network lookup (`Host.current()` can block on DNS; backups run at launch).
+    @ObservationIgnored var deviceName: () -> String = { (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? "Mac" }
 
     let engine: EvolutionEngine
+    let backups: DigimonBackups
     private let fileURL: URL
     private let clock: () -> Date
+    @ObservationIgnored private var lastBackupAt: Date?
 
     init(fileURL: URL? = nil, engine: EvolutionEngine = EvolutionEngine(),
          clock: @escaping () -> Date = Date.init, firstLine: String = "agumon") {
-        self.fileURL = fileURL ?? Self.defaultURL()
+        let fileURL = fileURL ?? Self.defaultURL()
+        self.fileURL = fileURL
         self.engine = engine
         self.clock = clock
+        self.backups = DigimonBackups(directory: fileURL.deletingLastPathComponent().appendingPathComponent("digimon-backups"))
         self.saved = Saved(digimon: .newEgg(lineID: firstLine))
         load()
+        lastBackupAt = backups.list().first?.file.savedAt
+        backupIfDue()
     }
 
     static func defaultURL() -> URL {
@@ -56,6 +68,7 @@ final class DigimonStore {
         return max(1, Int((left / 3600).rounded(.up)))
     }
     var menuGrowthText: String { "\(Int(progress * 100))%" }
+    var lines: [DigimonLine] { engine.catalog.lines.values.sorted { $0.id < $1.id } }
 
     // MARK: Inputs
     //
@@ -98,6 +111,48 @@ final class DigimonStore {
         commit(next, events)
     }
 
+    /// While it is still an egg, the user may pick which line it hatches into.
+    func chooseEggLine(_ lineID: String) {
+        guard isEgg, lineID != state.partner.lineID, engine.catalog.lines[lineID] != nil else { return }
+        var next = saved
+        next.digimon.partner.lineID = lineID
+        commit(next, [])
+        onLookChanged()
+    }
+
+    // MARK: Export, import, backups
+
+    func saveFile() -> DigimonSaveFile {
+        DigimonSaveFile(savedAt: clock(), device: deviceName(), digimon: state)
+    }
+
+    func exportData() throws -> Data { try DigimonSaveIO.encode(saveFile()) }
+
+    @discardableResult
+    func backupNow(tag: String? = nil) throws -> URL {
+        let file = saveFile()
+        let url = try backups.write(file, tag: tag)
+        lastBackupAt = file.savedAt
+        return url
+    }
+
+    /// Replaces the Digimon with one from a file (import or restore). The current one is backed up
+    /// first. The usage ledger and limit watch start over, so today's usage is not counted twice.
+    func replace(with file: DigimonSaveFile, reason: String) throws {
+        let clean = try DigimonSaveIO.sanitized(file.digimon, catalog: engine.catalog, growth: engine.growth)
+        try backupNow(tag: "before-\(reason)")
+        saved = Saved(digimon: clean)
+        save()
+        AppLog.write("digimon replaced by \(reason) from \(file.device) saved \(file.savedAt)")
+        onLookChanged()
+    }
+
+    private func backupIfDue() {
+        let now = clock()
+        if let lastBackupAt, now.timeIntervalSince(lastBackupAt) < backups.interval { return }
+        do { try backupNow() } catch { AppLog.write("digimon backup failed: \(error)") }
+    }
+
     // MARK: Saving
 
     private func commit(_ next: Saved, _ events: [DigimonEvent], fed: Int = 0) {
@@ -105,6 +160,7 @@ final class DigimonStore {
         if next != saved {
             saved = next
             save()
+            backupIfDue()
         }
         if !events.isEmpty || fed > 0 { onActivity(events, fed) }
     }
@@ -119,11 +175,15 @@ final class DigimonStore {
     }
 
     /// A missing file is a fresh install. An unreadable one is kept aside before starting over,
-    /// so a bad write never silently destroys progress.
+    /// so a bad write never silently destroys progress. A readable one still goes through the
+    /// sanitizing boundary: a hand-edited count must not crash every launch.
     private func load() {
         guard let data = try? Data(contentsOf: fileURL) else { return }
         do {
-            saved = try JSONDecoder().decode(Saved.self, from: data)
+            var loaded = try JSONDecoder().decode(Saved.self, from: data)
+            loaded.digimon = try DigimonSaveIO.sanitized(loaded.digimon, catalog: engine.catalog, growth: engine.growth)
+            loaded.ledger.claimedTodayByProvider = loaded.ledger.claimedTodayByProvider.mapValues { DigimonSaveIO.clamp($0) }
+            saved = loaded
         } catch {
             let stamp = Int(clock().timeIntervalSince1970)
             let backup = fileURL.deletingLastPathComponent()

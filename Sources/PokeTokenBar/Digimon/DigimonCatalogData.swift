@@ -21,7 +21,7 @@ enum DigimonCatalogData {
         DigimonSpecies(key: "wargreymon", name: "War Greymon", koreanName: "워그레이몬", level: .ultimate, attribute: .vaccine, vbSprite: "Wargreymon_vpet_vb.png", colorSprite: "Wargreymon_vpet_dpc.gif"),
         DigimonSpecies(key: "blitzgreymon", name: "Blitz Greymon", koreanName: "블리츠그레이몬", level: .ultimate, attribute: .virus, vbSprite: "Blitzgreymon_vpet_vb.png", colorSprite: "Blitzgreymon_vpet_dmc.gif"),
         DigimonSpecies(key: "omegamon", name: "Omegamon", koreanName: "오메가몬", level: .ultimate, attribute: .vaccine, vbSprite: "Omegamon_vpet_vb.png", colorSprite: "Omegamon_vpet_dpc.gif"),
-        DigimonSpecies(key: "punimon", name: "Punimon", koreanName: "Punimon", level: .babyI, attribute: .unknown, vbSprite: "Punimon_vpet_vb.png", colorSprite: "Punimon_vpet_dmc.gif"),
+        DigimonSpecies(key: "punimon", name: "Punimon", koreanName: "푸니몬", level: .babyI, attribute: .unknown, vbSprite: "Punimon_vpet_vb.png", colorSprite: "Punimon_vpet_dmc.gif"),
         DigimonSpecies(key: "tunomon", name: "Tunomon", koreanName: "뿔몬", level: .babyII, attribute: .unknown, vbSprite: "Tunomon_vpet_vb.png", colorSprite: "Tunomon_vpet_dmc.gif"),
         DigimonSpecies(key: "gabumon", name: "Gabumon", koreanName: "파피몬", level: .child, attribute: .data, vbSprite: "Gabumon_vpet_vb.png", colorSprite: "Gabumon_vpet_dmc.gif"),
         DigimonSpecies(key: "garurumon", name: "Garurumon", koreanName: "가루몬", level: .adult, attribute: .vaccine, vbSprite: "Garurumon_vpet_vb.png", colorSprite: "Garurumon_vpet_dmc.gif"),

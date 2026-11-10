@@ -54,6 +54,64 @@ struct DigimonText {
            : "Grows on the tokens you use with AI coding tools. Click to attack!"
     }
     var credit: String { ko ? "도트: Wikimon" : "Sprites: Wikimon" }
+    var basedOn: String { ko ? "원본: PokeTokenBar (MIT)" : "Based on PokeTokenBar (MIT)" }
+
+    // Settings
+    var growthPercent: String { ko ? "디지몬 성장률" : "Digimon growth %" }
+    var growthPercentHint: String {
+        ko ? "부화, 다음 진화, 졸업까지의 진행률" : "Progress toward hatching, the next evolution or graduation"
+    }
+    var deskPetTitle: String { ko ? "바탕화면 펫" : "Desktop pet" }
+    var deskPetShow: String { ko ? "바탕화면 펫 표시" : "Show desktop pet" }
+    var deskPetHint: String {
+        ko ? "디지몬이 화면 위를 걸어 다녀요. 끌어서 옮기고, 누르면 공격해요."
+           : "Your Digimon walks on the screen. Drag to move it, click to attack."
+    }
+    var agentActivityHint: String {
+        ko ? "코딩 에이전트가 digitokenbar:// 링크를 보내면 디지몬이 반응해요"
+           : "Coding agents can ping it with digitokenbar:// links"
+    }
+    // Backup & transfer
+    var exportLabel: String { ko ? "디지몬 내보내기" : "Export Digimon" }
+    var exportHint: String { ko ? "지금 디지몬, 도감, 졸업 기록을 파일 하나로 저장해요" : "Saves your Digimon, dex and graduates as one file" }
+    var importLabel: String { ko ? "디지몬 불러오기" : "Import Digimon" }
+    var importHint: String {
+        ko ? "다른 Mac에서 내보낸 파일로 이어서 키워요. 지금 디지몬은 먼저 백업해요"
+           : "Continue from a file exported on another Mac. The current one is backed up first"
+    }
+    var backupHint: String { ko ? "12시간마다 자동으로 백업해요 (최근 10개)" : "Backed up automatically every 12 hours (last 10 kept)" }
+    var backupNowButton: String { ko ? "지금 백업" : "Back up now" }
+    var backupDone: String { ko ? "백업했어요." : "Backed up." }
+    var backupsTitle: String { ko ? "백업 목록" : "Backups" }
+    var noBackups: String { ko ? "아직 백업이 없어요" : "No backups yet" }
+    var restoreButton: String { ko ? "되돌리기" : "Restore" }
+    var replaceButton: String { ko ? "바꾸기" : "Replace" }
+    var importConfirmTitle: String { ko ? "이 파일의 디지몬으로 바꿀까요?" : "Replace your Digimon with this file?" }
+    var restoreConfirmTitle: String { ko ? "이 백업으로 되돌릴까요?" : "Restore this backup?" }
+    var importDone: String { ko ? "불러왔어요." : "Imported." }
+    var restoreDone: String { ko ? "되돌렸어요." : "Restored." }
+    func replaceBody(incoming: String, from: String, current: String) -> String {
+        ko ? "불러올 디지몬: \(incoming)\n(\(from))\n\n지금 디지몬: \(current)\n지금 디지몬은 먼저 백업해요."
+           : "Incoming: \(incoming)\n(\(from))\n\nCurrent: \(current)\nThe current one is backed up first."
+    }
+    /// "Agumon (Child) · dex 5 · 1 graduated"
+    func summary(_ state: DigimonState, catalog: DigimonCatalog) -> String {
+        let who = "\(name(state.partner.speciesKey.flatMap(catalog.species))) (\(level(state.partner.level)))"
+        return ko ? "\(who) · 도감 \(state.dex.count) · 졸업 \(state.graduates.count)"
+                  : "\(who) · dex \(state.dex.count) · \(state.graduates.count) graduated"
+    }
+    func saveError(_ error: Error, fallback: String) -> String {
+        switch error as? DigimonSaveError {
+        case .notADigimonSave: return ko ? "DigiTokenBar 저장 파일이 아니에요." : "This is not a DigiTokenBar save file."
+        case .unknownLine(let key), .unknownSpecies(let key):
+            return ko ? "이 버전이 모르는 디지몬이 들어 있어요 (\(key))." : "The file has a Digimon this version does not know (\(key))."
+        case nil: return fallback
+        }
+    }
+
+    var notificationsLabel: String {
+        ko ? "디지몬 알림 (부화·진화·선택·졸업)" : "Digimon events (hatch / evolve / choice / graduate)"
+    }
 
     // Notifications
     var hatchedTitle: String { ko ? "디지타마가 부화했어요" : "Your Digi-Egg hatched" }
@@ -99,13 +157,44 @@ struct DigimonStatusView: View {
             nameRow
             progress
             if !digimon.candidates.isEmpty { choice }
+            if digimon.isEgg, digimon.lines.count > 1 { eggChoice }
+        }
+    }
+
+    /// Before hatching, pick the line (the Vital Bracelet card) to raise.
+    private var eggChoice: some View {
+        let catalog = digimon.engine.catalog
+        return VStack(alignment: .leading, spacing: 6) {
+            Text(t.chooseEggTitle).font(.callout.weight(.semibold))
+            HStack(spacing: 6) {
+                ForEach(digimon.lines, id: \.id) { line in
+                    let key = "egg_\(line.id)"
+                    let current = digimon.state.partner.lineID == line.id
+                    Button {
+                        digimon.chooseEggLine(line.id)
+                    } label: {
+                        HStack(spacing: 6) {
+                            PixelSprite(data: hub.icons[key]).frame(width: 32, height: 32)
+                            Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption.weight(.semibold))
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
+                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .controlBackgroundColor)))
+                        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(
+                            current ? Color.accentColor : Color.secondary.opacity(0.25), lineWidth: current ? 2 : 1))
+                    }
+                    .buttonStyle(.plain)
+                    .task(id: key) { _ = await hub.image(for: key) }
+                }
+            }
+            Text(t.chooseEggHint).font(.caption2).foregroundStyle(.secondary)
         }
     }
 
     private var nameRow: some View {
         HStack(spacing: 6) {
             Text(t.name(digimon.species)).font(.title3.weight(.bold))
-            badge(t.level(digimon.state.partner.level))
+            if !digimon.isEgg { badge(t.level(digimon.state.partner.level)) }
             if let attribute = digimon.species.flatMap({ t.attribute($0.attribute) }) { badge(attribute) }
             Spacer()
             if !digimon.state.graduates.isEmpty {
@@ -165,7 +254,7 @@ struct DigimonStatusView: View {
             picked = species.key
         } label: {
             VStack(spacing: 2) {
-                PixelSprite(data: hub.images[species.key]).frame(width: 48, height: 48)
+                PixelSprite(data: hub.icons[species.key]).frame(width: 48, height: 48)
                 Text(t.name(species)).font(.caption.weight(.semibold)).lineLimit(1)
                 Text([t.level(species.level), t.attribute(species.attribute)].compactMap { $0 }.joined(separator: " · "))
                     .font(.caption2)
@@ -192,16 +281,32 @@ struct DigimonStatusView: View {
     }
 }
 
-/// A pixel-art PNG drawn without smoothing. Empty while it is still downloading.
+/// A pixel-art PNG (cropped to its pixels) standing on the bottom of the space it is given.
+/// It grows only by whole steps (1x, 2x, ...) so pixels stay square, and shrinks only when it does
+/// not fit at 1x. Empty while it is still downloading.
 @MainActor
 struct PixelSprite: View {
     let data: Data?
+    /// Unmet Digimon in the dex: the shape only, in a muted color.
+    var silhouette = false
 
     var body: some View {
-        if let data, let image = NSImage(data: data) {
-            Image(nsImage: image).interpolation(.none).resizable().scaledToFit()
-        } else {
-            Color.clear
+        GeometryReader { geo in
+            if let data, let image = NSImage(data: data), image.size.width > 0, image.size.height > 0 {
+                let fit = min(geo.size.width / image.size.width, geo.size.height / image.size.height)
+                let scale = fit >= 1 ? fit.rounded(.down) : fit
+                sprite(image)
+                    .frame(width: image.size.width * scale, height: image.size.height * scale)
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+            }
         }
+    }
+
+    private func sprite(_ image: NSImage) -> some View {
+        Image(nsImage: image)
+            .renderingMode(silhouette ? .template : .original)
+            .interpolation(.none)
+            .resizable()
+            .foregroundStyle(Color.secondary.opacity(0.45))
     }
 }

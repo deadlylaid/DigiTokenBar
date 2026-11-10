@@ -153,11 +153,24 @@ struct PopoverView: View {
         @Bindable var nav = nav
         return VStack(alignment: .leading, spacing: 12) {
             updateBanner
-            // DigiTokenBar shows Home only: the Pokemon shop, bag and collection tabs are hidden.
-            if let digimonHub {
-                DigimonScenePanel(hub: digimonHub, language: companion.language)
+            // DigiTokenBar: Home and the Digimon dex. The Pokemon shop, bag and collection are hidden.
+            if let digimon, let digimonHub {
+                Picker("", selection: $nav.tab) {
+                    Text(l.home).tag(PopoverTab.home)
+                    Text(DigimonText(companion.language).dexTab).tag(PopoverTab.collection)
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                if nav.tab == .collection {
+                    DigimonDexView(digimon: digimon, hub: digimonHub, language: companion.language)
+                        .frame(height: 590)
+                } else {
+                    DigimonScenePanel(hub: digimonHub, language: companion.language)
+                }
             }
-            if nav.tab == .collection {
+            if digimon != nil, nav.tab == .collection {
+                EmptyView()   // the Digimon dex is shown above
+            } else if nav.tab == .collection {
                 CollectionView(store: companion, navigation: nav)
             } else if nav.tab == .bag {
                 BagView(store: companion, nav: nav)

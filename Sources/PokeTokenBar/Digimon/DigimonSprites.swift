@@ -115,6 +115,10 @@ enum PixelArt {
         return Bitmap(width: w, height: h, rgba: out)
     }
 
+    static func bitmap(from data: Data) -> Bitmap? {
+        frames(data).first.flatMap(bitmap)
+    }
+
     static func frames(_ data: Data) -> [CGImage] {
         guard let src = CGImageSourceCreateWithData(data as CFData, nil) else { return [] }
         return (0..<CGImageSourceGetCount(src)).compactMap { CGImageSourceCreateImageAtIndex(src, $0, nil) }

@@ -6,6 +6,8 @@ struct SettingsView: View {
     @Environment(UsageStore.self) private var store
     @Environment(CompanionStore.self) private var companion
     @Environment(UpdateChecker.self) private var updater
+    /// Present in DigiTokenBar: Pokemon-only rows are hidden and Digimon wording is used.
+    @Environment(DigimonStore.self) private var digimon: DigimonStore?
     /// 팝오버 내부 화면 전환 방식 — sheet/dismiss 를 쓰지 않는다 (PopoverView 의 NOTE 참조)
     var onClose: () -> Void
     /// 기존 컬렉션의 도감으로 돌아가 대표 포켓몬을 고르게 한다.
@@ -41,6 +43,8 @@ struct SettingsView: View {
     @FocusState private var additionalAccountsFocused: Bool
     @FocusState private var sessionKeyFocused: Bool
     private var l: L { companion.l }
+    private var dt: DigimonText { DigimonText(companion.language) }
+    private var isDigimon: Bool { digimon != nil }
 
     private var isBundledApp: Bool { AppEnv.isBundledApp }
 
@@ -72,7 +76,7 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 18) {
                         generalGroup(store)
-                        difficultyGroup
+                        if !isDigimon { difficultyGroup }
                         menuBarGroup(store)
                         trackedProvidersGroup(store)
                         floatingPetGroup(store)
@@ -161,7 +165,28 @@ struct SettingsView: View {
         .padding(.vertical, 10)
     }
 
+    @ViewBuilder
     private var footer: some View {
+        if isDigimon { digimonFooter } else { pokemonFooter }
+    }
+
+    /// Credits: sprites come from Wikimon at runtime, and the app is built on PokeTokenBar (MIT).
+    private var digimonFooter: some View {
+        HStack(spacing: 5) {
+            Text("v\(Self.appVersion)")
+            Text("·")
+            footerLink(dt.credit, "https://wikimon.net")
+            Text("·")
+            footerLink(dt.basedOn, "https://github.com/chattymin/PokeTokenBar")
+            Spacer()
+        }
+        .font(.caption2)
+        .foregroundStyle(.tertiary)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+    }
+
+    private var pokemonFooter: some View {
         HStack(spacing: 5) {
             Text("v\(Self.appVersion)")
             Text("·")
@@ -195,6 +220,7 @@ struct SettingsView: View {
                 }
                 .labelsHidden().pickerStyle(.menu).fixedSize()
             }
+            if !isDigimon {
             Divider()
             groupRow {
                 Text(l.representativePokemonLabel)
@@ -217,6 +243,7 @@ struct SettingsView: View {
                 .controlSize(.small)
                 .frame(width: 150, alignment: .trailing)
                 .layoutPriority(1)
+            }
             }
             Divider()
             groupRow {
@@ -306,7 +333,8 @@ struct SettingsView: View {
                 Divider()
                 toggleRow(l.todayCost, $store.showCostInMenu)
                 Divider()
-                toggleRow(l.pokemonGrowthPercent, $store.showGrowthInMenu, hint: l.pokemonGrowthPercentHint)
+                toggleRow(isDigimon ? dt.growthPercent : l.pokemonGrowthPercent, $store.showGrowthInMenu,
+                          hint: isDigimon ? dt.growthPercentHint : l.pokemonGrowthPercentHint)
                 Divider()
                 toggleRow(l.limitPercent, $store.showLimitInMenu)
                 if store.showLimitInMenu {
@@ -348,6 +376,24 @@ struct SettingsView: View {
 
     @ViewBuilder
     private func floatingPetGroup(_ store: UsageStore) -> some View {
+        if isDigimon { digimonDeskPetGroup(store) } else { pokemonFloatingPetGroup(store) }
+    }
+
+    /// The Digimon desktop pet has a fixed size and no back view or speech bubbles.
+    @ViewBuilder
+    private func digimonDeskPetGroup(_ store: UsageStore) -> some View {
+        @Bindable var store = store
+        settingsSection(dt.deskPetTitle) {
+            toggleRow(dt.deskPetShow, $store.floatingPetEnabled, hint: dt.deskPetHint)
+            if store.floatingPetEnabled {
+                Divider()
+                toggleRow(l.floatingPetAgentActivityLabel, $store.floatingPetAgentActivity, hint: dt.agentActivityHint)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func pokemonFloatingPetGroup(_ store: UsageStore) -> some View {
         @Bindable var store = store
         settingsSection(l.floatingPetSectionTitle) {
             groupRow {
@@ -419,7 +465,7 @@ struct SettingsView: View {
                 }
             }
             Divider()
-            toggleRow(l.companionNotificationsLabel, $store.companionNotifications)
+            toggleRow(isDigimon ? dt.notificationsLabel : l.companionNotificationsLabel, $store.companionNotifications)
             Divider()
             groupRow {
                 VStack(alignment: .leading, spacing: 1) {
@@ -491,6 +537,72 @@ struct SettingsView: View {
     /// 파일 선택창으로 고르게 한다.
     @ViewBuilder
     private func transferGroup(_ store: UsageStore) -> some View {
+        if let digimon { digimonTransferGroup(digimon) } else { pokemonTransferGroup(store) }
+    }
+
+    /// Digimon export, import and backups. Same rules as the Pokemon section below: results are
+    /// shown in alerts or Finder because a file panel closes the popover and this view with it.
+    @ViewBuilder
+    private func digimonTransferGroup(_ digimon: DigimonStore) -> some View {
+        settingsSection(l.transferSectionTitle) {
+            groupRow {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(dt.exportLabel)
+                    Text(dt.exportHint).font(.caption2).foregroundStyle(.tertiary)
+                }
+                Spacer()
+                Button(l.exportSaveButton) { exportDigimon(digimon) }
+            }
+            Divider()
+            groupRow {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(dt.importLabel)
+                    Text(dt.importHint).font(.caption2).foregroundStyle(.tertiary)
+                }
+                Spacer()
+                Button(l.importSaveButton) { importDigimon(digimon) }
+            }
+            Divider()
+            groupRow {
+                Text(dt.backupHint).font(.caption2).foregroundStyle(.tertiary)
+                Spacer()
+                Button(dt.backupNowButton) { backupDigimonNow(digimon) }
+            }
+            Divider()
+            SnapshotHistoryButton(isExpanded: $snapshotsExpanded, title: dt.backupsTitle,
+                                  stateDescription: l.snapshotHistoryState(expanded: snapshotsExpanded))
+                .frame(maxWidth: .infinity)
+                .frame(height: 20)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+            if snapshotsExpanded {
+                let entries = digimon.backups.list()
+                if entries.isEmpty {
+                    Divider()
+                    groupRow {
+                        Text(dt.noBackups).font(.caption2).foregroundStyle(.tertiary)
+                        Spacer()
+                    }
+                }
+                ForEach(entries) { entry in
+                    Divider()
+                    groupRow {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(dt.summary(entry.file.digimon, catalog: digimon.engine.catalog))
+                                .font(.callout).lineLimit(1)
+                            Text("\(Self.exportedAtText(entry.file.savedAt, language: companion.language)) · \(entry.file.device)")
+                                .font(.caption2).foregroundStyle(.tertiary).lineLimit(1)
+                        }
+                        Spacer()
+                        Button(dt.restoreButton) { restoreDigimon(digimon, from: entry) }.controlSize(.small)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func pokemonTransferGroup(_ store: UsageStore) -> some View {
         settingsSection(l.transferSectionTitle) {
             groupRow {
                 VStack(alignment: .leading, spacing: 1) {
@@ -936,6 +1048,8 @@ struct SettingsView: View {
 
     private var aboutSupportGroup: some View {
         settingsSection(l.aboutSupportSectionTitle) {
+            // The report mail goes to the PokeTokenBar maintainer, so the fork does not offer it.
+            if !isDigimon {
             groupRow {
                 VStack(alignment: .leading, spacing: 1) {
                     Text(l.reportProblem)
@@ -945,6 +1059,7 @@ struct SettingsView: View {
                 Button(l.reportProblem) { reportProblem() }
             }
             Divider()
+            }
             // 로그 파일 보기 — 문제 제보 시 바로 첨부할 수 있게 같은 그룹에 둔다(고급 접기 밖).
             groupRow {
                 Text(l.showLogFile)
@@ -1195,6 +1310,91 @@ struct SettingsView: View {
         f.dateStyle = .medium
         f.timeStyle = .short
         return f.string(from: date)
+    }
+
+    // MARK: Digimon save transfer
+
+    private func exportDigimon(_ digimon: DigimonStore) {
+        let panel = NSSavePanel()
+        panel.title = dt.exportLabel
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "en_US_POSIX")
+        f.dateFormat = "yyyyMMdd"
+        panel.nameFieldStringValue = "DigiTokenBar-\(f.string(from: Date())).json"
+        panel.allowedContentTypes = [.json]
+        panel.canCreateDirectories = true
+        NSApp.activate(ignoringOtherApps: true)
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            try digimon.exportData().write(to: url, options: .atomic)
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+        } catch {
+            AppLog.write("digimon export failed: \(error)")
+            presentAlert(title: dt.exportLabel, message: dt.saveError(error, fallback: l.userFacingError(error)), style: .warning)
+        }
+    }
+
+    private func importDigimon(_ digimon: DigimonStore) {
+        let panel = NSOpenPanel()
+        panel.title = dt.importLabel
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        NSApp.activate(ignoringOtherApps: true)
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        let file: DigimonSaveFile
+        do {
+            file = try DigimonSaveIO.decode(try Data(contentsOf: url))
+        } catch {
+            AppLog.write("digimon import read failed: \(error)")
+            presentAlert(title: dt.importLabel, message: dt.saveError(error, fallback: l.userFacingError(error)), style: .warning)
+            return
+        }
+        confirmAndReplace(digimon, with: file, reason: "import", title: dt.importConfirmTitle,
+                          button: dt.replaceButton, done: dt.importDone)
+    }
+
+    private func restoreDigimon(_ digimon: DigimonStore, from entry: DigimonBackups.Entry) {
+        confirmAndReplace(digimon, with: entry.file, reason: "restore", title: dt.restoreConfirmTitle,
+                          button: dt.restoreButton, done: dt.restoreDone)
+    }
+
+    /// Shows what is replaced by what, asks once more (the destructive button is not the default),
+    /// then replaces. The current Digimon is backed up inside `replace`.
+    private func confirmAndReplace(_ digimon: DigimonStore, with file: DigimonSaveFile, reason: String,
+                                   title: String, button: String, done: String) {
+        let catalog = digimon.engine.catalog
+        let confirm = NSAlert()
+        confirm.alertStyle = .warning
+        confirm.messageText = title
+        confirm.informativeText = dt.replaceBody(
+            incoming: dt.summary(file.digimon, catalog: catalog),
+            from: "\(file.device), \(Self.exportedAtText(file.savedAt, language: companion.language))",
+            current: dt.summary(digimon.state, catalog: catalog))
+        confirm.addButton(withTitle: button)
+        confirm.addButton(withTitle: l.cancel)
+        for (index, button) in confirm.buttons.enumerated() {
+            button.keyEquivalent = ImportConfirmPolicy.keyEquivalent(forButtonAt: index)
+        }
+        NSApp.activate(ignoringOtherApps: true)
+        guard confirm.runModal() == .alertFirstButtonReturn else { return }
+        do {
+            try digimon.replace(with: file, reason: reason)
+            presentAlert(title: title, message: done, style: .informational)
+        } catch {
+            AppLog.write("digimon \(reason) failed: \(error)")
+            presentAlert(title: title, message: dt.saveError(error, fallback: l.userFacingError(error)), style: .warning)
+        }
+    }
+
+    private func backupDigimonNow(_ digimon: DigimonStore) {
+        do {
+            try digimon.backupNow(tag: "manual")
+            presentAlert(title: dt.backupNowButton, message: dt.backupDone, style: .informational)
+        } catch {
+            AppLog.write("digimon manual backup failed: \(error)")
+            presentAlert(title: dt.backupNowButton, message: l.userFacingError(error), style: .warning)
+        }
     }
 
     private func presentAlert(title: String, message: String, style: NSAlert.Style) {
