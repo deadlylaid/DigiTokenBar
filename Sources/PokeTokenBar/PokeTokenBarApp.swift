@@ -99,7 +99,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         // Tooltips show 40% sooner than AppKit's 1 s default; the app's hover hints are short and
         // the popover closes quickly. Registration domain only, so a user `defaults write` still wins.
         UserDefaults.standard.register(defaults: ["NSInitialToolTipDelay": 600])
-        Self.migrateLegacyStorageIfNeeded()   // TokenMac → PokeTokenBar 리네임: 기존 companion/캐시 보존
+        // DigiTokenBar never adopts TokenMac/PokeTokenBar data, so the legacy folder migration is not run.
         if AppEnv.isBundledApp {
             LoginItem.system.migrateFromLegacyAgentIfNeeded()
         }

@@ -1,10 +1,11 @@
 #!/bin/bash
-# PokeTokenBar.app 번들 조립 + /Applications 설치
+# DigiTokenBar.app 번들 조립 + /Applications 설치 (SwiftPM 실행 파일 이름은 원본 그대로 PokeTokenBar)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-VERSION="2.5.7"
-APP_NAME="PokeTokenBar"
+VERSION="0.1.0"
+APP_NAME="DigiTokenBar"
+PRODUCT="PokeTokenBar"   # SwiftPM executable name (kept from upstream)
 BUILD_DIR="build"
 APP="$BUILD_DIR/$APP_NAME.app"
 
@@ -20,7 +21,7 @@ SLICES=()
 for arch in "${ARCHS[@]}"; do
     echo "==> swift build -c release --arch $arch"
     swift build -c release --arch "$arch"
-    SLICES+=("$(swift build -c release --arch "$arch" --show-bin-path)/$APP_NAME")
+    SLICES+=("$(swift build -c release --arch "$arch" --show-bin-path)/$PRODUCT")
 done
 
 echo "==> $APP 조립"
@@ -38,7 +39,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleIdentifier</key><string>io.github.chattymin.poketokenbar</string>
+    <key>CFBundleIdentifier</key><string>io.github.deadlylaid.digitokenbar</string>
     <key>CFBundleName</key><string>$APP_NAME</string>
     <key>CFBundleExecutable</key><string>$APP_NAME</string>
     <key>CFBundlePackageType</key><string>APPL</string>
@@ -51,8 +52,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
-            <key>CFBundleURLName</key><string>io.github.chattymin.poketokenbar.agent</string>
-            <key>CFBundleURLSchemes</key><array><string>poketokenbar</string></array>
+            <key>CFBundleURLName</key><string>io.github.deadlylaid.digitokenbar.agent</string>
+            <key>CFBundleURLSchemes</key><array><string>digitokenbar</string></array>
         </dict>
     </array>
 </dict>
@@ -62,12 +63,12 @@ PLIST
 # Keep the old LaunchAgent definition so SMAppService can query and unregister it
 # when upgrading. New login items register the main app.
 mkdir -p "$APP/Contents/Library/LaunchAgents"
-cat > "$APP/Contents/Library/LaunchAgents/io.github.chattymin.poketokenbar.login.plist" <<AGENT
+cat > "$APP/Contents/Library/LaunchAgents/io.github.deadlylaid.digitokenbar.login.plist" <<AGENT
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Label</key><string>io.github.chattymin.poketokenbar.login</string>
+    <key>Label</key><string>io.github.deadlylaid.digitokenbar.login</string>
     <key>ProgramArguments</key>
     <array>
         <string>/Applications/$APP_NAME.app/Contents/MacOS/$APP_NAME</string>
@@ -85,7 +86,7 @@ cat > "$APP/Contents/Library/LaunchAgents/io.github.chattymin.poketokenbar.login
 AGENT
 
 echo "==> codesign"
-SIGN_IDENTITY="${CODESIGN_IDENTITY:-PokeTokenBar Local}"
+SIGN_IDENTITY="${CODESIGN_IDENTITY:-DigiTokenBar Local}"
 # 안정적 Keychain ACL 을 위해서는 인증서 존재가 아니라 유효한 codesigning identity 가 필요하다.
 if security find-identity -v -p codesigning | grep -F "\"$SIGN_IDENTITY\"" >/dev/null; then
     # 안정적 자체 서명 신원 → 재빌드해도 Keychain "항상 허용" 유지

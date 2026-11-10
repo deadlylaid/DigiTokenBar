@@ -12,7 +12,7 @@ extension SMAppService: LoginItemService {}
 
 @MainActor
 struct LoginItem {
-    private static let legacyLabel = "io.github.chattymin.poketokenbar.login"
+    private static let legacyLabel = AppIdentity.loginAgentLabel
 
     let mainApp: any LoginItemService
     let legacyAgent: any LoginItemService
