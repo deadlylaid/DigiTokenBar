@@ -286,9 +286,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                        todayDate: LocalUsageReader.todayKey(),
                        hasUsageData: store.hasUsageData)
         let sleeping = (store.timeSinceLastUsage() ?? .infinity) > Self.digimonSleepAfter
-        if sleeping != digimonHub.sleeping || companion.language != digimonHub.language {
+        let mood = DigimonSceneHub.mood(
+            sleeping: sleeping, hour: Calendar.current.component(.hour, from: Date()),
+            nightHours: digimon.engine.growth.nightHours,
+            limitFull: store.candyEligibleWindows.contains { $0.utilization >= 100 })
+        if sleeping != digimonHub.sleeping || companion.language != digimonHub.language || mood != digimonHub.mood {
             digimonHub.sleeping = sleeping
             digimonHub.language = companion.language
+            digimonHub.mood = mood
             digimonHub.refresh()
         }
     }
@@ -385,7 +390,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             } else if let still = frames.first {
                 self.setMenuFrames([(Self.digimonMenuImage(still, up: false), 0.5), (Self.digimonMenuImage(still, up: true), 0.5)])
             } else if let fallback {
-                self.setMenuFrames(Self.bobFrames(from: fallback))
+                self.setMenuFrames([(Self.digimonFallbackImage(fallback, up: false), 0.5),
+                                    (Self.digimonFallbackImage(fallback, up: true), 0.5)])
             } else {
                 return   // offline and not cached: keep what is shown, retry on the next refresh
             }
@@ -402,6 +408,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         let x = 1 + (16 - sprite.size.width) / 2
         sprite.draw(in: NSRect(x: x, y: 3 + (up ? 1 : 0), width: sprite.size.width, height: sprite.size.height),
                     from: .zero, operation: .sourceOver, fraction: 1)
+        img.unlockFocus()
+        return img
+    }
+
+    /// A large V-Pet sprite shrunk to the bar (species without a color sprite). Shrinking several
+    /// times with nearest-neighbor drops whole pixels and looks noisy, so this one is smoothed.
+    static func digimonFallbackImage(_ sprite: NSImage, up: Bool) -> NSImage {
+        let layout = menuBarLayout(for: sprite.size, up: up)
+        let img = NSImage(size: layout.canvas)
+        img.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .high
+        sprite.draw(in: layout.rect, from: .zero, operation: .sourceOver, fraction: 1)
         img.unlockFocus()
         return img
     }

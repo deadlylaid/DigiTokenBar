@@ -35,7 +35,9 @@ const isDark = () => mq.matches;
 const assets = {};
 const waiting = {};
 let COIN = null;
-let S = {key: null, line: 'agumon', stage: 0, sleeping: false, lang: 'ko'};
+let S = {key: null, line: 'agumon', stage: 0, sleeping: false, lang: 'ko', mood: null};
+// Mood from the app: 'sleepy' in the small hours, 'sick' while a usage limit is full.
+const moodSlow = () => S.mood === 'sick' ? .45 : S.mood === 'sleepy' ? .55 : 1;
 
 // Move names: Korean from the official Korean Digimon reference (digimon.net/reference_ko; Agumon
 // keeps 꼬마 불꽃 from its reference text and the Korean dub), English from the Japanese originals
@@ -74,6 +76,80 @@ const MOVES = {
   orochimon: {ko: '술 브레스', en: 'Sake Breath', kind: 'fire'},
   nidhoggmon: {ko: '어나이얼레이션', en: 'Annihilention', kind: 'fire'},
   cresgarurumon: {ko: '황수언월도', en: 'Yellow Beast Crescent Blade', kind: 'claw'},
+  nyokimon: {ko: '시드 크래커', en: 'Seed Cracker', kind: 'fire'},
+  pyocomon: {ko: '샤본 플라워', en: 'Soap Flower', kind: 'fire'},
+  piyomon: {ko: '빙빙회오리', en: 'Magical Fire', kind: 'fire'},
+  luxmon: {ko: '피코 너클', en: 'Pico Knuckle', kind: 'claw'},
+  falcomon2006animeversion: {ko: '스크래치 스매시', en: 'Scratch Smash', kind: 'claw'},
+  jazamon: {ko: '콕콕픽', en: 'Tap-tapping Pick', kind: 'claw'},
+  birdramon: {ko: '메테오 윙', en: 'Meteor Wing', kind: 'fire'},
+  pidmon: {ko: '파이어 페더', en: 'Fire Feather', kind: 'fire'},
+  peckmon: {ko: '스파이럴 클로', en: 'Spiral Claw', kind: 'claw'},
+  xiquemon: {ko: '폭섬', en: 'Waterfall Flash', kind: 'claw'},
+  garudamon: {ko: '섀도 윙', en: 'Shadow Wing', kind: 'fire'},
+  arkhaiangemon: {ko: '세인트 레기온', en: 'Saint Legion', kind: 'gaia'},
+  yatagaramon2006animeversion: {ko: '미카후츠노카미', en: 'Mikafutsu-no-kami', kind: 'fire'},
+  huankunmon: {ko: '고농포', en: 'Lonely Bubble', kind: 'ice'},
+  jazarichmon: {ko: '메서 스파이럴', en: 'Messer Spiral', kind: 'claw'},
+  hououmon: {ko: '스타라이트 익스플로전', en: 'Starlight Explosion', kind: 'gaia'},
+  dominimon: {ko: '파이널 엑스칼리버', en: 'Final Excalibur', kind: 'claw'},
+  ravmon: {ko: '스파이럴 레이븐 클로', en: 'Spiral Raven Claw', kind: 'claw'},
+  xiangpengmon: {ko: '뇌황편', en: 'Lightning Scourge', kind: 'gaia'},
+  shakamon: {ko: '오편로장', en: 'Satori Henro Shou', kind: 'gaia'},
+  metallicdramon: {ko: '레이저 캐논', en: 'Laser Cannon', kind: 'fire'},
+  ravmonburstmode: {ko: '무쌍천상익지진', en: 'Unmatched Soaring Wings Formation', kind: 'gaia'},
+  bubbmon: {ko: '점성 거품', en: 'Adhesive Bubble Blow', kind: 'fire'},
+  mochimon: {ko: '신축성 거품', en: 'Elastic Bubbles', kind: 'fire'},
+  tentomon: {ko: '쁘띠 썬더', en: 'Petit Thunder', kind: 'fire'},
+  lalamon: {ko: '넛츠 슛', en: 'Nuts Shoot', kind: 'fire'},
+  funbeemon: {ko: '기어 스팅거', en: 'Gear Stinger', kind: 'missile'},
+  morphomon: {ko: '린린 테라피', en: 'Intense Therapy', kind: 'ice'},
+  kabuterimon: {ko: '전기충격', en: 'Mega Blaster', kind: 'fire'},
+  sunflowmon: {ko: '태양 광선', en: 'Sunshine Beam', kind: 'fire'},
+  waspmon: {ko: '터보 스팅거', en: 'Turbo Stinger', kind: 'missile'},
+  kuwagamon: {ko: '시저 암즈', en: 'Scissor Arms', kind: 'claw'},
+  hudiemon: {ko: '플라잉 킥', en: 'Flying Kick', kind: 'claw'},
+  atlurkabuterimonred: {ko: '호른 버스터', en: 'Horn Buster', kind: 'claw'},
+  lilamon: {ko: '라일라 샤워', en: 'Lila Shower', kind: 'fire'},
+  cannonbeemon: {ko: '니트로 스팅거', en: 'Nitro Stinger', kind: 'missile'},
+  okuwamon: {ko: '시저암즈Ω', en: 'Scissor Arms Ω', kind: 'claw'},
+  eosmonperfect: {ko: '비트 프레스', en: 'Beat Press', kind: 'claw'},
+  heraklekabuterimon: {ko: '기가 블래스터', en: 'Giga Blaster', kind: 'gaia'},
+  rosemon: {ko: '쏜 위프', en: 'Thorn Whip', kind: 'claw'},
+  tigervespamon: {ko: '마하스팅거V', en: 'Mach Stinger V', kind: 'claw'},
+  grankuwagamon: {ko: '디멘션 시저', en: 'Dimension Scissor', kind: 'claw'},
+  tyrantkabuterimon: {ko: '샤인 오브 비', en: 'Shine of Bee', kind: 'gaia'},
+  bancholilimon: {ko: '앱솔루트 테러토리', en: 'Absolute Territory', kind: 'claw'},
+  rosemonburstmode: {ko: '샤리테', en: 'Charité', kind: 'gaia'},
+  chicomon: {ko: '산성 거품', en: 'Acid Bubbles', kind: 'fire'},
+  chibimon: {ko: '홉 어택', en: 'Hop Attack', kind: 'claw'},
+  vmon: {ko: '붕붕 펀치', en: 'Bunbun Punch', kind: 'claw'},
+  vdramon: {ko: '브이 브레스 애로', en: 'V-Breath Arrow', kind: 'fire'},
+  xvmon: {ko: '스트롱 크런치', en: 'Strong Crunch', kind: 'claw'},
+  aerovdramon: {ko: 'V윙 블레이드', en: 'V-Wing Blade', kind: 'claw'},
+  paildramon: {ko: '에스그리마', en: 'Esgrima', kind: 'claw'},
+  dinobeemon: {ko: '헬 마스커레이드', en: 'Hell Masquerade', kind: 'claw'},
+  digitamamon: {ko: '에니그마', en: 'Enigma', kind: 'gaia'},
+  imperialdramonfightermode: {ko: '포지트론 레이저', en: 'Positron Laser', kind: 'fire'},
+  ulforcevdramon: {ko: '샤이닝 V 포스', en: 'Shining V Force', kind: 'fire'},
+  imperialdramondragonmode: {ko: '메가 데스', en: 'Mega Death', kind: 'gaia'},
+  jyarimon: {ko: '열기를 띤 거품', en: 'Heated Bubbles', kind: 'fire'},
+  gigimon: {ko: '핫 바이트', en: 'Hot Bite', kind: 'claw'},
+  guilmon: {ko: '록 브레이커', en: 'Rock Breaker', kind: 'claw'},
+  siesamon: {ko: '티다 ･ 이야', en: 'Tiida Iya', kind: 'missile'},   // its first listed move (Sekkantou) is a defensive barrier
+  growmonorange: {ko: '번개검', en: 'Plasma Blade', kind: 'claw'},
+  growmon: {ko: '번개검', en: 'Plasma Blade', kind: 'claw'},
+  devidramon: {ko: '크림슨 네일', en: 'Crimson Nail', kind: 'claw'},
+  vajramon: {ko: '로다', en: 'Rodha', kind: 'claw'},
+  majiramon: {ko: '베다카', en: 'Vedhaka', kind: 'missile'},
+  mihiramon: {ko: '비모하나', en: 'Vimohana', kind: 'gaia'},
+  megalogrowmonorange: {ko: '양날검', en: 'Double Edge', kind: 'claw'},
+  megalogrowmon: {ko: '양날검', en: 'Double Edge', kind: 'claw'},
+  sandiramon: {ko: '크리슈나', en: 'Krishńa', kind: 'fire'},
+  dukemon: {ko: '로얄 세이버', en: 'Royal Saber', kind: 'claw'},
+  dukemonxantibody: {ko: '지크 세이버', en: 'Sieg Saber', kind: 'fire'},
+  megidramon: {ko: '헬 ･ 하울링', en: 'Hell Howling', kind: 'gaia'},
+  dukemoncrimsonmode: {ko: '인빈시블 소드', en: 'Invincible Sword', kind: 'claw'},
 };
 const moveOf = key => {
   const m = MOVES[key];
@@ -83,6 +159,8 @@ const moveOf = key => {
 // Colors per attack shape (center -> outside)
 const PAL = {
   fire_agumon: ['#fff6c2', '#ffb53b', '#e8461e'], fire_gabumon: ['#eaffff', '#79d6ff', '#2a6fe0'],
+  fire_piyomon: ['#fff1f6', '#ff8fb8', '#e0457a'], fire_tentomon: ['#ffffe0', '#f4f05a', '#7cc23a'],
+  fire_vmon: ['#f2efff', '#a597ff', '#5b45d6'], fire_guilmon: ['#fff2d6', '#ff7a3d', '#c92a1a'],
   missile: ['#fff3c4', '#ffb53b', '#e0452c'],
   gaia: ['#fff3c4', '#ff8a2a', '#c92a1a'],
   claw: ['#ffffff', '#c9f1ff', '#6fb7ff'],
@@ -139,7 +217,7 @@ async function addSprite(key, src) {
   if (!im || assets[key]) return;
   const img = document.createElement('canvas'); img.width = img.height = 64;
   const x = img.getContext('2d'); x.imageSmoothingEnabled = false; x.drawImage(im, 0, 0, 64, 64);
-  assets[key] = {img, sil: [silhouette(img, '#262a36'), silhouette(img, '#f1f3fa')], bb: bboxOf(img)};
+  assets[key] = {img, sil: [silhouette(img, '#262a36'), silhouette(img, '#f1f3fa'), silhouette(img, '#5b7fd6')], bb: bboxOf(img)};
   const fns = waiting[key] || []; delete waiting[key];
   fns.forEach(f => f());
 }
@@ -184,9 +262,11 @@ class Pet {
     this.booms.push({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal});
     for (let i = 0; i < 12; i++) { const a = TAU * i / 12, sp = rand(20, 55); this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? 2 : 1}); }
   }
+  // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
   spawnBug() {
-    const fromLeft = Math.random() < .5;
-    this.bug = {x: fromLeft ? -12 : this.worldW + 1, dir: fromLeft ? 1 : -1, t: 0, dead: false, noticed: false};
+    const fromLeft = Math.random() < .5, big = Math.random() < 1 / 6, sc = big ? 2 : 1;
+    this.bug = {x: fromLeft ? -11 * sc - 1 : this.worldW + 1, dir: fromLeft ? 1 : -1, t: 0, dead: false, noticed: false,
+                big, sc, hp: big ? 3 : 1, hit: 0};
   }
   pixBall(c, x, y, r, col) {
     c.fillStyle = col; const R = Math.ceil(r), cx = Math.round(x), cy = Math.round(y);
@@ -209,7 +289,13 @@ class Pet {
   next() {
     const r = Math.random();
     if (this.isEgg()) { r < .45 ? this.enter('wobble', {dur: 900}) : this.enter('idle'); return; }
-    const walk = this.desk ? .58 : .5;
+    if (S.mood && Math.random() < .2) {
+      const sleepy = S.mood === 'sleepy', ko = S.lang === 'ko';
+      this.callout = {text: sleepy ? (ko ? '하암…' : 'Yawn…') : (ko ? '으으…' : 'Ugh…'), t: 0, life: 1400};
+      this.enter(sleepy ? 'stretch' : 'idle', {dur: sleepy ? 1400 : 1800});
+      return;
+    }
+    const walk = (this.desk ? .58 : .5) * (S.mood ? .45 : 1);
     if (r < walk) this.startWalk();
     else if (r < walk + .17) { this.facing = -this.facing; this.enter('idle', {dur: rand(900, 1800)}); }
     else if (r < walk + .29) this.enter('stretch', {dur: 1100});
@@ -294,6 +380,13 @@ class Pet {
     if (this.flash > 0) this.flash = Math.max(0, this.flash - dt / 550);
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
+    if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
+      this.moodT = (this.moodT || 0) + dt;
+      if (this.moodT > 4200) {
+        this.moodT = 0; const b = this.bb();
+        this.zs.push({x: this.facing < 0 ? this.x + b.l + 2 : this.x + b.r - 7, y: this.ground() - 64 + b.t - 4, t: 0, life: 2200, dir: this.facing});
+      }
+    }
     this.parts = this.parts.filter(p => { p.t += dt; p.x += p.vx * dt / 1000; p.y += p.vy * dt / 1000; p.vy += 60 * dt / 1000; return p.t < p.life; });
     this.shots = this.shots.filter(s => {
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
@@ -306,8 +399,12 @@ class Pet {
         for (let i = 0; i < (s.kind === 'gaia' ? 2 : 1); i++) if (Math.random() < .75) this.parts.push({x: s.x + back * s.r * .7 + rand(-1, 1), y: s.y + rand(-s.r * .5, s.r * .5), vx: -s.vx * .05, vy: rand(-14, -4), t: 0, life: rand(200, 380), c: s.pal[Math.random() < .5 ? 1 : 2], s: 1});
       }
       const g = this.bug;
-      if (g && !g.dead && Math.hypot(s.x - (g.x + 5.5), s.y - (this.ground() - 4)) < s.r + 6) {
-        this.boom(s.x, s.y, s); g.dead = true; g.t = 0; post({cmd: 'bugDefeated'}); return false;
+      if (g && !g.dead && Math.hypot(s.x - (g.x + 5.5 * g.sc), s.y - (this.ground() - 4 * g.sc)) < s.r + 6 * g.sc) {
+        this.boom(s.x, s.y, s);
+        g.hp -= 1; g.hit = 220;
+        if (g.hp <= 0) { g.dead = true; g.t = 0; post({cmd: 'bugDefeated', count: g.big ? 3 : 1}); }
+        else g.x -= g.dir * 6;   // knocked back, still coming
+        return false;
       }
       if (s.x < 3 || s.x > this.worldW - 3 || s.y > this.ground()) { this.boom(s.x, Math.min(s.y, this.ground() - 2), s); return false; }
       return true;
@@ -316,12 +413,13 @@ class Pet {
     if (this.callout && (this.callout.t += dt) > this.callout.life) this.callout = null;
     if (this.bug) {
       const g = this.bug; g.t += dt;
+      if (g.hit > 0) g.hit -= dt;
       if (g.dead) { if (g.t > 300) this.bug = null; }
       else if (this.state !== 'held') {
-        g.x += g.dir * 14 * dt / 1000;
-        const b = this.bb(), petL = this.x + b.l, petR = this.x + b.r;
-        if (g.dir > 0 && g.x + 11 > petL - 4 && g.x < petR) g.x = petL - 15;
-        if (g.dir < 0 && g.x < petR + 4 && g.x + 11 > petL) g.x = petR + 4;
+        g.x += g.dir * (g.big ? 9 : 14) * dt / 1000;
+        const b = this.bb(), petL = this.x + b.l, petR = this.x + b.r, w = 11 * g.sc;
+        if (g.dir > 0 && g.x + w > petL - 4 && g.x < petR) g.x = petL - 4 - w;
+        if (g.dir < 0 && g.x < petR + 4 && g.x + w > petL) g.x = petR + 4;
       }
     } else if (!this.isEgg() && this.canAct() && this.state !== 'alert') {
       this.bugIn -= dt;
@@ -363,7 +461,7 @@ class Pet {
       case 'stretch': { const p = Math.min(1, this.t / d.dur); this.breath = .03 + .13 * Math.sin(Math.PI * p); this.sx = 1 - .03 * Math.sin(Math.PI * p); if (p >= 1) this.enter('idle', {dur: rand(900, 2000)}); break; }
       case 'turn': idleBreath(); if (this.t >= 260) this.enter('walk', {x0: this.x, tx: d.tx, dir: d.dir}); break;
       case 'walk': {
-        if (!d.dur) d.dur = Math.abs(d.tx - d.x0) / this.speed * 1000 + 400;
+        if (!d.dur) d.dur = Math.abs(d.tx - d.x0) / (this.speed * moodSlow()) * 1000 + 400;
         const p = Math.min(1, this.t / d.dur); this.x = d.x0 + (d.tx - d.x0) * easeIO(p);
         const ph = (this.t % 320) / 320, lift = Math.sin(Math.PI * ph), moving = Math.min(1, Math.sin(Math.PI * p) * 3);
         this.y = 1.6 * lift * moving;
@@ -460,10 +558,13 @@ class Pet {
       c.fillStyle = g; c.fillRect(cx - rad, gcy - rad, rad * 2, rad * 2);
     }
     if (this.bug && !this.bug.dead) {
-      const g = this.bug, bx = Math.round(g.x), by = Math.round(gy - 7);
+      const g = this.bug, k = g.sc, bx = Math.round(g.x), by = Math.round(gy - 7 * k);
       c.fillStyle = desk ? 'rgba(0,0,0,.2)' : 'rgba(60,50,30,.12)';
-      c.beginPath(); c.ellipse(bx + 5.5, gy + .5, 5, 1.4, 0, 0, TAU); c.fill();
-      BUG[Math.floor(g.t / 140) % 2].forEach((row, r) => [...row].forEach((v, col) => { if (v !== '.') { c.fillStyle = BUG_C[v]; c.fillRect(bx + col, by + r, 1, 1); } }));
+      c.beginPath(); c.ellipse(bx + 5.5 * k, gy + .5, 5 * k, 1.4 * k, 0, 0, TAU); c.fill();
+      const flash = g.hit > 0 && Math.floor(g.hit / 55) % 2 === 0;
+      BUG[Math.floor(g.t / (g.big ? 200 : 140)) % 2].forEach((row, r) => [...row].forEach((v, col) => {
+        if (v !== '.') { c.fillStyle = flash ? '#ffffff' : BUG_C[v]; c.fillRect(bx + col * k, by + r * k, k, k); }
+      }));
     }
     if (this.chip) {
       const ch = this.chip, rem = Math.min(12, ch.bites * 4);
@@ -478,7 +579,13 @@ class Pet {
     c.scale(this.flipX * this.sx, this.sy);
     this.blit(c, img, bb, -(bb.l + bb.r) / 2);
     if (desk && this.dim > 0 && !evolving) { c.globalAlpha = .35 * this.dim; this.blit(c, A.sil[0], bb, -(bb.l + bb.r) / 2); c.globalAlpha = 1; }
+    if (S.mood === 'sick' && !evolving && A.sil[2]) { c.globalAlpha = .22; this.blit(c, A.sil[2], bb, -(bb.l + bb.r) / 2); c.globalAlpha = 1; }
     c.restore();
+    if (S.mood === 'sick' && !evolving && this.state !== 'sleep') {
+      // A sweat drop beside the head.
+      const sx = Math.round(cx + (bb.r - bb.l) / 2 * (this.facing < 0 ? -1 : 1) * .6), sy = Math.round(gy - this.y - hgt + 3 + Math.sin(performance.now() / 260));
+      c.fillStyle = '#8fd0ff'; c.fillRect(sx, sy, 2, 2); c.fillRect(sx, sy + 2, 2, 1); c.fillStyle = '#ffffff'; c.fillRect(sx, sy, 1, 1);
+    }
 
     if (!desk && this.dim > 0) { c.fillStyle = `rgba(12,16,34,${.38 * this.dim})`; c.fillRect(0, 0, W, H); }
     if (this.state === 'attack' && this.d.kind === 'gaia' && !this.d.fired) {

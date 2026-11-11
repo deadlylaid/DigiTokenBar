@@ -39,7 +39,7 @@ final class DigimonDexTests: XCTestCase {
         var state = DigimonState.newEgg(lineID: "agumon")
         state.dex = ["agumon", "algomonadult", "from-a-newer-version"]
         let progress = DigimonDex.progress(state: state, catalog: catalog)
-        XCTAssertEqual(progress.total, 32, "two 17-member lines share Algomon and Omegamon")
+        XCTAssertEqual(progress.total, catalog.species.count, "shared Digimon (Algomon, Omegamon) count once")
         XCTAssertEqual(progress.seen, 2)
     }
 

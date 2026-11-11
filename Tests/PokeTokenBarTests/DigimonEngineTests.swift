@@ -33,10 +33,10 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Catalog
 
-    func testMVPCatalogHasTwoLinesOf32SpeciesWithLargeSprites() {
+    func testCatalogHasSixLinesOf106SpeciesWithLargeSprites() {
         let catalog = DigimonCatalog.mvp
-        XCTAssertEqual(Set(catalog.lines.keys), ["agumon", "gabumon"])
-        XCTAssertEqual(catalog.species.count, 32)
+        XCTAssertEqual(Set(catalog.lines.keys), ["agumon", "gabumon", "piyomon", "tentomon", "vmon", "guilmon"])
+        XCTAssertEqual(catalog.species.count, 106)
         for species in catalog.species.values {
             XCTAssertTrue(species.vbSprite.hasSuffix("_vpet_vb.png"), species.key)
         }
@@ -49,7 +49,8 @@ final class DigimonEngineTests: XCTestCase {
             for key in line.members {
                 guard let species = catalog.species(key), species.level != .ultimate else { continue }
                 let normal = catalog.nextEvolutions(from: key, in: line)
-                    .filter { rules.hidden[$0.to] == nil && !rules.locked.contains($0.to) }
+                    .filter { rules.hidden[$0.to] == nil && !rules.locked.contains($0.to)
+                        && !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
                 XCTAssertFalse(normal.isEmpty, "\(line.id): \(key) has no normal next evolution")
             }
         }

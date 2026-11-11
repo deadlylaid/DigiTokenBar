@@ -11,7 +11,8 @@ final class DigimonScene: NSObject {
 
     let mode: Mode
     let webView: WKWebView
-    var onBugDefeated: () -> Void = {}
+    /// How many bugs one kill was worth (a big bug counts as several).
+    var onBugDefeated: (Int) -> Void = { _ in }
     /// Desk only: where the pet is drawn, in the web view's top-left based points.
     var onPetRect: (CGRect) -> Void = { _ in }
 
@@ -63,7 +64,7 @@ final class DigimonScene: NSObject {
             queued = []
             for js in pending { webView.evaluateJavaScript(js, completionHandler: nil) }
         case "bugDefeated":
-            onBugDefeated()
+            onBugDefeated((body["count"] as? NSNumber)?.intValue ?? 1)
         case "petRect":
             let v = { (k: String) in (body[k] as? NSNumber)?.doubleValue ?? 0 }
             onPetRect(CGRect(x: v("x"), y: v("y"), width: v("w"), height: v("h")))
@@ -98,6 +99,8 @@ final class DigimonSceneHub {
     @ObservationIgnored let sprites: DigimonSpriteStore
     @ObservationIgnored var language: AppLanguage = .ko
     @ObservationIgnored var sleeping = false
+    /// "sleepy", "sick" or nil: how the pet behaves (see `mood(sleeping:hour:nightHours:limitFull:)`).
+    @ObservationIgnored var mood: String?
     @ObservationIgnored private var scenes: [WeakScene] = []
     @ObservationIgnored private var loading: [String: Task<Data?, Never>] = [:]
     /// Event playback runs one step at a time so an evolution never arrives before its sprite.
@@ -110,6 +113,14 @@ final class DigimonSceneHub {
         self.sprites = sprites
     }
 
+    /// Sick while a usage limit is full (it hurts more than being tired), sleepy in the small hours.
+    /// Asleep (no usage for a while) shows no mood.
+    nonisolated static func mood(sleeping: Bool, hour: Int, nightHours: Range<Int>, limitFull: Bool) -> String? {
+        if sleeping { return nil }
+        if limitFull { return "sick" }
+        return nightHours.contains(hour) ? "sleepy" : nil
+    }
+
     static func sceneKey(_ partner: DigimonPartner) -> String {
         partner.speciesKey ?? "egg_\(partner.lineID)"
     }
@@ -119,7 +130,7 @@ final class DigimonSceneHub {
     func register(_ scene: DigimonScene) {
         scenes.removeAll { $0.scene == nil }
         scenes.append(WeakScene(scene: scene))
-        scene.onBugDefeated = { [weak self] in self?.digimon.recordBugDefeated() }
+        scene.onBugDefeated = { [weak self] count in self?.digimon.recordBugDefeated(count: count) }
         enqueue { hub in
             let key = hub.currentKey
             if let data = await hub.image(for: key) { scene.sprite(key: key, dataURI: Self.dataURI(data)) }
@@ -197,8 +208,10 @@ final class DigimonSceneHub {
 
     private func sceneState() -> [String: Any] {
         let partner = digimon.state.partner
-        return ["key": currentKey, "line": partner.lineID, "stage": partner.level.order,
-                "sleeping": sleeping, "lang": language == .ko ? "ko" : "en"]
+        var state: [String: Any] = ["key": currentKey, "line": partner.lineID, "stage": partner.level.order,
+                                    "sleeping": sleeping, "lang": language == .ko ? "ko" : "en"]
+        state["mood"] = mood ?? NSNull()
+        return state
     }
 
     private func pushState() {

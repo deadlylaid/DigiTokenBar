@@ -46,6 +46,8 @@ struct EvolutionRules: Sendable {
     var hidden: [String: HiddenCondition]
     /// Never offered by normal growth (e.g. Jogress results, added after the MVP).
     var locked: Set<String>
+    /// Single evolutions ("from>to") that only happen as a Jogress, so growth never takes them.
+    var lockedEdges: Set<String> = []
 
     static let mvp = EvolutionRules(
         hidden: [
@@ -54,7 +56,8 @@ struct EvolutionRules: Sendable {
             "donedevimon": .limitHits(atLeast: 3),
             "nidhoggmon": .limitHits(atLeast: 3),
         ],
-        locked: ["omegamon"])
+        locked: ["omegamon"],
+        lockedEdges: DigimonCatalogData.jogressEdges)
 
     func isMet(_ condition: HiddenCondition, by signals: GrowthSignals) -> Bool {
         switch condition {
@@ -178,11 +181,16 @@ struct EvolutionEngine: Sendable {
 
     /// Next-stage candidates for the current partner, best first, at most `maxChoices`.
     func candidates(for state: DigimonState) -> [String] {
+        Array(rankedOptions(for: state).prefix(growth.maxChoices))
+    }
+
+    /// Every next form growth can take now, best first (not cut to `maxChoices`).
+    func rankedOptions(for state: DigimonState) -> [String] {
         guard let line = catalog.lines[state.partner.lineID] else { return [] }
         guard let current = state.partner.speciesKey else { return [line.firstBaby] }
         let signals = state.partner.stageSignals
         let options = catalog.nextEvolutions(from: current, in: line).filter { evo in
-            if rules.locked.contains(evo.to) { return false }
+            if rules.locked.contains(evo.to) || rules.lockedEdges.contains("\(current)>\(evo.to)") { return false }
             if let condition = rules.hidden[evo.to] { return rules.isMet(condition, by: signals) }
             return true
         }
@@ -190,32 +198,57 @@ struct EvolutionEngine: Sendable {
             .map { evo in (evo, score(evo, signals: signals, baseline: state.lifetimeSignals)) }
             .sorted { lhs, rhs in lhs.1 != rhs.1 ? lhs.1 > rhs.1 : lhs.0.to < rhs.0.to }
             .map(\.0.to)
-        return Array(ranked.prefix(growth.maxChoices))
+        return ranked
     }
 
     /// How strongly the stage's usage pulls toward this candidate.
     func score(_ evo: DigimonEvolution, signals: GrowthSignals, baseline: GrowthSignals) -> Double {
         guard let target = catalog.species(evo.to) else { return 0 }
-        var value: Double
-        switch target.attribute {
-        case .vaccine:
-            // Daytime, steady, within limits.
-            value = (1 - signals.nightShare) * (signals.limitHits == 0 ? 1 : 0.5)
-        case .data:
-            // Several tools, many active days.
-            value = Double(min(signals.providerCount, 3)) / 3 * 0.5
-                + min(Double(signals.activeDays.count) / 3, 1) * 0.5
-        case .virus:
-            // More night than *usual for this user*, or limits filled.
-            value = max(0, signals.nightShare - baseline.nightShare) * 2
-                + Double(min(signals.limitHits, 3)) * 0.3
-        case .free, .unknown:
-            value = 0.4
-        }
+        var value = pull(target.attribute, signals: signals, baseline: baseline)
         if evo.canon { value += 0.15 }
         // An unlocked special evolution always comes first: earning it should feel like a reward.
         if rules.hidden[evo.to] != nil { value += 2 }
         return value
+    }
+
+    /// How the stage's usage pulls toward an attribute (the part of the score the user steers).
+    func pull(_ attribute: DigimonAttribute, signals: GrowthSignals, baseline: GrowthSignals) -> Double {
+        switch attribute {
+        case .vaccine:
+            // Daytime, steady, within limits.
+            return (1 - signals.nightShare) * (signals.limitHits == 0 ? 1 : 0.5)
+        case .data:
+            // Several tools, many active days.
+            return Double(min(signals.providerCount, 3)) / 3 * 0.5
+                + min(Double(signals.activeDays.count) / 3, 1) * 0.5
+        case .virus:
+            // More night than *usual for this user*, or limits filled.
+            return max(0, signals.nightShare - baseline.nightShare) * 2
+                + Double(min(signals.limitHits, 3)) * 0.3
+        case .free, .unknown:
+            return 0.4
+        }
+    }
+
+    struct Tendency: Equatable {
+        let attribute: DigimonAttribute
+        let pull: Double
+        /// The attribute of the candidate it would evolve into now.
+        let leading: Bool
+    }
+
+    /// Which way it is growing: the attributes its next forms can have, how strongly the stage pulls
+    /// toward each, and which one leads. Names stay hidden. Empty when there is no real fork.
+    func tendencies(for state: DigimonState) -> [Tendency] {
+        guard state.partner.speciesKey != nil, state.partner.level != .ultimate else { return [] }
+        let options = rankedOptions(for: state).compactMap(catalog.species)
+        let attributes = Set(options.map(\.attribute))
+        guard attributes.count > 1, let lead = options.first?.attribute else { return [] }
+        let order: [DigimonAttribute] = [.vaccine, .data, .virus, .free, .unknown]
+        return order.filter(attributes.contains).map {
+            Tendency(attribute: $0, pull: pull($0, signals: state.partner.stageSignals, baseline: state.lifetimeSignals),
+                     leading: $0 == lead)
+        }
     }
 
     // MARK: Growth

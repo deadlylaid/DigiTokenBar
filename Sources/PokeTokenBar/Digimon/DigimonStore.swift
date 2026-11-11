@@ -110,11 +110,14 @@ final class DigimonStore {
         commit(next, [])
     }
 
-    func recordBugDefeated() {
+    /// A big bug counts as several.
+    func recordBugDefeated(count: Int = 1) {
         var next = saved
-        engine.recordBugDefeated(&next.digimon)
+        for _ in 0..<max(0, min(count, 10)) { engine.recordBugDefeated(&next.digimon) }
         commit(next, [])
     }
+
+    var tendencies: [EvolutionEngine.Tendency] { engine.tendencies(for: state) }
 
     func choose(_ key: String) {
         var next = saved

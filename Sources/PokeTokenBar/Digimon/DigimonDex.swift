@@ -34,7 +34,9 @@ struct DigimonDex {
     static func rows(for line: DigimonLine, state: DigimonState, catalog: DigimonCatalog,
                      rules: EvolutionRules) -> [Row] {
         let members = line.members.compactMap(catalog.species)
+        // Jogress-only steps are not growth routes, so the dex does not hint at them.
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
+            .filter { !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
         func entry(_ species: DigimonSpecies) -> Entry {
             let secret: Secret? = rules.locked.contains(species.key) ? .locked
                 : rules.hidden[species.key].map { .hidden($0) }
@@ -110,7 +112,7 @@ struct DigimonDexView: View {
                 Picker("", selection: Binding(get: { shownLine?.id ?? "" }, set: { lineID = $0; selected = nil })) {
                     ForEach(digimon.lines, id: \.id) { Text(t.lineName($0, catalog: catalog)).tag($0.id) }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
                 .labelsHidden()
                 .fixedSize()
             }

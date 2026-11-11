@@ -142,6 +142,21 @@ struct DigimonText {
         ko ? "고를 때까지 부화하지 않아요. 그동안 쓴 경험치는 모아 둬요. \(hours)시간이 지나면 자동으로 정해져요."
            : "It won't hatch until you pick, and keeps the experience meanwhile. After \(hours)h it picks for you."
     }
+    func tendencyTitle(_ attribute: DigimonAttribute) -> String {
+        let name = self.attribute(attribute) ?? "?"
+        return ko ? "지금은 \(name) 쪽으로 자라고 있어요" : "Growing toward \(name)"
+    }
+    /// What this stage has seen so far: the inputs of the tendency.
+    func tendencyReasons(_ s: GrowthSignals) -> String {
+        let night = Int((s.nightShare * 100).rounded())
+        return ko ? "이번 단계: 새벽 \(night)% · 도구 \(s.providerCount)개 · 활동 \(s.activeDays.count)일 · 한도 초과 \(s.limitHits)회 · 버그 \(s.bugsDefeated)마리"
+                  : "This stage: night \(night)% · \(s.providerCount) tools · \(s.activeDays.count) days · \(s.limitHits) limits hit · \(s.bugsDefeated) bugs"
+    }
+    var tendencyHint: String {
+        ko ? "낮에 꾸준히 쓰면 백신, 여러 도구를 여러 날 쓰면 데이터, 새벽이 늘거나 한도를 넘기면 바이러스 쪽이에요."
+           : "Steady daytime use leans Vaccine, many tools over many days Data, more late nights or full limits Virus."
+    }
+    func bugsCaught(_ n: Int) -> String { ko ? "잡은 버그 \(n)마리" : "\(n) bugs caught" }
     var evolutionByCare: String {
         ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)으로 정해져요"
            : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting)"
@@ -178,6 +193,7 @@ struct DigimonStatusView: View {
         VStack(alignment: .leading, spacing: 10) {
             nameRow
             progress
+            if !digimon.tendencies.isEmpty { tendency }
             if !digimon.candidates.isEmpty { choice }
             if digimon.isEgg, digimon.lines.count > 1 { eggChoice }
         }
@@ -188,16 +204,17 @@ struct DigimonStatusView: View {
         let catalog = digimon.engine.catalog
         return VStack(alignment: .leading, spacing: 6) {
             Text(t.chooseEggTitle).font(.callout.weight(.semibold))
-            HStack(spacing: 6) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: min(3, digimon.lines.count)),
+                      spacing: 6) {
                 ForEach(digimon.lines, id: \.id) { line in
                     let key = "egg_\(line.id)"
                     let current = digimon.state.partner.lineID == line.id
                     Button {
                         digimon.chooseEggLine(line.id)
                     } label: {
-                        HStack(spacing: 6) {
-                            PixelSprite(data: hub.icons[key]).frame(width: 32, height: 32)
-                            Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption.weight(.semibold))
+                        VStack(spacing: 2) {
+                            PixelSprite(data: hub.icons[key]).frame(width: 28, height: 28)
+                            Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption2.weight(.semibold)).lineLimit(1)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 6)
@@ -225,6 +242,11 @@ struct DigimonStatusView: View {
             if !digimon.isEgg { badge(t.level(digimon.state.partner.level)) }
             if let attribute = digimon.species.flatMap({ t.attribute($0.attribute) }) { badge(attribute) }
             Spacer()
+            if digimon.state.lifetimeSignals.bugsDefeated > 0 {
+                Label("\(digimon.state.lifetimeSignals.bugsDefeated)", systemImage: "ant.fill")
+                    .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    .help(t.bugsCaught(digimon.state.lifetimeSignals.bugsDefeated))
+            }
             if !digimon.state.graduates.isEmpty {
                 Text(t.graduates(digimon.state.graduates.count)).font(.caption).foregroundStyle(.secondary)
             }
@@ -255,6 +277,39 @@ struct DigimonStatusView: View {
                 if digimon.isFastGrowth { Text(t.fastGrowthOn).foregroundStyle(.orange) }
             }
             .font(.caption2)
+        }
+    }
+
+    /// Which way it is growing (attributes only, never the next form's name).
+    private var tendency: some View {
+        let rows = digimon.tendencies
+        let top = max(rows.map(\.pull).max() ?? 1, 0.01)
+        return VStack(alignment: .leading, spacing: 5) {
+            if let lead = rows.first(where: \.leading) {
+                Text(t.tendencyTitle(lead.attribute)).font(.callout.weight(.semibold))
+            }
+            ForEach(rows, id: \.attribute) { row in
+                HStack(spacing: 6) {
+                    Text(t.attribute(row.attribute) ?? "?")
+                        .font(.caption.weight(row.leading ? .semibold : .regular))
+                        .frame(width: 58, alignment: .leading)
+                    ProgressView(value: min(1, row.pull / top))
+                        .tint(Self.color(row.attribute))
+                }
+            }
+            Text(t.tendencyReasons(digimon.state.partner.stageSignals))
+                .font(.caption2).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .help(t.tendencyHint)
+    }
+
+    static func color(_ attribute: DigimonAttribute) -> Color {
+        switch attribute {
+        case .vaccine: return .blue
+        case .data: return .green
+        case .virus: return .purple
+        case .free, .unknown: return .gray
         }
     }
 
