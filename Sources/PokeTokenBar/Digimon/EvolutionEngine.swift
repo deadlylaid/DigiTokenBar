@@ -25,6 +25,9 @@ struct GrowthRules: Sendable, Equatable {
         let base = Double(Self.baseThresholds[level] ?? 100)
         return max(1, Int((base * growthMultiplier).rounded(.up)))
     }
+
+    /// Experience for a whole life, egg to graduation: more than this never means anything.
+    var lifeThreshold: Int { DigimonLevel.allCases.reduce(0) { $0 + threshold(for: $1) } }
 }
 
 /// Evolution *conditions*, kept apart from the evolution data in `DigimonCatalog`.
@@ -133,12 +136,38 @@ struct EvolutionEngine: Sendable {
         advance(&state, at: date)
     }
 
-    /// Call periodically: auto-picks the top candidate after `choiceTimeout`.
+    /// Call periodically: after `choiceTimeout`, picks the top evolution candidate, or the egg line.
     @discardableResult
     func tick(_ state: inout DigimonState, now: Date) -> [DigimonEvent] {
+        if let offered = state.eggChoiceOfferedAt, now.timeIntervalSince(offered) >= growth.choiceTimeout {
+            return chooseEggLine(&state, autoEggLine(for: state), at: now)
+        }
         guard let pending = state.pendingChoice, let first = pending.candidates.first,
               now.timeIntervalSince(pending.offeredAt) >= growth.choiceTimeout else { return [] }
         return choose(&state, first, at: now)
+    }
+
+    /// Picks the line the egg hatches into. Allowed while it is still an egg. Closes an open egg
+    /// choice, so an egg that already has enough experience hatches right away.
+    @discardableResult
+    func chooseEggLine(_ state: inout DigimonState, _ lineID: String, at date: Date) -> [DigimonEvent] {
+        guard state.partner.speciesKey == nil, catalog.lines[lineID] != nil else { return [] }
+        var events: [DigimonEvent] = []
+        if state.partner.lineID != lineID {
+            state.partner.lineID = lineID
+            events.append(.newEgg(lineID: lineID))
+        }
+        state.eggChoiceOfferedAt = nil
+        return events + advance(&state, at: date)
+    }
+
+    /// When the user did not pick: the line raised least often, the current one on a tie.
+    func autoEggLine(for state: DigimonState) -> String {
+        let current = state.partner.lineID
+        let graduated = Dictionary(grouping: state.graduates, by: \.lineID).mapValues(\.count)
+        return catalog.lines.keys.min { a, b in
+            (graduated[a, default: 0], a == current ? 0 : 1, a) < (graduated[b, default: 0], b == current ? 0 : 1, b)
+        } ?? current
     }
 
     // MARK: Candidates
@@ -189,7 +218,7 @@ struct EvolutionEngine: Sendable {
 
     private func advance(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
         var events: [DigimonEvent] = []
-        while state.pendingChoice == nil,
+        while state.pendingChoice == nil, state.eggChoiceOfferedAt == nil,
               state.partner.stageExp >= growth.threshold(for: state.partner.level) {
             let options = candidates(for: state)
             if state.partner.level == .ultimate || options.isEmpty {
@@ -228,6 +257,7 @@ struct EvolutionEngine: Sendable {
         state.graduates.append(GraduateRecord(lineID: line, path: path, graduatedAt: date))
         state.partner = DigimonPartner(lineID: line, speciesKey: nil, level: .digitama)
         state.pendingChoice = nil
+        state.eggChoiceOfferedAt = date   // the new egg waits for the user to pick its line
         return [.graduated(lineID: line, path: path), .newEgg(lineID: line)]
     }
 

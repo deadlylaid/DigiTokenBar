@@ -270,7 +270,7 @@ final class DigimonSaveIOTests: XCTestCase {
         let engine = EvolutionEngine()
         let clean = try DigimonSaveIO.sanitized(state, catalog: engine.catalog, growth: engine.growth)
         XCTAssertEqual(clean.partner.level, .child)
-        XCTAssertEqual(clean.partner.stageExp, engine.growth.threshold(for: .child))
+        XCTAssertEqual(clean.partner.stageExp, engine.growth.lifeThreshold, "never more than a whole life")
         XCTAssertEqual(clean.expToday, 0)
         XCTAssertLessThan(clean.tokenRemainder, engine.growth.tokensPerExp)
         XCTAssertEqual(clean.lifetimeSignals.tokens, DigimonSaveIO.maxCount)
@@ -424,5 +424,28 @@ final class DigimonAgentBubbleTests: XCTestCase {
         tracker.apply(event("done"), now: Date())
         XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: ko).bubble, "다 했어요!")
         XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: DigimonText(.en)).bubble, "all done!")
+    }
+}
+
+@MainActor
+final class DigimonFirstEggTests: XCTestCase {
+    func testOnAFreshInstallTheFirstEggWaitsForItsLine() throws {
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("digimon-first-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let now = Date(timeIntervalSince1970: 1_793_000_000)
+        let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now }, waitForFirstEgg: true)
+        XCTAssertTrue(store.isChoosingEgg)
+        XCTAssertEqual(store.eggChoiceHoursLeft, 24)
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 5_000_001], todayDate: "d1", hasUsageData: true)
+        XCTAssertTrue(store.isEgg, "no hatching before the pick")
+        var played: [DigimonEvent] = []
+        store.onActivity = { events, _ in played += events }
+        store.chooseEggLine("agumon")
+        XCTAssertEqual(played, [.hatched(species: "botamon")], "confirming the current line hatches it")
+        XCTAssertFalse(store.isChoosingEgg)
+        let reopened = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now }, waitForFirstEgg: true)
+        XCTAssertFalse(reopened.isChoosingEgg, "only a fresh install asks")
     }
 }

@@ -31,15 +31,19 @@ final class DigimonStore {
     private let clock: () -> Date
     @ObservationIgnored private var lastBackupAt: Date?
 
+    /// `waitForFirstEgg`: on a fresh install the first egg also waits for the user to pick its line
+    /// (the app passes true; tests that only need a growing Digimon leave it off).
     init(fileURL: URL? = nil, engine: EvolutionEngine = EvolutionEngine(),
-         clock: @escaping () -> Date = Date.init, firstLine: String = "agumon") {
+         clock: @escaping () -> Date = Date.init, firstLine: String = "agumon", waitForFirstEgg: Bool = false) {
         let fileURL = fileURL ?? Self.defaultURL()
         self.fileURL = fileURL
         self.engine = engine
         self.clock = clock
         self.backups = DigimonBackups(directory: fileURL.deletingLastPathComponent().appendingPathComponent("digimon-backups"))
         self.saved = Saved(digimon: .newEgg(lineID: firstLine))
+        let freshInstall = !FileManager.default.fileExists(atPath: fileURL.path)
         load()
+        if freshInstall, waitForFirstEgg { saved.digimon.eggChoiceOfferedAt = clock() }
         lastBackupAt = backups.list().first?.file.savedAt
         backupIfDue()
     }
@@ -68,6 +72,13 @@ final class DigimonStore {
         return max(1, Int((left / 3600).rounded(.up)))
     }
     var menuGrowthText: String { "\(Int(progress * 100))%" }
+    /// A new egg is waiting for the user to pick its line.
+    var isChoosingEgg: Bool { state.eggChoiceOfferedAt != nil }
+    var eggChoiceHoursLeft: Int? {
+        guard let offered = state.eggChoiceOfferedAt else { return nil }
+        let left = engine.growth.choiceTimeout - clock().timeIntervalSince(offered)
+        return max(1, Int((left / 3600).rounded(.up)))
+    }
     var lines: [DigimonLine] { engine.catalog.lines.values.sorted { $0.id < $1.id } }
 
     // MARK: Inputs
@@ -133,13 +144,13 @@ final class DigimonStore {
         commit(next, events)
     }
 
-    /// While it is still an egg, the user may pick which line it hatches into.
+    /// While it is still an egg, the user picks which line it hatches into. Picking closes a waiting
+    /// egg choice (the same line confirms it), so a full egg hatches at once.
     func chooseEggLine(_ lineID: String) {
-        guard isEgg, lineID != state.partner.lineID, engine.catalog.lines[lineID] != nil else { return }
+        guard isEgg else { return }
         var next = saved
-        next.digimon.partner.lineID = lineID
-        commit(next, [])
-        onLookChanged()
+        let events = engine.chooseEggLine(&next.digimon, lineID, at: clock())
+        commit(next, events)
     }
 
     // MARK: Export, import, backups

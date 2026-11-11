@@ -256,6 +256,16 @@ class Pet {
     if (this.isEgg()) { this.enter('wobble', {dur: 900}); return; }
     this.enter('hop', {h: this.hopH * 1.2, dur: 560, then: () => this.enter('hop', {h: this.hopH * .6, dur: 420})});
   }
+  // Graduation: a big hop, a burst of sparkles and a send-off before it becomes an egg again.
+  graduate() {
+    if (this.state === 'evolve') return;
+    this.chip = null; this.bug = null; this.note = null;
+    this.callout = {text: S.lang === 'ko' ? '졸업 축하해요!' : 'Graduated!', t: 0, life: 1700};
+    const b = this.bb(), cx = this.x + (b.l + b.r) / 2, cy = this.ground() - 64 + (b.t + b.b) / 2;
+    this.sparkle(cx, cy, 26); this.flash = Math.max(this.flash, .5);
+    if (this.state === 'sleep') this.dim = 0;
+    this.enter('hop', {h: this.hopH * 1.5, dur: 700, then: () => this.enter('hop', {h: this.hopH * .8, dur: 520})});
+  }
   setAgent(a) {
     this.working = !!a.working; this.note = a.bubble || null;
     if (a.react === 'done') this.cheer();
@@ -617,6 +627,7 @@ window.app = {
     if (c.type === 'feed') { if (pet.state === 'sleep') pet.wake(); setTimeout(() => pet.feed(), pet.state === 'hop' ? 500 : 0); }
     else if (c.type === 'jump') pet.jump();
     else if (c.type === 'notice') pet.notice();
+    else if (c.type === 'graduate') pet.graduate();
 
     else if (c.type === 'attack') pet.attack();
     else if (c.type === 'grab') pet.grab();

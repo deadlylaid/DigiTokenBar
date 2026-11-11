@@ -64,7 +64,8 @@ enum DigimonSaveIO {
         } else {
             state.partner.level = .digitama
         }
-        state.partner.stageExp = clamp(state.partner.stageExp, max: growth.threshold(for: state.partner.level))
+        // Up to a whole life: an egg waiting for its line keeps collecting experience.
+        state.partner.stageExp = clamp(state.partner.stageExp, max: growth.lifeThreshold)
         state.expToday = clamp(state.expToday, max: growth.dailyExpCap)
         state.tokenRemainder = clamp(state.tokenRemainder, max: growth.tokensPerExp - 1)
         clampSignals(&state.partner.stageSignals)

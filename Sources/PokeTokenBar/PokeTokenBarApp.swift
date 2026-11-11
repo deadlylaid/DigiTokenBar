@@ -111,7 +111,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         // CompanionStore stays for the app language and settings; the Pokemon companion itself
         // no longer grows (no PokeAPI downloads, no hatching, no candy).
         companion = CompanionStore()
-        digimon = DigimonStore()
+        digimon = DigimonStore(waitForFirstEgg: true)
         digimonHub = DigimonSceneHub(digimon: digimon)
         digimonHub.language = companion.language
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }

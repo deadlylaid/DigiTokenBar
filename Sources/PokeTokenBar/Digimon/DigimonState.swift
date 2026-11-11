@@ -54,6 +54,10 @@ struct DigimonState: Codable, Sendable, Equatable {
     /// Evolution paths found so far, as "from>to".
     var discoveredEvolutions: Set<String> = []
     var graduates: [GraduateRecord] = []
+    /// Set while a new egg waits for the user to pick its line: it does not hatch until then
+    /// (experience keeps adding up), and the engine picks after `choiceTimeout`.
+    /// Optional so saves from before it decode unchanged.
+    var eggChoiceOfferedAt: Date?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))

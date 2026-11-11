@@ -212,6 +212,31 @@ final class DigimonEngineTests: XCTestCase {
         XCTAssertEqual(s.partner.level, .digitama)
         XCTAssertEqual(s.graduates.count, 1)
         XCTAssertTrue(s.dex.contains("wargreymon"), "the dex survives graduation")
+        XCTAssertEqual(s.eggChoiceOfferedAt, date(day: 5), "the new egg waits for its line")
+    }
+
+    func testANewEggWaitsForItsLineAndKeepsTheExperience() {
+        var s = state(at: "wargreymon")
+        s.partner.stageExp = 299
+        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
+        let events = engine.addUsage(&s, tokens: 6_000_000, provider: "claude_code", at: date(day: 5))
+        XCTAssertEqual(events, [], "30 experience, but no hatching before the user picks")
+        XCTAssertNil(s.partner.speciesKey)
+        XCTAssertEqual(s.partner.stageExp, 30)
+        XCTAssertEqual(engine.chooseEggLine(&s, "gabumon", at: date(day: 5)),
+                       [.newEgg(lineID: "gabumon"), .hatched(species: "punimon")])
+        XCTAssertNil(s.eggChoiceOfferedAt)
+        XCTAssertEqual(s.partner.stageExp, 10, "what the egg did not need carries into Punimon")
+    }
+
+    func testAnUnpickedEggTakesTheLineRaisedLeastAfterADay() {
+        var s = state(at: "wargreymon")
+        s.partner.stageExp = 299
+        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
+        XCTAssertEqual(engine.tick(&s, now: date(day: 5).addingTimeInterval(3600)), [], "still waiting")
+        let events = engine.tick(&s, now: date(day: 6))
+        XCTAssertEqual(events, [.newEgg(lineID: "gabumon")], "Agumon graduated once, Gabumon never")
+        XCTAssertNil(s.eggChoiceOfferedAt)
     }
 
     func testStateSurvivesAJSONRoundTrip() throws {

@@ -135,8 +135,14 @@ struct DigimonText {
     }
     var graduatedTitle: String { ko ? "졸업했어요" : "Graduated" }
     func graduatedBody(_ name: String) -> String {
-        ko ? "\(name)의 여정이 끝났어요. 새 디지타마가 도착했어요." : "\(name)'s journey is complete. A new Digi-Egg arrived."
+        ko ? "\(name)의 여정이 끝났어요. 새 알을 골라 주세요. 고를 때까지 부화하지 않아요."
+           : "\(name)'s journey is complete. Pick a new egg: it waits for you before hatching."
     }
+    func chooseEggWaiting(hours: Int) -> String {
+        ko ? "고를 때까지 부화하지 않아요. 그동안 쓴 경험치는 모아 둬요. \(hours)시간이 지나면 자동으로 정해져요."
+           : "It won't hatch until you pick, and keeps the experience meanwhile. After \(hours)h it picks for you."
+    }
+    var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
 
 /// The pet scene at the top of the popover Home. It stays outside the scroll view: a web view
@@ -199,8 +205,14 @@ struct DigimonStatusView: View {
                     .task(id: key) { _ = await hub.image(for: key) }
                 }
             }
-            Text(t.chooseEggHint).font(.caption2).foregroundStyle(.secondary)
+            Text(digimon.isChoosingEgg ? t.chooseEggWaiting(hours: digimon.eggChoiceHoursLeft ?? 0) : t.chooseEggHint)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .padding(digimon.isChoosingEgg ? 10 : 0)
+        .background(digimon.isChoosingEgg ? Color.accentColor.opacity(0.08) : .clear)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 
     private var nameRow: some View {
@@ -225,6 +237,9 @@ struct DigimonStatusView: View {
             .font(.caption)
             .foregroundStyle(.secondary)
             ProgressView(value: digimon.progress)
+            if digimon.isChoosingEgg, digimon.progress >= 1 {
+                Text(t.eggReady).font(.caption).foregroundStyle(Color.accentColor)
+            }
             HStack {
                 Text(t.todayExp(digimon.expToday, cap: digimon.engine.growth.dailyExpCap))
                     .foregroundStyle(.tertiary)

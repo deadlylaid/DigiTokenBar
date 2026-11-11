@@ -138,7 +138,12 @@ final class DigimonSceneHub {
                 case .hatched(let species): target = species
                 case .evolved(_, let to): target = to
                 case .newEgg(let line): target = "egg_\(line)"
-                case .choiceOffered, .graduated: target = nil
+                case .graduated:
+                    // A send-off before it turns back into an egg.
+                    hub.broadcast(["type": "graduate"])
+                    try? await Task.sleep(for: .seconds(1.8))
+                    target = nil
+                case .choiceOffered: target = nil
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
                 hub.liveScenes.forEach { $0.sprite(key: target, dataURI: Self.dataURI(data)) }
