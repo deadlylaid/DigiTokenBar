@@ -2714,8 +2714,8 @@
    "levels": [
     "Perfect",
     "Ultimate",
-    "Unknown",
-    "Hybrid"
+    "Hybrid",
+    "Unknown"
    ],
    "attributes": [
     "Data",
@@ -9483,8 +9483,8 @@
    "attribute": "Variable",
    "levels": [
     "Perfect",
-    "Unknown",
-    "Hybrid"
+    "Hybrid",
+    "Unknown"
    ],
    "attributes": [
     "Data",
@@ -14470,14 +14470,16 @@
    "to": "imperialdramonfightermode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "aerovdramon",
    "to": "magnamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with V-mon, XV-mon, and Fladramon or a Data or Free Attribute Perfect Di"
   },
   {
    "from": "aerovdramon",
@@ -14511,21 +14513,24 @@
    "to": "darksuperstarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "agnimon",
    "to": "gigasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "agnimon",
    "to": "superstarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "agnimon",
@@ -14774,14 +14779,16 @@
    "to": "hydramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "ajatarmon",
    "to": "rafflesimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "ajatarmon",
@@ -14802,7 +14809,8 @@
    "to": "ancientvolcamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "aldamon",
@@ -14817,14 +14825,16 @@
    "to": "andromon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "algomonadult",
    "to": "anomalocarimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "algomonadult",
@@ -14859,14 +14869,16 @@
    "to": "parrotmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "algomonadult",
    "to": "valvemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "algomonadult",
@@ -14919,7 +14931,8 @@
    "to": "rapidmonarmor",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "andiramon",
@@ -14974,7 +14987,8 @@
    "to": "rapidmonarmor",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "andiramondeva",
@@ -14997,7 +15011,8 @@
    "to": "blitzgreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "andromon",
@@ -15291,7 +15306,8 @@
    "to": "donedevimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "anomalocarimon",
@@ -15384,14 +15400,16 @@
    "to": "jetsilphymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "arbormon",
    "to": "peacockmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "arbormon",
@@ -15406,7 +15424,8 @@
    "to": "shutumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "arbormon",
@@ -15434,7 +15453,8 @@
    "to": "bloomlordmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Perfect Digimon from the Vital Bracelet Digital"
   },
   {
    "from": "archnemon",
@@ -15462,7 +15482,8 @@
    "to": "spinomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Data Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "arcturusmon",
@@ -15548,7 +15569,8 @@
    "to": "ancientmegatheriumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "astamon",
@@ -15570,7 +15592,8 @@
    "to": "frosvelgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "astamon",
@@ -15606,14 +15629,16 @@
    "to": "metalgarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with any Virus Perfect Digimon from the Digimon Pendulum COLOR"
   },
   {
    "from": "asuramon",
    "to": "ouryumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data, Virus or Free Attribute Perfect Digimon from the Vital Brac"
   },
   {
    "from": "asuramon",
@@ -15643,7 +15668,8 @@
    "to": "heavyleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Data Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "atlurballistamon",
@@ -15665,7 +15691,8 @@
    "to": "zekegreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "atlurkabuterimon",
@@ -15733,7 +15760,8 @@
    "to": "neovamdemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Jokermon or a Virus Attribute Perfect Digimon from the Vital Bracel"
   },
   {
    "from": "baalmon",
@@ -15747,7 +15775,8 @@
    "to": "piemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "babydmon",
@@ -15775,7 +15804,8 @@
    "to": "baalmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "bakemon",
@@ -15807,7 +15837,8 @@
    "to": "jokermon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "bakemon",
@@ -15882,7 +15913,8 @@
    "to": "loaderleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ballistamon",
@@ -15903,14 +15935,16 @@
    "to": "metalmamemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ballistamon",
    "to": "rebellimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "ballistamon",
@@ -15933,14 +15967,16 @@
    "to": "shoutmonx3gm",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Dorulumon, [[Greymon (2010 Anime Version"
   },
   {
    "from": "ballistamon",
    "to": "shoutmonx3sd",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Dorulumon, Skull Knightmon and Deadly Axemon, or [[Shoutm"
   },
   {
    "from": "ballistamon",
@@ -15956,7 +15992,8 @@
    "sources": [
     "DMC"
    ],
-   "canon": true
+   "canon": true,
+   "jogress": "Jogress with Shoutmon, Dorulumon, Starmons and [[Beelzebumon (2010 Anime Version"
   },
   {
    "from": "ballistamon",
@@ -15995,7 +16032,8 @@
    "to": "shoutmonx5s",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Dorulumon, Starmons, Spadamon and Sparrowmon, or [[Shoutm"
   },
   {
    "from": "ballistamon",
@@ -16050,7 +16088,8 @@
    "sources": [
     "DMC"
    ],
-   "canon": true
+   "canon": true,
+   "jogress": "Jogress with Shoutmon, Ballistamon, Dorulumon and Starmons, or [[Shoutmon (King "
   },
   {
    "from": "beelzebumon2010animeversion",
@@ -16094,7 +16133,8 @@
    "to": "ancientmermaimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "beowolfmon",
@@ -16199,7 +16239,8 @@
    "to": "tankdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "betelgammamon",
@@ -16327,7 +16368,8 @@
    "to": "groundramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with [[Coredramon (Blue"
   },
   {
    "from": "birdramon",
@@ -16406,14 +16448,16 @@
    "to": "raijiludomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "blacktailmonuver",
    "to": "rareraremon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "blackwargreymon",
@@ -16428,7 +16472,8 @@
    "to": "bolgmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "bladekuwagamon",
@@ -16456,14 +16501,16 @@
    "to": "rhinokabuterimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "bladekuwagamon",
    "to": "sephirothmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "bladekuwagamon",
@@ -16495,7 +16542,8 @@
    "to": "metallifekuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "blitzmon",
@@ -16510,28 +16558,32 @@
    "to": "sephirothmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "blitzmon",
    "to": "wisemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "blizzarmon",
    "to": "ancientmegatheriumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "blizzarmon",
    "to": "dynasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "blizzarmon",
@@ -16653,7 +16705,8 @@
    "to": "ancientwisemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "bolgmon",
@@ -16667,7 +16720,8 @@
    "to": "murmukusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "bombermon",
@@ -16728,7 +16782,8 @@
    "to": "achillesmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "boutmon",
@@ -16743,7 +16798,8 @@
    "to": "shivamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Virus Attribute Perfect Digimon from the Vital Bracelet D"
   },
   {
    "from": "boutmon",
@@ -16862,21 +16918,24 @@
    "to": "pistmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "bulkmon",
    "to": "tempomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Adult Digimon from the Vital Bracelet Digi"
   },
   {
    "from": "calamaramon",
    "to": "ancientgarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "calamaramon",
@@ -17095,7 +17154,8 @@
    "to": "kuzuhamonmikomode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "caturamon",
@@ -17109,7 +17169,8 @@
    "to": "sakuyamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "caturamon",
@@ -17166,21 +17227,24 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "cerberumon",
    "to": "zdgarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "chackmon",
    "to": "astamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "chackmon",
@@ -17203,14 +17267,16 @@
    "to": "nanomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "chackmon",
    "to": "panjyamonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "chamblemon",
@@ -17384,14 +17450,16 @@
    "to": "achillesmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "climbmon",
    "to": "kazuchimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "climbmon",
@@ -17447,7 +17515,8 @@
    "to": "jetsilphymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "cockatrimon",
@@ -17461,7 +17530,8 @@
    "to": "petaldramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "cockatrimon",
@@ -17483,7 +17553,8 @@
    "to": "zamielmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "coelamon",
@@ -17532,7 +17603,8 @@
    "to": "metalgreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "coelamon",
@@ -17671,7 +17743,8 @@
    "to": "ancientmegatheriumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Zudomon, Dagomon and Brachimon or a Virus Attribute Perfect Digimon"
   },
   {
    "from": "crescemon",
@@ -17714,7 +17787,8 @@
    "to": "skullmammon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "cresgarurumon",
@@ -17738,7 +17812,8 @@
    "to": "frosvelgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "cryspaledramon",
@@ -17753,7 +17828,8 @@
    "to": "skullmammon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "curimon",
@@ -17830,14 +17906,16 @@
    "to": "noblepumpmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "cyberdramon2010animeversion",
    "to": "piemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "cyclomon",
@@ -17886,14 +17964,16 @@
    "sources": [
     "DPC",
     "DPC:Pendulum COLOR 2 Deep Savers"
-   ]
+   ],
+   "jogress": "Jogress with any Pefect Digimon or certain Digimon from the Pendulum Ver.20th se"
   },
   {
    "from": "dagomon",
    "to": "regalecusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "daipenmon",
@@ -17907,7 +17987,8 @@
    "to": "dynasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "daipenmon",
@@ -17921,7 +18002,8 @@
    "to": "hexeblaumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "daipenmon",
@@ -17989,7 +18071,8 @@
    "to": "kaisergreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "darktyranomon",
@@ -18031,7 +18114,8 @@
    "to": "metalgreymonalterousmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "darktyranomon",
@@ -18126,7 +18210,8 @@
    "to": "cannondramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "deathmeramon",
@@ -18167,7 +18252,8 @@
    "to": "volcanicdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "deathxdorugamon",
@@ -18311,14 +18397,16 @@
    "to": "megalogrowmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Arresterdramon, Reppamon, or a Free Attribute Adult Digimon from th"
   },
   {
    "from": "devidramon",
    "to": "megalogrowmonorange",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "devidramon",
@@ -18333,7 +18421,8 @@
    "to": "mihiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "devidramon",
@@ -18361,7 +18450,8 @@
    "to": "cyberdramon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "devimon",
@@ -18434,7 +18524,8 @@
    "to": "bryweludramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus, or Free Attribute Perfect Digimon from the Vital "
   },
   {
    "from": "digitamamon",
@@ -18464,14 +18555,16 @@
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "digitamamon",
    "to": "imperialdramonfightermode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "digitamamon",
@@ -18506,7 +18599,8 @@
    "to": "gogmamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "digmon",
@@ -18548,14 +18642,16 @@
    "to": "triceramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "digmon",
    "to": "vulturemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "dijiangmon",
@@ -18570,7 +18666,8 @@
    "to": "banchostingmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "dinobeemon",
@@ -18614,28 +18711,32 @@
    "to": "magnamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "dinobeemon",
    "to": "ulforcevdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "divemon",
    "to": "achillesmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "divemon",
    "to": "kazuchimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "divemon",
@@ -18656,14 +18757,16 @@
    "to": "beowolfmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "dobermon",
    "to": "calamaramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "dobermon",
@@ -18677,7 +18780,8 @@
    "to": "sirenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "dobermon",
@@ -18728,7 +18832,8 @@
    "to": "asuramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "dokugumon",
@@ -18742,7 +18847,8 @@
    "to": "duramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "dokugumon",
@@ -18801,7 +18907,8 @@
    "to": "valvemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "dokugumon",
@@ -18817,14 +18924,16 @@
    "to": "weregarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "dominimon",
    "to": "shakamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Xiangpengmon"
   },
   {
    "from": "dorimon",
@@ -18920,14 +19029,16 @@
    "to": "shoutmonx3gm",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Ballistamon, [[Greymon (2010 Anime Version"
   },
   {
    "from": "dorulumon",
    "to": "shoutmonx3sd",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Ballistamon, Skull Knightmon and Deadly Axemon or Shoutmo"
   },
   {
    "from": "dorulumon",
@@ -18943,7 +19054,8 @@
    "sources": [
     "DMC"
    ],
-   "canon": true
+   "canon": true,
+   "jogress": "Jogress with Shoutmon, Ballistamon, Starmons and [[Beelzebumon (2010 Anime Versi"
   },
   {
    "from": "dorulumon",
@@ -18982,7 +19094,8 @@
    "to": "shoutmonx5s",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Ballistamon, Starmons, Spadamon and Sparrowmon, or [[Shou"
   },
   {
    "from": "dorulumon",
@@ -19004,7 +19117,8 @@
    "to": "weregarurumonblack",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Adult Digimon from the Vital Brac"
   },
   {
    "from": "dorulumon",
@@ -19050,7 +19164,8 @@
    "to": "parasimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "doumon",
@@ -19064,7 +19179,8 @@
    "to": "sakuyamonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "dracomon",
@@ -19138,7 +19254,8 @@
    "to": "weregarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Garurumon, Hanumon, or a Vaccine, Virus or Free Attribute Adult Dig"
   },
   {
    "from": "drimogemon",
@@ -19152,7 +19269,8 @@
    "to": "weregarurumonsagittariusmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "drimogemon",
@@ -19174,7 +19292,8 @@
    "to": "ouryumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data, Virus or Free Attribute Perfect Digimon from the Vital Brac"
   },
   {
    "from": "duramon",
@@ -19203,7 +19322,8 @@
    "to": "loaderleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "duskmon",
@@ -19217,7 +19337,8 @@
    "to": "raihimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Velgrmon<!--https://youtu.be/K-YXWL4UrEQ--> or a Vaccine Attribute "
   },
   {
    "from": "duskmon",
@@ -19248,21 +19369,24 @@
    "to": "beowolfmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "ebidramon",
    "to": "calamaramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ebidramon",
    "to": "garummon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "ebidramon",
@@ -19437,14 +19561,16 @@
    "to": "boutmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "exermon",
    "to": "climbmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "exermon",
@@ -19487,7 +19613,8 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "extyranomon",
@@ -19509,14 +19636,16 @@
    "to": "peacockmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "fairimon",
    "to": "petaldramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "fairimon",
@@ -19531,7 +19660,8 @@
    "to": "zamielmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "falcomon2006animeversion",
@@ -19560,7 +19690,8 @@
    "to": "beelzebumon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "fantomon",
@@ -19667,7 +19798,8 @@
    "to": "goldvdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "fladramon",
@@ -19725,7 +19857,8 @@
    "to": "cannondramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "flaremon",
@@ -19753,7 +19886,8 @@
    "to": "volcanicdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "floramon",
@@ -19800,7 +19934,8 @@
    "to": "mastertyranomon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Greymon: \"G\" Erosion Mode, Strikedramon, or Tyranomon"
   },
   {
    "from": "flymon",
@@ -19815,7 +19950,8 @@
    "to": "weregarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Raptordramon"
   },
   {
    "from": "frimon",
@@ -19844,7 +19980,8 @@
    "to": "frosvelgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "frozomon",
@@ -19858,7 +19995,8 @@
    "to": "skullmammon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "fufumon",
@@ -19889,7 +20027,8 @@
    "to": "oboromon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with any Data Adult or any Virus Adult Digimon from the Digimon Pendulum"
   },
   {
    "from": "fujamon",
@@ -20052,7 +20191,8 @@
    "sources": [
     "DMC",
     "DMC:Digital Monster COLOR Ver.2"
-   ]
+   ],
+   "jogress": "Jogress with Tentomon"
   },
   {
    "from": "gabumon",
@@ -20185,14 +20325,16 @@
    "to": "makuramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "galgomon",
    "to": "pajiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "galgomon",
@@ -20207,7 +20349,8 @@
    "to": "sinduramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gammamon",
@@ -20397,7 +20540,8 @@
    "to": "ancientmermaimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "garummon",
@@ -20418,7 +20562,8 @@
    "to": "omegaknight",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Grey Wars"
   },
   {
    "from": "garurumon",
@@ -20477,7 +20622,8 @@
    "to": "orochimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "garurumon",
@@ -20491,7 +20637,8 @@
    "to": "parrotmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Adult Digimon from the Vital Bracelet Digi"
   },
   {
    "from": "garurumon",
@@ -20507,7 +20654,8 @@
    "to": "rhinomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "garurumon",
@@ -20886,7 +21034,8 @@
    "to": "kaisergreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "gigimon",
@@ -20927,7 +21076,8 @@
    "to": "asuramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "ginryumon",
@@ -20941,7 +21091,8 @@
    "to": "duramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Adult Digimon from the Vital Bracelet Digi"
   },
   {
    "from": "ginryumon",
@@ -21053,7 +21204,8 @@
    "to": "ancientsphinxmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "gogmamon",
@@ -21074,7 +21226,8 @@
    "to": "pharaohmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "gokimon",
@@ -21088,7 +21241,8 @@
    "to": "jewelbeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "gokimon",
@@ -21102,7 +21256,8 @@
    "to": "paildramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gokimon",
@@ -21116,7 +21271,8 @@
    "to": "pucchiemongreen",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gokuwmon",
@@ -21151,7 +21307,8 @@
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "goldvdramon",
@@ -21172,7 +21329,8 @@
    "to": "ulforcevdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus or Free Attribute Perfect Digimon from the Vital Bracelet D"
   },
   {
    "from": "golemon",
@@ -21186,21 +21344,24 @@
    "to": "jyagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "golemon",
    "to": "mummymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "golemon",
    "to": "scorpiomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "golemon",
@@ -21283,14 +21444,16 @@
    "to": "waruseadramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "gorimon",
    "to": "weregarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "goromon",
@@ -21473,7 +21636,8 @@
    "to": "extyranomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "greymon",
@@ -21546,7 +21710,8 @@
    "to": "neodevimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "greymon",
@@ -21619,14 +21784,16 @@
    "to": "extyranomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "greymonblue",
    "to": "mametyramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "greymonblue",
@@ -21676,7 +21843,8 @@
    "to": "mastertyranomon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Tyranomon or Flymon"
   },
   {
    "from": "greywars",
@@ -21690,7 +21858,8 @@
    "to": "omegaknight",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Garuru Metal"
   },
   {
    "from": "griffomon",
@@ -21706,14 +21875,16 @@
    "to": "aldamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "grottemon",
    "to": "darksuperstarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "grottemon",
@@ -21735,14 +21906,16 @@
    "to": "vritramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with any Adult or Armor Digimon or a Data Attribute Adult Digimon from t"
   },
   {
    "from": "groundramon",
    "to": "ancientvolcamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "groundramon",
@@ -21778,14 +21951,16 @@
    "to": "volcanicdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "growmon",
    "to": "majiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "growmon",
@@ -21807,7 +21982,8 @@
    "to": "mihiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "growmon",
@@ -21821,14 +21997,16 @@
    "to": "vajramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "growmonorange",
    "to": "majiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "growmonorange",
@@ -21857,14 +22035,16 @@
    "to": "sandiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "growmonorange",
    "to": "vajramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gryzmon",
@@ -21878,21 +22058,24 @@
    "to": "blizzarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "gryzmon",
    "to": "daipenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gryzmon",
    "to": "nanomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "gryzmon",
@@ -22050,7 +22233,8 @@
    "to": "metalseadramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "gusokumon",
@@ -22064,7 +22248,8 @@
    "to": "plesiomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "gusokumon",
@@ -22078,7 +22263,8 @@
    "to": "durandamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "gyukimon",
@@ -22328,14 +22514,16 @@
    "to": "andiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "harpymon",
    "to": "andiramondeva",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "harpymon",
@@ -22356,7 +22544,8 @@
    "to": "rapidmonperfect",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "harpymon",
@@ -22507,7 +22696,8 @@
    "to": "durandamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data, Virus or Free Attribute Perfect Digimon from the Vital Brac"
   },
   {
    "from": "hisyaryumon",
@@ -22658,14 +22848,16 @@
    "to": "raijiludomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "hoverespimon",
    "to": "rareraremon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "huankunmon",
@@ -22714,7 +22906,8 @@
    "to": "dinobeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "hudiemon",
@@ -22735,7 +22928,8 @@
    "to": "kongoumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "hudiemon",
@@ -22749,7 +22943,8 @@
    "to": "pucchiemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "hudiemon",
@@ -22779,7 +22974,8 @@
    "to": "daipenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "hyougamon",
@@ -22793,7 +22989,8 @@
    "to": "mammon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "hyougamon",
@@ -22807,7 +23004,8 @@
    "to": "caturamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "icedevimon",
@@ -22828,14 +23026,16 @@
    "to": "kumbhiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "icedevimon",
    "to": "taomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "icedevimon",
@@ -22849,21 +23049,24 @@
    "to": "astamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "icemon",
    "to": "blizzarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "icemon",
    "to": "daipenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "icemon",
@@ -23007,14 +23210,16 @@
    "to": "sakuyamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "indaramon",
    "to": "sakuyamonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "jazamon",
@@ -23127,14 +23332,16 @@
    "to": "ancienttroiamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "jetsilphymon",
    "to": "lordknightmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "jetsilphymon",
@@ -23170,21 +23377,24 @@
    "to": "hydramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "jewelbeemon",
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "jewelbeemon",
    "to": "imperialdramonpaladinmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "jewelbeemon",
@@ -23198,7 +23408,8 @@
    "to": "spinomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Data Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "jokermon",
@@ -23212,14 +23423,16 @@
    "to": "neovamdemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Baalmon or a Vaccine or Free Attribute Perfect Digimon from the Vit"
   },
   {
    "from": "jokermon",
    "to": "noblepumpmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "jokermon",
@@ -23257,7 +23470,8 @@
    "to": "dinorexmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "jyagamon",
@@ -23273,7 +23487,8 @@
    "to": "pharaohmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Perfect Virus Digimon"
   },
   {
    "from": "jyagamon",
@@ -23403,7 +23618,8 @@
    "to": "dinotigermon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "kakamon",
@@ -23838,7 +24054,8 @@
    "to": "oboromon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with any Virus Adult Digimon from the Digimon Pendulum COLOR"
   },
   {
    "from": "kokuwamon",
@@ -23936,14 +24153,16 @@
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "kongoumon",
    "to": "imperialdramonpaladinmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "koromon",
@@ -24005,14 +24224,16 @@
    "to": "kuzuhamonmikomode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "kumbhiramon",
    "to": "parasimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "kumbhiramon",
@@ -24139,7 +24360,8 @@
    "to": "indaramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "kyubimon",
@@ -24161,7 +24383,8 @@
    "to": "vikaralamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "kyukimon",
@@ -24297,7 +24520,8 @@
    "to": "ancientvolcamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "lavogaritamon",
@@ -24311,7 +24535,8 @@
    "to": "marsmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "lavogaritamon",
@@ -24326,7 +24551,8 @@
    "to": "deathmeramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "lavorvomon",
@@ -24348,7 +24574,8 @@
    "to": "mastertyranomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "lavorvomon",
@@ -24463,21 +24690,24 @@
    "to": "raihimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "liamon",
    "to": "skullsatamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "liamon",
    "to": "velgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "lianpumon",
@@ -24519,7 +24749,8 @@
    "to": "aerovdramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "lighdramon",
@@ -24555,7 +24786,8 @@
    "to": "sagittarimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "lilamon",
@@ -24629,7 +24861,8 @@
    "to": "spinomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "liollmon",
@@ -24658,7 +24891,8 @@
    "to": "deathmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data, Virus or Free Attribute Perfect Digimon from the Vital Brac"
   },
   {
    "from": "loaderleomon",
@@ -24686,14 +24920,16 @@
    "to": "mugendramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "loaderleomon",
    "to": "zekegreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "locomon",
@@ -24708,14 +24944,16 @@
    "to": "heavyleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Perfect Digimon from the Digimon Pendulum Z or "
   },
   {
    "from": "locomon",
    "to": "mugendramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "locomon",
@@ -24835,7 +25073,8 @@
    "to": "loaderleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "lowemon",
@@ -24850,14 +25089,16 @@
    "to": "skullsatamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "lowemon",
    "to": "velgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ludomon",
@@ -24936,14 +25177,16 @@
    "to": "doumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "lynxmon",
    "to": "indaramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "lynxmon",
@@ -24964,7 +25207,8 @@
    "to": "vikaralamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "machgaogamon",
@@ -24993,7 +25237,8 @@
    "to": "atlurballistamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "machmon",
@@ -25007,14 +25252,16 @@
    "to": "locomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Virus Attribute Adult Digimon from the Digimon Pendulum Z"
   },
   {
    "from": "machmon",
    "to": "metalgreymon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "machmon",
@@ -25050,7 +25297,8 @@
    "to": "kaiserleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "madleomon",
@@ -25079,7 +25327,8 @@
    "to": "raihimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "madleomon",
@@ -25093,7 +25342,8 @@
    "to": "velgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "magnagarurumon",
@@ -25131,7 +25381,8 @@
    "to": "loaderleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mailbirdramon",
@@ -25154,14 +25405,16 @@
    "to": "metalmamemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "mailbirdramon",
    "to": "rebellimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "mailbirdramon",
@@ -25190,14 +25443,16 @@
    "to": "dukemoncrimsonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "majiramon",
    "to": "dukemonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "majiramon",
@@ -25218,14 +25473,16 @@
    "to": "cherubimonvice",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "makuramon",
    "to": "cherubimonvirtue",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "makuramon",
@@ -25275,7 +25532,8 @@
    "to": "blackwargreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "mametyramon",
@@ -25296,7 +25554,8 @@
    "to": "victorygreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mammon",
@@ -25328,14 +25587,16 @@
    "to": "frosvelgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "mammon",
    "to": "hexeblaumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mammon",
@@ -25400,7 +25661,8 @@
    "to": "bryweludramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data, or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "manticoremon",
@@ -25473,14 +25735,16 @@
    "to": "metalseadramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "marinchimairamon",
    "to": "neptunemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "marinchimairamon",
@@ -25555,14 +25819,16 @@
    "to": "ancientvolcamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mastertyranomon",
    "to": "blackwargreymongerosionmode",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with {{w|Godzilla (Showa"
   },
   {
    "from": "mastertyranomon",
@@ -25584,14 +25850,16 @@
    "to": "marsmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "mastertyranomon",
    "to": "metalgarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with or {{w|Mechagodzilla#Shōwa period (1974–1975"
   },
   {
    "from": "mastertyranomon",
@@ -25856,7 +26124,8 @@
    "to": "regalecusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mephismon",
@@ -25884,7 +26153,8 @@
    "to": "aldamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "meramon",
@@ -25924,21 +26194,24 @@
    "to": "gigasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "meramon",
    "to": "groundramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with [[Coredramon (Blue"
   },
   {
    "from": "meramon",
    "to": "lavogaritamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "meramon",
@@ -25953,7 +26226,8 @@
    "to": "mastertyranomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "meramon",
@@ -25969,7 +26243,8 @@
    "to": "superstarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "meramon",
@@ -25992,21 +26267,24 @@
    "to": "bolgmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "mercuremon",
    "to": "metallifekuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "mercuremon",
    "to": "rhinokabuterimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mercuremon",
@@ -26049,7 +26327,8 @@
    "to": "regalecusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "metaletemon",
@@ -26117,7 +26396,8 @@
    "to": "donedevimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "metalgreymon",
@@ -26187,14 +26467,16 @@
    "to": "grandlocomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Data Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "metalgreymon2010animeversion",
    "to": "heavyleomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Perfect Digimon from the Vital Bracelet Digital"
   },
   {
    "from": "metalgreymon2010animeversion",
@@ -26216,7 +26498,8 @@
    "to": "blackwargreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "metalgreymonalterousmode",
@@ -26281,7 +26564,8 @@
    "to": "victorygreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "metalgreymonvirus",
@@ -26302,7 +26586,8 @@
    "to": "metalgarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with any Perfect Digimon from another Digimon Pendulum COLOR version"
   },
   {
    "from": "metallifekuwagamon",
@@ -26316,7 +26601,8 @@
    "to": "ancientwisemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "metallifekuwagamon",
@@ -26330,7 +26616,8 @@
    "to": "murmukusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "metallifekuwagamon",
@@ -26368,7 +26655,8 @@
    "to": "grandlocomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Vaccine Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "metalmamemon",
@@ -26426,7 +26714,8 @@
    "to": "zekegreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "metalseadramon",
@@ -26456,7 +26745,8 @@
    "to": "donedevimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "metaltyranomon",
@@ -26494,7 +26784,8 @@
    "to": "dukemoncrimsonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "mihiramon",
@@ -26508,7 +26799,8 @@
    "to": "megidramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "minomon",
@@ -26617,7 +26909,8 @@
    "to": "astamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "mojyamon",
@@ -26631,7 +26924,8 @@
    "to": "daipenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "mojyamon",
@@ -26645,7 +26939,8 @@
    "to": "panjyamonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "mojyamon",
@@ -26692,7 +26987,8 @@
    "to": "mametyramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Pteranomon, [[Pteranomon (X-Antibody"
   },
   {
    "from": "monochromon",
@@ -26708,14 +27004,16 @@
    "to": "metalgreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus or Free Attribute Adult Digimon from the Vital Bra"
   },
   {
    "from": "monochromon",
    "to": "metalgreymonalterousmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "monochromon",
@@ -26840,7 +27138,8 @@
    "to": "cryspaledramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "moosemon",
@@ -26861,7 +27160,8 @@
    "to": "panjyamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Adult Digimon from the Vital Bracelet "
   },
   {
    "from": "morphomon",
@@ -26918,14 +27218,16 @@
    "to": "blastmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "mummymon",
    "to": "dinorexmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Vaccine Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "mummymon",
@@ -27008,7 +27310,8 @@
    "to": "gyukimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "musyamon",
@@ -27048,7 +27351,8 @@
    "to": "boutmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "namakemon",
@@ -27062,7 +27366,8 @@
    "to": "divemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "namakemon",
@@ -27105,7 +27410,8 @@
    "to": "olegmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "nanomon",
@@ -27150,7 +27456,8 @@
    "to": "wargreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "nezhamon",
@@ -27251,7 +27558,8 @@
    "to": "durandamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "oboromon",
@@ -27292,7 +27600,8 @@
    "to": "gusokumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "octmon",
@@ -27331,14 +27640,16 @@
    "to": "mermaimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "octmon",
    "to": "piranimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "okuwamon",
@@ -27479,7 +27790,8 @@
    "to": "anomalocarimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "orgemon",
@@ -27501,7 +27813,8 @@
    "to": "metalgreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "orgemon",
@@ -27529,7 +27842,8 @@
    "to": "metalgarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "orochimon",
@@ -27616,14 +27930,16 @@
    "to": "banchostingmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "paildramon",
    "to": "grankuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "paildramon",
@@ -27674,14 +27990,16 @@
    "to": "cherubimonvice",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "pajiramon",
    "to": "cherubimonvirtue",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "pajiramon",
@@ -27702,7 +28020,8 @@
    "to": "crescemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "paledramon",
@@ -27724,7 +28043,8 @@
    "to": "mammon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "paledramon",
@@ -27862,7 +28182,8 @@
    "to": "metalgarurumonblack",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "pandamon",
@@ -27877,7 +28198,8 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "pandamon",
@@ -27909,7 +28231,8 @@
    "to": "ancientmegatheriumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "panjyamon",
@@ -27923,7 +28246,8 @@
    "to": "hexeblaumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "panjyamon",
@@ -27944,14 +28268,16 @@
    "to": "dynasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "panjyamonxantibody",
    "to": "frosvelgrmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "panjyamonxantibody",
@@ -27972,21 +28298,24 @@
    "to": "archnemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "parasaurmon",
    "to": "blossomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "parasaurmon",
    "to": "jewelbeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "parasaurmon",
@@ -28007,7 +28336,8 @@
    "to": "cresgarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "parrotmon",
@@ -28106,14 +28436,16 @@
    "to": "ancienttroiamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "peacockmon",
    "to": "lordknightmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "peacockmon",
@@ -28184,7 +28516,8 @@
    "to": "ancientirismon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "petaldramon",
@@ -28198,7 +28531,8 @@
    "to": "lordknightmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "petaldramon",
@@ -28317,7 +28651,8 @@
    "to": "deathmonblack",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus, or Free Attribute Perfect Digimon from the Vital "
   },
   {
    "from": "piccolomon",
@@ -28461,7 +28796,8 @@
    "to": "metalseadramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "piranimon",
@@ -28475,14 +28811,16 @@
    "to": "plesiomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "piranimon",
    "to": "regalecusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus or Free Attribute Perfect Digimon from the Digimon Pendulum"
   },
   {
    "from": "pistmon",
@@ -28503,14 +28841,16 @@
    "to": "shivamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "pistmon",
    "to": "shroudmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "pitchmon",
@@ -28818,14 +29158,16 @@
    "to": "banchostingmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "pucchiemon",
    "to": "grankuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "pucchiemon",
@@ -28860,14 +29202,16 @@
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "pucchiemongreen",
    "to": "imperialdramonpaladinmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "pukamon",
@@ -28968,7 +29312,8 @@
    "to": "beelzebumon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "pumpmon",
@@ -28984,7 +29329,8 @@
    "to": "neovamdemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "pumpmon",
@@ -29124,7 +29470,8 @@
    "to": "deathmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "raihimon",
@@ -29146,7 +29493,8 @@
    "to": "deathmonblack",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus, or Free Attribute Perfect Digimon from the Vital "
   },
   {
    "from": "raijiludomon",
@@ -29160,7 +29508,8 @@
    "to": "beowolfmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "ranamon",
@@ -29175,7 +29524,8 @@
    "to": "garummon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ranamon",
@@ -29189,21 +29539,24 @@
    "to": "splashmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "rapidmonperfect",
    "to": "cherubimonvice",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "rapidmonperfect",
    "to": "cherubimonvirtue",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with [[Andiramon (Deva"
   },
   {
    "from": "rapidmonperfect",
@@ -29247,14 +29600,16 @@
    "to": "metalgreymonvirusgerosionmode",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Greymon: \"G\" Erosion Mode, , or"
   },
   {
    "from": "raptordramon",
    "to": "weregarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Flymon, Garurumon, Strikedramon, Tyranomon, another Raptordramon, o"
   },
   {
    "from": "raptorsparrowmon",
@@ -29269,7 +29624,8 @@
    "to": "atlurballistamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "raremon",
@@ -29291,21 +29647,24 @@
    "to": "locomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Adult Digimon from the Digimon Pendulum"
   },
   {
    "from": "raremon",
    "to": "metalgreymon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "raremon",
    "to": "metalmamemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Garurumon, Greymon, Angemon, Leomon, or Tailmon"
   },
   {
    "from": "raremon",
@@ -29326,7 +29685,8 @@
    "to": "bryweludramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data, or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "rareraremon",
@@ -29364,7 +29724,8 @@
    "to": "grandlocomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Perfect Digimon from the Digimon Pendul"
   },
   {
    "from": "rebellimon",
@@ -29378,7 +29739,8 @@
    "to": "mugendramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "rebellimon",
@@ -29520,7 +29882,8 @@
    "to": "digitamamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "reppamon",
@@ -29610,7 +29973,8 @@
    "to": "ancientwisemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "rhinokabuterimon",
@@ -29624,14 +29988,16 @@
    "to": "murmukusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "rhinomon",
    "to": "mercurymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "rhinomon",
@@ -29645,7 +30011,8 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "rhinomon",
@@ -29743,14 +30110,16 @@
    "to": "shootmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "runnermon",
    "to": "tempomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "ryudamon",
@@ -29802,7 +30171,8 @@
    "to": "baalmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "saberdramon",
@@ -29823,14 +30193,16 @@
    "to": "jokermon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "saberdramon",
    "to": "pumpmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "saberdramon",
@@ -29853,14 +30225,16 @@
    "to": "imperialdramondragonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Data Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "sagittarimon",
    "to": "imperialdramonfightermode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "sagittarimon",
@@ -29940,7 +30314,8 @@
    "to": "dukemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "sandiramon",
@@ -29961,7 +30336,8 @@
    "to": "megidramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Skull Satamon or a Vaccine or Free Attribute Perfect Digimon from t"
   },
   {
    "from": "sangloupmon",
@@ -30065,7 +30441,8 @@
    "to": "pharaohmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "scumon",
@@ -30099,7 +30476,8 @@
    "to": "gusokumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "seadramon",
@@ -30141,7 +30519,8 @@
    "to": "mermaimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "seadramon",
@@ -30206,7 +30585,8 @@
    "to": "enmamon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Tengumon"
   },
   {
    "from": "seitengokuwmon",
@@ -30249,7 +30629,8 @@
    "to": "ancientbeatmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "sephirothmon",
@@ -30263,7 +30644,8 @@
    "to": "grandiskuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "sephirothmon",
@@ -30284,7 +30666,8 @@
    "to": "jewelbeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "shadramon",
@@ -30298,7 +30681,8 @@
    "to": "paildramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Sethmon or a Virus Attribute Adult Digimon from the Vital Bracelet "
   },
   {
    "from": "shadramon",
@@ -30312,7 +30696,8 @@
    "to": "pucchiemongreen",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "shagaramon",
@@ -30430,7 +30815,8 @@
    "to": "marinchimairamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "shellmon",
@@ -30452,7 +30838,8 @@
    "to": "piranimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Digimon Pendulum Z or a Fr"
   },
   {
    "from": "shellmon",
@@ -30511,7 +30898,8 @@
    "to": "kazuchimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Paildramon or a Data or Free Attribute Perfect Digimon from the Vit"
   },
   {
    "from": "shootmon",
@@ -30525,7 +30913,8 @@
    "to": "shroudmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "shoutmon",
@@ -30574,7 +30963,8 @@
    "sources": [
     "DMC",
     "DMC:Digital Monster COLOR Digimon Xros Wars 15th Edition"
-   ]
+   ],
+   "jogress": "Jogress with Ballistamon, Dorulumon, [[Greymon (2010 Anime Version"
   },
   {
    "from": "shoutmon",
@@ -30582,7 +30972,8 @@
    "sources": [
     "DMC",
     "DMC:Digital Monster COLOR Digimon Xros Wars 15th Edition"
-   ]
+   ],
+   "jogress": "Jogress with Ballistamon, Dorulumon, Skull Knightmon and Deadly Axemon"
   },
   {
    "from": "shoutmon",
@@ -30645,7 +31036,8 @@
    "sources": [
     "DMC",
     "DMC:Digital Monster COLOR Digimon Xros Wars 15th Edition"
-   ]
+   ],
+   "jogress": "Jogress with Dorulumon, Ballistamon, Starmons, Spadamon and Sparrowmon"
   },
   {
    "from": "shoutmonx4",
@@ -30703,7 +31095,8 @@
    "to": "ancienttroiamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "shutumon",
@@ -30717,7 +31110,8 @@
    "to": "lotusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "siesamon",
@@ -30771,14 +31165,16 @@
    "to": "megalogrowmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "siesamon",
    "to": "megalogrowmonorange",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "siesamon",
@@ -30792,7 +31188,8 @@
    "to": "sandiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "siesamon",
@@ -30850,14 +31247,16 @@
    "to": "rapidmonarmor",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "sinduramon",
    "to": "saintgalgomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "sirenmon",
@@ -30878,7 +31277,8 @@
    "to": "magnagarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "siriusmon",
@@ -30924,7 +31324,8 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "skullgreymon",
@@ -30969,7 +31370,8 @@
    "to": "ancientsphinxmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "skullsatamon",
@@ -31020,7 +31422,8 @@
    "to": "ajatarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "snimon",
@@ -31048,14 +31451,16 @@
    "to": "lilimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "snimon",
    "to": "toropiamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "snowgoburimon",
@@ -31151,7 +31556,8 @@
    "to": "shoutmonx5s",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon X4 and Spadamon}}, Shoutmon X4S}}, Shoutmon, Dorulumon, Ba"
   },
   {
    "from": "sparrowmon",
@@ -31180,14 +31586,16 @@
    "to": "magnagarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Free Attribute Perfect Digimon from the Vital Br"
   },
   {
    "from": "starmon",
    "to": "aldamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "starmon",
@@ -31210,7 +31618,8 @@
    "to": "gigasmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "starmon",
@@ -31251,7 +31660,8 @@
    "to": "vritramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "starmons",
@@ -31275,7 +31685,8 @@
    "sources": [
     "DMC"
    ],
-   "canon": true
+   "canon": true,
+   "jogress": "Jogress with Shoutmon, Ballistamon, Dorulumon and [[Beelzebumon (2010 Anime Vers"
   },
   {
    "from": "starmons",
@@ -31314,7 +31725,8 @@
    "to": "shoutmonx5s",
    "sources": [
     "DMC"
-   ]
+   ],
+   "jogress": "Jogress with Shoutmon, Ballistamon, Dorulumon, Spadamon and Sparrowmon, or [[Sho"
   },
   {
    "from": "starmons",
@@ -31368,7 +31780,8 @@
    "to": "kongoumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with the Digimental of Miracles or a Data Attribute Adult Digimon from t"
   },
   {
    "from": "stingmon",
@@ -31383,7 +31796,8 @@
    "to": "pucchiemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "stingmon",
@@ -31420,14 +31834,16 @@
    "to": "mastertyranomon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Flymon or Tyranomon"
   },
   {
    "from": "strikedramon",
    "to": "metalgreymonvirusgerosionmode",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Greymon: \"G\" Erosion Mode, , or"
   },
   {
    "from": "strikedramon",
@@ -31491,21 +31907,24 @@
    "to": "ajatarmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "sunflowmon",
    "to": "archnemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "sunflowmon",
    "to": "blossomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Octmon, Togemon and Dokugumon or a Free Attribute Adult Digimon fro"
   },
   {
    "from": "sunflowmon",
@@ -31577,7 +31996,8 @@
    "to": "ancientgreymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Virus or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "superstarmon",
@@ -31653,7 +32073,8 @@
    "to": "warumonzaemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "tailmon",
@@ -31912,7 +32333,8 @@
    "to": "parasimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "taomon",
@@ -31955,14 +32377,16 @@
    "to": "shivamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "tempomon",
    "to": "shroudmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "tengumon",
@@ -31978,7 +32402,8 @@
    "to": "shakamon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Seiten Gokuwmon"
   },
   {
    "from": "tenkomon",
@@ -32264,7 +32689,8 @@
    "to": "rhinokabuterimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "thunderballmon",
@@ -32287,7 +32713,8 @@
    "to": "wisemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "thunderbirmon",
@@ -32308,7 +32735,8 @@
    "to": "digitamamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Adult Digimon from the Vital Bracelet D"
   },
   {
    "from": "tialudomon",
@@ -32322,7 +32750,8 @@
    "to": "piccolomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "tialudomon",
@@ -32380,7 +32809,8 @@
    "to": "dagomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "tobiumon",
@@ -32401,7 +32831,8 @@
    "to": "megaseadramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "tobiumon",
@@ -32447,7 +32878,8 @@
    "to": "gogmamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "togemon",
@@ -32479,14 +32911,16 @@
    "to": "mummymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "togemon",
    "to": "scorpiomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "togemon",
@@ -32566,7 +33000,8 @@
    "to": "bloomlordmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "toropiamon",
@@ -32580,7 +33015,8 @@
    "to": "rafflesimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Vaccine Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "toropiamon",
@@ -32609,7 +33045,8 @@
    "sources": [
     "DPC",
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with Starmon, [[Starmon (X-Antibody"
   },
   {
    "from": "tortamon",
@@ -32645,7 +33082,8 @@
    "to": "vulturemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "toyagumon",
@@ -32692,14 +33130,16 @@
    "to": "ancientsphinxmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "triceramon",
    "to": "blastmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free or Vaccine Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "triceramon",
@@ -32863,7 +33303,8 @@
    "to": "sinduramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "tuskmon",
@@ -32914,7 +33355,8 @@
    "to": "lavogaritamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "tyranomon",
@@ -32960,7 +33402,8 @@
    "to": "weregarurumon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Garurumon, Hanumon, or Raptordramon"
   },
   {
    "from": "ukkomon",
@@ -33028,14 +33471,16 @@
    "to": "dukemoncrimsonmode",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "vajramon",
    "to": "dukemonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "vajramon",
@@ -33063,7 +33508,8 @@
    "to": "nidhoggmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "vamdemon",
@@ -33077,7 +33523,8 @@
    "to": "beelzebumon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "vamdemon",
@@ -33116,7 +33563,8 @@
    "to": "noblepumpmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "vamdemon",
@@ -33162,14 +33610,16 @@
    "to": "digitamamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "vdramon",
    "to": "dinobeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Adult Digimon from the Vital Bracelet Digi"
   },
   {
    "from": "vdramon",
@@ -33220,7 +33670,8 @@
    "to": "jewelbeemon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "vegimon",
@@ -33250,7 +33701,8 @@
    "to": "ancientsphinxmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "velgrmon",
@@ -33285,7 +33737,8 @@
    "to": "omegamonzwart",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "vermillimon",
@@ -33320,14 +33773,16 @@
    "to": "sakuyamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "vikaralamon",
    "to": "sakuyamonxantibody",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "vmon",
@@ -33373,14 +33828,16 @@
    "to": "cannondramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "volcamon",
    "to": "marsmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "volcamon",
@@ -33430,7 +33887,8 @@
    "to": "ancientvolcamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data or Virus Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "vritramon",
@@ -33445,7 +33903,8 @@
    "to": "blastmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Perfect Digimon from the Vital Bracelet Digital"
   },
   {
    "from": "vulturemon",
@@ -33614,7 +34073,8 @@
    "to": "nidhoggmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "waruseadramon",
@@ -33665,21 +34125,24 @@
    "to": "makuramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "wendimon",
    "to": "pajiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "wendimon",
    "to": "rapidmonperfect",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "wendimon",
@@ -33709,7 +34172,8 @@
    "to": "dinomon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with [[Atlur Kabuterimon (Blue"
   },
   {
    "from": "weregarurumon",
@@ -33743,14 +34207,16 @@
    "to": "metalgarurumongerosionmode",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with {{w|Godzilla (Showa"
   },
   {
    "from": "weregarurumon",
    "to": "nidhoggmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "weregarurumon",
@@ -33827,14 +34293,16 @@
    "to": "mercurymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Perfect Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "weregarurumonsagittariusmode",
    "to": "metalgarurumonblack",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Perfect Digimon from the Vital Bracelet Di"
   },
   {
    "from": "weregarurumonsagittariusmode",
@@ -33952,7 +34420,8 @@
    "to": "vikemon",
    "sources": [
     "DPC"
-   ]
+   ],
+   "jogress": "Jogress with Were Garurumon or any Vaccine Perfect or any Data Perfect Digimon f"
   },
   {
    "from": "wingdramon",
@@ -33974,7 +34443,8 @@
    "to": "ancientbeatmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "wisemon",
@@ -33988,7 +34458,8 @@
    "to": "grandiskuwagamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Free Attribute Perfect Digimon from the Vital Bracelet"
   },
   {
    "from": "wisemon",
@@ -34009,7 +34480,8 @@
    "to": "cyberdramon2010animeversion",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "wizarmon",
@@ -34082,7 +34554,8 @@
    "to": "calamaramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "wolfmon",
@@ -34097,14 +34570,16 @@
    "to": "sirenmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "wolfmon",
    "to": "splashmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "woodmon",
@@ -34260,7 +34735,8 @@
    "to": "digitamamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "xvmon",
@@ -34304,7 +34780,8 @@
    "to": "metalgarurumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine, Data, or Free Attribute Perfect Digimon from the Vital B"
   },
   {
    "from": "yaegerdorulumon",
@@ -34390,7 +34867,8 @@
    "to": "caturamon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "youkomon",
@@ -34412,7 +34890,8 @@
    "to": "kumbhiramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "youkomon",
@@ -34447,7 +34926,8 @@
    "to": "frozomon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "yukidarumon",
@@ -34511,7 +34991,8 @@
    "to": "ancientirismon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine or Virus Attribute Perfect Digimon from the Vital Bracele"
   },
   {
    "from": "zamielmon",
@@ -34532,7 +35013,8 @@
    "to": "lotusmon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Perfect Digimon from the Vital Bracelet Digital Mo"
   },
   {
    "from": "zanbamon",
@@ -34561,7 +35043,8 @@
    "to": "jetsilphymon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Vaccine Attribute Adult Digimon from the Vital Bracelet Digital M"
   },
   {
    "from": "zassoumon",
@@ -34575,14 +35058,16 @@
    "to": "petaldramon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Free Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "zassoumon",
    "to": "shutumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data Attribute Adult Digimon from the Vital Bracelet Digital Mons"
   },
   {
    "from": "zassoumon",
@@ -34654,14 +35139,16 @@
    "to": "gyukimon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Virus Attribute Adult Digimon from the Vital Bracelet Digital Mon"
   },
   {
    "from": "zubaeagermon",
    "to": "hisyaryumon",
    "sources": [
     "VB"
-   ]
+   ],
+   "jogress": "Jogress with a Data or Free Attribute Adult Digimon from the Vital Bracelet Digi"
   },
   {
    "from": "zubaeagermon",

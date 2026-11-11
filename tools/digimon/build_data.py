@@ -244,6 +244,13 @@ def parse_digimon(title_key, text, nodes, edges):
             after = line[m.end():m.end() + 120]
             if re.search(r"Jogress|DNA", after):
                 e["jogress"] = unlink(after.split("<ref")[0])[:80]
+            # Vital Bracelet pages write a merge as "(with a Vaccine Adult ...)" without the word
+            # Jogress, and the note can be long. "(with or without X)" makes the partner optional,
+            # so that one stays a normal evolution.
+            bare = re.sub(r"<ref[^>]*/>|<ref[^>]*>.*?</ref>|\{\{ref\|.*?\}\}", "", line[m.end():]).lstrip()
+            vb_merge = re.match(r"\(with (?!or without)(.*?)\)", bare)
+            if vb_merge and not e.get("jogress"):
+                e["jogress"] = ("Jogress with " + unlink(vb_merge.group(1)))[:80]
             if "Warp" in after:
                 e["warp"] = True
 
@@ -323,7 +330,7 @@ def main():
         if not n.get("ko"):
             n["ko"] = official.get(key, "")
         levels = sorted(n.get("levels", set()) | n.get("device_levels", set()),
-                        key=lambda x: LEVEL_ORDER.index(x) if x in LEVEL_ORDER else 99)
+                        key=lambda x: (LEVEL_ORDER.index(x) if x in LEVEL_ORDER else 99, x))   # stable order
         level = n.get("level") or next((lv for lv in LEVEL_ORDER if lv in n.get("device_levels", set())), "")
         out_nodes[key] = {"name": n.get("name", key), "ko": n.get("ko", ""), "level": level, "attribute": n.get("attribute") or next(iter(sorted(n.get("attributes", set()))), ""), "levels": levels,
                           "attributes": sorted(n.get("attributes", set())), "sprites": sp}

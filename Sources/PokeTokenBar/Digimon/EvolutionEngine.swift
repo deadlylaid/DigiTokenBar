@@ -189,11 +189,13 @@ struct EvolutionEngine: Sendable {
         guard let line = catalog.lines[state.partner.lineID] else { return [] }
         guard let current = state.partner.speciesKey else { return [line.firstBaby] }
         let signals = state.partner.stageSignals
-        let options = catalog.nextEvolutions(from: current, in: line).filter { evo in
-            if rules.locked.contains(evo.to) || rules.lockedEdges.contains("\(current)>\(evo.to)") { return false }
-            if let condition = rules.hidden[evo.to] { return rules.isMet(condition, by: signals) }
-            return true
+        let open = catalog.nextEvolutions(from: current, in: line).filter { evo in
+            !rules.locked.contains(evo.to) && !rules.lockedEdges.contains("\(current)>\(evo.to)")
         }
+        let earned = open.filter { evo in rules.hidden[evo.to].map { rules.isMet($0, by: signals) } ?? true }
+        // A hidden evolution that is the only way on is the device's normal route (NeoDevimon ->
+        // DoneDevimon): it opens without its condition instead of ending the line early.
+        let options = earned.isEmpty ? open : earned
         let ranked = options
             .map { evo in (evo, score(evo, signals: signals, baseline: state.lifetimeSignals)) }
             .sorted { lhs, rhs in lhs.1 != rhs.1 ? lhs.1 > rhs.1 : lhs.0.to < rhs.0.to }

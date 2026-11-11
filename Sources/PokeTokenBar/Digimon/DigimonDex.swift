@@ -7,6 +7,8 @@ struct DigimonDex {
         case hidden(EvolutionRules.HiddenCondition)
         /// Not reachable yet (added after the MVP).
         case locked
+        /// Only a Jogress (a merge with another Digimon) leads here, and growth does not merge.
+        case mergeOnly
     }
 
     struct Link: Equatable, Identifiable {
@@ -37,8 +39,13 @@ struct DigimonDex {
         // Jogress-only steps are not growth routes, so the dex does not hint at them.
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
             .filter { !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
+        let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
+            let incoming = allSteps.filter { $0.to == species.key }
+            let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
+                && incoming.allSatisfy { rules.lockedEdges.contains("\($0.from)>\($0.to)") }
             let secret: Secret? = rules.locked.contains(species.key) ? .locked
+                : mergeOnly ? .mergeOnly
                 : rules.hidden[species.key].map { .hidden($0) }
             let link = { (from: String, to: String, other: String) in
                 Link(key: other, discovered: state.discoveredEvolutions.contains("\(from)>\(to)"))
@@ -76,6 +83,8 @@ extension DigimonText {
     func secretHint(_ secret: DigimonDex.Secret) -> String {
         switch secret {
         case .locked: return ko ? "아직 만날 수 없어요." : "Not reachable yet."
+        case .mergeOnly: return ko ? "다른 디지몬과 합체(조그레스)해야 만날 수 있어요. 아직은 만날 수 없어요."
+                                  : "Only a Jogress (a merge) leads here, so it cannot be met yet."
         case .hidden(.bugsDefeated): return ko ? "버그를 많이 잡은 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says bug hunters turn into this."
         case .hidden(.limitHits): return ko ? "한도를 자주 넘긴 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says hitting your limits often leads here."
         }
@@ -150,7 +159,7 @@ struct DigimonDexView: View {
                     PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen)
                         .frame(width: 44, height: 44)
                     if entry.secret != nil, !entry.seen {
-                        Image(systemName: entry.secret == .locked ? "lock.fill" : "sparkles")
+                        Image(systemName: entry.secret == .locked || entry.secret == .mergeOnly ? "lock.fill" : "sparkles")
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }

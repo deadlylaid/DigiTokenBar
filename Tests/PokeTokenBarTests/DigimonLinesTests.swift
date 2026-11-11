@@ -56,6 +56,32 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertTrue(catalog.nextEvolutions(from: "agumon", in: catalog.lines["agumon"]!).contains { $0.to == "greymon" })
     }
 
+    /// Wikimon writes a Vital Bracelet merge as "(with a ... Adult ...)" without the word Jogress;
+    /// the first data build missed that, so Algomon could grow into Andromon on its own.
+    func testVitalBraceletMergeNotesAreLockedButOptionalPartnersAreNot() {
+        for step in ["algomonadult>andromon", "algomonadult>anomalocarimon", "algomonadult>parrotmon",
+                     "algomonadult>valvemon", "neodevimon>wargreymon"] {
+            XCTAssertTrue(DigimonCatalogData.jogressEdges.contains(step), step)
+        }
+        XCTAssertFalse(DigimonCatalogData.jogressEdges.contains("andromon>wargreymon"), "(with or without Cyberdramon)")
+        let algomon = state(at: "algomonadult", line: "agumon")
+        XCTAssertEqual(Set(engine.candidates(for: algomon)), ["mamemon", "metalgreymon", "metaltyranomon"])
+    }
+
+    func testAHiddenEvolutionThatIsTheOnlyWayOnOpensWithoutItsCondition() {
+        let neo = state(at: "neodevimon", line: "agumon")
+        XCTAssertEqual(Set(engine.candidates(for: neo)), ["donedevimon", "blitzgreymon"],
+                       "no limits hit and no bugs, yet its only (hidden) routes open instead of a dead end")
+        let andromon = state(at: "andromon", line: "agumon")
+        XCTAssertFalse(engine.candidates(for: andromon).contains("blitzgreymon"), "still hidden where there is another way")
+    }
+
+    func testTheDexMarksMergeOnlyDigimon() {
+        let rows = DigimonDex.rows(for: catalog.lines["vmon"]!, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: engine.rules)
+        XCTAssertEqual(rows.flatMap(\.entries).first { $0.id == "digitamamon" }?.secret, .mergeOnly)
+        XCTAssertNil(rows.flatMap(\.entries).first { $0.id == "vdramon" }?.secret)
+    }
+
     func testTendencyFollowsHowTheStageWasUsed() {
         var day = state(at: "agumon", line: "agumon")
         day.partner.stageSignals.tokens = 1_000_000

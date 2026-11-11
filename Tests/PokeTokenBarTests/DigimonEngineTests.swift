@@ -48,10 +48,18 @@ final class DigimonEngineTests: XCTestCase {
         for line in catalog.lines.values {
             for key in line.members {
                 guard let species = catalog.species(key), species.level != .ultimate else { continue }
-                let normal = catalog.nextEvolutions(from: key, in: line)
-                    .filter { rules.hidden[$0.to] == nil && !rules.locked.contains($0.to)
-                        && !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
-                XCTAssertFalse(normal.isEmpty, "\(line.id): \(key) has no normal next evolution")
+                // Hidden evolutions count: when one is the only way on, it opens without its condition.
+                let open = catalog.nextEvolutions(from: key, in: line)
+                    .filter { !rules.locked.contains($0.to) && !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
+                let reachedOnlyByMerge = !catalog.lines.values.contains { l in
+                    l.members.contains { from in
+                        catalog.nextEvolutions(from: from, in: l).contains {
+                            $0.to == key && !rules.lockedEdges.contains("\(from)>\(key)") && !rules.locked.contains(key)
+                        }
+                    }
+                } && key != line.firstBaby
+                if reachedOnlyByMerge || rules.locked.contains(key) { continue }
+                XCTAssertFalse(open.isEmpty, "\(line.id): \(key) has no next evolution growth can take")
             }
         }
     }
