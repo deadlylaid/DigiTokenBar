@@ -15,15 +15,22 @@ final class DigimonDeskPet {
     private var petRect = CGRect.zero
     private var monitors: [Any] = []
     private var hitTimer: Timer?
+    /// Coding agents reporting through digitokenbar://agent (same rules as the Pokemon pet:
+    /// several labels, working times out after 10 minutes, done shows for 6 seconds).
+    private var agents = AgentActivityTracker()
+    private var agentTimer: Timer?
+    private let language: () -> AppLanguage
     private var tracking = false, dragging = false
     private var dragStartMouse = NSPoint.zero, dragStartOrigin = NSPoint.zero, lastMouse = NSPoint.zero
 
     static let size = NSSize(width: 440, height: 180)
 
-    init(store: UsageStore, hub: DigimonSceneHub, defaults: UserDefaults = .standard) {
+    init(store: UsageStore, hub: DigimonSceneHub, defaults: UserDefaults = .standard,
+         language: @escaping () -> AppLanguage = { .ko }) {
         self.store = store
         self.hub = hub
         self.defaults = defaults
+        self.language = language
         observe()
     }
 
@@ -33,17 +40,55 @@ final class DigimonDeskPet {
     }
 
     /// Agent hooks (digitokenbar:// events): the pet reacts when a run finishes or waits for you.
-    func handleAgentEvent(_ event: AgentActivityEvent) {
+    func handleAgentEvent(_ event: AgentActivityEvent, now: Date = Date()) {
         guard store.floatingPetAgentActivity else { return }
-        switch event.activity {
-        case .waiting, .done: scene?.command(["type": "notice"])
-        case .working, .idle: break
+        // "working" arrives after every tool call, so only the rarer states are logged.
+        if event.activity != .working {
+            AppLog.write("agent event \(event.activity) label=\(event.label ?? "-") pet=\(scene != nil)")
         }
+        agents.apply(event, now: now)
+        switch event.activity {
+        case .done: pushAgents(react: "done", now: now)
+        case .waiting: pushAgents(react: "waiting", now: now)
+        case .working, .idle: pushAgents(react: nil, now: now)
+        }
+    }
+
+    /// What the pet shows for the tracked agents: busy dots while any works, and one bubble.
+    /// A finished agent comes first (for its 6 seconds), then the latest one waiting for input.
+    static func agentScene(_ summary: AgentActivitySummary, text: DigimonText) -> (working: Bool, bubble: String?) {
+        func line(_ note: AgentActivitySummary.Note, _ fallback: String) -> String {
+            (note.label.map { "\($0): " } ?? "") + (note.message ?? fallback)
+        }
+        if let done = summary.done { return (summary.working, line(done, text.agentDone)) }
+        if let waiting = summary.waiting {
+            let more = summary.otherWaitingCount > 0 ? text.agentMoreWaiting(summary.otherWaitingCount) : ""
+            return (summary.working, line(waiting, text.agentWaiting) + more)
+        }
+        return (summary.working, nil)
+    }
+
+    private func pushAgents(react: String?, now: Date = Date()) {
+        agents.expire(now: now)
+        let view = Self.agentScene(agents.summary, text: DigimonText(language()))
+        var cmd: [String: Any] = ["type": "agent", "working": view.working]
+        if let bubble = view.bubble { cmd["bubble"] = bubble }
+        if let react { cmd["react"] = react }
+        scene?.command(cmd)
+        agentTimer?.invalidate()
+        agentTimer = nil
+        guard let deadline = agents.deadline, scene != nil else { return }
+        let timer = Timer(fire: deadline.addingTimeInterval(0.05), interval: 0, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated { self?.pushAgents(react: nil) }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        agentTimer = timer
     }
 
     private func observe() {
         withObservationTracking {
             _ = store.floatingPetEnabled
+            _ = store.floatingPetAgentActivity
         } onChange: { [weak self] in
             Task { @MainActor in
                 self?.sync()
@@ -55,6 +100,10 @@ final class DigimonDeskPet {
 
     private func sync() {
         if store.floatingPetEnabled && displayAwake { show() } else { hide() }
+        if !store.floatingPetAgentActivity, !agents.agents.isEmpty {
+            agents.reset()
+            pushAgents(react: nil)
+        }
     }
 
     private func show() {
@@ -78,6 +127,7 @@ final class DigimonDeskPet {
         self.panel = panel
         self.scene = scene
         hub.register(scene)
+        pushAgents(react: nil)
         installMonitors()
     }
 
@@ -86,6 +136,8 @@ final class DigimonDeskPet {
         monitors = []
         hitTimer?.invalidate()
         hitTimer = nil
+        agentTimer?.invalidate()
+        agentTimer = nil
         panel?.orderOut(nil)
         panel?.contentView = nil
         panel = nil
@@ -165,6 +217,8 @@ final class DigimonDeskPet {
                 clampToScreen()
                 scene?.command(["type": "drop"])
             } else {
+                // A click answers the agents' questions and acknowledges results (work goes on).
+                if agents.dismissBubble() { pushAgents(react: nil) }
                 scene?.command(["type": "attack"])
             }
         default:

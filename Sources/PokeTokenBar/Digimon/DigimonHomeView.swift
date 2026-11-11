@@ -116,6 +116,11 @@ struct DigimonText {
         }
     }
 
+    // Coding agent bubbles on the desktop pet
+    var agentWaiting: String { ko ? "확인이 필요해요" : "needs you" }
+    var agentDone: String { ko ? "다 했어요!" : "all done!" }
+    func agentMoreWaiting(_ n: Int) -> String { ko ? " 외 \(n)개" : " +\(n) more" }
+
     var notificationsLabel: String {
         ko ? "디지몬 알림 (부화·진화·선택·졸업)" : "Digimon events (hatch / evolve / choice / graduate)"
     }

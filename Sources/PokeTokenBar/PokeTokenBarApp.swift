@@ -120,7 +120,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         updater = UpdateChecker()
         store.localizationLanguage = companion.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
-        deskPet = DigimonDeskPet(store: store, hub: digimonHub)   // desktop pet (opt-in "floating pet" setting)
+        deskPet = DigimonDeskPet(store: store, hub: digimonHub,
+                                 language: { [weak companion] in companion?.language ?? .ko })   // desktop pet (opt-in "floating pet" setting)
         Task { await updater.check() }                    // 기동 시 1회 업데이트 확인
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

@@ -151,6 +151,7 @@ class Pet {
     this.sx = 1; this.sy = 1; this.lean = 0; this.breath = 0; this.sway = 0; this.rot = 0;
     this.parts = []; this.zs = []; this.chip = null; this.flash = 0; this.dim = 0; this.excl = 0;
     this.shots = []; this.booms = []; this.bug = null; this.bugIn = rand(8000, 20000);
+    this.note = null; this.working = false;   // coding agent: lasting bubble, "busy" dots
     this.resize(); this.x = this.center(); this.enter('idle', {dur: 900});
   }
   canAct() { return ['idle', 'walk', 'turn', 'stretch', 'alert'].includes(this.state); }
@@ -246,6 +247,20 @@ class Pet {
   wake() { if (this.state !== 'sleep') return; this.excl = 750; this.enter('hop', {h: this.hopH * .7, dur: 480}); }
   jump() { if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('hop', {h: this.hopH}); }
   notice() { if (this.state === 'evolve' || this.state === 'held') return; if (this.state === 'sleep') { this.wake(); return; } this.excl = 700; this.jump(); }
+  // A coding agent finished: a double hop with sparkles (an egg wobbles instead).
+  cheer() {
+    if (this.state === 'evolve' || this.state === 'held') return;
+    this.chip = null;
+    const b = this.bb();
+    this.sparkle(this.x + (b.l + b.r) / 2, this.ground() - 64 + b.t + 4, 12);
+    if (this.isEgg()) { this.enter('wobble', {dur: 900}); return; }
+    this.enter('hop', {h: this.hopH * 1.2, dur: 560, then: () => this.enter('hop', {h: this.hopH * .6, dur: 420})});
+  }
+  setAgent(a) {
+    this.working = !!a.working; this.note = a.bubble || null;
+    if (a.react === 'done') this.cheer();
+    else if (a.react === 'waiting') this.notice();
+  }
   grab() { if (this.state === 'evolve') return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
   dragMove(dx) { if (this.state === 'held') this.d.v += dx * .004; }
   drop() { if (this.state === 'held') this.enter('hop', {h: 3, dur: 420}); }
@@ -513,6 +528,42 @@ class Pet {
     c.globalAlpha = 1;
     if (!desk && this.flash > 0) { c.fillStyle = `rgba(255,255,250,${this.flash})`; c.fillRect(0, 0, W, H); }
     if (this.callout) this.drawCallout(c, cx, gy - this.y - hgt, dark);
+    else if (this.note) this.drawNote(c, cx, gy - this.y - hgt, dark);
+    else if (this.working && this.state !== 'sleep') this.drawBusy(c, cx, gy - this.y - hgt - 9, dark);
+  }
+  // Three dots over the head while a coding agent works; one at a time is lit.
+  drawBusy(c, x, y, dark) {
+    const lit = Math.floor(performance.now() / 320) % 3, desk = this.desk;
+    for (let i = 0; i < 3; i++) {
+      const dx = Math.round(x) - 5 + i * 4, dy = Math.round(y);
+      if (desk) { c.fillStyle = 'rgba(0,0,0,.45)'; c.fillRect(dx + .5, dy + .5, 2, 2); }
+      c.fillStyle = i === lit ? (desk || !dark ? '#ffffff' : '#f1f2f5') : (desk || !dark ? 'rgba(255,255,255,.55)' : 'rgba(241,242,245,.4)');
+      if (!desk && !dark) c.fillStyle = i === lit ? '#3a3f52' : 'rgba(58,63,82,.35)';
+      c.fillRect(dx, dy, 2, 2);
+    }
+  }
+  // A lasting bubble for a coding agent (waiting for input, or done). Shortened to fit the view.
+  drawNote(c, headX, headY, dark) {
+    const sc = this.scale, desk = this.desk, light = desk || !dark, fs = 12;
+    c.setTransform(DPR, 0, 0, DPR, 0, 0);
+    c.font = `600 ${fs}px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", system-ui, sans-serif`;
+    let text = this.note;
+    const maxW = this.cssW - 26;
+    if (c.measureText(text).width > maxW) {
+      while (text.length > 1 && c.measureText(text + '…').width > maxW) text = text.slice(0, -1);
+      text += '…';
+    }
+    const bw = c.measureText(text).width + 18, bh = fs + 10, ax = headX * sc;
+    const bx = Math.max(4, Math.min(this.cssW - bw - 4, ax - bw / 2)), by = Math.max(2, (headY - 6) * sc - bh - 8);
+    const tx = Math.max(bx + 12, Math.min(bx + bw - 12, ax));
+    c.save();
+    c.fillStyle = light ? '#ffffff' : '#2c2d33'; c.strokeStyle = light ? 'rgba(0,0,0,.18)' : 'rgba(255,255,255,.16)'; c.lineWidth = 1;
+    c.beginPath(); c.roundRect(bx, by, bw, bh, 8); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(tx - 5, by + bh - 1); c.lineTo(tx, by + bh + 6); c.lineTo(tx + 5, by + bh - 1); c.closePath(); c.fill();
+    c.beginPath(); c.moveTo(tx - 5, by + bh); c.lineTo(tx, by + bh + 6); c.lineTo(tx + 5, by + bh); c.stroke();
+    c.fillStyle = light ? '#1c1d21' : '#f1f2f5'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(text, bx + bw / 2, by + bh / 2 + .5);
+    c.restore();
   }
   drawCallout(c, headX, headY, dark) {
     const co = this.callout, p = co.t / co.life, sc = this.scale, desk = this.desk;
@@ -547,6 +598,7 @@ function startPet() {
   if (pet || !S.key || !assets[S.key]) return;
   pet = new Pet(cv, {desk: VIEW === 'desk', hopH: 14, speed: VIEW === 'desk' ? 26 : 30, key: S.key});
   if (S.sleeping) pet.sleep();
+  if (S.agent) pet.setAgent(Object.assign({}, S.agent, {react: null}));
 }
 
 window.app = {
@@ -559,10 +611,13 @@ window.app = {
   },
   cmd(c) {
     if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key); }); return; }
+    // Agent state is kept, so a pet created later (sprite still loading) shows it too.
+    if (c.type === 'agent') { S.agent = c; if (pet) pet.setAgent(c); return; }
     if (!pet) return;
     if (c.type === 'feed') { if (pet.state === 'sleep') pet.wake(); setTimeout(() => pet.feed(), pet.state === 'hop' ? 500 : 0); }
     else if (c.type === 'jump') pet.jump();
     else if (c.type === 'notice') pet.notice();
+
     else if (c.type === 'attack') pet.attack();
     else if (c.type === 'grab') pet.grab();
     else if (c.type === 'drag') pet.dragMove(c.dx || 0);

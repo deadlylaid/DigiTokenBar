@@ -384,3 +384,45 @@ final class DigimonFastGrowthTests: XCTestCase {
         XCTAssertEqual(store.candidates.count, 3, "switching back never takes the choice away")
     }
 }
+
+@MainActor
+final class DigimonAgentBubbleTests: XCTestCase {
+    private let ko = DigimonText(.ko)
+
+    private func event(_ state: String, label: String? = nil, message: String? = nil) -> AgentActivityEvent {
+        var c = URLComponents()
+        c.scheme = AppIdentity.urlScheme
+        c.host = "agent"
+        c.queryItems = [URLQueryItem(name: "state", value: state)]
+            + (label.map { [URLQueryItem(name: "label", value: $0)] } ?? [])
+            + (message.map { [URLQueryItem(name: "message", value: $0)] } ?? [])
+        return AgentActivityEvent(url: c.url!)!
+    }
+
+    func testWorkingShowsDotsWithoutABubble() {
+        var tracker = AgentActivityTracker()
+        tracker.apply(event("working", label: "digimon-tokenbar"), now: Date())
+        let view = DigimonDeskPet.agentScene(tracker.summary, text: ko)
+        XCTAssertTrue(view.working)
+        XCTAssertNil(view.bubble)
+    }
+
+    func testAFinishedAgentComesBeforeOneWaitingAndThenGivesWay() {
+        let start = Date()
+        var tracker = AgentActivityTracker()
+        tracker.apply(event("waiting", label: "app"), now: start)
+        tracker.apply(event("waiting", label: "api"), now: start)
+        tracker.apply(event("done", label: "web", message: "Build passed"), now: start)
+        XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: ko).bubble, "web: Build passed")
+        tracker.expire(now: start.addingTimeInterval(AgentActivityTracker.doneDuration + 1))
+        XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: ko).bubble, "api: 확인이 필요해요 외 1개",
+                       "the latest question, and how many more wait behind it")
+    }
+
+    func testAnUnlabeledAgentGetsNoPrefix() {
+        var tracker = AgentActivityTracker()
+        tracker.apply(event("done"), now: Date())
+        XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: ko).bubble, "다 했어요!")
+        XCTAssertEqual(DigimonDeskPet.agentScene(tracker.summary, text: DigimonText(.en)).bubble, "all done!")
+    }
+}
