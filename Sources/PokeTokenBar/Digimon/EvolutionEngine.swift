@@ -13,6 +13,9 @@ struct GrowthRules: Sendable, Equatable {
     /// Auto-pick the top candidate when the user has not chosen within this time.
     var choiceTimeout: TimeInterval = 24 * 60 * 60
     var maxChoices = 3
+    /// False (the default, like a V-Pet): with several candidates the Digimon evolves straight into
+    /// the best match for how it was raised. True brings back the choice cards.
+    var userPicksEvolution = false
 
     static let standard = GrowthRules()
 
@@ -142,8 +145,9 @@ struct EvolutionEngine: Sendable {
         if let offered = state.eggChoiceOfferedAt, now.timeIntervalSince(offered) >= growth.choiceTimeout {
             return chooseEggLine(&state, autoEggLine(for: state), at: now)
         }
-        guard let pending = state.pendingChoice, let first = pending.candidates.first,
-              now.timeIntervalSince(pending.offeredAt) >= growth.choiceTimeout else { return [] }
+        guard let pending = state.pendingChoice, let first = pending.candidates.first else { return [] }
+        // A choice saved before choosing was turned off resolves at once.
+        guard !growth.userPicksEvolution || now.timeIntervalSince(pending.offeredAt) >= growth.choiceTimeout else { return [] }
         return choose(&state, first, at: now)
     }
 
@@ -223,8 +227,8 @@ struct EvolutionEngine: Sendable {
             let options = candidates(for: state)
             if state.partner.level == .ultimate || options.isEmpty {
                 events += graduate(&state, at: date)
-            } else if options.count == 1 {
-                events += evolve(&state, to: options[0], at: date)
+            } else if options.count == 1 || !growth.userPicksEvolution {
+                events += evolve(&state, to: options[0], at: date)   // best match first
             } else {
                 state.pendingChoice = PendingChoice(candidates: options, offeredAt: date)
                 state.partner.stageExp = growth.threshold(for: state.partner.level)

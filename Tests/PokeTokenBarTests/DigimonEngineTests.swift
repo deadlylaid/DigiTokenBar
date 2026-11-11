@@ -8,6 +8,12 @@ final class DigimonEngineTests: XCTestCase {
         return c
     }()
     private lazy var engine = EvolutionEngine(calendar: calendar)
+    /// The optional mode where the user picks among the candidates.
+    private lazy var choosingEngine: EvolutionEngine = {
+        var growth = GrowthRules.standard
+        growth.userPicksEvolution = true
+        return EvolutionEngine(growth: growth, calendar: calendar)
+    }()
 
     private func date(day: Int, hour: Int = 14) -> Date {
         calendar.date(from: DateComponents(year: 2026, month: 11, day: day, hour: hour))!
@@ -100,7 +106,27 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Choosing an evolution
 
+    /// The default, like a V-Pet: no choice, the best match for how it was raised.
+    func testAFullStageEvolvesStraightIntoTheBestMatch() {
+        var s = DigimonState.newEgg(lineID: "agumon")
+        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
+        let best = engine.candidates(for: s).first   // still Agumon with 0 experience: same candidates
+        let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 2))
+        XCTAssertEqual(events, [.evolved(from: "agumon", to: best!)])
+        XCTAssertNil(s.pendingChoice)
+        XCTAssertFalse(events.contains { if case .choiceOffered = $0 { return true } else { return false } })
+        XCTAssertEqual(s.partner.stageExp, 60, "30 left from day 1 + 150 - 120: what the stage did not need carries over")
+    }
+
+    func testAChoiceSavedBeforeChoosingWasTurnedOffResolvesAtOnce() {
+        var s = state(at: "agumon")
+        s.partner.stageExp = 120
+        s.pendingChoice = PendingChoice(candidates: ["coelamon", "greymon"], offeredAt: date(day: 1, hour: 9))
+        XCTAssertEqual(engine.tick(&s, now: date(day: 1, hour: 10)), [.evolved(from: "agumon", to: "coelamon")])
+    }
+
     func testFullChildStageOffersUpToThreeCandidatesAndHoldsTheBar() {
+        let engine = choosingEngine
         var s = DigimonState.newEgg(lineID: "agumon")
         engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
         let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 2))
@@ -114,6 +140,7 @@ final class DigimonEngineTests: XCTestCase {
     }
 
     func testChoosingEvolvesRecordsTheDexAndRejectsOtherKeys() {
+        let engine = choosingEngine
         var s = state(at: "agumon")
         s.partner.stageExp = 120
         s.pendingChoice = PendingChoice(candidates: ["greymon", "orgemon"], offeredAt: date(day: 1))
@@ -129,6 +156,7 @@ final class DigimonEngineTests: XCTestCase {
     }
 
     func testTopCandidateIsPickedAutomaticallyAfter24Hours() {
+        let engine = choosingEngine
         var s = state(at: "agumon")
         s.partner.stageExp = 120
         s.pendingChoice = PendingChoice(candidates: ["coelamon", "greymon"], offeredAt: date(day: 1, hour: 9))

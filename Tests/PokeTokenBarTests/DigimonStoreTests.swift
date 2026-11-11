@@ -171,18 +171,16 @@ final class DigimonStoreTests: XCTestCase {
         XCTAssertTrue(names.contains { $0.hasPrefix("digimon-state.corrupt-") }, "\(names)")
     }
 
-    func testChoosingFromTheStoreEvolvesAndSaves() {
+    func testAFullStageEvolvesWithoutAChoiceAndSaves() {
         let store = makeStore()
         store.update(todayTokensByProvider: ["claude_code": 0 + 1], todayDate: "d1", hasUsageData: true)
-        // Two capped days: egg -> baby I -> baby II -> child, then a full child stage offers a choice.
+        // Two capped days: egg -> baby I -> baby II -> child, then a full child stage evolves.
         store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
         now += 86_400
         store.update(todayTokensByProvider: ["claude_code": 100_000_000], todayDate: "d2", hasUsageData: true)
-        let offered = store.candidates.map(\.key)
-        XCTAssertEqual(offered.count, 3)
-        store.choose(offered[1])
-        XCTAssertEqual(store.state.partner.speciesKey, offered[1])
-        XCTAssertEqual(makeStore().state.partner.speciesKey, offered[1])
+        XCTAssertEqual(store.state.partner.level, .adult)
+        XCTAssertTrue(store.candidates.isEmpty, "nothing to pick")
+        XCTAssertEqual(makeStore().state.partner.speciesKey, store.state.partner.speciesKey)
     }
 }
 
@@ -229,7 +227,7 @@ final class DigimonSaveIOTests: XCTestCase {
         return store
     }
 
-    /// Grows a store to Agumon with an open choice: two capped days.
+    /// Grows a store past Agumon: two capped days.
     private func grown(_ store: DigimonStore) {
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
         store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
@@ -327,7 +325,7 @@ final class DigimonSaveIOTests: XCTestCase {
         let store = makeStore()
         let eggBackup = try XCTUnwrap(store.backups.list().first)
         grown(store)
-        XCTAssertEqual(store.state.partner.speciesKey, "agumon")
+        XCTAssertFalse(store.isEgg)
         var changed = 0
         store.onLookChanged = { changed += 1 }
         try store.replace(with: eggBackup.file, reason: "restore")
@@ -375,13 +373,13 @@ final class DigimonFastGrowthTests: XCTestCase {
 
         store.setFastGrowth(true)
         XCTAssertTrue(store.isFastGrowth)
-        XCTAssertEqual(store.threshold, 12)
-        XCTAssertEqual(store.candidates.count, 3, "30 of 12: the choice is offered at once")
-        XCTAssertTrue(activity.contains { if case .choiceOffered = $0 { return true } else { return false } })
+        XCTAssertEqual(store.state.partner.level, .adult, "30 of 12: it evolves at once")
+        XCTAssertTrue(activity.contains { if case .evolved(from: "agumon", _) = $0 { return true } else { return false } })
+        let adult = store.state.partner.speciesKey
 
         store.setFastGrowth(false)
-        XCTAssertEqual(store.threshold, 120)
-        XCTAssertEqual(store.candidates.count, 3, "switching back never takes the choice away")
+        XCTAssertEqual(store.threshold, 200)
+        XCTAssertEqual(store.state.partner.speciesKey, adult, "switching back never takes progress away")
     }
 }
 

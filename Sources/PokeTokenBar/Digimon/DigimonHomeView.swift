@@ -142,6 +142,10 @@ struct DigimonText {
         ko ? "고를 때까지 부화하지 않아요. 그동안 쓴 경험치는 모아 둬요. \(hours)시간이 지나면 자동으로 정해져요."
            : "It won't hatch until you pick, and keeps the experience meanwhile. After \(hours)h it picks for you."
     }
+    var evolutionByCare: String {
+        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)으로 정해져요"
+           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting)"
+    }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
 
@@ -239,6 +243,9 @@ struct DigimonStatusView: View {
             ProgressView(value: digimon.progress)
             if digimon.isChoosingEgg, digimon.progress >= 1 {
                 Text(t.eggReady).font(.caption).foregroundStyle(Color.accentColor)
+            }
+            if !digimon.isEgg, digimon.state.partner.level != .ultimate {
+                Text(t.evolutionByCare).font(.caption2).foregroundStyle(.secondary)
             }
             HStack {
                 Text(t.todayExp(digimon.expToday, cap: digimon.engine.growth.dailyExpCap))
