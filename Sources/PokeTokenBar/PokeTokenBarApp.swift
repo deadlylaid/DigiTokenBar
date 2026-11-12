@@ -316,7 +316,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             case .hatched(let species):
                 DigimonNotifier.post(t.hatchedTitle, name(species))
             case .evolved(let from, let to):
-                DigimonNotifier.post(t.evolvedTitle, "\(name(from)) → \(name(to))")
+                let merged = digimon.engine.rules.specialJogress.contains { $0.from == from && $0.to == to }
+                DigimonNotifier.post(merged ? t.jogressTitle : t.evolvedTitle, "\(name(from)) → \(name(to))")
             case .choiceOffered(let candidates):
                 let hours = Int(digimon.engine.growth.choiceTimeout / 3600)
                 DigimonNotifier.post(t.chooseNotifyTitle, t.chooseNotifyBody(candidates.map(name), hours: hours))

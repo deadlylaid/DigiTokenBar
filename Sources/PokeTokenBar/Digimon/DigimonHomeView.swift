@@ -41,6 +41,8 @@ struct DigimonText {
         }
     }
 
+    var jogressLabel: String { ko ? "합체 진화까지" : "Until it merges" }
+    var jogressTitle: String { ko ? "합체 진화했어요" : "Jogress evolution" }
     func todayExp(_ exp: Int, cap: Int) -> String { ko ? "오늘 \(exp)/\(cap) EXP" : "Today \(exp)/\(cap) EXP" }
     var chooseTitle: String { ko ? "어떤 모습으로 진화할까요?" : "Which way should it evolve?" }
     func chooseDeadline(hours: Int) -> String {
@@ -256,7 +258,7 @@ struct DigimonStatusView: View {
     private var progress: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(t.progressLabel(digimon.state.partner.level))
+                Text(digimon.canSpecialJogress ? t.jogressLabel : t.progressLabel(digimon.state.partner.level))
                 Spacer()
                 Text("\(digimon.state.partner.stageExp) / \(digimon.threshold) EXP").monospacedDigit()
             }

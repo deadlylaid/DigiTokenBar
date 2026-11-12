@@ -89,6 +89,41 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertNil(rows.flatMap(\.entries).first { $0.id == "vdramon" }?.secret)
     }
 
+    /// War Greymon + Metal Garurumon = Omegamon. The partner counts once it is in the dex.
+    func testAFullWarGreymonMergesIntoOmegamonOnceMetalGarurumonWasRaised() {
+        var s = state(at: "wargreymon", line: "agumon")
+        s.partner.path = ["botamon", "koromon", "agumon", "greymon", "metalgreymon", "wargreymon"]
+        s.partner.stageExp = 299
+        var alone = s
+        let graduated = engine.addUsage(&alone, tokens: 200_000, provider: "claude_code", at: Date())
+        XCTAssertTrue(graduated.contains { if case .graduated = $0 { return true } else { return false } },
+                      "without the partner it graduates as before")
+
+        s.dex.insert("metalgarurumon")
+        let merged = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date())
+        XCTAssertEqual(merged, [.evolved(from: "wargreymon", to: "omegamon")])
+        XCTAssertEqual(s.partner.speciesKey, "omegamon")
+        XCTAssertTrue(s.discoveredEvolutions.contains("wargreymon>omegamon"))
+
+        s.partner.stageExp = engine.growth.threshold(for: .ultimate) - 1
+        let after = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date())
+        guard case .graduated(_, let path)? = after.first else { return XCTFail("Omegamon graduates: \(after)") }
+        XCTAssertEqual(path.suffix(2), ["wargreymon", "omegamon"])
+    }
+
+    func testMetalGarurumonMergesTheSameWayAndNormalGrowthNeverOffersOmegamon() {
+        var s = state(at: "metalgarurumon", line: "gabumon")
+        s.dex = ["wargreymon"]
+        s.partner.stageExp = 299
+        XCTAssertEqual(engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date()),
+                       [.evolved(from: "metalgarurumon", to: "omegamon")])
+        for line in catalog.lines.values {
+            for key in line.members {
+                XCTAssertFalse(engine.candidates(for: state(at: key, line: line.id)).contains("omegamon"), key)
+            }
+        }
+    }
+
     func testTendencyFollowsHowTheStageWasUsed() {
         var day = state(at: "agumon", line: "agumon")
         day.partner.stageSignals.tokens = 1_000_000

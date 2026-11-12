@@ -118,6 +118,8 @@ final class DigimonStore {
     }
 
     var tendencies: [EvolutionEngine.Tendency] { engine.tendencies(for: state) }
+    /// A full stage will merge (special Jogress) instead of graduating.
+    var canSpecialJogress: Bool { engine.rules.specialJogress(for: state, in: engine.catalog) != nil }
 
     func choose(_ key: String) {
         var next = saved

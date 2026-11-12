@@ -31,7 +31,7 @@ final class DigimonDexTests: XCTestCase {
             .flatMap(\.entries)
         XCTAssertEqual(entries.first { $0.id == "blitzgreymon" }?.secret, .hidden(.bugsDefeated(atLeast: 20)))
         XCTAssertEqual(entries.first { $0.id == "donedevimon" }?.secret, .hidden(.limitHits(atLeast: 3)))
-        XCTAssertEqual(entries.first { $0.id == "omegamon" }?.secret, .locked)
+        XCTAssertEqual(entries.first { $0.id == "omegamon" }?.secret, .specialJogress(partners: ["metalgarurumon", "wargreymon"]))
         XCTAssertNil(entries.first { $0.id == "wargreymon" }?.secret)
     }
 

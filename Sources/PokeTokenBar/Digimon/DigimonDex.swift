@@ -9,6 +9,8 @@ struct DigimonDex {
         case locked
         /// Only a Jogress (a merge with another Digimon) leads here, and growth does not merge.
         case mergeOnly
+        /// A named Jogress the app does: raise both partners (e.g. War Greymon and Metal Garurumon).
+        case specialJogress(partners: [String])
     }
 
     struct Link: Equatable, Identifiable {
@@ -36,15 +38,20 @@ struct DigimonDex {
     static func rows(for line: DigimonLine, state: DigimonState, catalog: DigimonCatalog,
                      rules: EvolutionRules) -> [Row] {
         let members = line.members.compactMap(catalog.species)
-        // Jogress-only steps are not growth routes, so the dex does not hint at them.
+        // Jogress-only steps are not growth routes, so the dex does not hint at them; the special
+        // Jogress the app does is shown as an evolution.
+        let special = rules.specialJogress.filter { line.members.contains($0.from) && line.members.contains($0.to) }
+            .map { DigimonEvolution(from: $0.from, to: $0.to, sources: [.vitalBracelet], canon: false) }
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
-            .filter { !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
+            .filter { !rules.lockedEdges.contains("\($0.from)>\($0.to)") } + special
         let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
             let incoming = allSteps.filter { $0.to == species.key }
             let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
                 && incoming.allSatisfy { rules.lockedEdges.contains("\($0.from)>\($0.to)") }
-            let secret: Secret? = rules.locked.contains(species.key) ? .locked
+            let jogressFrom = rules.specialJogress.filter { $0.to == species.key }.map(\.from)
+            let secret: Secret? = !jogressFrom.isEmpty ? .specialJogress(partners: Array(Set(jogressFrom)).sorted())
+                : rules.locked.contains(species.key) ? .locked
                 : mergeOnly ? .mergeOnly
                 : rules.hidden[species.key].map { .hidden($0) }
             let link = { (from: String, to: String, other: String) in
@@ -85,6 +92,9 @@ extension DigimonText {
         case .locked: return ko ? "아직 만날 수 없어요." : "Not reachable yet."
         case .mergeOnly: return ko ? "다른 디지몬과 합체(조그레스)해야 만날 수 있어요. 아직은 만날 수 없어요."
                                   : "Only a Jogress (a merge) leads here, so it cannot be met yet."
+        case .specialJogress(let partners):
+            return ko ? "\(partners.count)마리를 모두 키워 보면, 궁극체를 다 채운 순간 졸업 대신 합체 진화해요."
+                      : "Raise all \(partners.count) of them and a full Ultimate merges into this instead of graduating."
         case .hidden(.bugsDefeated): return ko ? "버그를 많이 잡은 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says bug hunters turn into this."
         case .hidden(.limitHits): return ko ? "한도를 자주 넘긴 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says hitting your limits often leads here."
         }

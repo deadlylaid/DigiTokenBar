@@ -48,6 +48,16 @@ struct EvolutionRules: Sendable {
     var locked: Set<String>
     /// Single evolutions ("from>to") that only happen as a Jogress, so growth never takes them.
     var lockedEdges: Set<String> = []
+    /// Named Jogress across cards (the device's War Greymon + Metal Garurumon = Omegamon). The app has
+    /// no backup slot, so the partner counts once it is in the dex (raised before). It takes the place
+    /// of graduation when the stage is full.
+    var specialJogress: [SpecialJogress] = []
+
+    struct SpecialJogress: Sendable, Equatable {
+        let from: String
+        let partner: String
+        let to: String
+    }
 
     static let mvp = EvolutionRules(
         hidden: [
@@ -57,7 +67,21 @@ struct EvolutionRules: Sendable {
             "nidhoggmon": .limitHits(atLeast: 3),
         ],
         locked: ["omegamon"],
-        lockedEdges: DigimonCatalogData.jogressEdges)
+        lockedEdges: DigimonCatalogData.jogressEdges,
+        specialJogress: [
+            SpecialJogress(from: "wargreymon", partner: "metalgarurumon", to: "omegamon"),
+            SpecialJogress(from: "metalgarurumon", partner: "wargreymon", to: "omegamon"),
+        ])
+
+    /// The special Jogress this Digimon can do now, if any.
+    func specialJogress(for state: DigimonState, in catalog: DigimonCatalog) -> SpecialJogress? {
+        guard let current = state.partner.speciesKey,
+              let line = catalog.lines[state.partner.lineID] else { return nil }
+        return specialJogress.first {
+            $0.from == current && state.dex.contains($0.partner) && line.members.contains($0.to)
+                && catalog.species($0.to) != nil
+        }
+    }
 
     func isMet(_ condition: HiddenCondition, by signals: GrowthSignals) -> Bool {
         switch condition {
@@ -260,7 +284,9 @@ struct EvolutionEngine: Sendable {
         while state.pendingChoice == nil, state.eggChoiceOfferedAt == nil,
               state.partner.stageExp >= growth.threshold(for: state.partner.level) {
             let options = candidates(for: state)
-            if state.partner.level == .ultimate || options.isEmpty {
+            if let jogress = rules.specialJogress(for: state, in: catalog) {
+                events += evolve(&state, to: jogress.to, at: date)   // instead of graduating
+            } else if state.partner.level == .ultimate || options.isEmpty {
                 events += graduate(&state, at: date)
             } else if options.count == 1 || !growth.userPicksEvolution {
                 events += evolve(&state, to: options[0], at: date)   // best match first
