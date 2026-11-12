@@ -1,0 +1,4133 @@
+{
+ "system": {
+  "device": "Vital Bracelet BE (Bandai) with BE Memory cards",
+  "summary": [
+   "Evolution is timer-driven: when the current stage timer ends the device checks the requirements of every unlocked next form; if one is met it evolves, otherwise the timer restarts and is re-checked after the same interval (humulos manual).",
+   "Stage timers on BE Memories: Baby I 1h, Baby II 3h, Child 12h (16h for original Dim cards), Adult 24h, Perfect 24h, Ultimate->Super Ultimate via Jogress 3h (humulos FAQ). Sleep counts toward the timer; backup and power-off do not.",
+   "Requirement types on BE Memories: PP (renamed Trophies; earned only by Squat training: Great=2, Good=1), Vital Values (heart rate + steps; 4 VV per 50 miles, x2 when Happy, x0.5 when Upset/injured, +/- from battle wins/losses, -20 per 5 min unworn while awake), Battles (NFC-triggered or Adventure boss battles; app battles do not count), Win Ratio (%), Adventure Mode stage cleared (one-time unlock stored per card), Jogress partner (specific named Digimon from a specific card in backup set as Support).",
+   "Only listed stats matter; N/A means no minimum. A form whose four stats are all N/A is the default/failure evolution, which is expressed in the detail popup as Choose one of ranges (e.g. 0-2 PP OR 0-499 VV) = below the minimum of the other options.",
+   "If several options are met: you usually get the option with the highest Vital Value requirement, then highest Win Ratio; the true rule is the order in the card code (humulos FAQ). Ties on VV and win ratio are not resolved by any source.",
+   "Stats reset: PP, Battles and Win Ratio reset after every evolution; Vital Values reset after every evolution except I->II and II->III; BP/HP/AP training gains carry over. Training stats can only be gained during a 100-hour Limit per Digimon (PP too), after which unmet PP requirements can never be met.",
+   "Training (Squat=PP, Crunch=HP, Punch=AP, Dash=BP) raises battle stats only on BE Memories; with original Dim cards any training only gives PP. Training/Traits/personality are not evolution requirements on these cards (each Digimon has an Activity Type that only controls its battle Super Hit).",
+   "Adventure Mode: 12 stages per BE Memory; stages walk a step count then fight a boss. On these two cards Stage 2, 5, 8, 11, 12 clears unlock specific forms (the device hides locked forms).",
+   "Death: 4 injuries in one day or 24h unworn. Injury = losing a battle while Upset."
+  ],
+  "selectionOrderDerivedNote": "cards.*.selectionOrderDerived is NOT source-stated per edge: it applies the humulos FAQ rule (highest Vital Value requirement first, then highest Win Ratio; true order is the card code) to the stated numbers. unresolvedTies lists options with equal VV and win ratio, which no source orders. Adventure-locked options only compete after their stage is cleared.",
+  "differencesFromOriginalVitalBracelet": [
+   "Trophies (earned by completing missions, max 4 trainings/hard missions per day) became PP (Squat training, no daily limit; 100h Limit).",
+   "Training raises BP/HP/AP only on BE (original devices: training gives no stat growth).",
+   "Original Dim cards allowed attribute-based Jogress at Stage IV/V (any different-attribute Digimon in backup); BE only supports Jogress with a specific named Digimon from a specific card.",
+   "Original Dims have 1 Adventure unlock (Area 15 of 15); BE Memories have multiple unlocks across 12 stages.",
+   "Evolution timer runs while asleep on BE (not on the original VB Digital Monster); Child timer 12h on BE Memories vs 16h on original Dims.",
+   "Original VB: all stats reset on evolution (except I->II, II->III); BE keeps BP/HP/AP gains.",
+   "Activity Type: on earlier Vital Bracelets it \"had a few other purposes\" (Digimon preferred specific exercise types); on BE all Digimon react to exercise the same way and Activity Type only sets the Super Hit turn (humulos manual).",
+   "BE has no device PvP (no VS Memory); backup Digimon from the same franchise can assist in NFC battles; up to 23 Digimon per card vs 17."
+  ],
+  "sourceDisagreements": [
+   "Wikimon (Vital_Bracelet_BE) says \"Completing Stages 2, 3, 6, 9, 11 and 12 Unlock more Digimon evolutions\"; humulos lists the unlock stages for these two cards as 2, 5, 8, 11, 12. Wikimon's sentence is generic (not card-specific); humulos is per card.",
+   "humulos chart graphic draws Hououmon only from Garudamon, but its detail popups (and Wikimon) also list Arkhai Angemon->Hououmon and Jazarichmon->Hououmon with the same requirement; the chart image omits those connector lines, the data does not.",
+   "humulos manual table says Ultimate evolves \"3 Hours via Jogress, otherwise 24 Hours\", while the same text says Jogress \"takes the same amount of time as normal evolutions do\"; the FAQ table says 3 hours for Stage VI.",
+   "humulos BE FAQ says a Digimon is guaranteed to reach Stage III; Child->Adult has a default form only for some Child lines on these cards (Luxmon/Falcomon->Xiquemon, Tentomon/Funbeemon->Kuwagamon). Piyomon, Jazamon, Lalamon, Morphomon have no default form, so they can stall if no requirement is met."
+  ],
+  "sources": [
+   {
+    "name": "humulos.com VB BE Evolution Guide (Special Selection page: Holy Wing / Forest Guardian charts)",
+    "url": "https://humulos.com/digimon/vbbe/special/",
+    "used_for": "per-edge requirements (chart values) + legend + FAQ (priority, resets, timers)"
+   },
+   {
+    "name": "humulos.com detail popups",
+    "url": "https://humulos.com/digimon/php/details.php?digimon=<id>&device=14",
+    "used_for": "complete Evolves From/To lists with requirement text per edge (includes edges the chart graphic does not draw)"
+   },
+   {
+    "name": "humulos.com VB BE manual",
+    "url": "https://humulos.com/digimon/vbbe/manual/",
+    "used_for": "timers, VV earning, PP/training, 100h limit, Jogress mechanics, adventure, death"
+   },
+   {
+    "name": "humulos.com Vital Series differences table",
+    "url": "https://humulos.com/digimon/vbdm/differences",
+    "used_for": "BE vs original VB"
+   },
+   {
+    "name": "humulos.com original VB Evolution Guide FAQ/legend",
+    "url": "https://humulos.com/digimon/vbdm/",
+    "used_for": "original VB trophies, 16h child timer, attribute Jogress, Area 15 unlock"
+   },
+   {
+    "name": "Wikimon Vital Bracelet BE",
+    "url": "https://wikimon.net/Vital_Bracelet_BE",
+    "used_for": "general description (training types, adventure, evolution requirements not standardized, time standardized)"
+   },
+   {
+    "name": "Wikimon Vital Bracelet Series Memory Cards (local cache)",
+    "url": "tools/digimon/.cache/pages/vitalbraceletseriesmemorycards.wiki",
+    "used_for": "card rosters, adventure unlockables chosen by Evolution Vote vol.2"
+   },
+   {
+    "name": "Wikimon species pages (local cache, 923 pages)",
+    "url": "tools/digimon/.cache/pages/<key>.wiki",
+    "used_for": "route corroboration only; every \"Vital Bracelet BE\" section in the relevant pages is empty, no conditions"
+   }
+  ],
+  "sourcesTriedWithoutResult": [
+   "Local Wikimon cache: all 50 relevant species pages have empty \"==={{hdr|Vital Bracelet BE}}===\" sections.",
+   "Wikimon has no separate BEMemory card pages (API search for Holy Wings / Forest Guardians returns nothing).",
+   "digimon.fandom.com/wiki/Holy_Wings returned HTTP 402 to automated fetch (not retried).",
+   "Bandai official English VB BE pages (toy.bandai.co.jp/series/en_vitalbraceletbe/..., toy.bandai.co.jp/special/vb/digitalmonster) returned 404; no official per-card requirement material found.",
+   "Web searches (EN/JP) found no independent per-card requirement chart besides humulos."
+  ]
+ },
+ "cards": {
+  "piyomon": {
+   "card": "BEMemory Holy Wings Dim",
+   "humulosChart": "Holy Wing",
+   "releasedJP": "2023-08 (BEMemory Special Selection vol.2 Holy Wings & Forest Guardians two-pack)",
+   "species": {
+    "nyokimon": {
+     "humulosId": "nyoki",
+     "name": "Nyokimon",
+     "stage": "Stage I (Baby I)",
+     "attribute": "Free"
+    },
+    "pyocomon": {
+     "humulosId": "pyoco",
+     "name": "Pyocomon",
+     "stage": "Stage II (Baby II)",
+     "attribute": "Free"
+    },
+    "piyomon": {
+     "humulosId": "piyo",
+     "name": "Piyomon",
+     "stage": "Stage III (Child)",
+     "attribute": "Vaccine"
+    },
+    "luxmon": {
+     "humulosId": "lux",
+     "name": "Luxmon",
+     "stage": "Stage III (Child)",
+     "attribute": "Vaccine"
+    },
+    "falcomon2006animeversion": {
+     "humulosId": "falco_2006",
+     "name": "Falcomon (2006)",
+     "stage": "Stage III (Child)",
+     "attribute": "Vaccine"
+    },
+    "jazamon": {
+     "humulosId": "jaza",
+     "name": "Jazamon",
+     "stage": "Stage III (Child)",
+     "attribute": "Data"
+    },
+    "birdramon": {
+     "humulosId": "birdra",
+     "name": "Birdramon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Vaccine"
+    },
+    "pidmon": {
+     "humulosId": "pid",
+     "name": "Pidmon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Vaccine"
+    },
+    "peckmon": {
+     "humulosId": "peck",
+     "name": "Peckmon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Vaccine"
+    },
+    "xiquemon": {
+     "humulosId": "xique",
+     "name": "Xiquemon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Vaccine"
+    },
+    "thunderbirmon": {
+     "humulosId": "thunderbir",
+     "name": "Thunderbirmon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Data"
+    },
+    "garudamon": {
+     "humulosId": "garuda",
+     "name": "Garudamon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Vaccine"
+    },
+    "arkhaiangemon": {
+     "humulosId": "arkhaiange",
+     "name": "Arkhai Angemon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Vaccine"
+    },
+    "yatagaramon2006animeversion": {
+     "humulosId": "yatagara_2006",
+     "name": "Yatagaramon (2006)",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Vaccine"
+    },
+    "huankunmon": {
+     "humulosId": "huankun",
+     "name": "Huankunmon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Vaccine"
+    },
+    "jazarichmon": {
+     "humulosId": "jazarich",
+     "name": "Jazarichmon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Data"
+    },
+    "hououmon": {
+     "humulosId": "houou",
+     "name": "Hououmon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "dominimon": {
+     "humulosId": "domini",
+     "name": "Dominimon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "ravmon": {
+     "humulosId": "rav",
+     "name": "Ravmon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "xiangpengmon": {
+     "humulosId": "xiangpeng",
+     "name": "Xiangpengmon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "ravmonburstmode": {
+     "humulosId": "rav_b",
+     "name": "Ravmon: Burst Mode",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "metallicdramon": {
+     "humulosId": "metallicdra",
+     "name": "Metallicdramon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Data"
+    },
+    "shakamon": {
+     "humulosId": "shaka",
+     "name": "Shakamon",
+     "stage": "Stage VI+ (Super Ultimate)",
+     "attribute": "Vaccine"
+    }
+   },
+   "edges": [
+    {
+     "from": "arkhaiangemon",
+     "to": "dominimon",
+     "fromName": "Arkhai Angemon",
+     "toName": "Dominimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Arkhai Angemon -> Dominimon: \"30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=domini&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/dominimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "arkhaiangemon",
+     "to": "hououmon",
+     "fromName": "Arkhai Angemon",
+     "toName": "Hououmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Arkhai Angemon -> Hououmon: \"30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=houou&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/hououmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "arkhaiangemon",
+     "to": "xiangpengmon",
+     "fromName": "Arkhai Angemon",
+     "toName": "Xiangpengmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 20,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Arkhai Angemon -> Xiangpengmon: \"20+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=xiangpeng&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/xiangpengmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "birdramon",
+     "to": "arkhaiangemon",
+     "fromName": "Birdramon",
+     "toName": "Arkhai Angemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 12
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Birdramon -> Arkhai Angemon: \"12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arkhaiange&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/arkhaiangemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "birdramon",
+     "to": "garudamon",
+     "fromName": "Birdramon",
+     "toName": "Garudamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Birdramon -> Garudamon: \"10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garuda&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/garudamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "falcomon2006animeversion",
+     "to": "peckmon",
+     "fromName": "Falcomon (2006 Anime Version)",
+     "toName": "Peckmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 3
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Falcomon (2006) -> Peckmon: \"5+ PP, 1,000+ Vital Values, 3+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peck&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/peckmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "falcomon2006animeversion",
+     "to": "xiquemon",
+     "fromName": "Falcomon (2006 Anime Version)",
+     "toName": "Xiquemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 4
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 999
+          }
+         },
+         {
+          "battles": {
+           "min": 0,
+           "max": 2
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Falcomon (2006) -> Xiquemon: \"Choose one: 0-4 PP OR 0-999 Vital Values OR 0-2 Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=xique&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/xiquemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "garudamon",
+     "to": "dominimon",
+     "fromName": "Garudamon",
+     "toName": "Dominimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Garudamon -> Dominimon: \"30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=domini&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/dominimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "garudamon",
+     "to": "hououmon",
+     "fromName": "Garudamon",
+     "toName": "Hououmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Garudamon -> Hououmon: \"30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=houou&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/hououmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "huankunmon",
+     "to": "ravmon",
+     "fromName": "Huankunmon",
+     "toName": "Ravmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Huankunmon -> Ravmon: \"25+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rav&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/ravmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "huankunmon",
+     "to": "xiangpengmon",
+     "fromName": "Huankunmon",
+     "toName": "Xiangpengmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 20,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Huankunmon -> Xiangpengmon: \"20+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=xiangpeng&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/xiangpengmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "jazamon",
+     "to": "birdramon",
+     "fromName": "Jazamon",
+     "toName": "Birdramon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 5
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Jazamon -> Birdramon: \"8+ PP, 1,000+ Vital Values, 5+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=birdra&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/birdramon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "jazarichmon",
+     "to": "hououmon",
+     "fromName": "Jazarichmon",
+     "toName": "Hououmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Jazarichmon -> Hououmon: \"30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=houou&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/hououmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "jazarichmon",
+     "to": "metallicdramon",
+     "fromName": "Jazarichmon",
+     "toName": "Metallicdramon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 35,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 12,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Jazarichmon -> Metallicdramon: \"Stage 12 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallicdra&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/metallicdramon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "luxmon",
+     "to": "birdramon",
+     "fromName": "Luxmon",
+     "toName": "Birdramon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 5
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Luxmon -> Birdramon: \"8+ PP, 1,000+ Vital Values, 5+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=birdra&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/birdramon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "luxmon",
+     "to": "pidmon",
+     "fromName": "Luxmon",
+     "toName": "Pidmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 8
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Luxmon -> Pidmon: \"10+ PP, 1,000+ Vital Values, 8+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pid&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/pidmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "luxmon",
+     "to": "xiquemon",
+     "fromName": "Luxmon",
+     "toName": "Xiquemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 7
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 999
+          }
+         },
+         {
+          "battles": {
+           "min": 0,
+           "max": 4
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Luxmon -> Xiquemon: \"Choose one: 0-7 PP OR 0-999 Vital Values OR 0-4 Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=xique&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/xiquemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "nyokimon",
+     "to": "pyocomon",
+     "fromName": "Nyokimon",
+     "toName": "Pyocomon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "I (Baby I)",
+       "evolutionTimer": "1h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       "No stat requirements (time-only evolution)"
+      ]
+     },
+     "isFallback": false,
+     "raw": "Nyokimon -> Pyocomon: \"No requirements\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pyoco&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/pyocomon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "peckmon",
+     "to": "jazarichmon",
+     "fromName": "Peckmon",
+     "toName": "Jazarichmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 8,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Peckmon -> Jazarichmon: \"Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jazarich&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/jazarichmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "peckmon",
+     "to": "yatagaramon2006animeversion",
+     "fromName": "Peckmon",
+     "toName": "Yatagaramon (2006 Anime Version)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Peckmon -> Yatagaramon (2006): \"10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=yatagara_2006&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/yatagaramon2006animeversion.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pidmon",
+     "to": "arkhaiangemon",
+     "fromName": "Pidmon",
+     "toName": "Arkhai Angemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 12
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Pidmon -> Arkhai Angemon: \"12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arkhaiange&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/arkhaiangemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pidmon",
+     "to": "garudamon",
+     "fromName": "Pidmon",
+     "toName": "Garudamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Pidmon -> Garudamon: \"10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garuda&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/garudamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pidmon",
+     "to": "huankunmon",
+     "fromName": "Pidmon",
+     "toName": "Huankunmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Pidmon -> Huankunmon: \"8+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=huankun&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/huankunmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "piyomon",
+     "to": "birdramon",
+     "fromName": "Piyomon",
+     "toName": "Birdramon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 5
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Piyomon -> Birdramon: \"8+ PP, 1,000+ Vital Values, 5+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=birdra&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/birdramon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "piyomon",
+     "to": "peckmon",
+     "fromName": "Piyomon",
+     "toName": "Peckmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 3
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Piyomon -> Peckmon: \"5+ PP, 1,000+ Vital Values, 3+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peck&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/peckmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "piyomon",
+     "to": "pidmon",
+     "fromName": "Piyomon",
+     "toName": "Pidmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 8
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Piyomon -> Pidmon: \"10+ PP, 1,000+ Vital Values, 8+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pid&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/pidmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pyocomon",
+     "to": "falcomon2006animeversion",
+     "fromName": "Pyocomon",
+     "toName": "Falcomon (2006 Anime Version)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 2
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 499
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Pyocomon -> Falcomon (2006): \"Choose one: 0-2 PP OR 0-499 Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=falco_2006&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/falcomon2006animeversion.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pyocomon",
+     "to": "jazamon",
+     "fromName": "Pyocomon",
+     "toName": "Jazamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 2,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Pyocomon -> Jazamon: \"Stage 2 cleared, 5+ PP, 1,000+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jaza&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/jazamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pyocomon",
+     "to": "luxmon",
+     "fromName": "Pyocomon",
+     "toName": "Luxmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 500
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Pyocomon -> Luxmon: \"5+ PP, 500+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lux&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/luxmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "pyocomon",
+     "to": "piyomon",
+     "fromName": "Pyocomon",
+     "toName": "Piyomon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 500
+      },
+      "trophies": {
+       "min": 3,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Pyocomon -> Piyomon: \"3+ PP, 500+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=piyo&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/piyomon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "xiquemon",
+     "to": "huankunmon",
+     "fromName": "Xiquemon",
+     "toName": "Huankunmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Xiquemon -> Huankunmon: \"8+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=huankun&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/huankunmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "xiquemon",
+     "to": "yatagaramon2006animeversion",
+     "fromName": "Xiquemon",
+     "toName": "Yatagaramon (2006 Anime Version)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Xiquemon -> Yatagaramon (2006): \"10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=yatagara_2006&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/yatagaramon2006animeversion.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "yatagaramon2006animeversion",
+     "to": "metallicdramon",
+     "fromName": "Yatagaramon (2006 Anime Version)",
+     "toName": "Metallicdramon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 12,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Yatagaramon (2006) -> Metallicdramon: \"Stage 12 cleared, 30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallicdra&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/metallicdramon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "yatagaramon2006animeversion",
+     "to": "ravmon",
+     "fromName": "Yatagaramon (2006 Anime Version)",
+     "toName": "Ravmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Yatagaramon (2006) -> Ravmon: \"25+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rav&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/ravmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "yatagaramon2006animeversion",
+     "to": "ravmonburstmode",
+     "fromName": "Yatagaramon (2006 Anime Version)",
+     "toName": "Ravmon: Burst Mode",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 35,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 70
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 11,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Yatagaramon (2006) -> Ravmon: Burst Mode: \"Stage 11 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 70%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rav_b&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/ravmonburstmode.wiki",
+     "conditionStated": true
+    }
+   ],
+   "extraEdges": [
+    {
+     "from": "dominimon",
+     "to": "shakamon",
+     "fromName": "Dominimon",
+     "toName": "Shakamon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": {
+       "partner": "Xiangpengmon",
+       "partnerCard": "Holy Wing BE Memory Dim",
+       "how": "partner must be in backup and set as Support Digimon when the evolution timer ends; only the active Digimon evolves, partner is unchanged"
+      },
+      "time": {
+       "fromStage": "VI (Ultimate)",
+       "evolutionTimer": "3h (Jogress; the manual table says \"3 Hours via Jogress, otherwise 24 Hours\")",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Dominimon -> Shakamon: \"Jogress with Xiangpengmon from the Holy Wing BE Memory Dim\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shaka&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/shakamon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Jogress edge not present in vb_lines_b.json edges"
+    },
+    {
+     "from": "falcomon2006animeversion",
+     "to": "thunderbirmon",
+     "fromName": "Falcomon (2006)",
+     "toName": "Thunderbirmon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": {
+       "min": 1500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 5,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Falcomon (2006) -> Thunderbirmon: \"Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderbir&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/thunderbirmon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Thunderbirmon is on the card but absent from vb_lines_b.json species"
+    },
+    {
+     "from": "jazamon",
+     "to": "thunderbirmon",
+     "fromName": "Jazamon",
+     "toName": "Thunderbirmon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": {
+       "min": 1500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 5,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Jazamon -> Thunderbirmon: \"Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderbir&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/thunderbirmon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Thunderbirmon is on the card but absent from vb_lines_b.json species"
+    },
+    {
+     "from": "thunderbirmon",
+     "to": "garudamon",
+     "fromName": "Thunderbirmon",
+     "toName": "Garudamon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Thunderbirmon -> Garudamon: \"10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garuda&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/garudamon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Thunderbirmon is on the card but absent from vb_lines_b.json species"
+    },
+    {
+     "from": "thunderbirmon",
+     "to": "jazarichmon",
+     "fromName": "Thunderbirmon",
+     "toName": "Jazarichmon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 8,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Thunderbirmon -> Jazarichmon: \"Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jazarich&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/jazarichmon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Thunderbirmon is on the card but absent from vb_lines_b.json species"
+    },
+    {
+     "from": "xiangpengmon",
+     "to": "shakamon",
+     "fromName": "Xiangpengmon",
+     "toName": "Shakamon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": {
+       "partner": "Dominimon",
+       "partnerCard": "Holy Wing BE Memory Dim",
+       "how": "partner must be in backup and set as Support Digimon when the evolution timer ends; only the active Digimon evolves, partner is unchanged"
+      },
+      "time": {
+       "fromStage": "VI (Ultimate)",
+       "evolutionTimer": "3h (Jogress; the manual table says \"3 Hours via Jogress, otherwise 24 Hours\")",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Xiangpengmon -> Shakamon: \"Jogress with Dominimon from the Holy Wing BE Memory Dim\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shaka&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#hwi_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/shakamon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Jogress edge not present in vb_lines_b.json edges"
+    }
+   ],
+   "selectionOrderDerived": {
+    "pyocomon": {
+     "priorityHighFirst": [
+      {
+       "to": "jazamon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "piyomon",
+       "vvMin": 500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "luxmon",
+       "vvMin": 500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "falcomon2006animeversion",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "piyomon",
+       "luxmon"
+      ]
+     ]
+    },
+    "piyomon": {
+     "priorityHighFirst": [
+      {
+       "to": "birdramon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "pidmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "peckmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "birdramon",
+       "pidmon"
+      ],
+      [
+       "pidmon",
+       "peckmon"
+      ]
+     ]
+    },
+    "luxmon": {
+     "priorityHighFirst": [
+      {
+       "to": "birdramon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "pidmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "xiquemon",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "birdramon",
+       "pidmon"
+      ]
+     ]
+    },
+    "jazamon": {
+     "priorityHighFirst": [
+      {
+       "to": "thunderbirmon",
+       "vvMin": 1500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "birdramon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "falcomon2006animeversion": {
+     "priorityHighFirst": [
+      {
+       "to": "thunderbirmon",
+       "vvMin": 1500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "peckmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "xiquemon",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "birdramon": {
+     "priorityHighFirst": [
+      {
+       "to": "garudamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "arkhaiangemon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "garudamon",
+       "arkhaiangemon"
+      ]
+     ]
+    },
+    "pidmon": {
+     "priorityHighFirst": [
+      {
+       "to": "garudamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "arkhaiangemon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "huankunmon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "garudamon",
+       "arkhaiangemon"
+      ]
+     ]
+    },
+    "thunderbirmon": {
+     "priorityHighFirst": [
+      {
+       "to": "jazarichmon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "garudamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "peckmon": {
+     "priorityHighFirst": [
+      {
+       "to": "jazarichmon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "yatagaramon2006animeversion",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "xiquemon": {
+     "priorityHighFirst": [
+      {
+       "to": "yatagaramon2006animeversion",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "huankunmon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "garudamon": {
+     "priorityHighFirst": [
+      {
+       "to": "dominimon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "hououmon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "arkhaiangemon": {
+     "priorityHighFirst": [
+      {
+       "to": "dominimon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "hououmon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "xiangpengmon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "jazarichmon": {
+     "priorityHighFirst": [
+      {
+       "to": "metallicdramon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "hououmon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "yatagaramon2006animeversion": {
+     "priorityHighFirst": [
+      {
+       "to": "ravmonburstmode",
+       "vvMin": 3500,
+       "winMin": 70,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "metallicdramon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "ravmon",
+       "vvMin": 3000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "huankunmon": {
+     "priorityHighFirst": [
+      {
+       "to": "ravmon",
+       "vvMin": 3000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "xiangpengmon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    }
+   },
+   "coverage": {
+    "appEdges": 35,
+    "withStatedCondition": 35,
+    "unknown": 0,
+    "ratio": "35/35",
+    "extraCardEdgesNotInApp": 6,
+    "note": "Every app edge appears in the humulos detail popups with an explicit requirement line (Baby I->II is stated as \"No requirements\"). Numeric conditions come from a single source (humulos); Wikimon corroborates the routes and Jogress partners but states no numbers."
+   }
+  },
+  "tentomon": {
+   "card": "BEMemory Forest Guardians Dim",
+   "humulosChart": "Forest Guardian",
+   "releasedJP": "2023-08 (BEMemory Special Selection vol.2 Holy Wings & Forest Guardians two-pack)",
+   "species": {
+    "bubbmon": {
+     "humulosId": "bubb",
+     "name": "Bubbmon",
+     "stage": "Stage I (Baby I)",
+     "attribute": "Free"
+    },
+    "mochimon": {
+     "humulosId": "mochi",
+     "name": "Mochimon",
+     "stage": "Stage II (Baby II)",
+     "attribute": "Free"
+    },
+    "tentomon": {
+     "humulosId": "tento",
+     "name": "Tentomon",
+     "stage": "Stage III (Child)",
+     "attribute": "Vaccine"
+    },
+    "lalamon": {
+     "humulosId": "lala",
+     "name": "Lalamon",
+     "stage": "Stage III (Child)",
+     "attribute": "Data"
+    },
+    "funbeemon": {
+     "humulosId": "funbee",
+     "name": "Funbeemon",
+     "stage": "Stage III (Child)",
+     "attribute": "Virus"
+    },
+    "morphomon": {
+     "humulosId": "morpho",
+     "name": "Morphomon",
+     "stage": "Stage III (Child)",
+     "attribute": "Vaccine"
+    },
+    "kabuterimon": {
+     "humulosId": "kabuteri",
+     "name": "Kabuterimon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Vaccine"
+    },
+    "sunflowmon": {
+     "humulosId": "sunflow",
+     "name": "Sunflowmon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Data"
+    },
+    "waspmon": {
+     "humulosId": "wasp",
+     "name": "Waspmon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Virus"
+    },
+    "kuwagamon": {
+     "humulosId": "kuwaga",
+     "name": "Kuwagamon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Virus"
+    },
+    "hudiemon": {
+     "humulosId": "hudie",
+     "name": "Hudiemon",
+     "stage": "Stage IV (Adult)",
+     "attribute": "Free"
+    },
+    "atlurkabuterimonred": {
+     "humulosId": "atlurkabuteri_r",
+     "name": "Atlur Kabuterimon (Red)",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Vaccine"
+    },
+    "lilamon": {
+     "humulosId": "lila",
+     "name": "Lilamon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Data"
+    },
+    "cannonbeemon": {
+     "humulosId": "cannonbee",
+     "name": "Cannonbeemon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Virus"
+    },
+    "okuwamon": {
+     "humulosId": "okuwa",
+     "name": "Okuwamon",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Virus"
+    },
+    "eosmonperfect": {
+     "humulosId": "eos_v",
+     "name": "Eosmon (Perfect)",
+     "stage": "Stage V (Perfect)",
+     "attribute": "Free"
+    },
+    "heraklekabuterimon": {
+     "humulosId": "heraklekabuteri",
+     "name": "Herakle Kabuterimon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Vaccine"
+    },
+    "rosemon": {
+     "humulosId": "rose",
+     "name": "Rosemon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Data"
+    },
+    "tigervespamon": {
+     "humulosId": "tigervespa",
+     "name": "Tiger Vespamon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Virus"
+    },
+    "grankuwagamon": {
+     "humulosId": "grankuwaga",
+     "name": "Gran Kuwagamon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Free"
+    },
+    "rosemonburstmode": {
+     "humulosId": "rose_b",
+     "name": "Rosemon: Burst Mode",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Data"
+    },
+    "bancholilimon": {
+     "humulosId": "bancholili",
+     "name": "Bancho Lilimon",
+     "stage": "Stage VI (Ultimate)",
+     "attribute": "Data"
+    },
+    "tyrantkabuterimon": {
+     "humulosId": "tyrantkabuteri",
+     "name": "Tyrant Kabuterimon",
+     "stage": "Stage VI+ (Super Ultimate)",
+     "attribute": "Virus"
+    }
+   },
+   "edges": [
+    {
+     "from": "atlurkabuterimonred",
+     "to": "heraklekabuterimon",
+     "fromName": "Atlur Kabuterimon (Red)",
+     "toName": "Herakle Kabuterimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Atlur Kabuterimon (Red) -> Herakle Kabuterimon: \"30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=heraklekabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/heraklekabuterimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "atlurkabuterimonred",
+     "to": "rosemon",
+     "fromName": "Atlur Kabuterimon (Red)",
+     "toName": "Rosemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Atlur Kabuterimon (Red) -> Rosemon: \"30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rose&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/rosemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "bubbmon",
+     "to": "mochimon",
+     "fromName": "Bubbmon",
+     "toName": "Mochimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "I (Baby I)",
+       "evolutionTimer": "1h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       "No stat requirements (time-only evolution)"
+      ]
+     },
+     "isFallback": false,
+     "raw": "Bubbmon -> Mochimon: \"No requirements\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mochi&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/mochimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "cannonbeemon",
+     "to": "grankuwagamon",
+     "fromName": "Cannonbeemon",
+     "toName": "Gran Kuwagamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 20,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Cannonbeemon -> Gran Kuwagamon: \"20+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grankuwaga&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/grankuwagamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "cannonbeemon",
+     "to": "heraklekabuterimon",
+     "fromName": "Cannonbeemon",
+     "toName": "Herakle Kabuterimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Cannonbeemon -> Herakle Kabuterimon: \"30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=heraklekabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/heraklekabuterimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "cannonbeemon",
+     "to": "tigervespamon",
+     "fromName": "Cannonbeemon",
+     "toName": "Tiger Vespamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Cannonbeemon -> Tiger Vespamon: \"25+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tigervespa&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tigervespamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "eosmonperfect",
+     "to": "bancholilimon",
+     "fromName": "Eosmon (Perfect)",
+     "toName": "Bancho Lilimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 35,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 12,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Eosmon (Perfect) -> Bancho Lilimon: \"Stage 12 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bancholili&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/bancholilimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "eosmonperfect",
+     "to": "tigervespamon",
+     "fromName": "Eosmon (Perfect)",
+     "toName": "Tiger Vespamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Eosmon (Perfect) -> Tiger Vespamon: \"25+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tigervespa&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tigervespamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "funbeemon",
+     "to": "kabuterimon",
+     "fromName": "Funbeemon",
+     "toName": "Kabuterimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 5
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Funbeemon -> Kabuterimon: \"8+ PP, 1,000+ Vital Values, 5+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/kabuterimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "funbeemon",
+     "to": "kuwagamon",
+     "fromName": "Funbeemon",
+     "toName": "Kuwagamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 4
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 999
+          }
+         },
+         {
+          "battles": {
+           "min": 0,
+           "max": 2
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Funbeemon -> Kuwagamon: \"Choose one: 0-4 PP OR 0-999 Vital Values OR 0-2 Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kuwaga&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/kuwagamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "funbeemon",
+     "to": "waspmon",
+     "fromName": "Funbeemon",
+     "toName": "Waspmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 3
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Funbeemon -> Waspmon: \"5+ PP, 1,000+ Vital Values, 3+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wasp&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/waspmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "hudiemon",
+     "to": "cannonbeemon",
+     "fromName": "Hudiemon",
+     "toName": "Cannonbeemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Hudiemon -> Cannonbeemon: \"10+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cannonbee&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/cannonbeemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "hudiemon",
+     "to": "eosmonperfect",
+     "fromName": "Hudiemon",
+     "toName": "Eosmon (Perfect)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 8,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Hudiemon -> Eosmon (Perfect): \"Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=eos_v&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/eosmonperfect.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "kabuterimon",
+     "to": "atlurkabuterimonred",
+     "fromName": "Kabuterimon",
+     "toName": "Atlur Kabuterimon (Red)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 12
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Kabuterimon -> Atlur Kabuterimon (Red): \"10+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=atlurkabuteri_r&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/atlurkabuterimonred.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "kabuterimon",
+     "to": "lilamon",
+     "fromName": "Kabuterimon",
+     "toName": "Lilamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Kabuterimon -> Lilamon: \"12+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lila&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/lilamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "kuwagamon",
+     "to": "cannonbeemon",
+     "fromName": "Kuwagamon",
+     "toName": "Cannonbeemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Kuwagamon -> Cannonbeemon: \"10+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cannonbee&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/cannonbeemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "kuwagamon",
+     "to": "okuwamon",
+     "fromName": "Kuwagamon",
+     "toName": "Okuwamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 40
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Kuwagamon -> Okuwamon: \"8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=okuwa&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/okuwamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lalamon",
+     "to": "hudiemon",
+     "fromName": "Lalamon",
+     "toName": "Hudiemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 5,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Lalamon -> Hudiemon: \"Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hudie&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/hudiemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lalamon",
+     "to": "sunflowmon",
+     "fromName": "Lalamon",
+     "toName": "Sunflowmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 8
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Lalamon -> Sunflowmon: \"10+ PP, 1,000+ Vital Values, 8+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sunflow&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/sunflowmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lalamon",
+     "to": "waspmon",
+     "fromName": "Lalamon",
+     "toName": "Waspmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 3
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Lalamon -> Waspmon: \"5+ PP, 1,000+ Vital Values, 3+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wasp&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/waspmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lilamon",
+     "to": "bancholilimon",
+     "fromName": "Lilamon",
+     "toName": "Bancho Lilimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 30,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 12,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Lilamon -> Bancho Lilimon: \"Stage 12 cleared, 30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bancholili&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/bancholilimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lilamon",
+     "to": "rosemon",
+     "fromName": "Lilamon",
+     "toName": "Rosemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Lilamon -> Rosemon: \"25+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rose&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/rosemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "lilamon",
+     "to": "rosemonburstmode",
+     "fromName": "Lilamon",
+     "toName": "Rosemon: Burst Mode",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3500
+      },
+      "trophies": {
+       "min": 35,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 20
+      },
+      "winRatio": {
+       "minPercent": 70
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 11,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Lilamon -> Rosemon: Burst Mode: \"Stage 11 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 70%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rose_b&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/rosemonburstmode.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "mochimon",
+     "to": "funbeemon",
+     "fromName": "Mochimon",
+     "toName": "Funbeemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 2
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 499
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Mochimon -> Funbeemon: \"Choose one: 0-2 PP OR 0-499 Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=funbee&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/funbeemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "mochimon",
+     "to": "lalamon",
+     "fromName": "Mochimon",
+     "toName": "Lalamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 500
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Mochimon -> Lalamon: \"5+ PP, 500+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lala&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/lalamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "mochimon",
+     "to": "morphomon",
+     "fromName": "Mochimon",
+     "toName": "Morphomon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 2,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Mochimon -> Morphomon: \"Stage 2 cleared, 5+ PP, 1,000+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=morpho&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/morphomon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "mochimon",
+     "to": "tentomon",
+     "fromName": "Mochimon",
+     "toName": "Tentomon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 500
+      },
+      "trophies": {
+       "min": 3,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "II (Baby II)",
+       "evolutionTimer": "3h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Mochimon -> Tentomon: \"3+ PP, 500+ Vital Values\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tento&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tentomon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "morphomon",
+     "to": "hudiemon",
+     "fromName": "Morphomon",
+     "toName": "Hudiemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 5,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Morphomon -> Hudiemon: \"Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hudie&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/hudiemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "morphomon",
+     "to": "waspmon",
+     "fromName": "Morphomon",
+     "toName": "Waspmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 5,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 3
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Morphomon -> Waspmon: \"5+ PP, 1,000+ Vital Values, 3+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wasp&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/waspmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "okuwamon",
+     "to": "grankuwagamon",
+     "fromName": "Okuwamon",
+     "toName": "Gran Kuwagamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 20,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Okuwamon -> Gran Kuwagamon: \"20+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grankuwaga&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/grankuwagamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "okuwamon",
+     "to": "tigervespamon",
+     "fromName": "Okuwamon",
+     "toName": "Tiger Vespamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 25,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "V (Perfect)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Okuwamon -> Tiger Vespamon: \"25+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tigervespa&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tigervespamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "sunflowmon",
+     "to": "cannonbeemon",
+     "fromName": "Sunflowmon",
+     "toName": "Cannonbeemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Sunflowmon -> Cannonbeemon: \"10+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cannonbee&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/cannonbeemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "sunflowmon",
+     "to": "eosmonperfect",
+     "fromName": "Sunflowmon",
+     "toName": "Eosmon (Perfect)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 3000
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 60
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "adventureStageCleared": 8,
+        "note": "Adventure Mode stage must have been cleared once on this BE Memory (status is stored per card on the device); the option is hidden until then"
+       }
+      ]
+     },
+     "isFallback": false,
+     "raw": "Sunflowmon -> Eosmon (Perfect): \"Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=eos_v&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/eosmonperfect.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "sunflowmon",
+     "to": "lilamon",
+     "fromName": "Sunflowmon",
+     "toName": "Lilamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 15
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Sunflowmon -> Lilamon: \"12+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lila&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/lilamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "tentomon",
+     "to": "kabuterimon",
+     "fromName": "Tentomon",
+     "toName": "Kabuterimon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 5
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Tentomon -> Kabuterimon: \"8+ PP, 1,000+ Vital Values, 5+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/kabuterimon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "tentomon",
+     "to": "kuwagamon",
+     "fromName": "Tentomon",
+     "toName": "Kuwagamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": [
+       {
+        "fallback": true,
+        "anyOf": [
+         {
+          "trophies": {
+           "min": 0,
+           "max": 7
+          }
+         },
+         {
+          "vitalValues": {
+           "min": 0,
+           "max": 999
+          }
+         },
+         {
+          "battles": {
+           "min": 0,
+           "max": 4
+          }
+         }
+        ],
+        "meaning": "Default/failure evolution: taken when at least ONE listed range is true (i.e. the stats are too low for every other unlocked option from this Digimon). On the chart all four stats show N/A."
+       }
+      ]
+     },
+     "isFallback": true,
+     "raw": "Tentomon -> Kuwagamon: \"Choose one: 0-7 PP OR 0-999 Vital Values OR 0-4 Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kuwaga&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/kuwagamon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "tentomon",
+     "to": "sunflowmon",
+     "fromName": "Tentomon",
+     "toName": "Sunflowmon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 1000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 8
+      },
+      "winRatio": null,
+      "jogress": null,
+      "time": {
+       "fromStage": "III (Child)",
+       "evolutionTimer": "12h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Tentomon -> Sunflowmon: \"10+ PP, 1,000+ Vital Values, 8+ Battles\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sunflow&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/sunflowmon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "waspmon",
+     "to": "atlurkabuterimonred",
+     "fromName": "Waspmon",
+     "toName": "Atlur Kabuterimon (Red)",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2500
+      },
+      "trophies": {
+       "min": 12,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 12
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Waspmon -> Atlur Kabuterimon (Red): \"12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=atlurkabuteri_r&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/atlurkabuterimonred.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "waspmon",
+     "to": "cannonbeemon",
+     "fromName": "Waspmon",
+     "toName": "Cannonbeemon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 10,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 50
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Waspmon -> Cannonbeemon: \"10+ PP, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cannonbee&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/cannonbeemon.wiki",
+     "conditionStated": true
+    },
+    {
+     "from": "waspmon",
+     "to": "okuwamon",
+     "fromName": "Waspmon",
+     "toName": "Okuwamon",
+     "lockedAsMerge": false,
+     "inAppEdges": true,
+     "requirements": {
+      "vitalValues": {
+       "min": 2000
+      },
+      "trophies": {
+       "min": 8,
+       "deviceLabel": "PP (Squat training; BE name for Trophies)"
+      },
+      "battles": {
+       "min": 10
+      },
+      "winRatio": {
+       "minPercent": 40
+      },
+      "jogress": null,
+      "time": {
+       "fromStage": "IV (Adult)",
+       "evolutionTimer": "24h",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Waspmon -> Okuwamon: \"8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=okuwa&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/okuwamon.wiki",
+     "conditionStated": true
+    }
+   ],
+   "extraEdges": [
+    {
+     "from": "grankuwagamon",
+     "to": "tyrantkabuterimon",
+     "fromName": "Gran Kuwagamon",
+     "toName": "Tyrant Kabuterimon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": {
+       "partner": "Herakle Kabuterimon",
+       "partnerCard": "Forest Guardian BE Memory Dim",
+       "how": "partner must be in backup and set as Support Digimon when the evolution timer ends; only the active Digimon evolves, partner is unchanged"
+      },
+      "time": {
+       "fromStage": "VI (Ultimate)",
+       "evolutionTimer": "3h (Jogress; the manual table says \"3 Hours via Jogress, otherwise 24 Hours\")",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Gran Kuwagamon -> Tyrant Kabuterimon: \"Jogress with Herakle Kabuterimon from the Forest Guardian BE Memory Dim\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tyrantkabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tyrantkabuterimon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Jogress edge not present in vb_lines_b.json edges"
+    },
+    {
+     "from": "heraklekabuterimon",
+     "to": "tyrantkabuterimon",
+     "fromName": "Herakle Kabuterimon",
+     "toName": "Tyrant Kabuterimon",
+     "lockedAsMerge": null,
+     "inAppEdges": false,
+     "requirements": {
+      "vitalValues": null,
+      "trophies": null,
+      "battles": null,
+      "winRatio": null,
+      "jogress": {
+       "partner": "Gran Kuwagamon",
+       "partnerCard": "Forest Guardian BE Memory Dim",
+       "how": "partner must be in backup and set as Support Digimon when the evolution timer ends; only the active Digimon evolves, partner is unchanged"
+      },
+      "time": {
+       "fromStage": "VI (Ultimate)",
+       "evolutionTimer": "3h (Jogress; the manual table says \"3 Hours via Jogress, otherwise 24 Hours\")",
+       "note": "General BE rule (humulos FAQ/manual), not stated per edge: requirements are checked when the stage timer ends; if none is met the timer restarts and they are re-checked after the same interval. PP can only be earned during the 100h training Limit, so a missing PP requirement becomes unreachable after it."
+      },
+      "other": null
+     },
+     "isFallback": false,
+     "raw": "Herakle Kabuterimon -> Tyrant Kabuterimon: \"Jogress with Gran Kuwagamon from the Forest Guardian BE Memory Dim\"",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tyrantkabuteri&device=14 (detail popup of https://humulos.com/digimon/vbbe/special/#fgu_anchor)",
+     "routeAlsoOnWikimon": "tools/digimon/.cache/pages/tyrantkabuterimon.wiki",
+     "conditionStated": true,
+     "whyExtra": "Jogress edge not present in vb_lines_b.json edges"
+    }
+   ],
+   "selectionOrderDerived": {
+    "mochimon": {
+     "priorityHighFirst": [
+      {
+       "to": "morphomon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "tentomon",
+       "vvMin": 500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "lalamon",
+       "vvMin": 500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "funbeemon",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "tentomon",
+       "lalamon"
+      ]
+     ]
+    },
+    "tentomon": {
+     "priorityHighFirst": [
+      {
+       "to": "kabuterimon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "sunflowmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "kuwagamon",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "kabuterimon",
+       "sunflowmon"
+      ]
+     ]
+    },
+    "funbeemon": {
+     "priorityHighFirst": [
+      {
+       "to": "kabuterimon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "waspmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "kuwagamon",
+       "vvMin": null,
+       "winMin": null,
+       "fallback": true,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "kabuterimon",
+       "waspmon"
+      ]
+     ]
+    },
+    "lalamon": {
+     "priorityHighFirst": [
+      {
+       "to": "hudiemon",
+       "vvMin": 1500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "sunflowmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "waspmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "sunflowmon",
+       "waspmon"
+      ]
+     ]
+    },
+    "morphomon": {
+     "priorityHighFirst": [
+      {
+       "to": "hudiemon",
+       "vvMin": 1500,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "waspmon",
+       "vvMin": 1000,
+       "winMin": null,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "kabuterimon": {
+     "priorityHighFirst": [
+      {
+       "to": "atlurkabuterimonred",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "lilamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "atlurkabuterimonred",
+       "lilamon"
+      ]
+     ]
+    },
+    "waspmon": {
+     "priorityHighFirst": [
+      {
+       "to": "atlurkabuterimonred",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "cannonbeemon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "okuwamon",
+       "vvMin": 2000,
+       "winMin": 40,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "sunflowmon": {
+     "priorityHighFirst": [
+      {
+       "to": "eosmonperfect",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "lilamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "cannonbeemon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "kuwagamon": {
+     "priorityHighFirst": [
+      {
+       "to": "cannonbeemon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "okuwamon",
+       "vvMin": 2000,
+       "winMin": 40,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "hudiemon": {
+     "priorityHighFirst": [
+      {
+       "to": "eosmonperfect",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "cannonbeemon",
+       "vvMin": 2000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "atlurkabuterimonred": {
+     "priorityHighFirst": [
+      {
+       "to": "rosemon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "heraklekabuterimon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "cannonbeemon": {
+     "priorityHighFirst": [
+      {
+       "to": "heraklekabuterimon",
+       "vvMin": 3000,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "tigervespamon",
+       "vvMin": 3000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "grankuwagamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "lilamon": {
+     "priorityHighFirst": [
+      {
+       "to": "rosemonburstmode",
+       "vvMin": 3500,
+       "winMin": 70,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "rosemon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "bancholilimon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": [
+      [
+       "rosemon",
+       "bancholilimon"
+      ]
+     ]
+    },
+    "okuwamon": {
+     "priorityHighFirst": [
+      {
+       "to": "tigervespamon",
+       "vvMin": 3000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "grankuwagamon",
+       "vvMin": 2500,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    },
+    "eosmonperfect": {
+     "priorityHighFirst": [
+      {
+       "to": "bancholilimon",
+       "vvMin": 3500,
+       "winMin": 60,
+       "fallback": false,
+       "jogress": false
+      },
+      {
+       "to": "tigervespamon",
+       "vvMin": 3000,
+       "winMin": 50,
+       "fallback": false,
+       "jogress": false
+      }
+     ],
+     "unresolvedTies": []
+    }
+   },
+   "coverage": {
+    "appEdges": 40,
+    "withStatedCondition": 40,
+    "unknown": 0,
+    "ratio": "40/40",
+    "extraCardEdgesNotInApp": 2,
+    "note": "Every app edge appears in the humulos detail popups with an explicit requirement line (Baby I->II is stated as \"No requirements\"). Numeric conditions come from a single source (humulos); Wikimon corroborates the routes and Jogress partners but states no numbers."
+   }
+  }
+ }
+}
