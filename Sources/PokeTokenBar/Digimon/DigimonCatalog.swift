@@ -46,6 +46,11 @@ struct DigimonLine: Sendable, Hashable {
     let eggColorHex: String
     let firstBaby: String
     let members: [String]
+    /// The card's own evolutions as "from>to". Growth follows only these; nil = every evolution
+    /// between members (test catalogs). The same two Digimon can be linked on one card and not another.
+    var steps: Set<String>? = nil
+    /// Steps that are a Jogress (a merge) on this card: kept in the data, never taken by growth.
+    var mergeSteps: Set<String> = []
 }
 
 /// Evolution *data*: who can become whom. Conditions live in `EvolutionRules`.
@@ -72,6 +77,7 @@ struct DigimonCatalog: Sendable {
         let members = Set(line.members)
         return (outgoing[key] ?? []).filter { evo in
             members.contains(evo.to) && species[evo.to]?.level == nextLevel
+                && line.steps.map { $0.contains("\(key)>\(evo.to)") } ?? true
         }
     }
 }

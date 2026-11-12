@@ -43,12 +43,12 @@ struct DigimonDex {
         let special = rules.specialJogress.filter { line.members.contains($0.from) && line.members.contains($0.to) }
             .map { DigimonEvolution(from: $0.from, to: $0.to, sources: [.vitalBracelet], canon: false) }
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
-            .filter { !rules.lockedEdges.contains("\($0.from)>\($0.to)") } + special
+            .filter { !rules.isLocked($0.from, $0.to, in: line) } + special
         let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
             let incoming = allSteps.filter { $0.to == species.key }
             let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
-                && incoming.allSatisfy { rules.lockedEdges.contains("\($0.from)>\($0.to)") }
+                && incoming.allSatisfy { rules.isLocked($0.from, $0.to, in: line) }
             let jogressFrom = rules.specialJogress.filter { $0.to == species.key }.map(\.from)
             let secret: Secret? = !jogressFrom.isEmpty ? .specialJogress(partners: Array(Set(jogressFrom)).sorted())
                 : rules.locked.contains(species.key) ? .locked

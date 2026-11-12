@@ -6,7 +6,7 @@ final class DigimonLinesTests: XCTestCase {
     private let engine = EvolutionEngine()
     private var catalog: DigimonCatalog { engine.catalog }
 
-    private func state(at key: String, line: String) -> DigimonState {
+    private func state(at key: String, line: String, in catalog: DigimonCatalog = .mvp) -> DigimonState {
         var s = DigimonState.newEgg(lineID: line)
         s.partner.speciesKey = key
         s.partner.level = catalog.species(key)!.level
@@ -43,9 +43,15 @@ final class DigimonLinesTests: XCTestCase {
         }
     }
 
+    /// Every Jogress step on a card's own routes (`mergeSteps` is a subset of `steps`).
+    private func merges(_ line: String) -> Set<String> { catalog.lines[line]!.mergeSteps }
+
     func testJogressOnlyStepsAreLockedButTheDataKeepsThem() {
-        XCTAssertFalse(DigimonCatalogData.jogressEdges.isEmpty)
-        XCTAssertEqual(EvolutionRules.mvp.lockedEdges, DigimonCatalogData.jogressEdges)
+        for line in catalog.lines.values {
+            XCTAssertTrue(line.mergeSteps.isSubset(of: line.steps ?? []), "\(line.id): a merge step off the card")
+        }
+        XCTAssertFalse(merges("agumon").isEmpty)
+        XCTAssertTrue(EvolutionRules.mvp.lockedEdges.isEmpty, "the card data locks its own merges")
         // Lock a normal step the same way: the candidate disappears, the evolution data does not.
         let s = state(at: "agumon", line: "agumon")
         var rules = EvolutionRules.mvp
@@ -56,21 +62,48 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertTrue(catalog.nextEvolutions(from: "agumon", in: catalog.lines["agumon"]!).contains { $0.to == "greymon" })
     }
 
+    /// Two cards with the same Digimon: each card's own routes and merges decide, not the other's.
+    func testEachCardKeepsItsOwnRoutesAndMerges() {
+        let species = ["agumon", "greymon"].map { DigimonCatalog.mvp.species($0)! }
+            + [DigimonSpecies(key: "tyranomon", name: "Tyranomon", koreanName: "티라노몬", level: .adult,
+                              attribute: .data, vbSprite: "x.png", colorSprite: "")]
+        let evolutions = ["greymon", "tyranomon"].map {
+            DigimonEvolution(from: "agumon", to: $0, sources: [.vitalBracelet], canon: false)
+        }
+        let a = DigimonLine(id: "a", card: "A", eggColorHex: "000000", firstBaby: "agumon",
+                            members: ["agumon", "greymon", "tyranomon"],
+                            steps: ["agumon>greymon", "agumon>tyranomon"], mergeSteps: ["agumon>greymon"])
+        let b = DigimonLine(id: "b", card: "B", eggColorHex: "000000", firstBaby: "agumon",
+                            members: ["agumon", "greymon", "tyranomon"], steps: ["agumon>greymon"])
+        let two = DigimonCatalog(species: species, evolutions: evolutions, lines: [a, b])
+        XCTAssertEqual(two.nextEvolutions(from: "agumon", in: a).map(\.to), ["greymon", "tyranomon"])
+        XCTAssertEqual(two.nextEvolutions(from: "agumon", in: b).map(\.to), ["greymon"],
+                       "Tyranomon is not on card B, although both are members")
+        let engine = EvolutionEngine(catalog: two, rules: EvolutionRules(hidden: [:], locked: []))
+        XCTAssertEqual(engine.candidates(for: state(at: "agumon", line: "a", in: two)), ["tyranomon"],
+                       "a merge on card A")
+        XCTAssertEqual(engine.candidates(for: state(at: "agumon", line: "b", in: two)), ["greymon"],
+                       "the same step is a normal route on card B")
+    }
+
     /// Wikimon writes a Vital Bracelet merge as "(with a ... Adult ...)" without the word Jogress;
     /// the first data build missed that, so Algomon could grow into Andromon on its own.
     func testVitalBraceletMergeNotesAreLockedButOptionalPartnersAreNot() {
-        for step in ["algomonadult>andromon", "algomonadult>anomalocarimon", "algomonadult>parrotmon",
-                     "algomonadult>valvemon", "neodevimon>wargreymon"] {
-            XCTAssertTrue(DigimonCatalogData.jogressEdges.contains(step), step)
+        for (line, step) in [("agumon", "algomonadult>andromon"), ("agumon", "algomonadult>anomalocarimon"),
+                             ("gabumon", "algomonadult>parrotmon"), ("gabumon", "algomonadult>valvemon"),
+                             ("agumon", "neodevimon>wargreymon")] {
+            XCTAssertTrue(merges(line).contains(step), step)
         }
         // Wikimon writes these "(with or without ...)" because other games need no partner; on these
         // exact cards they are a Jogress (tools/digimon/research).
-        for step in ["coelamon>metaltyranomon", "greymon>andromon", "mamemon>wargreymon", "bigmamemon>metalgarurumon",
-                     "paildramon>ulforcevdramon", "xvmon>aerovdramon", "megalogrowmon>dukemonxantibody",
-                     "megalogrowmonorange>dukemon", "megalogrowmonorange>megidramon"] {
-            XCTAssertTrue(DigimonCatalogData.jogressEdges.contains(step), "\(step) is a Jogress on its card")
+        for (line, step) in [("agumon", "coelamon>metaltyranomon"), ("agumon", "greymon>andromon"),
+                             ("agumon", "mamemon>wargreymon"), ("gabumon", "bigmamemon>metalgarurumon"),
+                             ("vmon", "paildramon>ulforcevdramon"), ("vmon", "xvmon>aerovdramon"),
+                             ("guilmon", "megalogrowmon>dukemonxantibody"), ("guilmon", "megalogrowmonorange>dukemon"),
+                             ("guilmon", "megalogrowmonorange>megidramon")] {
+            XCTAssertTrue(merges(line).contains(step), "\(step) is a Jogress on its card")
         }
-        XCTAssertFalse(DigimonCatalogData.jogressEdges.contains("andromon>wargreymon"), "(with or without Cyberdramon)")
+        XCTAssertFalse(merges("agumon").contains("andromon>wargreymon"), "(with or without Cyberdramon)")
         let algomon = state(at: "algomonadult", line: "agumon")
         XCTAssertEqual(Set(engine.candidates(for: algomon)), ["mamemon", "metalgreymon", "metaltyranomon"])
     }

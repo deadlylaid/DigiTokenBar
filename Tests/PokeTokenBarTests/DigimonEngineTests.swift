@@ -50,11 +50,11 @@ final class DigimonEngineTests: XCTestCase {
                 guard let species = catalog.species(key), species.level != .ultimate else { continue }
                 // Hidden evolutions count: when one is the only way on, it opens without its condition.
                 let open = catalog.nextEvolutions(from: key, in: line)
-                    .filter { !rules.locked.contains($0.to) && !rules.lockedEdges.contains("\($0.from)>\($0.to)") }
+                    .filter { !rules.locked.contains($0.to) && !rules.isLocked($0.from, $0.to, in: line) }
                 let reachedOnlyByMerge = !catalog.lines.values.contains { l in
                     l.members.contains { from in
                         catalog.nextEvolutions(from: from, in: l).contains {
-                            $0.to == key && !rules.lockedEdges.contains("\(from)>\(key)") && !rules.locked.contains(key)
+                            $0.to == key && !rules.isLocked(from, key, in: l) && !rules.locked.contains(key)
                         }
                     }
                 } && key != line.firstBaby

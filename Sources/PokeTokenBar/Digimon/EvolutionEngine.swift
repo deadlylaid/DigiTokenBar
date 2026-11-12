@@ -48,7 +48,8 @@ struct EvolutionRules: Sendable {
     var hidden: [String: HiddenCondition]
     /// Never offered by normal growth (e.g. Jogress results, added after the MVP).
     var locked: Set<String>
-    /// Single evolutions ("from>to") that only happen as a Jogress, so growth never takes them.
+    /// Single evolutions ("from>to") growth never takes, on every line. The card data adds its own
+    /// Jogress steps per line (`DigimonLine.mergeSteps`); see `isLocked`.
     var lockedEdges: Set<String> = []
     /// Named Jogress across cards (the device's War Greymon + Metal Garurumon = Omegamon). The app has
     /// no backup slot, so the partner counts once it is in the dex (raised before). It takes the place
@@ -69,7 +70,6 @@ struct EvolutionRules: Sendable {
             "nidhoggmon": .limitHits(atLeast: 3),
         ],
         locked: ["omegamon"],
-        lockedEdges: DigimonCatalogData.jogressEdges,
         specialJogress: [
             SpecialJogress(from: "wargreymon", partner: "metalgarurumon", to: "omegamon"),
             SpecialJogress(from: "metalgarurumon", partner: "wargreymon", to: "omegamon"),
@@ -83,6 +83,12 @@ struct EvolutionRules: Sendable {
             $0.from == current && state.dex.contains($0.partner) && line.members.contains($0.to)
                 && catalog.species($0.to) != nil
         }
+    }
+
+    /// A step growth never takes on this line: a Jogress on its card, or locked everywhere.
+    func isLocked(_ from: String, _ to: String, in line: DigimonLine) -> Bool {
+        let step = "\(from)>\(to)"
+        return lockedEdges.contains(step) || line.mergeSteps.contains(step)
     }
 
     func isMet(_ condition: HiddenCondition, by signals: GrowthSignals) -> Bool {
@@ -251,7 +257,7 @@ struct EvolutionEngine: Sendable {
         guard let current = state.partner.speciesKey else { return [line.firstBaby] }
         let signals = state.partner.stageSignals
         let open = catalog.nextEvolutions(from: current, in: line).filter { evo in
-            !rules.locked.contains(evo.to) && !rules.lockedEdges.contains("\(current)>\(evo.to)")
+            !rules.locked.contains(evo.to) && !rules.isLocked(current, evo.to, in: line)
         }
         let earned = open.filter { evo in rules.hidden[evo.to].map { rules.isMet($0, by: signals) } ?? true }
         // A hidden evolution that is the only way on is the device's normal route (NeoDevimon ->
