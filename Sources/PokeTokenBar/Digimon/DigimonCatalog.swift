@@ -71,13 +71,16 @@ struct DigimonCatalog: Sendable {
 
     func species(_ key: String) -> DigimonSpecies? { species[key] }
 
-    /// Evolutions from `key` to the next level, limited to the members of `line`.
+    /// Evolutions from `key` to the next level, limited to the members and routes of `line`. A route
+    /// that skips levels counts only when the card has it (D-3 White and Red: Ukkomon, a Child, becomes
+    /// Big Ukkomon, an Ultimate).
     func nextEvolutions(from key: String, in line: DigimonLine) -> [DigimonEvolution] {
         guard let level = species[key]?.level, let nextLevel = level.next else { return [] }
         let members = Set(line.members)
         return (outgoing[key] ?? []).filter { evo in
-            members.contains(evo.to) && species[evo.to]?.level == nextLevel
-                && line.steps.map { $0.contains("\(key)>\(evo.to)") } ?? true
+            guard members.contains(evo.to), let to = species[evo.to]?.level else { return false }
+            guard let steps = line.steps else { return to == nextLevel }
+            return to > level && steps.contains("\(key)>\(evo.to)")
         }
     }
 }

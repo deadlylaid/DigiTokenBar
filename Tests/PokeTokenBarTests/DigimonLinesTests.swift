@@ -14,7 +14,7 @@ final class DigimonLinesTests: XCTestCase {
     }
 
     func testEveryLineIsWellFormed() {
-        XCTAssertEqual(catalog.lines.keys.sorted(), ["agumon", "gabumon", "guilmon", "piyomon", "tentomon", "vmon"])
+        XCTAssertEqual(catalog.lines.count, 34)
         for line in catalog.lines.values {
             XCTAssertEqual(catalog.species(line.firstBaby)?.level, .babyI, line.id)
             XCTAssertEqual(catalog.species(line.id)?.level, .child, "\(line.id) names its line after a Child on the card")
@@ -84,6 +84,80 @@ final class DigimonLinesTests: XCTestCase {
                        "a merge on card A")
         XCTAssertEqual(engine.candidates(for: state(at: "agumon", line: "b", in: two)), ["greymon"],
                        "the same step is a normal route on card B")
+    }
+
+    /// Every Digimon in a line's dex can be met there: from the first baby by the card's routes (a
+    /// merge step counts, the dex marks it) or by a named Ultimate merge. Shakamon and Tyrant
+    /// Kabuterimon used to sit in their dex with no way in: their merges were in a research list the
+    /// generator did not read.
+    func testEveryLineMemberCanBeMet() {
+        for line in catalog.lines.values {
+            var met: Set<String> = [line.firstBaby]
+            var grew = true
+            while grew {
+                grew = false
+                for key in met {
+                    let next = catalog.nextEvolutions(from: key, in: line).map(\.to)
+                        + EvolutionRules.mvp.specialJogress.filter { $0.from == key && line.members.contains($0.to) }.map(\.to)
+                    for to in next where !met.contains(to) {
+                        met.insert(to)
+                        grew = true
+                    }
+                }
+            }
+            XCTAssertEqual(Set(line.members).subtracting(met), [], "\(line.id): no way to meet these")
+        }
+    }
+
+    /// The research writes "Choose one: <stats> / Jogress with ..." as a normal route plus a Jogress
+    /// route for the same step. Only a step with nothing but Jogress routes is a merge (the first
+    /// build locked the step whenever one of its routes was a Jogress: Wizarmon could not grow).
+    func testAChooseOneStepIsNotLockedButAMergeOnlyStepIs() {
+        for (line, step) in [("gabumonblack", "garurumonblack>weregarurumonsagittariusmode"),
+                             ("gabumonblack", "garurumonblack>pandamon"), ("impmon", "wizarmon>baalmon"),
+                             ("impmon", "baalmon>beelzebumon")] {
+            XCTAssertTrue(catalog.lines[line]!.steps!.contains(step), step)
+            XCTAssertFalse(merges(line).contains(step), "\(step) also has a stat route on its card")
+        }
+        for (line, step) in [("gabumonblack", "drimogemon>pandamon"), ("espimon", "tialudomon>digitamamon"),
+                             ("pulsemon", "exermon>boutmon")] {
+            XCTAssertTrue(merges(line).contains(step), "\(step) is only a Jogress on its card")
+        }
+        XCTAssertEqual(Set(engine.candidates(for: state(at: "wizarmon", line: "impmon"))), ["baalmon"])
+    }
+
+    /// D-3 White and Red: Ukkomon (a Child) becomes Big Ukkomon (an Ultimate) on that card only.
+    func testACardRouteMaySkipLevels() {
+        var s = state(at: "ukkomon", line: "hawkmon")
+        XCTAssertEqual(engine.candidates(for: s), ["bigukkomon"])
+        s.partner.stageExp = engine.growth.threshold(for: .child)
+        let events = engine.settle(&s, at: Date())
+        XCTAssertEqual(events, [.evolved(from: "ukkomon", to: "bigukkomon")])
+        XCTAssertEqual(s.partner.level, .ultimate, "the level follows the species, not one step up")
+        XCTAssertTrue(DigimonCatalog.mvp.lines.values.filter { $0.id != "hawkmon" && $0.members.contains("ukkomon") }
+            .allSatisfy { line in !catalog.nextEvolutions(from: "ukkomon", in: line).contains { $0.to == "bigukkomon" } })
+    }
+
+    /// Ultimate + Ultimate merges come from the card research (both partners name each other), the
+    /// same way as War Greymon + Metal Garurumon = Omegamon.
+    func testNamedUltimateMergesComeFromTheResearch() {
+        let pairs = Set(EvolutionRules.mvp.specialJogress.map { "\($0.from)+\($0.partner)=\($0.to)" })
+        for pair in ["wargreymon+metalgarurumon=omegamon", "metalgarurumon+wargreymon=omegamon",
+                     "apollomon+dianamon=gracenovamon", "dianamon+apollomon=gracenovamon",
+                     "blackwargreymon+metalgarurumonblack=omegamonzwart", "alphamon+ouryumon=alphamonouryuken",
+                     "dominimon+xiangpengmon=shakamon", "grankuwagamon+heraklekabuterimon=tyrantkabuterimon"] {
+            XCTAssertTrue(pairs.contains(pair), pair)
+        }
+        XCTAssertEqual(pairs.count, 20, "ten merges, both directions")
+        for merge in EvolutionRules.mvp.specialJogress {
+            XCTAssertTrue(EvolutionRules.mvp.locked.contains(merge.to), "growth never takes \(merge.to)")
+            XCTAssertTrue(catalog.lines.values.contains { $0.members.contains(merge.from) && $0.members.contains(merge.to) },
+                          "\(merge.to) is on \(merge.from)'s card")
+        }
+        var s = state(at: "apollomon", line: "gaomon")
+        s.dex = ["dianamon"]
+        s.partner.stageExp = engine.growth.threshold(for: .ultimate)
+        XCTAssertEqual(engine.settle(&s, at: Date()), [.evolved(from: "apollomon", to: "gracenovamon")])
     }
 
     /// Wikimon writes a Vital Bracelet merge as "(with a ... Adult ...)" without the word Jogress;

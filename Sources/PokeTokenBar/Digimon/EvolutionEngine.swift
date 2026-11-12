@@ -56,7 +56,7 @@ struct EvolutionRules: Sendable {
     /// of graduation when the stage is full.
     var specialJogress: [SpecialJogress] = []
 
-    struct SpecialJogress: Sendable, Equatable {
+    struct SpecialJogress: Sendable, Equatable, Hashable {
         let from: String
         let partner: String
         let to: String
@@ -69,11 +69,9 @@ struct EvolutionRules: Sendable {
             "donedevimon": .limitHits(atLeast: 3),
             "nidhoggmon": .limitHits(atLeast: 3),
         ],
-        locked: ["omegamon"],
-        specialJogress: [
-            SpecialJogress(from: "wargreymon", partner: "metalgarurumon", to: "omegamon"),
-            SpecialJogress(from: "metalgarurumon", partner: "wargreymon", to: "omegamon"),
-        ])
+        // A named Jogress result is reached only by that merge, never by growth.
+        locked: Set(DigimonCatalogData.specialJogress.map(\.to)),
+        specialJogress: DigimonCatalogData.specialJogress)
 
     /// The special Jogress this Digimon can do now, if any.
     func specialJogress(for state: DigimonState, in catalog: DigimonCatalog) -> SpecialJogress? {

@@ -33,10 +33,12 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Catalog
 
-    func testCatalogHasSixLinesOf106SpeciesWithLargeSprites() {
+    func testCatalogHas34LinesOf521SpeciesWithLargeSprites() {
         let catalog = DigimonCatalog.mvp
-        XCTAssertEqual(Set(catalog.lines.keys), ["agumon", "gabumon", "piyomon", "tentomon", "vmon", "guilmon"])
-        XCTAssertEqual(catalog.species.count, 106)
+        XCTAssertEqual(catalog.lines.count, 34)
+        XCTAssertTrue(Set(["agumon", "gabumon", "piyomon", "tentomon", "vmon", "guilmon"]).isSubset(of: catalog.lines.keys),
+                      "the first six lines stay")
+        XCTAssertEqual(catalog.species.count, 521)
         for species in catalog.species.values {
             XCTAssertTrue(species.vbSprite.hasSuffix("_vpet_vb.png"), species.key)
         }
@@ -277,7 +279,8 @@ final class DigimonEngineTests: XCTestCase {
     }
 
     func testTheDrawFillsUpWithRaisedLinesWhenFewAreLeft() throws {
-        let s = graduatedEgg(at: 5, graduates: ["agumon", "gabumon", "piyomon", "tentomon", "guilmon"])
+        let all = DigimonCatalog.mvp.lines.keys.sorted()
+        let s = graduatedEgg(at: 5, graduates: all.filter { $0 != "vmon" })
         let offer = try XCTUnwrap(s.eggOffer)
         XCTAssertEqual(offer.first, "vmon", "the only line never raised comes first")
         XCTAssertEqual(offer.count, 3)

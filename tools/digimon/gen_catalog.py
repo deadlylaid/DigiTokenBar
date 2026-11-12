@@ -14,6 +14,8 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 DATA = json.loads((HERE / "data" / "evolutions.json").read_text())
 OUT = ROOT / "Sources" / "PokeTokenBar" / "Digimon" / "DigimonCatalogData.swift"
+MOVES = json.loads((HERE / "data" / "moves.json").read_text())["moves"]
+MOVES_OUT = ROOT / "Sources" / "PokeTokenBar" / "Digimon" / "DigimonMovesData.swift"
 
 # line id (a Child species key on the card), Vital Bracelet card name, egg spot color (RGB hex,
 # drawn in code), and which card when several share the name (roster size).
@@ -24,7 +26,39 @@ LINES = [
     ("tentomon", "BEMemory Forest Guardians Dim", "6DB33F", None),
     ("vmon", "Ancient Warriors", "6B5BD6", None),
     ("guilmon", "Guilmon", "D9473B", 17),
+    # Step 7: more DIM and BEMemory cards (research: research/vb-conditions-step7.json).
+    ("pulsemon", "Impulse City", "F7D23E", None),
+    ("vorvomon", "Volcanic Beat", "E2572B", None),
+    ("blucomon", "Blizzard Fang", "7FC8F0", None),
+    ("sangomon", "Infinite Tide", "2E9BB5", None),
+    ("sunarizamon", "Titan of Dust", "C49A5A", None),
+    ("impmon", "Impmon", "5A3E8C", None),
+    ("monodramon", "Monodramon", "B07BD8", None),
+    ("palmon", "Hermit in the Jungle", "8FCB5B", None),
+    ("hagurumon", "Nu Metal Empire", "8A96A3", None),
+    ("ghostmon", "Dynasty of the Evil", "4B4F6B", None),
+    ("agumonblack", "Mad Black Roar", "4A4038", None),
+    ("gabumonblack", "Dim Card Set vol. 0.5: Mad Black Roar & True Shadow Howl", "2F4A6B", None),
+    ("terriermon", "Terriermon", "9BCB7A", 17),
+    ("renamon", "Renamon", "E8A33D", 17),
+    ("wormmon", "Primeval Warriors", "6FAE7A", None),
+    ("espimon", "Espimon", "35506E", None),
+    ("ryudamon", "Ryudamon", "B88A3E", None),
+    ("gammamon", "BEMemory Gammamon Dim", "62B6E8", None),
+    ("angoramon", "BEMemory Angoramon Dim", "E9A9C8", None),
+    ("jellymon", "BEMemory Jellymon Dim", "6AD6C6", None),
+    ("agumon2006animeversion", "BEMemory Dragonic Blaze Dim", "F07A2A", None),
+    ("gaomon", "BEMemory Rampage of The Beast Dim", "3D6FC9", None),
+    ("loogamon", "BEMemory Digimon Seekers Loogamon Dim", "5C4A9E", None),
+    ("commandramon", "BEMemory Digimon Seekers Ryudamon Dim", "6B7F4A", None),
+    ("dorumon", "BEMemory Digimon Seekers DORUmon Dim", "7B5FB0", None),
+    ("armadimon", "BEMemory D-3 White and Yellow Dim", "E6C84A", None),
+    ("hawkmon", "BEMemory D-3 White and Red Dim", "E06A5A", None),
+    ("kudamon", "BEMemory Digimon Seekers Pulsemon Dim", "F2E6A0", None),
 ]
+# Named Jogress between two Ultimates that the research does not list as a route (the first DIM
+# research left it out): War Greymon + Metal Garurumon = Omegamon. Others come from the research.
+EXTRA_SPECIAL = [("wargreymon", "metalgarurumon", "omegamon")]
 LEVEL = {"Baby I": "babyI", "Baby II": "babyII", "Child": "child", "Adult": "adult",
          "Perfect": "perfect", "Ultimate": "ultimate"}
 ORDER = ["babyI", "babyII", "child", "adult", "perfect", "ultimate"]
@@ -53,7 +87,7 @@ RESEARCH = sorted((HERE / "research").glob("vb-conditions-*.json"))
 def edge_kind(e):
     if e.get("kind"):
         return e["kind"]
-    if (e.get("requirements") or {}).get("jogress"):
+    if (e.get("requirements") or {}).get("jogress") or "jogress with" in (e.get("raw") or "").lower():
         return "jogress"
     return "fallback" if e.get("isFallback") else "normal"
 
@@ -65,7 +99,8 @@ def research_cards():
         for line_id, card in json.loads(path.read_text())["cards"].items():
             if line_id in out:
                 raise SystemExit(f"{line_id}: researched twice ({path.name})")
-            out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in card["edges"]
+            # `extraEdges`: routes on the card the first research found missing from the app data.
+            out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in card["edges"] + card.get("extraEdges", [])
                             if e.get("onCard", True) is not False]
     return out
 
@@ -75,6 +110,38 @@ def is_jogress_only(edge):
     as an alternative is written the other way round ("0-2 Care Mistakes ... OR ... Jogress")."""
     note = (edge.get("jogress") or "").strip().lower()
     return note.startswith("jogress with")
+
+
+def js_str(s):
+    return "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
+
+
+def write_moves(keys):
+    """The scene's move table (a JS object body, interpolated into DigimonSceneHTML.page)."""
+    missing = [k for k in keys if k not in MOVES]
+    if missing:
+        print(f"no move yet for {len(missing)} species: {', '.join(missing[:8])}{' ...' if len(missing) > 8 else ''}")
+    rows = []
+    for k in keys:
+        m = MOVES.get(k)
+        if m:
+            rows.append(f"  {k}: {{ko: {js_str(m['ko'])}, en: {js_str(m['en'])}, kind: {js_str(m['kind'])}}},")
+    body = "\n".join(rows)
+    if '"""#' in body or "\\#(" in body:
+        raise SystemExit("a move name would break the Swift raw string")
+    MOVES_OUT.write_text("\n".join([
+        "// Generated by tools/digimon/gen_catalog.py from tools/digimon/data/moves.json. Do not edit.",
+        "// Korean from the official Korean Digimon reference (digimon.net/reference_ko), English from the",
+        "// Japanese originals (digimon.net/reference_en, or Wikimon where reference_en uses a dub name).",
+        "",
+        "enum DigimonMovesData {",
+        "    /// Body of the scene's `MOVES` object: `key: {ko, en, kind}`; kind picks the drawn attack shape.",
+        '    static let js = #"""',
+        body,
+        '"""#',
+        "}",
+        "",
+    ]))
 
 
 def swift_str(s):
@@ -107,7 +174,9 @@ def main():
         sp = n["sprites"]
         if "vb" not in sp:
             raise SystemExit(f"{k}: no 64x64 Vital Bracelet sprite")
-        species.append((k, n["name"], KO_OVERRIDES.get(k) or n["ko"] or n["name"], level, ATTR.get(n.get("attribute", ""), "unknown"),
+        # Korean name: a checked override, then the official reference name found with the move.
+        ko = KO_OVERRIDES.get(k) or MOVES.get(k, {}).get("koSpecies") or n["ko"] or n["name"]
+        species.append((k, n["name"], ko, level, ATTR.get(n.get("attribute", ""), "unknown"),
                         sp["vb"], sp.get("dmc") or sp.get("dpc") or ""))
 
     level_of = {s[0]: s[3] for s in species}
@@ -124,18 +193,32 @@ def main():
     device = research_cards()
     evo = dict(wikimon)
     steps_of, merges_of = {}, {}
+    special = {}   # result -> {from, ...}: Ultimates that merge into another Ultimate
     for line_id, _, _, _, roster in lines:
         members = set(roster)
         if line_id in device:
             routes = [(a, b, k) for a, b, k in device[line_id] if a in members and b in members]
+            # "Choose one: <stats> / Jogress with ..." is written as two routes for the same step; the
+            # step is a merge only when every route for it is a Jogress.
+            kinds = {}
             for a, b, k in routes:
-                if not next_level(a, b):
-                    raise SystemExit(f"{line_id}: {a}>{b} skips a level")
+                kinds.setdefault((a, b), set()).add(k)
+            steps, merges = set(), set()
+            for a, b, k in routes:
+                up = ORDER.index(level_of[b]) - ORDER.index(level_of[a])
+                if up == 0 and k == "jogress":
+                    special.setdefault(b, set()).add(a)   # a full Ultimate merges instead of graduating
+                    continue
+                if up <= 0:
+                    raise SystemExit(f"{line_id}: {a}>{b} does not go up a level")
+                if up > 1:
+                    print(f"{line_id}: {a}>{b} skips {up - 1} level(s) on the card, kept")
                 if (a, b) not in evo:
                     print(f"{line_id}: {a}>{b} is on the card but not in the Wikimon data, added")
                     evo[(a, b)] = (["vb"], False, False)
-            steps = {(a, b) for a, b, _ in routes}
-            merges = {(a, b) for a, b, k in routes if k == "jogress"}
+                steps.add((a, b))
+                if kinds[(a, b)] == {"jogress"}:
+                    merges.add((a, b))
             dropped = sorted(f"{a}>{b}" for (a, b) in wikimon if a in members and b in members and (a, b) not in steps)
             if dropped:
                 print(f"{line_id}: not on the card, left out: {', '.join(dropped)}")
@@ -144,6 +227,56 @@ def main():
             merges = {(a, b) for (a, b) in steps if wikimon[(a, b)][2]}
             print(f"{line_id}: no card research, using every Wikimon device route")
         steps_of[line_id], merges_of[line_id] = steps, merges
+    for a, partner, b in EXTRA_SPECIAL:
+        special.setdefault(b, set()).update({a, partner})
+    jogress = []   # (from, partner, to), both directions
+    for b, froms in sorted(special.items()):
+        if len(froms) != 2:
+            raise SystemExit(f"{b}: a named Jogress needs exactly two partners, got {sorted(froms)}")
+        x, y = sorted(froms)
+        jogress += [(x, y, b), (y, x, b)]
+
+    # A Digimon the card can never reach (no route in from the egg, not even a merge) is left out
+    # of the line, so the dex does not show one that cannot be met there.
+    pruned = []
+    for i, (line_id, card_name, egg, baby1, roster) in enumerate(lines):
+        reach, grew = {baby1}, True
+        while grew:
+            grew = False
+            for a, b in steps_of[line_id]:
+                if a in reach and b not in reach:
+                    reach.add(b); grew = True
+            for a, partner, b in jogress:
+                if a in reach and b in roster and b not in reach:
+                    reach.add(b); grew = True
+        gone = [k for k in roster if k not in reach]
+        if gone:
+            print(f"{line_id}: no route reaches {', '.join(gone)} on this card, left out of the line")
+        # A Digimon below Ultimate with no way on (its next forms are missing from the Wikimon data,
+        # e.g. Arresterdramon -> Savior Hackmon) would end the line early: left out too, and so is a
+        # Digimon whose only way on led there.
+        merging = {a for a, _, b in jogress if b in roster}
+        while True:
+            alive = reach - set(gone)
+            dead = [k for k in roster if k in alive and level_of[k] != "ultimate" and k not in merging
+                    and not any(a == k and b in alive and (a, b) not in merges_of[line_id] for a, b in steps_of[line_id])]
+            if not dead:
+                break
+            print(f"{line_id}: {', '.join(dead)} cannot grow on (next forms missing), left out of the line")
+            gone += dead
+        if gone:
+            reach -= set(gone)
+            steps_of[line_id] = {(a, b) for (a, b) in steps_of[line_id] if a in reach and b in reach}
+            merges_of[line_id] &= steps_of[line_id]
+        # Without its first baby the egg has nothing to hatch into, and the engine would try forever.
+        if baby1 not in reach:
+            raise SystemExit(f"{line_id}: its first baby {baby1} cannot grow up to an Ultimate on this card; "
+                             "fix the data or leave the line out")
+        pruned.append((line_id, card_name, egg, baby1, [k for k in roster if k in reach]))
+    lines = pruned
+    keep = {k for *_, roster in lines for k in roster}
+    species = [sp for sp in species if sp[0] in keep]
+    keys = [k for k in keys if k in keep]
 
     out = [
         "// Generated by tools/digimon/gen_catalog.py from tools/digimon/data/evolutions.json and the",
@@ -164,6 +297,12 @@ def main():
         src = ", ".join("." + {"vb": "vitalBracelet", "dmc": "digitalMonsterColor", "dpc": "pendulumColor"}[s]
                         for s in srcs)
         out.append(f"        DigimonEvolution(from: {swift_str(a)}, to: {swift_str(b)}, sources: [{src}], canon: {str(canon).lower()}),")
+    out += ["    ]", "",
+            "    /// Named Jogress between two Ultimates: with the partner raised before, a full stage merges",
+            "    /// instead of graduating (EvolutionRules.specialJogress). Both directions are listed.",
+            "    static let specialJogress: [EvolutionRules.SpecialJogress] = ["]
+    for a, partner, b in jogress:
+        out.append(f"        .init(from: {swift_str(a)}, partner: {swift_str(partner)}, to: {swift_str(b)}),")
     out += ["    ]", "", "    static let lines: [DigimonLine] = ["]
     step = lambda ab: swift_str(f"{ab[0]}>{ab[1]}")
     for line_id, card_name, egg, baby1, roster in lines:
@@ -178,6 +317,7 @@ def main():
     out += ["    ]", "}", ""]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(out))
+    write_moves(keys)
     print(f"{len(species)} species, {len(used)} evolutions, {len(lines)} lines -> {OUT.relative_to(ROOT)}")
 
 
