@@ -1,7 +1,7 @@
 {
  "meta": {
   "source": "Wikimon (https://wikimon.net) - text licensed CC BY-SA 3.0; sprites are not included",
-  "fetched": "2026-11-08",
+  "fetched": "2026-11-13",
   "sprite_list": "Wikimon file names snapshot (tools/digimon/.cache/wikimon_images.json)",
   "edge_sources": "VB = Vital Bracelet (from Digimon pages), DMC/DPC = color V-Pet device pages or references"
  },
@@ -858,6 +858,26 @@
     "vb": "Arresterdramon_vpet_vb.png"
    }
   },
+  "arresterdramonsuperiormodebravesnatcher": {
+   "name": "Arresterdramon: Superior Mode (Brave Snatcher)",
+   "ko": "아레스타드라몬: 슈페리올 모드",
+   "level": "Perfect",
+   "attribute": "Vaccine",
+   "levels": [
+    "Perfect",
+    "No Level"
+   ],
+   "attributes": [
+    "Free",
+    "None",
+    "Unknown",
+    "Vaccine"
+   ],
+   "sprites": {
+    "dmc": "Arresterdramon_superior_brave_snatcher_vpet_dmc.gif",
+    "vb": "Arresterdramon_superior_brave_snatcher_vpet_vb.png"
+   }
+  },
   "artiomon": {
    "name": "Artiomon",
    "ko": "아르티오몬",
@@ -1178,6 +1198,21 @@
    ],
    "sprites": {
     "vb": "Banchostingmon_vpet_vb.png"
+   }
+  },
+  "baohuckmon": {
+   "name": "Bao Huckmon",
+   "ko": "바오헉몬",
+   "level": "Adult",
+   "attribute": "Data",
+   "levels": [
+    "Adult"
+   ],
+   "attributes": [
+    "Data"
+   ],
+   "sprites": {
+    "vb": "Baohackmon_vpet_vb.png"
    }
   },
   "bastemon": {
@@ -4598,6 +4633,21 @@
     "vb": "Gesomon_vpet_vb.png"
    }
   },
+  "ghilliedhumon": {
+   "name": "Ghilliedhumon",
+   "ko": "길리두몬",
+   "level": "Perfect",
+   "attribute": "Data",
+   "levels": [
+    "Perfect"
+   ],
+   "attributes": [
+    "Data"
+   ],
+   "sprites": {
+    "vb": "Ghilliedumon_vpet_vb.png"
+   }
+  },
   "ghostmon": {
    "name": "Ghostmon",
    "ko": "아이고스몬",
@@ -5827,6 +5877,21 @@
     "vb": "Huankunmon_vpet_vb.png"
    }
   },
+  "huckmon": {
+   "name": "Huckmon",
+   "ko": "헉몬",
+   "level": "Child",
+   "attribute": "Data",
+   "levels": [
+    "Child"
+   ],
+   "attributes": [
+    "Data"
+   ],
+   "sprites": {
+    "vb": "Hackmon_vpet_vb.png"
+   }
+  },
   "hudiemon": {
    "name": "Hudiemon",
    "ko": "후디에몬",
@@ -6639,6 +6704,21 @@
    ],
    "sprites": {
     "dpc": "Knightmon_vpet_dpc.gif"
+   }
+  },
+  "kodokugumonchild": {
+   "name": "Kodokugumon Child",
+   "ko": "",
+   "level": "Child",
+   "attribute": "Virus",
+   "levels": [
+    "Child"
+   ],
+   "attributes": [
+    "Virus"
+   ],
+   "sprites": {
+    "vb": "Kodokugumon_vpet_vb.png"
    }
   },
   "koemon": {
@@ -10990,6 +11070,21 @@
     "dpc": "Sanzomon_vpet_dpc.gif"
    }
   },
+  "saviorhuckmon": {
+   "name": "Savior Huckmon",
+   "ko": "세이버헉몬",
+   "level": "Perfect",
+   "attribute": "Data",
+   "levels": [
+    "Perfect"
+   ],
+   "attributes": [
+    "Data"
+   ],
+   "sprites": {
+    "vb": "Saviorhackmon_vpet_vb.png"
+   }
+  },
   "scorpiomon": {
    "name": "Scorpiomon",
    "ko": "전갈몬",
@@ -14446,6 +14541,21 @@
    "sprites": {
     "dpc": "Digitama_virusbusters_vpet_dpc.gif"
    }
+  },
+  "tailmonchild": {
+   "name": "Tailmon (Child)",
+   "ko": "",
+   "level": "Child",
+   "attribute": "Vaccine",
+   "levels": [
+    "Child"
+   ],
+   "attributes": [
+    "Vaccine"
+   ],
+   "sprites": {
+    "vb": "Tailmon_child_vpet_vb.png"
+   }
   }
  },
  "edges": [
@@ -14676,6 +14786,13 @@
     "VB"
    ],
    "canon": true
+  },
+  {
+   "from": "agumon2006animeversion",
+   "to": "baohuckmon",
+   "sources": [
+    "VB"
+   ]
   },
   {
    "from": "agumon2006animeversion",
@@ -15565,6 +15682,37 @@
    ]
   },
   {
+   "from": "arresterdramon",
+   "to": "arresterdramonsuperiormodebravesnatcher",
+   "sources": [
+    "DMC",
+    "DMC:Digital Monster COLOR Digimon Xros Wars 15th Edition",
+    "VB"
+   ],
+   "canon": true
+  },
+  {
+   "from": "arresterdramon",
+   "to": "saviorhuckmon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "arresterdramonsuperiormodebravesnatcher",
+   "to": "jesmon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "arresterdramonsuperiormodebravesnatcher",
+   "to": "magnakidmon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
    "from": "astamon",
    "to": "ancientmegatheriumon",
    "sources": [
@@ -15795,6 +15943,13 @@
   {
    "from": "babydmon",
    "to": "gumdramon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "babydmon",
+   "to": "huckmon",
    "sources": [
     "VB"
    ]
@@ -16052,6 +16207,28 @@
    ],
    "canon": true,
    "jogress": "Jogress with Darkdramon (COLOR Ver.4)"
+  },
+  {
+   "from": "baohuckmon",
+   "to": "arresterdramonsuperiormodebravesnatcher",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "baohuckmon",
+   "to": "groundramon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "baohuckmon",
+   "to": "saviorhuckmon",
+   "sources": [
+    "VB"
+   ],
+   "canon": true
   },
   {
    "from": "bastemon",
@@ -17707,6 +17884,13 @@
     "VB"
    ],
    "canon": true
+  },
+  {
+   "from": "coredramongreen",
+   "to": "saviorhuckmon",
+   "sources": [
+    "VB"
+   ]
   },
   {
    "from": "coronamon",
@@ -20973,6 +21157,20 @@
    "canon": true
   },
   {
+   "from": "ghilliedhumon",
+   "to": "cannondramon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "ghilliedhumon",
+   "to": "spinomon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
    "from": "ghostmon",
    "to": "bakemon",
    "sources": [
@@ -22199,6 +22397,13 @@
    "canon": true
   },
   {
+   "from": "gumdramon",
+   "to": "baohuckmon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
    "from": "gummymon",
    "to": "terriermon",
    "sources": [
@@ -22893,6 +23098,28 @@
     "VB"
    ],
    "canon": true
+  },
+  {
+   "from": "huckmon",
+   "to": "arresterdramon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "huckmon",
+   "to": "baohuckmon",
+   "sources": [
+    "VB"
+   ],
+   "canon": true
+  },
+  {
+   "from": "huckmon",
+   "to": "coredramonblue",
+   "sources": [
+    "VB"
+   ]
   },
   {
    "from": "hudiemon",
@@ -23992,6 +24219,20 @@
    "sources": [
     "DPC",
     "DPC:Pendulum COLOR 5 Metal Empire"
+   ]
+  },
+  {
+   "from": "kodokugumonchild",
+   "to": "chamblemon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "kodokugumonchild",
+   "to": "karatukinumemon",
+   "sources": [
+    "VB"
    ]
   },
   {
@@ -29388,6 +29629,13 @@
    "canon": true
   },
   {
+   "from": "puyoyomon",
+   "to": "kodokugumonchild",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
    "from": "pyocomon",
    "to": "falcomon2006animeversion",
    "sources": [
@@ -30421,6 +30669,28 @@
     "DPC:Pendulum COLOR 6 Saiyu Warriors"
    ],
    "jogress": "Jogress with a Vaccine or Data Perfect"
+  },
+  {
+   "from": "saviorhuckmon",
+   "to": "breakdramon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "saviorhuckmon",
+   "to": "jesmon",
+   "sources": [
+    "VB"
+   ],
+   "canon": true
+  },
+  {
+   "from": "saviorhuckmon",
+   "to": "magnakidmon",
+   "sources": [
+    "VB"
+   ]
   },
   {
    "from": "scorpiomon",
@@ -34338,6 +34608,13 @@
   },
   {
    "from": "wezengammamon",
+   "to": "ghilliedhumon",
+   "sources": [
+    "VB"
+   ]
+  },
+  {
+   "from": "wezengammamon",
    "to": "metalgreymon",
    "sources": [
     "DPC",
@@ -36111,7 +36388,7 @@
     "sealsdramon",
     "canoweissmon",
     "fumamon",
-    "ghilliedumon",
+    "ghilliedhumon",
     "bombermon",
     "zanmetsumon",
     "regulusmon",
@@ -36209,7 +36486,7 @@
     "puyoyomon",
     "jellymon",
     "jellymonbattle",
-    "kodokugumon",
+    "kodokugumonchild",
     "teslajellymon",
     "ikkakumon",
     "tobiumon",
@@ -36239,18 +36516,18 @@
     "babydmon",
     "agumon2006animeversion",
     "dracomon",
-    "hackmon",
+    "huckmon",
     "gumdramon",
     "geogreymon",
     "coredramonblue",
-    "baohackmon",
+    "baohuckmon",
     "coredramongreen",
     "arresterdramon",
     "rizegreymon",
     "wingdramon",
-    "saviorhackmon",
+    "saviorhuckmon",
     "groundramon",
-    "arresterdramonsuperiorbravesnatcher",
+    "arresterdramonsuperiormodebravesnatcher",
     "shinegreymon",
     "slayerdramon",
     "jesmon",

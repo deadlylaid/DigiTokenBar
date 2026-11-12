@@ -56,6 +56,10 @@ LINES = [
     ("hawkmon", "BEMemory D-3 White and Red Dim", "E06A5A", None),
     ("kudamon", "BEMemory Digimon Seekers Pulsemon Dim", "F2E6A0", None),
 ]
+# Card roster entries that are not a species of their own.
+NOT_SPECIES = {
+    "jellymonbattle": "Jellymon's battle sprite on the Jellymon cards",
+}
 # Named Jogress between two Ultimates that the research does not list as a route (the first DIM
 # research left it out): War Greymon + Metal Garurumon = Omegamon. Others come from the research.
 EXTRA_SPECIAL = [("wargreymon", "metalgarurumon", "omegamon")]
@@ -154,6 +158,12 @@ def main():
     for line_id, card_name, egg, size in LINES:
         card = next(c for c in DATA["cards"] if c["name"] == card_name
                     and (size is None or len([k for k in c["roster"] if k in nodes]) == size))
+        # A card species missing from the data used to be skipped without a word (Huckmon, Kodokugumon):
+        # stop instead, so a new card shows its gaps. Fix the match in fetch_wikimon.SPRITE_TITLES or
+        # build_data.CARD_ONLY_SPECIES, or list a roster entry that is not a species here.
+        unknown = [k for k in card["roster"] if k not in nodes and k not in NOT_SPECIES]
+        if unknown:
+            raise SystemExit(f"{line_id}: card species missing from data/evolutions.json: {', '.join(unknown)}")
         # Armor Digimon need Digimentals, not growth: they are left out.
         skipped = [k for k in card["roster"] if k in nodes and nodes[k]["level"] not in LEVEL]
         if skipped:

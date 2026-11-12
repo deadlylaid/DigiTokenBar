@@ -1,6 +1,6 @@
 {
  "system": {
-  "description": "Per-card Vital Bracelet routes for the 28 cards added in step 7 (DIM, DIM vol. 0.5, Primeval Warriors and BEMemory cards). Collected 2026-11-12 by research agents, mainly from humulos.com detail pages (device 13 = VB DIM/EX cards, 14 = Vital Bracelet BE / BEMemory cards). Each edge is a route between two species of the card, with its kind (normal, fallback, jogress, timeOnly, adventure), the stated requirements and the source text. Third-party quotes: review before a public release (see README).",
+  "description": "Per-card Vital Bracelet routes for the 28 cards added in step 7 (DIM, DIM vol. 0.5, Primeval Warriors and BEMemory cards). Collected 2026-11-12 by research agents, mainly from humulos.com detail pages (device 13 = VB DIM/EX cards, 14 = Vital Bracelet BE / BEMemory cards). Each edge is a route between two species of the card, with its kind (normal, fallback, jogress, timeOnly, adventure), the stated requirements and the source text. Third-party quotes: review before a public release (see README). Routes of seven species restored on 2026-11-13 (Huckmon, Bao Huckmon, Savior Huckmon, Arresterdramon: Superior Mode, Kodokugumon, Tailmon (Child), Ghilliedhumon) were read from cached humulos detail pages and carry a note.",
   "kinds": {
    "normal": "stat requirements (Vital Values, trophies or PP, battles, win ratio)",
    "fallback": "taken when nothing else is met",
@@ -3866,6 +3866,48 @@
      "raw": "Jogress with Siriusmon from the Gammamon BE Memory Dim",
      "source": "https://humulos.com/digimon/php/details.php?digimon=proxima&device=14",
      "note": null
+    },
+    {
+     "from": "ghilliedhumon",
+     "to": "cannondramon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 3000,
+      "pp": 12,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "12+ PP, 3,000+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cannondra&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "ghilliedhumon",
+     "to": "spinomon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 10,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=spino&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "wezengammamon",
+     "to": "ghilliedhumon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 10,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wezengamma&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
     }
    ],
    "missingFromApp": [
@@ -7825,6 +7867,46 @@
      "raw": "20+ PP, 2,500+ Vital Values, 20+ Battles, 50%+ Win Ratio",
      "source": "https://humulos.com/digimon/php/details.php?digimon=toropia&device=14",
      "note": null
+    },
+    {
+     "from": "puyoyomon",
+     "to": "kodokugumonchild",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 5,
+      "adventureStage": 2
+     },
+     "raw": "Stage 2 cleared, 5+ PP, 1,000+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kodokugu&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "kodokugumonchild",
+     "to": "chamblemon",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 1500,
+      "pp": 12,
+      "battles": 10,
+      "adventureStage": 3
+     },
+     "raw": "Stage 3 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kodokugu&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "kodokugumonchild",
+     "to": "karatukinumemon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 10,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kodokugu&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
     }
    ],
    "missingFromApp": [],
@@ -9673,6 +9755,57 @@
      "raw": "10+ PP, 2,500+ Vital Values, 15+ Battles, 60%+ Win Ratio",
      "source": "https://humulos.com/digimon/php/details.php?digimon=chimaira&device=14",
      "note": null
+    },
+    {
+     "from": "poromon",
+     "to": "tailmonchild",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 500,
+      "pp": 3
+     },
+     "raw": "3+ PP, 500+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tail_c&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "tailmonchild",
+     "to": "aquilamon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1500,
+      "pp": 12,
+      "battles": 10
+     },
+     "raw": "12+ PP, 1,500+ Vital Values, 10+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tail_c&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "tailmonchild",
+     "to": "tailmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 10,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tail_c&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "tailmonchild",
+     "to": "nefertimon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 8,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tail_c&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
     }
    ],
    "missingFromApp": [
@@ -15696,6 +15829,242 @@
      "raw": "30+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
      "source": "https://humulos.com/digimon/php/details.php?digimon=wingdra&device=14",
      "note": null
+    },
+    {
+     "from": "huckmon",
+     "to": "arresterdramon",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 1500,
+      "pp": 12,
+      "battles": 10,
+      "adventureStage": 5
+     },
+     "raw": "Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "arresterdramon",
+     "to": "arresterdramonsuperiormodebravesnatcher",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 3000,
+      "pp": 12,
+      "battles": 15,
+      "winRatio": 60,
+      "adventureStage": 8
+     },
+     "raw": "Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "arresterdramon",
+     "to": "saviorhuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 12,
+      "battles": 12,
+      "winRatio": 50
+     },
+     "raw": "12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "baohuckmon",
+     "to": "arresterdramonsuperiormodebravesnatcher",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 3000,
+      "pp": 12,
+      "battles": 15,
+      "winRatio": 60,
+      "adventureStage": 8
+     },
+     "raw": "Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra_s&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "arresterdramonsuperiormodebravesnatcher",
+     "to": "magnakidmon",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 3500,
+      "pp": 35,
+      "battles": 20,
+      "winRatio": 60,
+      "adventureStage": 12
+     },
+     "raw": "Stage 12 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra_s&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "arresterdramonsuperiormodebravesnatcher",
+     "to": "jesmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 3500,
+      "pp": 30,
+      "battles": 20,
+      "winRatio": 60
+     },
+     "raw": "30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arresterdra_s&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "agumon2006animeversion",
+     "to": "baohuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 10,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=baohack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "huckmon",
+     "to": "baohuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 10,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=baohack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "gumdramon",
+     "to": "baohuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 10,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=baohack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "baohuckmon",
+     "to": "saviorhuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 12,
+      "battles": 12,
+      "winRatio": 50
+     },
+     "raw": "12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=baohack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "baohuckmon",
+     "to": "groundramon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2000,
+      "pp": 8,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=baohack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "babydmon",
+     "to": "huckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 500,
+      "pp": 5
+     },
+     "raw": "5+ PP, 500+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "huckmon",
+     "to": "coredramonblue",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1000,
+      "pp": 8,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "coredramongreen",
+     "to": "saviorhuckmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 12,
+      "battles": 12,
+      "winRatio": 50
+     },
+     "raw": "12+ PP, 2,500+ Vital Values, 12+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=saviorhack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "saviorhuckmon",
+     "to": "magnakidmon",
+     "kind": "adventure",
+     "requirements": {
+      "vitalValues": 3500,
+      "pp": 35,
+      "battles": 20,
+      "winRatio": 60,
+      "adventureStage": 12
+     },
+     "raw": "Stage 12 cleared, 35+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=saviorhack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "saviorhuckmon",
+     "to": "jesmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 3500,
+      "pp": 30,
+      "battles": 20,
+      "winRatio": 60
+     },
+     "raw": "30+ PP, 3,500+ Vital Values, 20+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=saviorhack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
+    },
+    {
+     "from": "saviorhuckmon",
+     "to": "breakdramon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 2500,
+      "pp": 20,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "20+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=saviorhack&device=14",
+     "note": "Added 2026-11-13 when the species was restored to the data (it was missing from the Wikimon build)."
     }
    ],
    "missingFromApp": [

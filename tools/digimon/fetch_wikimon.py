@@ -47,8 +47,25 @@ def norm(s):
 TITLE_SUFFIXES = ("mode", "animeversion", "arm", "perfect", "species", "antibody")
 
 
+# Articles the automatic match misses, by sprite key. Wikimon spells some names differently from the
+# sprite file ("Huckmon"; its "Hackmon" is the Appli Monsters one), keeps "Mode" that the file drops
+# with a suffix after it, or uses the plain title for a disambiguation page ("Kodokugumon").
+SPRITE_TITLES = {
+    "hackmon": "Huckmon",
+    "baohackmon": "Bao Huckmon",
+    "saviorhackmon": "Savior Huckmon",
+    "ghilliedumon": "Ghilliedhumon",
+    "kodokugumon": "Kodokugumon Child",
+    "arresterdramonsuperiorbravesnatcher": "Arresterdramon: Superior Mode (Brave Snatcher)",
+}
+
+
 def sprite_key_for_title(title_norm, sprite_keys):
-    """Sprite key used by this article: the title itself, or the title minus a known suffix."""
+    """Sprite key used by this article: a listed alias, the title itself, or the title minus a known
+    suffix."""
+    for sprite, title in SPRITE_TITLES.items():
+        if norm(title) == title_norm and sprite in sprite_keys:
+            return sprite
     if title_norm in sprite_keys:
         return title_norm
     for suf in TITLE_SUFFIXES:

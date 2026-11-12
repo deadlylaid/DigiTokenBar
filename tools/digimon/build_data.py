@@ -30,6 +30,9 @@ def norm(s):
 
 
 SPRITE_TO_ARTICLE = {}  # sprite file key -> article key (filled in main)
+CARD_ONLY_SPECIES = {
+    "tailmonchild": {"name": "Tailmon (Child)", "ko": "", "level": "Child", "attribute": "Vaccine"},
+}
 
 
 def article_key(k):
@@ -334,6 +337,12 @@ def main():
         level = n.get("level") or next((lv for lv in LEVEL_ORDER if lv in n.get("device_levels", set())), "")
         out_nodes[key] = {"name": n.get("name", key), "ko": n.get("ko", ""), "level": level, "attribute": n.get("attribute") or next(iter(sorted(n.get("attributes", set()))), ""), "levels": levels,
                           "attributes": sorted(n.get("attributes", set())), "sprites": sp}
+    # Card forms Wikimon has no article for, from the card data (humulos): the D-3 White and Red card
+    # raises a Child Tailmon (sprite "Tailmon_child") before the usual Adult one.
+    for key, node in CARD_ONLY_SPECIES.items():
+        if key in out_nodes or key not in sprites:
+            continue
+        out_nodes[key] = dict(node, levels=[node["level"]], attributes=[node["attribute"]], sprites=dict(sprites[key]))
     out_edges = []
     for (a, b), e in sorted(edges.items()):
         if a == b or a not in out_nodes or b not in out_nodes:

@@ -1,0 +1,91 @@
+[
+ {
+  "key": "huckmon",
+  "ko": "피프스 러시",
+  "en": "Fifth Rush",
+  "what": "rushes in slashing with its claws",
+  "koSpecies": "헉몬",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=huckmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=huckmon",
+   "https://digimon.net/reference/detail.php?directory_name=huckmon"
+  ],
+  "note": "Official ko/en/ja first move. Wikimon title \"Huckmon\" (its \"Hackmon\" page is the Appli Monsters one)."
+ },
+ {
+  "key": "baohuckmon",
+  "ko": "피프 크로스",
+  "en": "Fif Cross",
+  "what": "cross slash with its claws",
+  "koSpecies": "바오헉몬",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=baohuckmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=baohuckmon",
+   "https://digimon.net/reference/detail.php?directory_name=baohuckmon"
+  ],
+  "note": "Official ko/en/ja first move."
+ },
+ {
+  "key": "saviorhuckmon",
+  "ko": "레이지 스트레이드",
+  "en": "Ledge Stride",
+  "what": "leaping strike",
+  "koSpecies": "세이버헉몬",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=saviorhuckmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=saviorhuckmon",
+   "https://digimon.net/reference/detail.php?directory_name=saviorhuckmon"
+  ],
+  "note": "Official ko/en/ja first move; ko renders レッジストレイド as 레이지 스트레이드."
+ },
+ {
+  "key": "ghilliedhumon",
+  "ko": "코어 슛",
+  "en": "Core Shoot",
+  "what": "sniper shot",
+  "koSpecies": "길리두몬",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ghilliedhumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ghilliedhumon",
+   "https://digimon.net/reference/detail.php?directory_name=ghilliedhumon"
+  ],
+  "note": "First listed move True Eyes (트루 아이즈) sees through camouflage, not an attack, so the second move was used. JP コアシュート; reference_en writes \"Core Snipe\"."
+ },
+ {
+  "key": "kodokugumonchild",
+  "ko": "포이즌 네일",
+  "en": "Poison Nail",
+  "what": "scratches with poison claws",
+  "koSpecies": "코스파이더몬",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kodokugumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kodokugumon",
+   "https://digimon.net/reference/detail.php?directory_name=kodokugumon"
+  ],
+  "note": "Official directory kodokugumon (Child). JP ポイズンネイル; reference_en writes \"Poison Nails\"."
+ },
+ {
+  "key": "arresterdramonsuperiormodebravesnatcher",
+  "ko": "블레이즈 스파이커",
+  "en": "Blaze Spiker",
+  "what": "flaming spike charge",
+  "koSpecies": "아레스타드라몬: 슈페리올 모드",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=arresterdramon_superior",
+   "https://digimon.net/reference_en/detail.php?directory_name=arresterdramon_superior",
+   "https://digimon.net/reference/detail.php?directory_name=arresterdramon_superior"
+  ],
+  "note": "Official directory arresterdramon_superior; the card shows the Brave Snatcher sprite."
+ },
+ {
+  "key": "tailmonchild",
+  "ko": "고양이 펀치",
+  "en": "Cat Punch",
+  "what": "punch",
+  "koSpecies": "가트몬(성장기)",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=tailmon"
+  ],
+  "note": "The Child Tailmon of the D-3 White and Red card has no separate official entry; it uses Tailmon's move and name with (성장기)."
+ }
+]

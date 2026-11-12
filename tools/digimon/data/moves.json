@@ -3059,6 +3059,48 @@
    "en": "Corona Blaze Sword",
    "kind": "claw",
    "koSpecies": "샤인그레이몬: 버스트 모드"
+  },
+  "huckmon": {
+   "ko": "피프스 러시",
+   "en": "Fifth Rush",
+   "kind": "claw",
+   "koSpecies": "헉몬"
+  },
+  "baohuckmon": {
+   "ko": "피프 크로스",
+   "en": "Fif Cross",
+   "kind": "claw",
+   "koSpecies": "바오헉몬"
+  },
+  "saviorhuckmon": {
+   "ko": "레이지 스트레이드",
+   "en": "Ledge Stride",
+   "kind": "claw",
+   "koSpecies": "세이버헉몬"
+  },
+  "ghilliedhumon": {
+   "ko": "코어 슛",
+   "en": "Core Shoot",
+   "kind": "gaia",
+   "koSpecies": "길리두몬"
+  },
+  "kodokugumonchild": {
+   "ko": "포이즌 네일",
+   "en": "Poison Nail",
+   "kind": "claw",
+   "koSpecies": "코스파이더몬"
+  },
+  "arresterdramonsuperiormodebravesnatcher": {
+   "ko": "블레이즈 스파이커",
+   "en": "Blaze Spiker",
+   "kind": "missile",
+   "koSpecies": "아레스타드라몬: 슈페리올 모드"
+  },
+  "tailmonchild": {
+   "ko": "고양이 펀치",
+   "en": "Cat Punch",
+   "kind": "claw",
+   "koSpecies": "가트몬(성장기)"
   }
  }
 }
