@@ -242,9 +242,11 @@ final class DigimonEngineTests: XCTestCase {
         s.dex = Set(s.partner.path)
         s.partner.stageExp = 299
         let events = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
+        let offer = try? XCTUnwrap(s.eggOffer)
         XCTAssertEqual(events, [.graduated(lineID: "agumon",
                                            path: ["botamon", "koromon", "agumon", "greymon", "metalgreymon", "wargreymon"]),
-                                .newEgg(lineID: "agumon")])
+                                .newEgg(lineID: s.partner.lineID)])
+        XCTAssertEqual(s.partner.lineID, offer?.first, "the egg shows the first drawn line")
         XCTAssertNil(s.partner.speciesKey)
         XCTAssertEqual(s.partner.level, .digitama)
         XCTAssertEqual(s.graduates.count, 1)
@@ -252,27 +254,88 @@ final class DigimonEngineTests: XCTestCase {
         XCTAssertEqual(s.eggChoiceOfferedAt, date(day: 5), "the new egg waits for its line")
     }
 
-    func testANewEggWaitsForItsLineAndKeepsTheExperience() {
+    // MARK: Egg draw
+
+    /// A graduated egg after `graduates` (one Agumon graduation unless given).
+    private func graduatedEgg(at day: Int, graduates: [String] = ["agumon"]) -> DigimonState {
         var s = state(at: "wargreymon")
+        s.graduates = graduates.dropLast().map { GraduateRecord(lineID: $0, path: [], graduatedAt: date(day: 1)) }
+        s.partner.lineID = graduates.last ?? "agumon"
         s.partner.stageExp = 299
-        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
+        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: day))
+        return s
+    }
+
+    func testANewEggDrawsThreeLinesItHasNeverRaised() throws {
+        let s = graduatedEgg(at: 5)
+        let offer = try XCTUnwrap(s.eggOffer)
+        XCTAssertEqual(offer.count, 3)
+        XCTAssertEqual(Set(offer).count, 3, "no line twice")
+        XCTAssertFalse(offer.contains("agumon"), "the line just raised is not drawn while others are left")
+        XCTAssertTrue(offer.allSatisfy { DigimonCatalog.mvp.lines[$0] != nil })
+        XCTAssertEqual(engine.eggLineChoices(for: s), Set(offer + ["agumon"]), "drawn lines plus lines raised before")
+    }
+
+    func testTheDrawFillsUpWithRaisedLinesWhenFewAreLeft() throws {
+        let s = graduatedEgg(at: 5, graduates: ["agumon", "gabumon", "piyomon", "tentomon", "guilmon"])
+        let offer = try XCTUnwrap(s.eggOffer)
+        XCTAssertEqual(offer.first, "vmon", "the only line never raised comes first")
+        XCTAssertEqual(offer.count, 3)
+        XCTAssertEqual(Set(offer).count, 3)
+    }
+
+    func testTheDrawIsRandomPerEggButFixedOnceDrawn() throws {
+        let offers = Set((5...14).map { graduatedEgg(at: $0).eggOffer ?? [] })
+        XCTAssertGreaterThan(offers.count, 1, "different eggs draw different lines")
+        var s = graduatedEgg(at: 5)
+        let drawn = s.eggOffer
+        engine.addUsage(&s, tokens: 1_000_000, provider: "claude_code", at: date(day: 5, hour: 18))
+        XCTAssertEqual(engine.tick(&s, now: date(day: 5, hour: 20)), [])
+        XCTAssertEqual(s.eggOffer, drawn, "nothing redraws a waiting egg")
+        XCTAssertEqual(engine.eggOffer(for: graduatedEgg(at: 5), at: date(day: 5)), drawn, "the draw repeats exactly")
+    }
+
+    func testOnlyDrawnOrRaisedLinesCanBePicked() throws {
+        var s = graduatedEgg(at: 5)
+        let offer = try XCTUnwrap(s.eggOffer)
+        let notAllowed = try XCTUnwrap(DigimonCatalog.mvp.lines.keys.sorted().first { !offer.contains($0) && $0 != "agumon" })
+        XCTAssertEqual(engine.chooseEggLine(&s, notAllowed, at: date(day: 5)), [], "neither drawn nor raised")
+        XCTAssertEqual(s.partner.lineID, offer[0])
+        XCTAssertNotNil(s.eggChoiceOfferedAt, "a refused pick leaves the choice open")
+        XCTAssertEqual(engine.chooseEggLine(&s, "agumon", at: date(day: 5)), [.newEgg(lineID: "agumon")],
+                       "a line raised before can always be picked again")
+        XCTAssertNil(s.eggChoiceOfferedAt)
+    }
+
+    func testAnEggFromBeforeTheDrawMayTakeAnyLine() {
+        var s = DigimonState.newEgg(lineID: "agumon")
+        XCTAssertNil(s.eggOffer)
+        XCTAssertEqual(engine.eggLineChoices(for: s), Set(DigimonCatalog.mvp.lines.keys))
+        XCTAssertEqual(engine.chooseEggLine(&s, "vmon", at: date(day: 5)), [.newEgg(lineID: "vmon")])
+    }
+
+    func testANewEggWaitsForItsLineAndKeepsTheExperience() throws {
+        var s = graduatedEgg(at: 5)
         let events = engine.addUsage(&s, tokens: 6_000_000, provider: "claude_code", at: date(day: 5))
         XCTAssertEqual(events, [], "30 experience, but no hatching before the user picks")
         XCTAssertNil(s.partner.speciesKey)
         XCTAssertEqual(s.partner.stageExp, 30)
-        XCTAssertEqual(engine.chooseEggLine(&s, "gabumon", at: date(day: 5)),
-                       [.newEgg(lineID: "gabumon"), .hatched(species: "punimon")])
+        let pick = try XCTUnwrap(s.eggOffer?[1])
+        let baby = try XCTUnwrap(DigimonCatalog.mvp.lines[pick]?.firstBaby)
+        XCTAssertEqual(engine.chooseEggLine(&s, pick, at: date(day: 5)), [.newEgg(lineID: pick), .hatched(species: baby)])
         XCTAssertNil(s.eggChoiceOfferedAt)
-        XCTAssertEqual(s.partner.stageExp, 10, "what the egg did not need carries into Punimon")
+        XCTAssertNil(s.eggOffer, "hatching uses up the draw")
+        XCTAssertEqual(s.partner.stageExp, 10, "what the egg did not need carries into the baby")
     }
 
-    func testAnUnpickedEggTakesTheLineRaisedLeastAfterADay() {
-        var s = state(at: "wargreymon")
-        s.partner.stageExp = 299
-        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
+    func testAnUnpickedEggTakesTheDrawnLineRaisedLeastAfterADay() {
+        var s = DigimonState.newEgg(lineID: "gabumon")
+        s.graduates = ["agumon", "gabumon"].map { GraduateRecord(lineID: $0, path: [], graduatedAt: date(day: 1)) }
+        s.eggOffer = ["gabumon", "agumon", "tentomon"]
+        s.eggChoiceOfferedAt = date(day: 5)
         XCTAssertEqual(engine.tick(&s, now: date(day: 5).addingTimeInterval(3600)), [], "still waiting")
-        let events = engine.tick(&s, now: date(day: 6))
-        XCTAssertEqual(events, [.newEgg(lineID: "gabumon")], "Agumon graduated once, Gabumon never")
+        XCTAssertEqual(engine.tick(&s, now: date(day: 6)), [.newEgg(lineID: "tentomon")],
+                       "Tentomon was never raised; Piyomon was not drawn, so it is not taken")
         XCTAssertNil(s.eggChoiceOfferedAt)
     }
 

@@ -16,6 +16,8 @@ struct GrowthRules: Sendable, Equatable {
     /// False (the default, like a V-Pet): with several candidates the Digimon evolves straight into
     /// the best match for how it was raised. True brings back the choice cards.
     var userPicksEvolution = false
+    /// How many lines a new egg offers (drawn at random, lines never raised first).
+    var eggOfferSize = 3
 
     static let standard = GrowthRules()
 
@@ -178,11 +180,12 @@ struct EvolutionEngine: Sendable {
         return choose(&state, first, at: now)
     }
 
-    /// Picks the line the egg hatches into. Allowed while it is still an egg. Closes an open egg
-    /// choice, so an egg that already has enough experience hatches right away.
+    /// Picks the line the egg hatches into: one of the drawn lines, a line raised before, or the
+    /// line it already shows. Allowed while it is still an egg. Closes an open egg choice, so an egg
+    /// that already has enough experience hatches right away.
     @discardableResult
     func chooseEggLine(_ state: inout DigimonState, _ lineID: String, at date: Date) -> [DigimonEvent] {
-        guard state.partner.speciesKey == nil, catalog.lines[lineID] != nil else { return [] }
+        guard state.partner.speciesKey == nil, eggLineChoices(for: state).contains(lineID) else { return [] }
         var events: [DigimonEvent] = []
         if state.partner.lineID != lineID {
             state.partner.lineID = lineID
@@ -192,11 +195,45 @@ struct EvolutionEngine: Sendable {
         return events + advance(&state, at: date)
     }
 
-    /// When the user did not pick: the line raised least often, the current one on a tie.
+    /// Every line the current egg may take. Before a draw exists (saves from before it), any line.
+    func eggLineChoices(for state: DigimonState) -> Set<String> {
+        guard let offer = state.eggOffer else { return Set(catalog.lines.keys) }
+        return Set(offer).union(raisedLines(for: state)).union([state.partner.lineID])
+            .filter { catalog.lines[$0] != nil }
+    }
+
+    /// Lines this user has raised to graduation (they can always be picked again).
+    func raisedLines(for state: DigimonState) -> Set<String> {
+        Set(state.graduates.map(\.lineID)).filter { catalog.lines[$0] != nil }
+    }
+
+    /// Draws the lines a new egg offers: `eggOfferSize` lines at random, lines never raised first,
+    /// raised ones only to fill up. The draw is seeded by the time and the number of graduations,
+    /// so it is the same every time for the same egg and is saved until the egg hatches.
+    func eggOffer(for state: DigimonState, at date: Date) -> [String] {
+        let raised = raisedLines(for: state)
+        var rng = SeededGenerator(seed: date.timeIntervalSince1970.bitPattern &+ UInt64(state.graduates.count))
+        let all = catalog.lines.keys.sorted()
+        let fresh = all.filter { !raised.contains($0) }.shuffled(using: &rng)
+        let again = all.filter { raised.contains($0) }.shuffled(using: &rng)
+        return Array((fresh + again).prefix(growth.eggOfferSize))
+    }
+
+    /// Opens the line pick for a new egg: draws its lines and shows the first of them.
+    func offerEggLines(_ state: inout DigimonState, at date: Date) {
+        let offer = eggOffer(for: state, at: date)
+        state.eggOffer = offer
+        state.eggChoiceOfferedAt = date
+        if let first = offer.first { state.partner.lineID = first }
+    }
+
+    /// When the user did not pick: among the drawn lines, the one raised least often, the line the
+    /// egg already shows on a tie.
     func autoEggLine(for state: DigimonState) -> String {
         let current = state.partner.lineID
         let graduated = Dictionary(grouping: state.graduates, by: \.lineID).mapValues(\.count)
-        return catalog.lines.keys.min { a, b in
+        let pool = state.eggOffer.map { Set($0) } ?? Set(catalog.lines.keys)
+        return pool.filter { catalog.lines[$0] != nil }.min { a, b in
             (graduated[a, default: 0], a == current ? 0 : 1, a) < (graduated[b, default: 0], b == current ? 0 : 1, b)
         } ?? current
     }
@@ -309,6 +346,7 @@ struct EvolutionEngine: Sendable {
         state.partner.stageSignals = GrowthSignals()
         state.partner.path.append(key)
         state.dex.insert(key)
+        state.eggOffer = nil   // hatched: the draw is used up
         if let previous {
             state.discoveredEvolutions.insert("\(previous)>\(key)")
             return [.evolved(from: previous, to: key)]
@@ -322,12 +360,27 @@ struct EvolutionEngine: Sendable {
         state.graduates.append(GraduateRecord(lineID: line, path: path, graduatedAt: date))
         state.partner = DigimonPartner(lineID: line, speciesKey: nil, level: .digitama)
         state.pendingChoice = nil
-        state.eggChoiceOfferedAt = date   // the new egg waits for the user to pick its line
-        return [.graduated(lineID: line, path: path), .newEgg(lineID: line)]
+        offerEggLines(&state, at: date)   // the new egg waits for the user to pick its line
+        return [.graduated(lineID: line, path: path), .newEgg(lineID: state.partner.lineID)]
     }
 
     func dayKey(_ date: Date) -> String {
         let c = calendar.dateComponents([.year, .month, .day], from: date)
         return String(format: "%04d-%02d-%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0)
+    }
+}
+
+/// SplitMix64: a small seeded generator, so a draw can be repeated exactly (and tested).
+struct SeededGenerator: RandomNumberGenerator {
+    private var state: UInt64
+
+    init(seed: UInt64) { state = seed }
+
+    mutating func next() -> UInt64 {
+        state &+= 0x9E37_79B9_7F4A_7C15
+        var z = state
+        z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
+        z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
+        return z ^ (z >> 31)
     }
 }

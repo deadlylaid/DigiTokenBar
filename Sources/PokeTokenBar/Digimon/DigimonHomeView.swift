@@ -197,36 +197,44 @@ struct DigimonStatusView: View {
             progress
             if !digimon.tendencies.isEmpty { tendency }
             if !digimon.candidates.isEmpty { choice }
-            if digimon.isEgg, digimon.lines.count > 1 { eggChoice }
+            if digimon.canChooseEggLine { eggChoice }
         }
     }
 
-    /// Before hatching, pick the line (the Vital Bracelet card) to raise.
+    /// Before hatching, pick the line (the Vital Bracelet card) to raise: one of the eggs drawn for
+    /// it, or a line raised before from the menu under them.
     private var eggChoice: some View {
         let catalog = digimon.engine.catalog
+        let offered = digimon.eggOfferLines
+        let others = digimon.otherEggLines
+        let current = digimon.state.partner.lineID
         return VStack(alignment: .leading, spacing: 6) {
             Text(t.chooseEggTitle).font(.callout.weight(.semibold))
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: min(3, digimon.lines.count)),
-                      spacing: 6) {
-                ForEach(digimon.lines, id: \.id) { line in
-                    let key = "egg_\(line.id)"
-                    let current = digimon.state.partner.lineID == line.id
-                    Button {
-                        digimon.chooseEggLine(line.id)
-                    } label: {
-                        VStack(spacing: 2) {
-                            PixelSprite(data: hub.icons[key]).frame(width: 28, height: 28)
-                            Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption2.weight(.semibold)).lineLimit(1)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                        .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .controlBackgroundColor)))
-                        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(
-                            current ? Color.accentColor : Color.secondary.opacity(0.25), lineWidth: current ? 2 : 1))
-                    }
-                    .buttonStyle(.plain)
-                    .task(id: key) { _ = await hub.image(for: key) }
+            if !offered.isEmpty {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: min(3, offered.count)),
+                          spacing: 6) {
+                    ForEach(offered, id: \.id) { line in eggTile(line, catalog: catalog, picked: current == line.id) }
                 }
+            }
+            if !others.isEmpty {
+                Menu {
+                    ForEach(others, id: \.id) { line in
+                        Button {
+                            digimon.chooseEggLine(line.id)
+                        } label: {
+                            Text(t.eggOf(t.lineName(line, catalog: catalog)))
+                            if line.id == current { Image(systemName: "checkmark") }
+                        }
+                    }
+                } label: {
+                    let pickedOther = others.first { $0.id == current }
+                    Label(pickedOther.map { t.eggOf(t.lineName($0, catalog: catalog)) } ?? t.raisedLinesMenu,
+                          systemImage: "arrow.counterclockwise")
+                        .font(.caption)
+                }
+                .menuStyle(.borderlessButton)
+                .fixedSize()
+                .help(t.raisedLinesHelp)
             }
             Text(digimon.isChoosingEgg ? t.chooseEggWaiting(hours: digimon.eggChoiceHoursLeft ?? 0) : t.chooseEggHint)
                 .font(.caption2)
@@ -236,6 +244,25 @@ struct DigimonStatusView: View {
         .padding(digimon.isChoosingEgg ? 10 : 0)
         .background(digimon.isChoosingEgg ? Color.accentColor.opacity(0.08) : .clear)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    private func eggTile(_ line: DigimonLine, catalog: DigimonCatalog, picked: Bool) -> some View {
+        let key = "egg_\(line.id)"
+        return Button {
+            digimon.chooseEggLine(line.id)
+        } label: {
+            VStack(spacing: 2) {
+                PixelSprite(data: hub.icons[key]).frame(width: 28, height: 28)
+                Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption2.weight(.semibold)).lineLimit(1)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 6)
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .controlBackgroundColor)))
+            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(
+                picked ? Color.accentColor : Color.secondary.opacity(0.25), lineWidth: picked ? 2 : 1))
+        }
+        .buttonStyle(.plain)
+        .task(id: key) { _ = await hub.image(for: key) }
     }
 
     private var nameRow: some View {

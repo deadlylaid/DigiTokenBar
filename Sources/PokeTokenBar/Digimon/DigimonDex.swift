@@ -104,6 +104,10 @@ extension DigimonText {
     }
     var chooseEggTitle: String { ko ? "어떤 알을 키울까요?" : "Which egg will you raise?" }
     var chooseEggHint: String { ko ? "부화하기 전까지 바꿀 수 있어요." : "You can switch until it hatches." }
+    var raisedLinesMenu: String { ko ? "키워 본 줄기에서 고르기" : "Pick a line you've raised" }
+    var raisedLinesHelp: String {
+        ko ? "졸업시켜 본 줄기는 언제든 다시 키울 수 있어요." : "Lines you've raised to graduation can always be raised again."
+    }
     func eggOf(_ name: String) -> String { ko ? "\(name) 알" : "\(name) egg" }
 }
 

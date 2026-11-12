@@ -70,6 +70,10 @@ enum DigimonSaveIO {
         state.tokenRemainder = clamp(state.tokenRemainder, max: growth.tokensPerExp - 1)
         clampSignals(&state.partner.stageSignals)
         clampSignals(&state.lifetimeSignals)
+        if let offer = state.eggOffer {
+            let known = offer.filter { catalog.lines[$0] != nil }
+            state.eggOffer = state.partner.speciesKey == nil && !known.isEmpty ? known : nil
+        }
         if let pending = state.pendingChoice {
             let known = pending.candidates.filter { catalog.species($0) != nil && line.members.contains($0) }
             state.pendingChoice = known.isEmpty ? nil : PendingChoice(candidates: known, offeredAt: pending.offeredAt)

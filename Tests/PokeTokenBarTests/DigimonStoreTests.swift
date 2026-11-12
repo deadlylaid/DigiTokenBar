@@ -334,15 +334,33 @@ final class DigimonSaveIOTests: XCTestCase {
         XCTAssertEqual(makeStore().state, store.state, "the restore is saved")
     }
 
-    func testTheEggLineCanChangeOnlyWhileItIsAnEgg() {
+    func testTheEggLineCanChangeOnlyWhileItIsAnEgg() throws {
         let store = makeStore()
-        store.chooseEggLine("gabumon")
-        XCTAssertEqual(store.state.partner.lineID, "gabumon")
+        XCTAssertEqual(store.state.partner.lineID, "agumon")
+        XCTAssertEqual(store.eggOfferLines.count, 3, "every egg in the store has its draw")
+        let other = try XCTUnwrap(store.eggOfferLines.first { $0.id != "agumon" })
+        store.chooseEggLine(other.id)
+        XCTAssertEqual(store.state.partner.lineID, other.id)
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
         store.update(todayTokensByProvider: ["claude_code": 4_000_001], todayDate: "d1", hasUsageData: true)
-        XCTAssertEqual(store.state.partner.speciesKey, "punimon", "a Gabumon-line egg hatches into Punimon")
+        XCTAssertEqual(store.state.partner.speciesKey, other.firstBaby, "the egg hatches into its line's baby")
+        XCTAssertNil(store.state.eggOffer)
         store.chooseEggLine("agumon")
-        XCTAssertEqual(store.state.partner.lineID, "gabumon", "too late once hatched")
+        XCTAssertEqual(store.state.partner.lineID, other.id, "too late once hatched")
+    }
+
+    func testAnEggFromAnOlderSaveGetsADrawAndKeepsItsLine() throws {
+        let store = makeStore()
+        grown(store)
+        let old = DigimonSaveFile(savedAt: Date(timeIntervalSince1970: 1_790_000_000), device: "Old Mac",
+                                  digimon: .newEgg(lineID: "guilmon"))
+        try store.replace(with: old, reason: "import")
+        XCTAssertEqual(store.state.partner.lineID, "guilmon", "the line it showed stays")
+        XCTAssertEqual(store.eggOfferLines.count, 3)
+        XCTAssertTrue(store.canChooseEggLine)
+        let choices = Set(store.eggOfferLines.map(\.id) + store.otherEggLines.map(\.id))
+        XCTAssertTrue(choices.contains("guilmon"))
+        XCTAssertEqual(makeStore().state.eggOffer, store.state.eggOffer, "the draw is saved, not redrawn at launch")
     }
 }
 
@@ -435,13 +453,22 @@ final class DigimonFirstEggTests: XCTestCase {
         let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now }, waitForFirstEgg: true)
         XCTAssertTrue(store.isChoosingEgg)
         XCTAssertEqual(store.eggChoiceHoursLeft, 24)
+        // Quit before any usage arrives (nothing else saves yet) and open again a minute later.
+        let quitBeforePicking = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now.addingTimeInterval(60) },
+                                             waitForFirstEgg: true)
+        XCTAssertEqual(quitBeforePicking.state.eggOffer, store.state.eggOffer, "reopening does not redraw")
+        XCTAssertTrue(quitBeforePicking.isChoosingEgg)
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
         store.update(todayTokensByProvider: ["claude_code": 5_000_001], todayDate: "d1", hasUsageData: true)
         XCTAssertTrue(store.isEgg, "no hatching before the pick")
+        XCTAssertEqual(store.eggOfferLines.count, 3, "the first egg draws three lines too")
+        XCTAssertEqual(store.state.partner.lineID, store.eggOfferLines.first?.id)
+        XCTAssertTrue(store.otherEggLines.isEmpty, "nothing raised yet")
         var played: [DigimonEvent] = []
         store.onActivity = { events, _ in played += events }
-        store.chooseEggLine("agumon")
-        XCTAssertEqual(played, [.hatched(species: "botamon")], "confirming the current line hatches it")
+        let line = try XCTUnwrap(store.line)
+        store.chooseEggLine(line.id)
+        XCTAssertEqual(played, [.hatched(species: line.firstBaby)], "confirming the shown line hatches it")
         XCTAssertFalse(store.isChoosingEgg)
         let reopened = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now }, waitForFirstEgg: true)
         XCTAssertFalse(reopened.isChoosingEgg, "only a fresh install asks")

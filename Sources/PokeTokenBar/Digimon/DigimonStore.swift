@@ -43,7 +43,16 @@ final class DigimonStore {
         self.saved = Saved(digimon: .newEgg(lineID: firstLine))
         let freshInstall = !FileManager.default.fileExists(atPath: fileURL.path)
         load()
-        if freshInstall, waitForFirstEgg { saved.digimon.eggChoiceOfferedAt = clock() }
+        var digimon = saved.digimon
+        if freshInstall, waitForFirstEgg {
+            engine.offerEggLines(&digimon, at: clock())
+        } else {
+            ensureEggOffer(&digimon)
+        }
+        if digimon != saved.digimon {
+            saved.digimon = digimon
+            save()   // the draw must not change if the app quits before the pick
+        }
         lastBackupAt = backups.list().first?.file.savedAt
         backupIfDue()
     }
@@ -80,6 +89,15 @@ final class DigimonStore {
         return max(1, Int((left / 3600).rounded(.up)))
     }
     var lines: [DigimonLine] { engine.catalog.lines.values.sorted { $0.id < $1.id } }
+    /// The lines drawn for the current egg, in the order drawn.
+    var eggOfferLines: [DigimonLine] { (state.eggOffer ?? []).compactMap { engine.catalog.lines[$0] } }
+    /// The other lines the egg may take: lines raised before (and the line it shows, if not drawn).
+    var otherEggLines: [DigimonLine] {
+        let offered = Set(state.eggOffer ?? [])
+        return engine.eggLineChoices(for: state).subtracting(offered)
+            .compactMap { engine.catalog.lines[$0] }.sorted { $0.id < $1.id }
+    }
+    var canChooseEggLine: Bool { isEgg && engine.eggLineChoices(for: state).count > 1 }
 
     // MARK: Inputs
     //
@@ -177,7 +195,8 @@ final class DigimonStore {
     /// Replaces the Digimon with one from a file (import or restore). The current one is backed up
     /// first. The usage ledger and limit watch start over, so today's usage is not counted twice.
     func replace(with file: DigimonSaveFile, reason: String) throws {
-        let clean = try DigimonSaveIO.sanitized(file.digimon, catalog: engine.catalog, growth: engine.growth)
+        var clean = try DigimonSaveIO.sanitized(file.digimon, catalog: engine.catalog, growth: engine.growth)
+        ensureEggOffer(&clean)
         try backupNow(tag: "before-\(reason)")
         saved = Saved(digimon: clean)
         save()
@@ -192,6 +211,13 @@ final class DigimonStore {
     }
 
     // MARK: Saving
+
+    /// Every egg in the store has its drawn lines. An egg from an older save gets a draw here,
+    /// keeping the line it shows (that line stays pickable).
+    private func ensureEggOffer(_ digimon: inout DigimonState) {
+        guard digimon.partner.speciesKey == nil, digimon.eggOffer == nil else { return }
+        digimon.eggOffer = engine.eggOffer(for: digimon, at: clock())
+    }
 
     private func commit(_ next: Saved, _ events: [DigimonEvent], fed: Int = 0) {
         for event in events { AppLog.write("digimon \(event)") }

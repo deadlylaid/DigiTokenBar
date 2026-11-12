@@ -58,6 +58,9 @@ struct DigimonState: Codable, Sendable, Equatable {
     /// (experience keeps adding up), and the engine picks after `choiceTimeout`.
     /// Optional so saves from before it decode unchanged.
     var eggChoiceOfferedAt: Date?
+    /// Lines drawn for the current egg (see `EvolutionEngine.offerEggLines`). Kept until it hatches
+    /// so reopening the app never redraws them. Optional so saves from before it decode unchanged.
+    var eggOffer: [String]?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
