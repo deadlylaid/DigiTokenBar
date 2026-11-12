@@ -63,6 +63,13 @@ final class DigimonLinesTests: XCTestCase {
                      "algomonadult>valvemon", "neodevimon>wargreymon"] {
             XCTAssertTrue(DigimonCatalogData.jogressEdges.contains(step), step)
         }
+        // Wikimon writes these "(with or without ...)" because other games need no partner; on these
+        // exact cards they are a Jogress (tools/digimon/research).
+        for step in ["coelamon>metaltyranomon", "greymon>andromon", "mamemon>wargreymon", "bigmamemon>metalgarurumon",
+                     "paildramon>ulforcevdramon", "xvmon>aerovdramon", "megalogrowmon>dukemonxantibody",
+                     "megalogrowmonorange>dukemon", "megalogrowmonorange>megidramon"] {
+            XCTAssertTrue(DigimonCatalogData.jogressEdges.contains(step), "\(step) is a Jogress on its card")
+        }
         XCTAssertFalse(DigimonCatalogData.jogressEdges.contains("andromon>wargreymon"), "(with or without Cyberdramon)")
         let algomon = state(at: "algomonadult", line: "agumon")
         XCTAssertEqual(Set(engine.candidates(for: algomon)), ["mamemon", "metalgreymon", "metaltyranomon"])

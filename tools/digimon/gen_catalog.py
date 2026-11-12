@@ -44,6 +44,25 @@ KO_OVERRIDES = {
 }
 
 
+# Per-card device research (tools/digimon/research): which steps are a Jogress on that exact card.
+# Wikimon's notes mix devices and games ("with or without ..."), so the research wins for its cards.
+RESEARCH = [HERE / "research" / "vb-conditions-dim.json", HERE / "research" / "vb-conditions-bememory.json"]
+
+
+def research_merges():
+    """{line id: {"from>to", ...}} for the edges the research marks as a Jogress on the line's card."""
+    out = {}
+    for path in RESEARCH:
+        if not path.exists():
+            continue
+        for line_id, card in json.loads(path.read_text())["cards"].items():
+            for e in card["edges"]:
+                kind = e.get("kind") or ("jogress" if (e.get("requirements") or {}).get("jogress") else "normal")
+                if kind == "jogress":
+                    out.setdefault(line_id, set()).add(e["from"] + ">" + e["to"])
+    return out
+
+
 def is_jogress_only(edge):
     """The note starts with "Jogress with ...": only a merge evolves it. A normal route with a merge
     as an alternative is written the other way round ("0-2 Care Mistakes ... OR ... Jogress")."""
@@ -115,9 +134,16 @@ def main():
     out += ["    ]", "",
             "    /// Evolutions that only happen as a Jogress (a merge with another Digimon). Locked by EvolutionRules.",
             "    static let jogressEdges: Set<String> = ["]
-    for a, b, *_ , jog in evo:
-        if jog:
-            out.append(f"        {swift_str(a + '>' + b)},")
+    merges = {f"{a}>{b}" for a, b, *_, jog in evo if jog}
+    device = research_merges()
+    for line_id, _, _, _, roster in lines:
+        for step in device.get(line_id, ()):
+            a, b = step.split(">")
+            if a in roster and b in roster and step not in merges:
+                print(f"{line_id}: {step} is a Jogress on the card (research), locked")
+                merges.add(step)
+    for step in sorted(merges):
+        out.append(f"        {swift_str(step)},")
     out += ["    ]", "", "    static let lines: [DigimonLine] = ["]
     for line_id, card_name, egg, baby1, roster in lines:
         members = ", ".join(swift_str(k) for k in roster)
