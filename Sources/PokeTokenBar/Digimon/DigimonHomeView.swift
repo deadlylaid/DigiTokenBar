@@ -44,6 +44,24 @@ struct DigimonText {
     var jogressLabel: String { ko ? "합체 진화까지" : "Until it merges" }
     var jogressTitle: String { ko ? "합체 진화했어요" : "Jogress evolution" }
     func todayExp(_ exp: Int, cap: Int) -> String { ko ? "오늘 \(exp)/\(cap) EXP" : "Today \(exp)/\(cap) EXP" }
+    func todayExpFull(cap: Int) -> String {
+        ko ? "오늘 받을 수 있는 경험치(\(cap))를 다 받았어요. 자정이 지나면 다시 쌓여요."
+           : "Today's \(cap) EXP are all earned. More after midnight."
+    }
+    /// The stage as the card counts it: coding hours a day (Vital Values) and trophies.
+    func cardProgress(hoursPerDay: Double, trophies: Int) -> String {
+        let hours = String(format: "%.1f", hoursPerDay)
+        return ko ? "카드 조건: 하루 평균 코딩 \(hours)시간 · 트로피 \(trophies)개"
+                  : "Card: \(hours) h of coding a day · \(trophies) trophies"
+    }
+    var lockedTendency: String {
+        ko ? "자물쇠가 있는 쪽은 코딩 시간이나 트로피를 더 채우면 열려요"
+           : "Locked sides open with more coding hours or trophies"
+    }
+    var cardProgressHint: String {
+        ko ? "코딩 시간이 길고 트로피가 많을수록 어려운 진화가 열려요. 트로피는 코딩한 날 +1, 한도를 안 넘긴 날 +1, 도구를 2개 이상 쓴 날 +1이에요."
+           : "More coding hours and trophies open harder evolutions. Trophies: +1 for a day of coding, +1 without a full limit, +1 with two or more tools."
+    }
     var chooseTitle: String { ko ? "어떤 모습으로 진화할까요?" : "Which way should it evolve?" }
     func chooseDeadline(hours: Int) -> String {
         ko ? "\(hours)시간 안에 고르지 않으면 가장 잘 맞는 쪽으로 진화해요."
@@ -160,8 +178,8 @@ struct DigimonText {
     }
     func bugsCaught(_ n: Int) -> String { ko ? "잡은 버그 \(n)마리" : "\(n) bugs caught" }
     var evolutionByCare: String {
-        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)으로 정해져요"
-           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting)"
+        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피)으로 정해져요"
+           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies)"
     }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
@@ -299,9 +317,11 @@ struct DigimonStatusView: View {
                 Text(t.evolutionByCare).font(.caption2).foregroundStyle(.secondary)
             }
             HStack {
-                Text(t.todayExp(digimon.expToday, cap: digimon.engine.growth.dailyExpCap))
+                let cap = digimon.engine.growth.dailyExpCap
+                Text(digimon.expToday >= cap ? t.todayExpFull(cap: cap) : t.todayExp(digimon.expToday, cap: cap))
                     .foregroundStyle(.tertiary)
                     .monospacedDigit()
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 if digimon.isFastGrowth { Text(t.fastGrowthOn).foregroundStyle(.orange) }
             }
@@ -319,16 +339,31 @@ struct DigimonStatusView: View {
             }
             ForEach(rows, id: \.attribute) { row in
                 HStack(spacing: 6) {
-                    Text(t.attribute(row.attribute) ?? "?")
-                        .font(.caption.weight(row.leading ? .semibold : .regular))
-                        .frame(width: 58, alignment: .leading)
+                    HStack(spacing: 2) {
+                        Text(t.attribute(row.attribute) ?? "?")
+                            .font(.caption.weight(row.leading ? .semibold : .regular))
+                        if !row.open { Image(systemName: "lock.fill").font(.system(size: 8)) }
+                    }
+                    .frame(width: 58, alignment: .leading)
                     ProgressView(value: min(1, row.pull / top))
                         .tint(Self.color(row.attribute))
+                        .opacity(row.open ? 1 : 0.35)
                 }
+                .help(row.open ? "" : t.lockedTendency)
             }
             Text(t.tendencyReasons(digimon.state.partner.stageSignals))
                 .font(.caption2).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+            if let card = digimon.stagePerformance {
+                Text(t.cardProgress(hoursPerDay: card.hoursPerDay, trophies: card.trophyCount))
+                    .font(.caption2).foregroundStyle(.secondary)
+                    .help(t.cardProgressHint)
+                if rows.contains(where: { !$0.open }) {
+                    Label(t.lockedTendency, systemImage: "lock.fill")
+                        .font(.caption2).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
         }
         .help(t.tendencyHint)
     }

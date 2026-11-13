@@ -18,6 +18,16 @@ struct GrowthRules: Sendable, Equatable {
     var userPicksEvolution = false
     /// How many lines a new egg offers (drawn at random, lines never raised first).
     var eggOfferSize = 3
+    /// The card's requirements decide which routes are open (`growthOptions`). Off = every allowed
+    /// route, picked by tendency only.
+    var cardConditions = true
+    /// Average hours of coding per coding day that meets the hardest Vital Values route of a Digimon.
+    /// Set from the user's own logs (2026-11: median 4 h, best days 6 h).
+    var vitalHoursPerDay = 6.0
+    /// Trophies per day of the stage that meet the hardest trophy route. A day with one tool gives at
+    /// most 2 (coding, no full limit), so coding every day within limits is enough; a day with two
+    /// tools gives 3 and makes up for a missed day.
+    var trophiesPerDay = 2.0
 
     static let standard = GrowthRules()
 
@@ -123,7 +133,10 @@ struct EvolutionEngine: Sendable {
             state.expDay = day
             state.expToday = 0
         }
-        let isNight = growth.nightHours.contains(calendar.component(.hour, from: date))
+        let hour = calendar.component(.hour, from: date)
+        let isNight = growth.nightHours.contains(hour)
+        state.partner.stageSignals.activeHours.insert(String(format: "%@ %02d", day, hour))
+        state.partner.stageSignals.toolsByDay[day, default: []].insert(provider)
         for keyPath in [\DigimonState.partner.stageSignals, \DigimonState.lifetimeSignals] {
             state[keyPath: keyPath].tokens += tokens
             if isNight { state[keyPath: keyPath].nightTokens += tokens }
@@ -145,9 +158,10 @@ struct EvolutionEngine: Sendable {
         return advance(&state, at: date)
     }
 
-    func recordLimitHit(_ state: inout DigimonState) {
+    func recordLimitHit(_ state: inout DigimonState, at date: Date? = nil) {
         state.partner.stageSignals.limitHits += 1
         state.lifetimeSignals.limitHits += 1
+        if let date { state.partner.stageSignals.limitDays.insert(dayKey(date)) }
     }
 
     func recordBugDefeated(_ state: inout DigimonState) {
@@ -268,6 +282,79 @@ struct EvolutionEngine: Sendable {
         return ranked
     }
 
+    // MARK: Card conditions
+
+    /// How the stage went, as the card counts it (each 0...1).
+    struct StagePerformance: Equatable {
+        /// Vital Values: average hours of coding per coding day, against `vitalHoursPerDay`.
+        let vital: Double
+        /// Trophies per day of the stage, against `trophiesPerDay`.
+        let trophies: Double
+        let hoursPerDay: Double
+        let trophyCount: Int
+    }
+
+    /// Trophies of the stage: each day with usage gives 1, plus 1 without a filled usage limit, plus
+    /// 1 with two or more tools.
+    func trophies(_ signals: GrowthSignals) -> Int {
+        signals.activeDays.reduce(0) { sum, day in
+            sum + 1 + (signals.limitDays.contains(day) ? 0 : 1) + ((signals.toolsByDay[day]?.count ?? 0) >= 2 ? 1 : 0)
+        }
+    }
+
+    func performance(for state: DigimonState, at now: Date) -> StagePerformance {
+        let s = state.partner.stageSignals
+        let codingDays = max(1, s.activeDays.count)
+        let hoursPerDay = Double(s.activeHours.count) / Double(codingDays)
+        // Days of the stage so far, counting the ones without usage (they give no trophies).
+        var stageDays = codingDays
+        if let start = state.partner.stageStartedAt {
+            let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: start),
+                                               to: calendar.startOfDay(for: now)).day ?? 0
+            stageDays = max(codingDays, days + 1)
+        }
+        let count = trophies(s)
+        return StagePerformance(vital: min(1, hoursPerDay / growth.vitalHoursPerDay),
+                                trophies: min(1, Double(count) / Double(stageDays) / growth.trophiesPerDay),
+                                hoursPerDay: hoursPerDay, trophyCount: count)
+    }
+
+    /// The forms growth may take now, best first. The card's requirements are compared only among
+    /// the routes from the current Digimon: the hardest one needs a full stage (performance 1), the
+    /// others their share of it. Among the met routes the tendency picks, as before. With none met,
+    /// the easiest route: the card's fallback when it has one (it requires nothing), so growth never
+    /// stops. The fallback is never taken while another route is met.
+    func growthOptions(for state: DigimonState, at now: Date) -> [String] {
+        let ranked = rankedOptions(for: state)
+        // A stage that began before the app counted coding hours (no start date) evolves as before.
+        guard growth.cardConditions, state.partner.stageStartedAt != nil, let current = state.partner.speciesKey,
+              let line = catalog.lines[state.partner.lineID] else { return ranked }
+        let conditions = ranked.compactMap { catalog.condition(from: current, to: $0, in: line) }
+        let stat = conditions.filter { !$0.fallback && ($0.vital > 0 || $0.trophies > 0) }
+        guard !stat.isEmpty else { return ranked }
+        let maxVital = Double(stat.map(\.vital).max() ?? 0)
+        let maxTrophies = Double(stat.map(\.trophies).max() ?? 0)
+        func difficulty(_ c: DigimonStepCondition) -> Double {
+            max(maxVital > 0 ? Double(c.vital) / maxVital : 0, maxTrophies > 0 ? Double(c.trophies) / maxTrophies : 0)
+        }
+        let p = performance(for: state, at: now)
+        var met: [String] = []
+        for key in ranked {
+            guard let c = catalog.condition(from: current, to: key, in: line) else { met.append(key); continue }
+            if c.fallback { continue }
+            let vitalOK = maxVital == 0 || p.vital + 1e-9 >= Double(c.vital) / maxVital
+            let trophiesOK = maxTrophies == 0 || p.trophies + 1e-9 >= Double(c.trophies) / maxTrophies
+            // A hidden evolution already earned its own condition.
+            if (vitalOK && trophiesOK) || rules.hidden[key] != nil { met.append(key) }
+        }
+        if !met.isEmpty { return met }
+        let easiest = ranked.min { a, b in
+            let ca = catalog.condition(from: current, to: a, in: line), cb = catalog.condition(from: current, to: b, in: line)
+            return (ca.map(difficulty) ?? 0) < (cb.map(difficulty) ?? 0)
+        }
+        return easiest.map { [$0] } ?? ranked
+    }
+
     /// How strongly the stage's usage pulls toward this candidate.
     func score(_ evo: DigimonEvolution, signals: GrowthSignals, baseline: GrowthSignals) -> Double {
         guard let target = catalog.species(evo.to) else { return 0 }
@@ -302,19 +389,31 @@ struct EvolutionEngine: Sendable {
         let pull: Double
         /// The attribute of the candidate it would evolve into now.
         let leading: Bool
+        /// A route of this attribute is open now (false: the card's requirements are not met yet).
+        var open = true
     }
 
     /// Which way it is growing: the attributes its next forms can have, how strongly the stage pulls
     /// toward each, and which one leads. Names stay hidden. Empty when there is no real fork.
-    func tendencies(for state: DigimonState) -> [Tendency] {
-        guard state.partner.speciesKey != nil, state.partner.level != .ultimate else { return [] }
-        let options = rankedOptions(for: state).compactMap(catalog.species)
+    /// With `now`, the leading attribute is the one growth would take now, after the card's
+    /// requirements (`growthOptions`), and the bars of routes the card keeps closed are marked. A
+    /// fallback route shows only while growth would take it: more coding never opens it.
+    func tendencies(for state: DigimonState, at now: Date? = nil) -> [Tendency] {
+        guard let current = state.partner.speciesKey, state.partner.level != .ultimate else { return [] }
+        let growingNow = now.map { growthOptions(for: state, at: $0).compactMap(catalog.species) }
+        let line = catalog.lines[state.partner.lineID]
+        let options = rankedOptions(for: state).filter { key in
+            guard now != nil, let line, catalog.condition(from: current, to: key, in: line)?.fallback == true else { return true }
+            return growingNow?.contains { $0.key == key } ?? true
+        }.compactMap(catalog.species)
         let attributes = Set(options.map(\.attribute))
-        guard attributes.count > 1, let lead = options.first?.attribute else { return [] }
+        let growing = growingNow ?? options
+        guard attributes.count > 1, let lead = (growing.first ?? options.first)?.attribute else { return [] }
+        let openAttributes = Set(growing.map(\.attribute))
         let order: [DigimonAttribute] = [.vaccine, .data, .virus, .free, .unknown]
         return order.filter(attributes.contains).map {
             Tendency(attribute: $0, pull: pull($0, signals: state.partner.stageSignals, baseline: state.lifetimeSignals),
-                     leading: $0 == lead)
+                     leading: $0 == lead, open: openAttributes.contains($0))
         }
     }
 
@@ -324,7 +423,7 @@ struct EvolutionEngine: Sendable {
         var events: [DigimonEvent] = []
         while state.pendingChoice == nil, state.eggChoiceOfferedAt == nil,
               state.partner.stageExp >= growth.threshold(for: state.partner.level) {
-            let options = candidates(for: state)
+            let options = Array(growthOptions(for: state, at: date).prefix(growth.maxChoices))
             if let jogress = rules.specialJogress(for: state, in: catalog) {
                 events += evolve(&state, to: jogress.to, at: date)   // instead of graduating
             } else if state.partner.level == .ultimate || options.isEmpty {
@@ -348,6 +447,7 @@ struct EvolutionEngine: Sendable {
         state.partner.level = species.level
         state.partner.stageExp = leftover
         state.partner.stageSignals = GrowthSignals()
+        state.partner.stageStartedAt = date
         state.partner.path.append(key)
         state.dex.insert(key)
         state.eggOffer = nil   // hatched: the draw is used up

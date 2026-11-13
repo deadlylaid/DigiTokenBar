@@ -11,9 +11,37 @@ struct GrowthSignals: Codable, Sendable, Equatable {
     var limitHits = 0
     /// Bugs defeated by the pet's attack.
     var bugsDefeated = 0
+    /// Clock hours with usage, as "yyyy-MM-dd HH" (the card's Vital Values: time spent coding).
+    /// Kept for the current stage only.
+    var activeHours: Set<String> = []
+    /// Tools used per day, and the days a usage limit filled (the card's trophies, see
+    /// `EvolutionEngine.trophies`). Current stage only.
+    var toolsByDay: [String: Set<String>] = [:]
+    var limitDays: Set<String> = []
 
     var nightShare: Double { tokens > 0 ? Double(nightTokens) / Double(tokens) : 0 }
     var providerCount: Int { tokensByProvider.values.filter { $0 > 0 }.count }
+}
+
+// In an extension, so the memberwise initializer stays.
+extension GrowthSignals {
+    private enum CodingKeys: String, CodingKey {
+        case tokens, nightTokens, tokensByProvider, activeDays, limitHits, bugsDefeated, activeHours, toolsByDay, limitDays
+    }
+
+    /// Every field may be missing: saves from before a field existed decode with its default.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        tokens = try c.decodeIfPresent(Int.self, forKey: .tokens) ?? 0
+        nightTokens = try c.decodeIfPresent(Int.self, forKey: .nightTokens) ?? 0
+        tokensByProvider = try c.decodeIfPresent([String: Int].self, forKey: .tokensByProvider) ?? [:]
+        activeDays = try c.decodeIfPresent(Set<String>.self, forKey: .activeDays) ?? []
+        limitHits = try c.decodeIfPresent(Int.self, forKey: .limitHits) ?? 0
+        bugsDefeated = try c.decodeIfPresent(Int.self, forKey: .bugsDefeated) ?? 0
+        activeHours = try c.decodeIfPresent(Set<String>.self, forKey: .activeHours) ?? []
+        toolsByDay = try c.decodeIfPresent([String: Set<String>].self, forKey: .toolsByDay) ?? [:]
+        limitDays = try c.decodeIfPresent(Set<String>.self, forKey: .limitDays) ?? []
+    }
 }
 
 struct DigimonPartner: Codable, Sendable, Equatable {
@@ -25,6 +53,9 @@ struct DigimonPartner: Codable, Sendable, Equatable {
     var stageSignals = GrowthSignals()
     /// Species keys from the first baby to now.
     var path: [String] = []
+    /// When the current stage began (hatching or the last evolution). Optional so saves from before
+    /// it decode unchanged; the trophy rate then counts only the days with usage.
+    var stageStartedAt: Date?
 }
 
 /// Evolution candidates waiting for the user's pick.

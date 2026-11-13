@@ -51,6 +51,32 @@ struct DigimonLine: Sendable, Hashable {
     var steps: Set<String>? = nil
     /// Steps that are a Jogress (a merge) on this card: kept in the data, never taken by growth.
     var mergeSteps: Set<String> = []
+    /// What the card requires for each step (not for merges). Empty = no card data (test catalogs).
+    var conditions: [DigimonStepCondition] = []
+}
+
+/// A Vital Bracelet card's requirement for one step, as the device states it (0 = not required).
+/// The app compares them only within the routes from the same Digimon (`EvolutionEngine`).
+struct DigimonStepCondition: Sendable, Hashable {
+    let step: String
+    /// Vital Values: on the device from steps and heart rate; in the app, hours spent coding.
+    let vital: Int
+    /// Trophies (PP on the BE): daily missions on the device; in the app, good days (see `trophies`).
+    let trophies: Int
+    /// Battles and win ratio: kept for a later battle mode, not used yet.
+    let battles: Int
+    let winRatio: Int
+    /// Taken only when no other route is met ("0-2 trophies or 0-499 Vital Values").
+    let fallback: Bool
+
+    init(_ step: String, vital: Int, trophies: Int, battles: Int, winRatio: Int, fallback: Bool) {
+        self.step = step
+        self.vital = vital
+        self.trophies = trophies
+        self.battles = battles
+        self.winRatio = winRatio
+        self.fallback = fallback
+    }
 }
 
 /// Evolution *data*: who can become whom. Conditions live in `EvolutionRules`.
@@ -58,11 +84,16 @@ struct DigimonCatalog: Sendable {
     let species: [String: DigimonSpecies]
     let lines: [String: DigimonLine]
     private let outgoing: [String: [DigimonEvolution]]
+    /// line id -> step -> the card's requirement.
+    private let conditionIndex: [String: [String: DigimonStepCondition]]
 
     init(species: [DigimonSpecies], evolutions: [DigimonEvolution], lines: [DigimonLine]) {
         self.species = Dictionary(species.map { ($0.key, $0) }, uniquingKeysWith: { first, _ in first })
         self.lines = Dictionary(lines.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         self.outgoing = Dictionary(grouping: evolutions, by: \.from)
+        self.conditionIndex = Dictionary(lines.map { line in
+            (line.id, Dictionary(line.conditions.map { ($0.step, $0) }, uniquingKeysWith: { first, _ in first }))
+        }, uniquingKeysWith: { first, _ in first })
     }
 
     static let mvp = DigimonCatalog(species: DigimonCatalogData.species,
@@ -70,6 +101,11 @@ struct DigimonCatalog: Sendable {
                                     lines: DigimonCatalogData.lines)
 
     func species(_ key: String) -> DigimonSpecies? { species[key] }
+
+    /// The card's requirement for `from>to` on this line, nil when the card data has none.
+    func condition(from: String, to: String, in line: DigimonLine) -> DigimonStepCondition? {
+        conditionIndex[line.id]?["\(from)>\(to)"]
+    }
 
     /// Evolutions from `key` to the next level, limited to the members and routes of `line`. A route
     /// that skips levels counts only when the card has it (D-3 White and Red: Ukkomon, a Child, becomes

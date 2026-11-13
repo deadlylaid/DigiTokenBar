@@ -8,10 +8,17 @@ final class DigimonEngineTests: XCTestCase {
         return c
     }()
     private lazy var engine = EvolutionEngine(calendar: calendar)
-    /// The optional mode where the user picks among the candidates.
+    /// The optional mode where the user picks among the candidates (tendency only, no card conditions).
     private lazy var choosingEngine: EvolutionEngine = {
         var growth = GrowthRules.standard
         growth.userPicksEvolution = true
+        growth.cardConditions = false
+        return EvolutionEngine(growth: growth, calendar: calendar)
+    }()
+    /// Tendency only: the card's requirements are left out (see DigimonCardConditionTests).
+    private lazy var tendencyEngine: EvolutionEngine = {
+        var growth = GrowthRules.standard
+        growth.cardConditions = false
         return EvolutionEngine(growth: growth, calendar: calendar)
     }()
 
@@ -119,6 +126,7 @@ final class DigimonEngineTests: XCTestCase {
 
     /// The default, like a V-Pet: no choice, the best match for how it was raised.
     func testAFullStageEvolvesStraightIntoTheBestMatch() {
+        let engine = tendencyEngine
         var s = DigimonState.newEgg(lineID: "agumon")
         engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
         let best = engine.candidates(for: s).first   // still Agumon with 0 experience: same candidates

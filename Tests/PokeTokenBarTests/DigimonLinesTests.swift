@@ -274,3 +274,144 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertEqual(store.state.lifetimeSignals.bugsDefeated, 14, "a page cannot claim more than 10 at once")
     }
 }
+
+/// The card's requirements (Vital Values -> coding hours, trophies -> good days) open the routes;
+/// the tendency picks among the open ones. Agumon on the Agumon card: Greymon 1,200 VV / 5 trophies,
+/// Algomon 800 / 5, Ogremon 500 / 3, Coelamon the fallback.
+final class DigimonCardConditionTests: XCTestCase {
+    private var calendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        c.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        return c
+    }()
+    private lazy var engine = EvolutionEngine(calendar: calendar)
+
+    private func date(day: Int, hour: Int = 14) -> Date {
+        calendar.date(from: DateComponents(year: 2026, month: 11, day: day, hour: hour))!
+    }
+
+    /// A stage that began on day 1 with `hours` coding hours on each of `days` days.
+    private func stage(at key: String, line: String = "agumon", days: Int = 1, hours: Int, tools: [String] = ["claude_code"],
+                       limitOn: Set<Int> = []) -> DigimonState {
+        var s = DigimonState.newEgg(lineID: line)
+        s.partner.speciesKey = key
+        s.partner.level = DigimonCatalog.mvp.species(key)!.level
+        s.partner.stageStartedAt = date(day: 1, hour: 0)
+        for day in 1...days {
+            let key = engine.dayKey(date(day: day))
+            s.partner.stageSignals.activeDays.insert(key)
+            s.partner.stageSignals.toolsByDay[key] = Set(tools)
+            for hour in 0..<hours { s.partner.stageSignals.activeHours.insert(String(format: "%@ %02d", key, hour)) }
+            if limitOn.contains(day) { s.partner.stageSignals.limitDays.insert(key) }
+        }
+        return s
+    }
+
+    func testTrophiesCountCodingDaysDaysWithoutALimitAndDaysWithTwoTools() {
+        var s = stage(at: "agumon", days: 3, hours: 1, limitOn: [2])
+        s.partner.stageSignals.toolsByDay[engine.dayKey(date(day: 3))] = ["claude_code", "codex"]
+        // day 1: coded, no limit = 2 · day 2: coded, limit = 1 · day 3: coded, no limit, two tools = 3
+        XCTAssertEqual(engine.trophies(s.partner.stageSignals), 6)
+    }
+
+    func testPerformanceIsHoursPerCodingDayAndTrophiesPerStageDay() {
+        let s = stage(at: "agumon", days: 2, hours: 4)
+        let p = engine.performance(for: s, at: date(day: 4))
+        XCTAssertEqual(p.hoursPerDay, 4)
+        XCTAssertEqual(p.vital, 4.0 / 6.0, accuracy: 1e-9)
+        XCTAssertEqual(p.trophyCount, 4)
+        XCTAssertEqual(p.trophies, 4.0 / 4.0 / 2.0, accuracy: 1e-9, "four stage days, two without coding")
+    }
+
+    func testLittleCodingTakesTheCardsFallback() {
+        XCTAssertEqual(engine.growthOptions(for: stage(at: "agumon", hours: 1), at: date(day: 1)), ["coelamon"])
+    }
+
+    func testSomeCodingOpensOnlyTheEasierRoutes() {
+        // 3 h -> 0.5 of the Vital Values scale (Algomon needs 0.67); 2 trophies a day is full: Ogremon only.
+        XCTAssertEqual(engine.growthOptions(for: stage(at: "agumon", hours: 3), at: date(day: 1)), ["orgemon"])
+    }
+
+    func testFourHoursADayWithinLimitsOpensTheMiddleRoute() {
+        // The user's usual stage (2026-11 logs: 4 h a day, one tool): Algomon (0.67 / 1.0) and Ogremon.
+        let options = engine.growthOptions(for: stage(at: "agumon", days: 2, hours: 4), at: date(day: 2))
+        XCTAssertEqual(Set(options), ["algomonadult", "orgemon"])
+    }
+
+    func testAFullStageOpensEveryRouteAndTheTendencyPicks() {
+        let s = stage(at: "agumon", hours: 6, tools: ["claude_code", "codex"])
+        let options = engine.growthOptions(for: s, at: date(day: 1))
+        XCTAssertEqual(Set(options), ["greymon", "algomonadult", "orgemon"], "the fallback is only for when nothing is met")
+        XCTAssertEqual(options, engine.rankedOptions(for: s).filter { $0 != "coelamon" }, "ranked by tendency as before")
+    }
+
+    func testTheLeadingTendencyIsWhereGrowthWouldGoNow() {
+        let s = stage(at: "agumon", hours: 1)
+        let fallback = DigimonCatalog.mvp.species("coelamon")!.attribute
+        XCTAssertEqual(engine.tendencies(for: s, at: date(day: 1)).first { $0.leading }?.attribute, fallback,
+                       "little coding: the fallback leads")
+        let rows = engine.tendencies(for: s, at: date(day: 1))
+        XCTAssertGreaterThan(rows.count, 1, "the bars still show every route")
+        XCTAssertEqual(rows.filter(\.open).map(\.attribute), [fallback], "the others are locked by the card")
+    }
+
+    func testAFallbackIsNotShownAsLockedWhenTheStageWentWell() {
+        // 4 h: Algomon and Ogremon (Virus) open, Greymon (Vaccine) locked, Coelamon (the fallback) not taken.
+        let rows = engine.tendencies(for: stage(at: "agumon", days: 2, hours: 4), at: date(day: 2))
+        let coelamon = DigimonCatalog.mvp.species("coelamon")!.attribute
+        XCTAssertFalse(rows.contains { $0.attribute == coelamon && !$0.open }, "more coding never opens the fallback")
+        XCTAssertEqual(rows.first { !$0.open }?.attribute, DigimonCatalog.mvp.species("greymon")!.attribute)
+    }
+
+    func testWithoutAFallbackTheEasiestRouteIsTaken() {
+        // Greymon has no fallback on the card: Metal Tyranomon (2,000 / 6) is the easiest.
+        XCTAssertEqual(engine.growthOptions(for: stage(at: "greymon", hours: 1), at: date(day: 1)), ["metaltyranomon"])
+    }
+
+    func testAStageFromBeforeTheConditionsEvolvesByTendencyAsBefore() {
+        var s = stage(at: "agumon", hours: 1)
+        s.partner.stageStartedAt = nil
+        XCTAssertEqual(engine.growthOptions(for: s, at: date(day: 1)), engine.rankedOptions(for: s))
+    }
+
+    func testGrowthUsesTheConditionsWhenTheStageIsFull() {
+        var s = stage(at: "agumon", hours: 1)
+        s.partner.stageExp = engine.growth.threshold(for: .child)
+        XCTAssertEqual(engine.settle(&s, at: date(day: 1)), [.evolved(from: "agumon", to: "coelamon")])
+        XCTAssertEqual(s.partner.stageStartedAt, date(day: 1), "the next stage starts counting now")
+        XCTAssertEqual(s.partner.stageSignals.activeHours, [], "a new stage counts from zero")
+    }
+
+    func testUsageAndLimitsAreRecordedForTheStage() {
+        var s = stage(at: "agumon", hours: 0)
+        s.partner.stageSignals = GrowthSignals()
+        engine.addUsage(&s, tokens: 10, provider: "claude_code", at: date(day: 2, hour: 9))
+        engine.addUsage(&s, tokens: 10, provider: "codex", at: date(day: 2, hour: 15))
+        engine.recordLimitHit(&s, at: date(day: 2, hour: 16))
+        let day = engine.dayKey(date(day: 2))
+        XCTAssertEqual(s.partner.stageSignals.activeHours, ["\(day) 09", "\(day) 15"])
+        XCTAssertEqual(s.partner.stageSignals.toolsByDay[day], ["claude_code", "codex"])
+        XCTAssertEqual(s.partner.stageSignals.limitDays, [day])
+        XCTAssertTrue(s.lifetimeSignals.activeHours.isEmpty, "hours are kept for the stage only")
+    }
+
+    func testASaveFromBeforeTheNewSignalsDecodes() throws {
+        let old = #"{"tokens":5,"nightTokens":1,"tokensByProvider":{"claude_code":5},"activeDays":["2026-11-01"],"limitHits":0}"#
+        let signals = try JSONDecoder().decode(GrowthSignals.self, from: Data(old.utf8))
+        XCTAssertEqual(signals.tokens, 5)
+        XCTAssertEqual(signals.bugsDefeated, 0)
+        XCTAssertEqual(signals.activeHours, [])
+        let partner = #"{"lineID":"agumon","speciesKey":"agumon","level":"child","stageExp":3,"stageSignals":\#(old),"path":["agumon"]}"#
+        XCTAssertNil(try JSONDecoder().decode(DigimonPartner.self, from: Data(partner.utf8)).stageStartedAt)
+    }
+
+    func testEveryLineCarriesItsCardConditions() {
+        for line in DigimonCatalog.mvp.lines.values {
+            XCTAssertFalse(line.conditions.isEmpty, line.id)
+            for c in line.conditions {
+                XCTAssertTrue(line.steps?.contains(c.step) ?? false, "\(line.id): \(c.step) is not a route of the card")
+                XCTAssertFalse(line.mergeSteps.contains(c.step), "\(line.id): merges carry no condition")
+            }
+        }
+    }
+}

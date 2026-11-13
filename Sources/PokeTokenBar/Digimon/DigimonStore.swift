@@ -124,7 +124,7 @@ final class DigimonStore {
     func recordLimitWindows(_ windows: [CandyWindow], limitsReady: Bool) {
         var next = saved
         let hits = next.limits.observe(windows, limitsReady: limitsReady)
-        for _ in 0..<hits { engine.recordLimitHit(&next.digimon) }
+        for _ in 0..<hits { engine.recordLimitHit(&next.digimon, at: clock()) }
         commit(next, [])
     }
 
@@ -135,7 +135,13 @@ final class DigimonStore {
         commit(next, [])
     }
 
-    var tendencies: [EvolutionEngine.Tendency] { engine.tendencies(for: state) }
+    var tendencies: [EvolutionEngine.Tendency] { engine.tendencies(for: state, at: clock()) }
+    /// The stage as the card counts it; nil when card conditions do not apply (off, an egg, or a stage
+    /// that began before the app counted coding hours).
+    var stagePerformance: EvolutionEngine.StagePerformance? {
+        guard engine.growth.cardConditions, !isEgg, state.partner.stageStartedAt != nil else { return nil }
+        return engine.performance(for: state, at: clock())
+    }
     /// A full stage will merge (special Jogress) instead of graduating.
     var canSpecialJogress: Bool { engine.rules.specialJogress(for: state, in: engine.catalog) != nil }
 

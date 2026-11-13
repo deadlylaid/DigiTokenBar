@@ -8,6 +8,7 @@ stay separate.
     python3 -I tools/digimon/gen_catalog.py
 """
 import json
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -96,6 +97,49 @@ def edge_kind(e):
     return "fallback" if e.get("isFallback") else "normal"
 
 
+CONDITIONS = {}   # line id -> {(from, to): (vital values, trophies, battles, win ratio %, fallback)}
+
+
+def req_number(value):
+    """A requirement as a number: 800, "800+", {"min": 800} or {"minPercent": 60}; None when absent."""
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return int(value)
+    if isinstance(value, dict):
+        for k in ("min", "minPercent", "value"):
+            if isinstance(value.get(k), (int, float)):
+                return int(value[k])
+        return None
+    m = re.search(r"[\d,]+", str(value))
+    return int(m.group().replace(",", "")) if m else None
+
+
+def step_conditions(edges):
+    """The card's requirements per step. A step written as several routes ("Choose one: <stats> /
+    Jogress") keeps its easiest stat route; it is a fallback only when every route for it is one."""
+    routes = {}
+    for e in edges:
+        if e.get("onCard", True) is False:
+            continue
+        kind = edge_kind(e)
+        if kind == "jogress":
+            continue
+        r = e.get("requirements") or {}
+        get = lambda *names: next((req_number(r[n]) for n in names if n in r and req_number(r[n]) is not None), None)
+        routes.setdefault((e["from"], e["to"]), []).append(
+            (kind, get("vitalValues"), get("trophies", "pp"), get("battles"), get("winRatio")))
+    out = {}
+    for step, rs in routes.items():
+        stat = [x for x in rs if x[0] != "fallback"]
+        if stat:
+            kind, vv, tr, bt, wr = min(stat, key=lambda x: (x[1] or 0, x[2] or 0))
+            out[step] = (vv or 0, tr or 0, bt or 0, wr or 0, False)
+        else:
+            out[step] = (0, 0, 0, 0, True)
+    return out
+
+
 def research_cards():
     """{line id: [(from, to, kind), ...]}: the routes on each researched line's card."""
     out = {}
@@ -106,6 +150,7 @@ def research_cards():
             # `extraEdges`: routes on the card the first research found missing from the app data.
             out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in card["edges"] + card.get("extraEdges", [])
                             if e.get("onCard", True) is not False]
+            CONDITIONS[line_id] = step_conditions(card["edges"] + card.get("extraEdges", []))
     return out
 
 
@@ -323,7 +368,14 @@ def main():
         out.append(f"        DigimonLine(id: {swift_str(line_id)}, card: {swift_str(card_name)}, eggColorHex: {swift_str(egg)},")
         out.append(f"                    firstBaby: {swift_str(baby1)}, members: [{members}],")
         out.append(f"                    steps: [{steps}],")
-        out.append(f"                    mergeSteps: [{merges}]),")
+        out.append(f"                    mergeSteps: [{merges}],")
+        conds = CONDITIONS.get(line_id, {})
+        rows = []
+        for ab in sorted(steps_of[line_id], key=order):
+            if ab in conds and ab not in merges_of[line_id]:
+                vv, tr, bt, wr, fb = conds[ab]
+                rows.append(f".init({step(ab)}, vital: {vv}, trophies: {tr}, battles: {bt}, winRatio: {wr}, fallback: {str(fb).lower()})")
+        out.append(f"                    conditions: [{', '.join(rows)}]),")
     out += ["    ]", "}", ""]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text("\n".join(out))
