@@ -1,6 +1,6 @@
 {
  "meta": {
-  "description": "Signature move per species for the pet's attack: Korean from the official Korean Digimon reference (digimon.net/reference_ko), English from the Japanese original (digimon.net/reference_en, or Wikimon where reference_en uses a dub name). kind picks one of the drawn attack shapes: fire, missile, gaia, claw, ice. Sources and notes per move: tools/digimon/research/moves-*.json and docs/digimon."
+  "description": "Signature move per species for the pet's attack: Korean from the official Korean Digimon reference (digimon.net/reference_ko), English from the Japanese original (digimon.net/reference_en, or Wikimon where reference_en uses a dub name). kind picks one of the drawn attack shapes: fire, missile, gaia, claw, ice, bind (tentacles, vines, threads, whips). Sources and notes per move: tools/digimon/research/moves-*.json and docs/digimon."
  },
  "moves": {
   "agumon": {
@@ -66,7 +66,7 @@
   "algomonadult": {
    "ko": "임프리즈먼트",
    "en": "Imprisonment",
-   "kind": "claw"
+   "kind": "bind"
   },
   "orgemon": {
    "ko": "패왕권",
@@ -361,7 +361,7 @@
   "rosemon": {
    "ko": "쏜 위프",
    "en": "Thorn Whip",
-   "kind": "claw"
+   "kind": "bind"
   },
   "tigervespamon": {
    "ko": "마하스팅거V",
@@ -561,7 +561,7 @@
   "baalmon": {
    "ko": "카미우치",
    "en": "Kamiuchi",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "바알몬"
   },
   "beelzebumon": {
@@ -1065,7 +1065,7 @@
   "palmon": {
    "ko": "포이즌 아이비",
    "en": "Poison Ivy",
-   "kind": "fire",
+   "kind": "bind",
    "koSpecies": "팔몬"
   },
   "snimon": {
@@ -1119,7 +1119,7 @@
   "archnemon": {
    "ko": "스파이더 스레드",
    "en": "Spider Thread",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "아라크네몬"
   },
   "bloomlordmon": {
@@ -1623,7 +1623,7 @@
   "parasimon": {
    "ko": "일렉트릭 바인드",
    "en": "Electric Bind",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "패러사이몬"
   },
   "sakuyamonxantibody": {
@@ -1647,7 +1647,7 @@
   "wormmon": {
    "ko": "끈적 그물",
    "en": "Sticky Net",
-   "kind": "fire",
+   "kind": "bind",
    "koSpecies": "추추몬"
   },
   "stingmon": {
@@ -1737,7 +1737,7 @@
   "gyukimon": {
    "ko": "팔속염박",
    "en": "Yatsuka Senbaku",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "규우키몬"
   },
   "oboromon": {
@@ -1863,7 +1863,7 @@
   "cthyllamon": {
    "ko": "벅클라슈",
    "en": "Buccal Rush",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "쿠티라몬"
   },
   "wanyamon": {
@@ -2055,7 +2055,7 @@
   "bigukkomon": {
    "ko": "바이올런트 퍼니셔",
    "en": "Violent Punisher",
-   "kind": "claw",
+   "kind": "bind",
    "koSpecies": "빅웃코몬"
   },
   "dokimon": {
@@ -2841,7 +2841,7 @@
   "mummymon": {
    "ko": "스네이크 밴디지",
    "en": "Snake Bandage",
-   "kind": "gaia",
+   "kind": "bind",
    "koSpecies": "미이라몬"
   },
   "blastmon": {

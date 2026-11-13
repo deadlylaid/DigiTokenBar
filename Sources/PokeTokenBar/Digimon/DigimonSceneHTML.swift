@@ -42,7 +42,7 @@ const moodSlow = () => S.mood === 'sick' ? .45 : S.mood === 'sleepy' ? .55 : 1;
 // Move names: Korean from the official Korean Digimon reference (digimon.net/reference_ko; Agumon
 // keeps 꼬마 불꽃 from its reference text and the Korean dub), English from the Japanese originals
 // (digimon.net/reference_en, or Wikimon where reference_en uses a dub name). Checked 2026-11-10.
-// The kind picks one of the five drawn attack shapes. Species without an entry use a plain attack.
+// The kind picks one of the six drawn attack shapes. Species without an entry use a plain attack.
 const MOVES = {
 \#(DigimonMovesData.js)
 };
@@ -60,9 +60,10 @@ const PAL = {
   gaia: ['#fff3c4', '#ff8a2a', '#c92a1a'],
   claw: ['#ffffff', '#c9f1ff', '#6fb7ff'],
   ice: ['#ffffff', '#c7f3ff', '#59b4ff'],
+  bind: ['#f6e9ff', '#b685e8', '#5e3a8f'],
 };
 // Timing per attack shape: [charge, release, recover] (ms)
-const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380]};
+const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380], bind: [240, 140, 420]};
 // Bug enemy drawn in code (11x8, two leg frames)
 const BUG = [[
   "...k...k...",
@@ -137,24 +138,39 @@ class Pet {
     this.callout = {text: atk.name + '!', t: 0, life: 1500};
     this.enter('attack', {kind: atk.kind, name: atk.name});
   }
-  fire(kind, n = 0) {
-    const b = this.bb(), f = this.facing, h = b.b - b.t, st = Math.max(1, S.stage - 2);
-    let mx = (f < 0 ? this.x + b.l : this.x + b.r) + this.lean, my = this.ground() - this.y - h * .66;
-    let speed = 110 + st * 12, r = 2.6 + st, pal = PAL['fire_' + S.line] || PAL.fire_agumon;
-    if (kind === 'missile') { my = this.ground() - this.y - h * (.5 - n * .12); speed = 150; r = 3; pal = PAL.missile; }
-    if (kind === 'gaia') { mx = this.x + (b.l + b.r) / 2 + f * 4; my = this.ground() - this.y - h - 9; speed = 95; r = 9; pal = PAL.gaia; }
-    if (kind === 'claw') { my = this.ground() - this.y - h * .5; speed = 170; r = 6; pal = PAL.claw; }
+  // One move's projectile from a Digimon at x (box b, facing f, lifted by lift). Bug attacks and
+  // battles both use it, so a move looks the same everywhere.
+  shotFrom(kind, x, b, f, line, n = 0, lift = 0, lean = 0) {
+    const gy = this.ground() - lift, h = b.b - b.t, st = Math.max(1, S.stage - 2);
+    let mx = (f < 0 ? x + b.l : x + b.r) + lean, my = gy - h * .66;
+    let speed = 110 + st * 12, r = 2.6 + st, pal = PAL['fire_' + line] || PAL.fire_agumon;
+    if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 150; r = 3; pal = PAL.missile; }
+    if (kind === 'gaia') { mx = x + (b.l + b.r) / 2 + f * 4; my = gy - h - 9; speed = 95; r = 9; pal = PAL.gaia; }
+    if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6; pal = PAL.claw; }
     if (kind === 'ice') { speed = 135; r = 5; pal = PAL.ice; }
-    const vx = f * speed;
-    let vy = 0;
-    const g = this.bug;
-    if (g && !g.dead && Math.sign(g.x + 5 - mx) === f) vy = (this.ground() - 4 - my) / (Math.abs(g.x + 5 - mx) / Math.abs(vx));
-    this.shots.push({kind, x: mx, y: my, vx, vy, r, pal, t: 0});
-    for (let i = 0; i < 6; i++) this.parts.push({x: mx, y: my, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: pal[1], s: 1});
+    if (kind === 'bind') { my = gy - h * .55; speed = 210; r = 2.5; pal = PAL.bind; }
+    return {kind, x: mx, y: my, ox: mx, vx: f * speed, vy: 0, r, pal, t: 0};
+  }
+  fire(kind, n = 0) {
+    const s = this.shotFrom(kind, this.x, this.bb(), this.facing, S.line, n, this.y, this.lean), f = this.facing;
+    const g = this.bug, F = this.fight;
+    if (F && F.pending) {
+      // A battle: the shot flies at the foe and lands as the app decided.
+      const fb = assets[F.foe].bb;
+      Object.assign(s, {duel: true, mine: true, hit: F.pending.hit, tx: F.fx + (fb.l + fb.r) / 2, body: fb});
+    } else if (g && !g.dead && Math.sign(g.x + 5 - s.x) === f) {
+      s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
+    }
+    this.shots.push(s);
+    if (kind !== 'bind') for (let i = 0; i < 6; i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: 1});
   }
   boom(x, y, s) {
     if (s.kind === 'gaia') this.flash = Math.max(this.flash, .45);
-    this.booms.push({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal});
+    // A binding move coils around the target instead of bursting, sized to the target's body.
+    const body = s.body, coil = s.kind === 'bind' && body
+      ? {y: this.ground() - (body.b - body.t) * .48, rx: (body.r - body.l) * .42, gap: (body.b - body.t) * .17} : {};
+    this.booms.push(Object.assign({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal, kind: s.kind,
+                                   life: s.kind === 'bind' ? 650 : 320}, coil));
     for (let i = 0; i < 12; i++) { const a = TAU * i / 12, sp = rand(20, 55); this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? 2 : 1}); }
   }
   // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
@@ -271,21 +287,13 @@ class Pet {
     this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
     this.facing = onLeft ? 1 : -1;
     this.fight = {foe: c.foe, rounds: c.rounds || [], won: !!c.won, i: 0, t: -650, fx: onLeft ? W * .75 - 32 : W * .25 - 32,
-                  dir: onLeft ? -1 : 1, alpha: 0, hurt: 0, foeHurt: 0, shots: [], done: 0};
+                  dir: onLeft ? -1 : 1, alpha: 0, hurt: 0, foeHurt: 0, lunge: 0, done: 0, pending: null};
     this.enter('duel', {});
   }
   updateDuel(dt) {
     const F = this.fight;
     F.t += dt; F.alpha = F.done > 1900 ? Math.max(0, F.alpha - dt / 450) : Math.min(1, F.alpha + dt / 350);
-    F.hurt = Math.max(0, F.hurt - dt); F.foeHurt = Math.max(0, F.foeHurt - dt);
-    F.shots = F.shots.filter(s => {
-      s.t += dt; s.x += s.vx * dt / 1000;
-      if (!s.done && (s.vx > 0 ? s.x >= s.tx : s.x <= s.tx)) {
-        s.done = true;
-        if (s.hit) { this.boom(s.x, s.y, s); if (s.mine) F.foeHurt = 520; else { F.hurt = 520; this.lean = -this.facing * 2; } return false; }
-      }
-      return s.x > -12 && s.x < this.worldW + 12;
-    });
+    F.hurt = Math.max(0, F.hurt - dt); F.foeHurt = Math.max(0, F.foeHurt - dt); F.lunge = Math.max(0, (F.lunge || 0) - dt);
     if (F.done) {
       F.done += dt;
       if (F.won && F.done < 900) this.y = Math.abs(Math.sin(F.done / 900 * Math.PI * 2)) * 8;
@@ -294,18 +302,22 @@ class Pet {
     }
     if (F.t < 0) return;
     if (F.i < F.rounds.length) {
-      const r = F.rounds[F.i++], mine = r.a === 'me', A = assets[F.foe], fb = A.bb, mb = this.bb(), gy = this.ground();
-      const myCx = this.x + (mb.l + mb.r) / 2, foeCx = F.fx + (fb.l + fb.r) / 2;
-      const from = mine ? myCx + this.facing * (mb.r - mb.l) * .4 : foeCx + F.dir * (fb.r - fb.l) * .4;
-      const to = mine ? foeCx : myCx;
-      const kind = moveOf(mine ? this.key : F.foe).kind;
-      const pal = kind === 'fire' ? (mine ? (PAL['fire_' + S.line] || PAL.fire_agumon) : PAL.fire_agumon) : (PAL[kind] || PAL.fire_agumon);
-      const y = gy - ((mine ? mb.b - mb.t : fb.b - fb.t) * .55);
-      F.shots.push({x: from, y, vx: Math.sign(to - from || 1) * 160, tx: to, hit: !!r.hit, mine, kind: kind === 'gaia' ? 'gaia' : 'fire',
-                    r: kind === 'gaia' ? 6 : 3.5, pal, t: 0});
-      if (mine) { this.callout = {text: moveOf(this.key).name + '!', t: 0, life: 800}; this.lean = this.facing * 2.5; }
+      const r = F.rounds[F.i++];
       F.t = -850;
-    } else if (F.shots.length === 0) {
+      if (r.a === 'me') {
+        // The pet's own attack (wind-up, the move's shape); `fire` aims it at the foe.
+        const atk = moveOf(this.key);
+        F.pending = {hit: !!r.hit};
+        this.callout = {text: atk.name + '!', t: 0, life: 800};
+        this.enter('attack', {kind: atk.kind, name: atk.name});
+      } else {
+        const fb = assets[F.foe].bb, mb = this.bb();
+        const s = this.shotFrom(moveOf(F.foe).kind, F.fx, fb, F.dir, '');
+        Object.assign(s, {duel: true, mine: false, hit: !!r.hit, tx: this.x + (mb.l + mb.r) / 2, body: mb});
+        this.shots.push(s);
+        F.lunge = 260;
+      }
+    } else if (!this.shots.some(s => s.duel)) {
       const ko = S.lang === 'ko';
       F.done = 1;
       this.callout = {text: F.won ? (ko ? '이겼다!' : 'Won!') : (ko ? '졌다…' : 'Lost…'), t: 0, life: 2300};
@@ -319,14 +331,10 @@ class Pet {
     c.fillStyle = this.desk ? 'rgba(0,0,0,.22)' : (dark ? 'rgba(0,0,0,.35)' : 'rgba(60,50,30,.13)');
     c.beginPath(); c.ellipse(cx, gy + .5, (bb.r - bb.l) * .39, this.desk ? 2 : 2.4, 0, 0, TAU); c.fill();
     const flash = F.foeHurt > 0 && Math.floor(F.foeHurt / 80) % 2 === 0;
-    c.save(); c.translate(cx, gy); c.scale(F.dir === 1 ? -1 : 1, lost ? .92 : 1);
+    c.save(); c.translate(cx + F.dir * 2 * Math.sin(Math.PI * (F.lunge || 0) / 260), gy); c.scale(F.dir === 1 ? -1 : 1, lost ? .92 : 1);
     c.drawImage(flash ? A.sil[1] : A.img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
     c.restore();
     c.globalAlpha = 1;
-    for (const s of F.shots) {
-      const r = s.r + Math.sin(s.t / 40) * .5;
-      this.pixBall(c, s.x, s.y, r, s.pal[2]); this.pixBall(c, s.x, s.y, r * .7, s.pal[1]); this.pixBall(c, s.x, s.y, r * .35, s.pal[0]);
-    }
   }
   // ---- update ----
   update(dt) {
@@ -340,7 +348,7 @@ class Pet {
     if (this.flash > 0) this.flash = Math.max(0, this.flash - dt / 550);
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
-    if (this.fight && this.state !== 'duel') this.fight = null;   // interrupted (sleep, evolution, ...)
+    if (this.fight && this.state !== 'duel' && this.state !== 'attack') this.fight = null;   // interrupted (sleep, evolution, ...)
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
       if (this.moodT > 4200) {
@@ -356,9 +364,22 @@ class Pet {
         if (Math.random() < .9) this.parts.push({x: s.x + back * 5, y: s.y + rand(-.5, .5), vx: back * rand(4, 12), vy: rand(-8, -2), t: 0, life: rand(300, 550), c: Math.random() < .3 ? '#ffb53b' : (Math.random() < .5 ? '#c8ccd4' : '#9aa0aa'), s: Math.random() < .5 ? 2 : 1});
       } else if (s.kind === 'ice') {
         for (let i = 0; i < 2; i++) this.parts.push({x: s.x + back * rand(0, s.r * 1.5), y: s.y + rand(-s.r, s.r), vx: s.vx * .1, vy: rand(-6, 6), t: 0, life: rand(250, 500), c: Math.random() < .5 ? '#ffffff' : '#c7f3ff', s: Math.random() < .5 ? 2 : 1});
-      } else if (s.kind !== 'claw') {
+      } else if (s.kind !== 'claw' && s.kind !== 'bind') {
         for (let i = 0; i < (s.kind === 'gaia' ? 2 : 1); i++) if (Math.random() < .75) this.parts.push({x: s.x + back * s.r * .7 + rand(-1, 1), y: s.y + rand(-s.r * .5, s.r * .5), vx: -s.vx * .05, vy: rand(-14, -4), t: 0, life: rand(200, 380), c: s.pal[Math.random() < .5 ? 1 : 2], s: 1});
       }
+      if (s.duel) {
+        if (!s.done && (s.vx > 0 ? s.x >= s.tx : s.x <= s.tx)) {
+          s.done = true;
+          if (s.hit) {
+            this.boom(s.x, s.y, s);
+            if (this.fight) { if (s.mine) this.fight.foeHurt = 520; else this.fight.hurt = 520; }
+            return false;
+          }
+          if (s.kind === 'bind') return false;   // a missed tendril falls away
+        }
+        return s.x > -12 && s.x < this.worldW + 12;
+      }
+      if (s.kind === 'bind' && Math.abs(s.x - s.ox) > 120) return false;   // out of reach
       const g = this.bug;
       if (g && !g.dead && Math.hypot(s.x - (g.x + 5.5 * g.sc), s.y - (this.ground() - 4 * g.sc)) < s.r + 6 * g.sc) {
         this.boom(s.x, s.y, s);
@@ -370,7 +391,7 @@ class Pet {
       if (s.x < 3 || s.x > this.worldW - 3 || s.y > this.ground()) { this.boom(s.x, Math.min(s.y, this.ground() - 2), s); return false; }
       return true;
     });
-    this.booms = this.booms.filter(b => (b.t += dt) < 320);
+    this.booms = this.booms.filter(b => (b.t += dt) < (b.life || 320));
     if (this.callout && (this.callout.t += dt) > this.callout.life) this.callout = null;
     if (this.bug) {
       const g = this.bug; g.t += dt;
@@ -416,7 +437,8 @@ class Pet {
         } else if (t < t2 + rc) {
           const e = 1 - easeIO((t - t2) / rc);
           this.lean = f * (k === 'claw' ? 5.8 : 2.2) * e; this.sway = (k === 'claw' ? 0 : -2.4) * e; this.sy = 1 + .04 * e;
-        } else this.enter('idle', {dur: rand(700, 1500)});
+        } else if (this.fight) { this.fight.pending = null; this.enter('duel', {}); }
+        else this.enter('idle', {dur: rand(700, 1500)});
         if (k === 'missile' && d.fired && !d.fired2 && t - d.ft >= 130) { d.fired2 = true; this.fire('missile', 1); }
         break; }
       case 'wobble': { const p = this.t / d.dur; this.rot = .16 * Math.sin(this.t / 70) * (1 - p); if (p >= 1) this.enter('idle'); break; }
@@ -572,6 +594,16 @@ class Pet {
           c.fillStyle = s.pal[2]; c.fillRect(px + back, py, 1, 1);
           c.fillStyle = s.pal[0]; c.fillRect(px, py, 1, 1);
         }
+      } else if (s.kind === 'bind') {
+        // A wavy tendril from where it was thrown to its tip.
+        const dir = Math.sign(s.vx) || 1, len = Math.abs(s.x - s.ox);
+        const wave = i => Math.sin(i / 4.5 - s.t / 55) * 2.4 * Math.min(1, i / 8);
+        for (let i = 0; i <= len; i++) {
+          const px = Math.round(s.ox + dir * i), py = Math.round(s.y + wave(i));
+          c.fillStyle = s.pal[2]; c.fillRect(px, py - 1, 1, 3);
+          c.fillStyle = s.pal[1]; c.fillRect(px, py, 1, 1);
+        }
+        this.pixBall(c, s.x, s.y + wave(len), 2.4, s.pal[2]); this.pixBall(c, s.x, s.y + wave(len), 1.2, s.pal[0]);
       } else if (s.kind === 'ice') {
         const r = s.r;
         c.fillStyle = s.pal[2]; for (let dy = -r; dy <= r; dy++) { const w = Math.round((r - Math.abs(dy)) * 1.6); c.fillRect(Math.round(s.x - w), Math.round(s.y + dy), w * 2 + 1, 1); }
@@ -586,6 +618,21 @@ class Pet {
       }
     }
     for (const b of this.booms) {
+      if (b.kind === 'bind') {
+        // Three loops wound around the target, tightening, then fading.
+        const p = b.t / b.life, squeeze = 1 - .25 * Math.min(1, p * 3);
+        c.globalAlpha = p < .7 ? 1 : (1 - p) / .3;
+        const rx0 = b.rx || 9, gap = b.gap || 5;
+        for (let k = -1; k <= 1; k++) {
+          const rx = (rx0 - Math.abs(k) * rx0 * .2) * squeeze, ry = Math.max(2.2, rx0 * .18), cy = b.y + k * gap;
+          for (let a = 0; a < TAU; a += Math.min(.2, 1.2 / rx)) {
+            c.fillStyle = Math.sin(a) > 0 ? b.pal[1] : b.pal[2];
+            c.fillRect(Math.round(b.x + Math.cos(a) * rx), Math.round(cy + Math.sin(a) * ry), 1, 1);
+          }
+        }
+        c.globalAlpha = 1;
+        continue;
+      }
       const p = b.t / 320, R = b.r * (1 + 1.8 * p);
       c.globalAlpha = 1 - p;
       this.pixBall(c, b.x, b.y, R, b.pal[2]); this.pixBall(c, b.x, b.y, R * .65, b.pal[1]); this.pixBall(c, b.x, b.y, R * .3, b.pal[0]);

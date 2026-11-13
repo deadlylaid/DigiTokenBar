@@ -17,6 +17,9 @@ NODES = json.loads((HERE / "data" / "evolutions.json").read_text())["nodes"]
 
 # Checked in order: the first matching shape wins.
 SHAPES = [
+    # Binding moves (tentacles, vines, threads, whips): a tendril that coils around the target.
+    ("bind", r"\b(binds?|binding|entangl\w*|restrain\w*|wraps?|coils?|whips?|lash\w*|ensnar\w*|snares?|vines?|ivy|"
+             r"threads?|silk|webs?|bandages?|tongues?)\b"),
     ("ice", r"\b(ice|icy|freez\w*|frost\w*|snow\w*|blizzard|cold|hail|frozen|diamond dust)\b"),
     ("missile", r"\b(missiles?|rockets?|bullets?|guns?|gatling|cannon\w*|shells?|bombs?|torpedo\w*|grenades?|"
                 r"arrows?|darts?|needles?|spikes?|quills?|projectiles?|shoots?|launch\w*|throws?|hurls?)\b"),
