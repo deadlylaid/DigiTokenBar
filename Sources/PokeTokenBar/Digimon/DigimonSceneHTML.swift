@@ -263,6 +263,71 @@ class Pet {
     this.enter('evolve', {from: this.key, to, show: false, acc: 0, swapped: false});
   }
   setNow(key) { if (!assets[key] || this.key === key) return; this.key = key; this.clampX(); }
+  // ---- battle (decided by the app; this only plays it) ----
+  duel(c) {
+    if (this.isEgg() || !assets[c.foe]) return;
+    this.bug = null; this.chip = null; this.callout = null; this.note = null;
+    const W = this.worldW, onLeft = this.x + 32 < W / 2;
+    this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
+    this.facing = onLeft ? 1 : -1;
+    this.fight = {foe: c.foe, rounds: c.rounds || [], won: !!c.won, i: 0, t: -650, fx: onLeft ? W * .75 - 32 : W * .25 - 32,
+                  dir: onLeft ? -1 : 1, alpha: 0, hurt: 0, foeHurt: 0, shots: [], done: 0};
+    this.enter('duel', {});
+  }
+  updateDuel(dt) {
+    const F = this.fight;
+    F.t += dt; F.alpha = F.done > 1900 ? Math.max(0, F.alpha - dt / 450) : Math.min(1, F.alpha + dt / 350);
+    F.hurt = Math.max(0, F.hurt - dt); F.foeHurt = Math.max(0, F.foeHurt - dt);
+    F.shots = F.shots.filter(s => {
+      s.t += dt; s.x += s.vx * dt / 1000;
+      if (!s.done && (s.vx > 0 ? s.x >= s.tx : s.x <= s.tx)) {
+        s.done = true;
+        if (s.hit) { this.boom(s.x, s.y, s); if (s.mine) F.foeHurt = 520; else { F.hurt = 520; this.lean = -this.facing * 2; } return false; }
+      }
+      return s.x > -12 && s.x < this.worldW + 12;
+    });
+    if (F.done) {
+      F.done += dt;
+      if (F.won && F.done < 900) this.y = Math.abs(Math.sin(F.done / 900 * Math.PI * 2)) * 8;
+      if (F.done > 2500) { this.fight = null; if (S.sleeping) this.sleep(); else this.enter('idle', {dur: 900}); }
+      return;
+    }
+    if (F.t < 0) return;
+    if (F.i < F.rounds.length) {
+      const r = F.rounds[F.i++], mine = r.a === 'me', A = assets[F.foe], fb = A.bb, mb = this.bb(), gy = this.ground();
+      const myCx = this.x + (mb.l + mb.r) / 2, foeCx = F.fx + (fb.l + fb.r) / 2;
+      const from = mine ? myCx + this.facing * (mb.r - mb.l) * .4 : foeCx + F.dir * (fb.r - fb.l) * .4;
+      const to = mine ? foeCx : myCx;
+      const kind = moveOf(mine ? this.key : F.foe).kind;
+      const pal = kind === 'fire' ? (mine ? (PAL['fire_' + S.line] || PAL.fire_agumon) : PAL.fire_agumon) : (PAL[kind] || PAL.fire_agumon);
+      const y = gy - ((mine ? mb.b - mb.t : fb.b - fb.t) * .55);
+      F.shots.push({x: from, y, vx: Math.sign(to - from || 1) * 160, tx: to, hit: !!r.hit, mine, kind: kind === 'gaia' ? 'gaia' : 'fire',
+                    r: kind === 'gaia' ? 6 : 3.5, pal, t: 0});
+      if (mine) { this.callout = {text: moveOf(this.key).name + '!', t: 0, life: 800}; this.lean = this.facing * 2.5; }
+      F.t = -850;
+    } else if (F.shots.length === 0) {
+      const ko = S.lang === 'ko';
+      F.done = 1;
+      this.callout = {text: F.won ? (ko ? '이겼다!' : 'Won!') : (ko ? '졌다…' : 'Lost…'), t: 0, life: 2300};
+    }
+  }
+  drawFoe(c, gy, dark) {
+    const F = this.fight, A = assets[F.foe];
+    if (!A) return;
+    const bb = A.bb, cx = F.fx + (bb.l + bb.r) / 2, lost = F.done && F.won;
+    c.globalAlpha = F.alpha;
+    c.fillStyle = this.desk ? 'rgba(0,0,0,.22)' : (dark ? 'rgba(0,0,0,.35)' : 'rgba(60,50,30,.13)');
+    c.beginPath(); c.ellipse(cx, gy + .5, (bb.r - bb.l) * .39, this.desk ? 2 : 2.4, 0, 0, TAU); c.fill();
+    const flash = F.foeHurt > 0 && Math.floor(F.foeHurt / 80) % 2 === 0;
+    c.save(); c.translate(cx, gy); c.scale(F.dir === 1 ? -1 : 1, lost ? .92 : 1);
+    c.drawImage(flash ? A.sil[1] : A.img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
+    c.restore();
+    c.globalAlpha = 1;
+    for (const s of F.shots) {
+      const r = s.r + Math.sin(s.t / 40) * .5;
+      this.pixBall(c, s.x, s.y, r, s.pal[2]); this.pixBall(c, s.x, s.y, r * .7, s.pal[1]); this.pixBall(c, s.x, s.y, r * .35, s.pal[0]);
+    }
+  }
   // ---- update ----
   update(dt) {
     dt = Math.min(dt, 50);
@@ -275,6 +340,7 @@ class Pet {
     if (this.flash > 0) this.flash = Math.max(0, this.flash - dt / 550);
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
+    if (this.fight && this.state !== 'duel') this.fight = null;   // interrupted (sleep, evolution, ...)
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
       if (this.moodT > 4200) {
@@ -327,6 +393,7 @@ class Pet {
     const d = this.d;
     const idleBreath = () => { this.breath = .03 * (.5 + .5 * Math.sin(TAU * T / 1900)); this.sway = .6 * Math.sin(TAU * T / 3700); };
     switch (this.state) {
+      case 'duel': idleBreath(); this.updateDuel(dt); break;
       case 'idle':
         idleBreath();
         if (this.bug && !this.bug.dead && this.bug.noticed && this.t > 350) { this.attack(); break; }
@@ -468,6 +535,7 @@ class Pet {
       if (rem < 12) { if (ch.fromRight) c.drawImage(COIN, 0, 0, 12 - rem, 12, ch.x, ch.y, 12 - rem, 12); else c.drawImage(COIN, rem, 0, 12 - rem, 12, ch.x + rem, ch.y, 12 - rem, 12); }
       c.restore();
     }
+    if (this.fight && this.fight.hurt > 0 && Math.floor(this.fight.hurt / 80) % 2 === 0 && !evolving) img = A.sil[1];
     c.save();
     c.translate(cx, gy - this.y);
     if (this.rot) c.rotate(this.rot);
@@ -476,6 +544,7 @@ class Pet {
     if (desk && this.dim > 0 && !evolving) { c.globalAlpha = .35 * this.dim; this.blit(c, A.sil[0], bb, -(bb.l + bb.r) / 2); c.globalAlpha = 1; }
     if (S.mood === 'sick' && !evolving && A.sil[2]) { c.globalAlpha = .22; this.blit(c, A.sil[2], bb, -(bb.l + bb.r) / 2); c.globalAlpha = 1; }
     c.restore();
+    if (this.fight) this.drawFoe(c, gy, dark);
     if (S.mood === 'sick' && !evolving && this.state !== 'sleep') {
       // A sweat drop beside the head.
       const sx = Math.round(cx + (bb.r - bb.l) / 2 * (this.facing < 0 ? -1 : 1) * .6), sy = Math.round(gy - this.y - hgt + 3 + Math.sin(performance.now() / 260));
@@ -623,6 +692,7 @@ window.app = {
   },
   cmd(c) {
     if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key); }); return; }
+    if (c.type === 'battle') { whenAsset(c.foe, () => { if (pet) pet.duel(c); }); return; }
     // Agent state is kept, so a pet created later (sprite still loading) shows it too.
     if (c.type === 'agent') { S.agent = c; if (pet) pet.setAgent(c); return; }
     if (!pet) return;

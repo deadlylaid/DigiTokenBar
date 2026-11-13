@@ -48,19 +48,56 @@ struct DigimonText {
         ko ? "오늘 받을 수 있는 경험치(\(cap))를 다 받았어요. 자정이 지나면 다시 쌓여요."
            : "Today's \(cap) EXP are all earned. More after midnight."
     }
-    /// The stage as the card counts it: coding hours a day (Vital Values) and trophies.
-    func cardProgress(hoursPerDay: Double, trophies: Int) -> String {
+    /// The stage as the card counts it: coding hours a day (Vital Values), trophies and battles.
+    func cardProgress(hoursPerDay: Double, trophies: Int, battles: Int, winPercent: Int) -> String {
         let hours = String(format: "%.1f", hoursPerDay)
-        return ko ? "카드 조건: 하루 평균 코딩 \(hours)시간 · 트로피 \(trophies)개"
-                  : "Card: \(hours) h of coding a day · \(trophies) trophies"
+        return ko ? "카드 조건: 하루 평균 코딩 \(hours)시간 · 트로피 \(trophies)개 · 배틀 \(battles)번(승률 \(winPercent)%)"
+                  : "Card: \(hours) h of coding a day · \(trophies) trophies · \(battles) battles (\(winPercent)% won)"
+    }
+    // Battles
+    var battleTitle: String { ko ? "배틀" : "Battle" }
+    func battleStats(_ battles: Int, _ winPercent: Int) -> String {
+        ko ? "이번 단계 \(battles)번 · 승률 \(winPercent)%" : "This stage: \(battles) · \(winPercent)% won"
+    }
+    func practiceButton(_ left: Int, of total: Int) -> String { ko ? "연습 배틀 (\(left)/\(total))" : "Practice (\(left)/\(total))" }
+    var copyCodeButton: String { ko ? "내 코드 복사" : "Copy my code" }
+    var codeBattleButton: String { ko ? "받은 코드로 배틀" : "Battle a code" }
+    var battleHelp: String {
+        ko ? "연습 배틀은 하루 5번, 같은 단계의 야생 디지몬과 싸워요. 다른 사용자와는 서로 코드를 보내고, 받은 코드를 복사한 뒤 '받은 코드로 배틀'을 누르면 두 앱에서 같은 배틀이 펼쳐져요. 코드 배틀은 3번으로 쳐요. 배틀은 경험치를 주지 않고, 카드 조건(배틀 수·승률)만 채워요."
+           : "Practice: 5 a day against wild Digimon of the same level. With another user, send each other your codes; copy theirs and press 'Battle a code' and both apps play the same battle. A code battle counts three. Battles give no EXP, only the card's battle and win-ratio requirements."
+    }
+    var codeCopied: String {
+        ko ? "내 배틀 코드를 복사했어요. 상대에게 보내고, 상대 코드도 받아서 '받은 코드로 배틀'을 눌러 주세요."
+           : "Your battle code is copied. Send it, then copy theirs and press 'Battle a code'."
+    }
+    func battleResult(_ outcome: DigimonStore.BattleOutcome, foeName: String) -> String {
+        let score = "\(outcome.result.myHits) : \(outcome.result.foeHits)"
+        if ko {
+            let kind = outcome.withCode ? "코드 배틀, 3번으로 셈" : "연습"
+            return (outcome.result.won ? "이겼어요! " : "졌어요… ") + "\(score) · 상대: \(foeName) (\(kind))"
+        }
+        let kind = outcome.withCode ? "code battle, counts 3" : "practice"
+        return (outcome.result.won ? "Won! " : "Lost… ") + "\(score) · vs \(foeName) (\(kind))"
+    }
+    func battleError(_ error: Error) -> String {
+        switch error as? BattleCodeError {
+        case .notACode?: return ko ? "클립보드에 배틀 코드가 없어요. 상대가 보낸 코드(DTB1.로 시작)를 복사한 뒤 눌러 주세요." : "No battle code on the clipboard. Copy the code you got (it starts with DTB1.) first."
+        case .damaged?: return ko ? "코드가 잘렸거나 바뀌었어요. 다시 복사해 주세요." : "The code was cut or changed. Copy it again."
+        case .unsupported?: return ko ? "이 앱에서 읽을 수 없는 코드예요." : "This app cannot read that code."
+        case .unknownDigimon?: return ko ? "모르는 디지몬의 코드예요." : "That code holds a Digimon this app does not know."
+        case .expired?: return ko ? "7일이 지난 코드예요. 새 코드를 받아 주세요." : "That code is over 7 days old. Ask for a new one."
+        case .ownCode?: return ko ? "내 코드예요. 상대가 보낸 코드를 복사해 주세요." : "That is your own code. Copy theirs."
+        case .alreadyFought?: return ko ? "이미 싸운 코드예요. 상대 코드는 하루에 한 번 바뀌어요." : "Already fought with that code. Codes change once a day."
+        case nil: return ko ? "배틀을 할 수 없어요." : "No battle right now."
+        }
     }
     var lockedTendency: String {
-        ko ? "자물쇠가 있는 쪽은 코딩 시간이나 트로피를 더 채우면 열려요"
-           : "Locked sides open with more coding hours or trophies"
+        ko ? "자물쇠가 있는 쪽은 코딩 시간, 트로피, 배틀을 더 채우면 열려요"
+           : "Locked sides open with more coding hours, trophies or battles"
     }
     var cardProgressHint: String {
-        ko ? "코딩 시간이 길고 트로피가 많을수록 어려운 진화가 열려요. 트로피는 코딩한 날 +1, 한도를 안 넘긴 날 +1, 도구를 2개 이상 쓴 날 +1이에요."
-           : "More coding hours and trophies open harder evolutions. Trophies: +1 for a day of coding, +1 without a full limit, +1 with two or more tools."
+        ko ? "코딩 시간, 트로피, 배틀이 많을수록 어려운 진화가 열려요. 트로피는 코딩한 날 +1, 한도를 안 넘긴 날 +1, 도구를 2개 이상 쓴 날 +1이에요. 승률을 요구하는 진화도 있어요."
+           : "More coding hours, trophies and battles open harder evolutions. Trophies: +1 for a day of coding, +1 without a full limit, +1 with two or more tools. Some need a win ratio."
     }
     var chooseTitle: String { ko ? "어떤 모습으로 진화할까요?" : "Which way should it evolve?" }
     func chooseDeadline(hours: Int) -> String {
@@ -178,8 +215,8 @@ struct DigimonText {
     }
     func bugsCaught(_ n: Int) -> String { ko ? "잡은 버그 \(n)마리" : "\(n) bugs caught" }
     var evolutionByCare: String {
-        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피)으로 정해져요"
-           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies)"
+        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피, 배틀)으로 정해져요"
+           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies, battles)"
     }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
@@ -206,6 +243,7 @@ struct DigimonStatusView: View {
     let hub: DigimonSceneHub
     let language: AppLanguage
     @State private var picked: String?
+    @State private var battleMessage: String?
 
     private var t: DigimonText { DigimonText(language) }
 
@@ -216,7 +254,50 @@ struct DigimonStatusView: View {
             if !digimon.tendencies.isEmpty { tendency }
             if !digimon.candidates.isEmpty { choice }
             if digimon.canChooseEggLine { eggChoice }
+            if digimon.canBattle { battle }
         }
+    }
+
+    /// Practice and code battles. The scene above plays each battle.
+    private var battle: some View {
+        let signals = digimon.state.partner.stageSignals
+        let win = signals.battles > 0 ? signals.battleWins * 100 / signals.battles : 0
+        let total = digimon.engine.growth.practiceBattlesPerDay
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(t.battleTitle).font(.callout.weight(.semibold))
+                Spacer()
+                Text(t.battleStats(signals.battles, win)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+            }
+            HStack(spacing: 6) {
+                Button(t.practiceButton(digimon.practiceLeft, of: total)) {
+                    if let outcome = digimon.practiceBattle() { battleMessage = resultText(outcome) }
+                }
+                .disabled(digimon.practiceLeft == 0)
+                Button(t.copyCodeButton) {
+                    guard let code = digimon.myBattleCode() else { return }
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(code, forType: .string)
+                    battleMessage = t.codeCopied
+                }
+                Button(t.codeBattleButton) {
+                    let text = NSPasteboard.general.string(forType: .string) ?? ""
+                    do { battleMessage = resultText(try digimon.battle(withCode: text)) }
+                    catch { battleMessage = t.battleError(error) }
+                }
+            }
+            .controlSize(.small)
+            if let battleMessage {
+                Text(battleMessage).font(.caption2).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .help(t.battleHelp)
+    }
+
+    private func resultText(_ outcome: DigimonStore.BattleOutcome) -> String {
+        let foe = digimon.engine.catalog.species(outcome.foe.species)
+        let level = foe.map { t.level($0.level) } ?? ""
+        return t.battleResult(outcome, foeName: "\(t.name(foe)) \(level)")
     }
 
     /// Before hatching, pick the line (the Vital Bracelet card) to raise: one of the eggs drawn for
@@ -355,7 +436,8 @@ struct DigimonStatusView: View {
                 .font(.caption2).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
             if let card = digimon.stagePerformance {
-                Text(t.cardProgress(hoursPerDay: card.hoursPerDay, trophies: card.trophyCount))
+                Text(t.cardProgress(hoursPerDay: card.hoursPerDay, trophies: card.trophyCount,
+                                    battles: card.battleCount, winPercent: card.winPercent))
                     .font(.caption2).foregroundStyle(.secondary)
                     .help(t.cardProgressHint)
                 if rows.contains(where: { !$0.open }) {

@@ -275,7 +275,8 @@ final class DigimonLinesTests: XCTestCase {
     }
 }
 
-/// The card's requirements (Vital Values -> coding hours, trophies -> good days) open the routes;
+/// The card's requirements (Vital Values -> coding hours, trophies -> good days, battles and win
+/// ratio -> battles) open the routes;
 /// the tendency picks among the open ones. Agumon on the Agumon card: Greymon 1,200 VV / 5 trophies,
 /// Algomon 800 / 5, Ogremon 500 / 3, Coelamon the fallback.
 final class DigimonCardConditionTests: XCTestCase {
@@ -290,10 +291,13 @@ final class DigimonCardConditionTests: XCTestCase {
         calendar.date(from: DateComponents(year: 2026, month: 11, day: day, hour: hour))!
     }
 
-    /// A stage that began on day 1 with `hours` coding hours on each of `days` days.
+    /// A stage that began on day 1 with `hours` coding hours on each of `days` days. Battles default
+    /// to a full stage of wins, so the tests about hours and trophies are not decided by battles.
     private func stage(at key: String, line: String = "agumon", days: Int = 1, hours: Int, tools: [String] = ["claude_code"],
-                       limitOn: Set<Int> = []) -> DigimonState {
+                       limitOn: Set<Int> = [], battles: Int = 10, wins: Int? = nil) -> DigimonState {
         var s = DigimonState.newEgg(lineID: line)
+        s.partner.stageSignals.battles = battles
+        s.partner.stageSignals.battleWins = wins ?? battles
         s.partner.speciesKey = key
         s.partner.level = DigimonCatalog.mvp.species(key)!.level
         s.partner.stageStartedAt = date(day: 1, hour: 0)
@@ -361,6 +365,32 @@ final class DigimonCardConditionTests: XCTestCase {
         let coelamon = DigimonCatalog.mvp.species("coelamon")!.attribute
         XCTAssertFalse(rows.contains { $0.attribute == coelamon && !$0.open }, "more coding never opens the fallback")
         XCTAssertEqual(rows.first { !$0.open }?.attribute, DigimonCatalog.mvp.species("greymon")!.attribute)
+    }
+
+    func testWithoutBattlesTheBattleRoutesStayClosed() {
+        // Greymon needs 8 battles and Algomon 3 on the card; Ogremon none.
+        let s = stage(at: "agumon", hours: 6, tools: ["claude_code", "codex"], battles: 0)
+        XCTAssertEqual(engine.growthOptions(for: s, at: date(day: 1)), ["orgemon"])
+        let some = stage(at: "agumon", hours: 6, tools: ["claude_code", "codex"], battles: 4)
+        XCTAssertEqual(Set(engine.growthOptions(for: some, at: date(day: 1))), ["algomonadult", "orgemon"],
+                       "4 of 10 battles: Algomon (3/8 = 0.375) opens, Greymon (8/8) does not")
+    }
+
+    func testTheWinRatioIsTheCardsOwnPercentage() {
+        // Greymon: Metal Greymon needs 70% wins, Anomalocarimon and Metal Tyranomon 50%.
+        let full = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 6)
+        XCTAssertEqual(Set(engine.growthOptions(for: full, at: date(day: 1))), ["anomalocarimon", "metaltyranomon"],
+                       "60% wins: not enough for Metal Greymon")
+        let strong = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 7)
+        XCTAssertTrue(engine.growthOptions(for: strong, at: date(day: 1)).contains("metalgreymon"))
+    }
+
+    func testBattleConditionsCanBeTurnedOff() {
+        var growth = GrowthRules.standard
+        growth.battleConditions = false
+        let off = EvolutionEngine(growth: growth, calendar: calendar)
+        let s = stage(at: "agumon", hours: 6, tools: ["claude_code", "codex"], battles: 0)
+        XCTAssertEqual(Set(off.growthOptions(for: s, at: date(day: 1))), ["greymon", "algomonadult", "orgemon"])
     }
 
     func testWithoutAFallbackTheEasiestRouteIsTaken() {

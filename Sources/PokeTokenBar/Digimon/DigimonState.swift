@@ -18,6 +18,9 @@ struct GrowthSignals: Codable, Sendable, Equatable {
     /// `EvolutionEngine.trophies`). Current stage only.
     var toolsByDay: [String: Set<String>] = [:]
     var limitDays: Set<String> = []
+    /// Battles and wins, weighted: a battle with another user counts `GrowthRules.codeBattleWeight`.
+    var battles = 0
+    var battleWins = 0
 
     var nightShare: Double { tokens > 0 ? Double(nightTokens) / Double(tokens) : 0 }
     var providerCount: Int { tokensByProvider.values.filter { $0 > 0 }.count }
@@ -27,6 +30,7 @@ struct GrowthSignals: Codable, Sendable, Equatable {
 extension GrowthSignals {
     private enum CodingKeys: String, CodingKey {
         case tokens, nightTokens, tokensByProvider, activeDays, limitHits, bugsDefeated, activeHours, toolsByDay, limitDays
+        case battles, battleWins
     }
 
     /// Every field may be missing: saves from before a field existed decode with its default.
@@ -41,6 +45,8 @@ extension GrowthSignals {
         activeHours = try c.decodeIfPresent(Set<String>.self, forKey: .activeHours) ?? []
         toolsByDay = try c.decodeIfPresent([String: Set<String>].self, forKey: .toolsByDay) ?? [:]
         limitDays = try c.decodeIfPresent(Set<String>.self, forKey: .limitDays) ?? []
+        battles = try c.decodeIfPresent(Int.self, forKey: .battles) ?? 0
+        battleWins = try c.decodeIfPresent(Int.self, forKey: .battleWins) ?? 0
     }
 }
 
@@ -92,10 +98,25 @@ struct DigimonState: Codable, Sendable, Equatable {
     /// Lines drawn for the current egg (see `EvolutionEngine.offerEggLines`). Kept until it hatches
     /// so reopening the app never redraws them. Optional so saves from before it decode unchanged.
     var eggOffer: [String]?
+    /// A random number standing for this save in battle codes (nothing personal). Made on first use.
+    var playerID: String?
+    /// Battle bookkeeping. Optional so saves from before battles decode unchanged.
+    var battleBook: BattleBook?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
     }
+}
+
+struct BattleBook: Codable, Sendable, Equatable {
+    /// The user's code for the current stage and day: the same every time it is copied, so both
+    /// sides of a battle compute it from the same two codes.
+    var myCode: BattleFighter?
+    /// Codes already fought, as "player:nonce", newest last (at most `limit`).
+    var fought: [String] = []
+    var practiceDay = ""
+    var practiceToday = 0
+    static let limit = 200
 }
 
 /// Things the UI animates. The engine never touches the UI.

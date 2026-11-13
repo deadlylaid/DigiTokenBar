@@ -24,6 +24,14 @@ struct GrowthRules: Sendable, Equatable {
     /// Average hours of coding per coding day that meets the hardest Vital Values route of a Digimon.
     /// Set from the user's own logs (2026-11: median 4 h, best days 6 h).
     var vitalHoursPerDay = 6.0
+    /// The card's battle and win-ratio requirements count (battle mode).
+    var battleConditions = true
+    /// Weighted battles in a stage that meet the hardest battle route.
+    var battlesPerStage = 10.0
+    /// Practice battles against wild Digimon per day.
+    var practiceBattlesPerDay = 5
+    /// A battle with another user's code counts as this many.
+    var codeBattleWeight = 3
     /// Trophies per day of the stage that meet the hardest trophy route. A day with one tool gives at
     /// most 2 (coding, no full limit), so coding every day within limits is enough; a day with two
     /// tools gives 3 and makes up for a missed day.
@@ -292,6 +300,10 @@ struct EvolutionEngine: Sendable {
         let trophies: Double
         let hoursPerDay: Double
         let trophyCount: Int
+        /// Weighted battles of the stage against `battlesPerStage`, the count, and the win ratio (%).
+        var battles: Double = 0
+        var battleCount = 0
+        var winPercent = 0
     }
 
     /// Trophies of the stage: each day with usage gives 1, plus 1 without a filled usage limit, plus
@@ -316,7 +328,9 @@ struct EvolutionEngine: Sendable {
         let count = trophies(s)
         return StagePerformance(vital: min(1, hoursPerDay / growth.vitalHoursPerDay),
                                 trophies: min(1, Double(count) / Double(stageDays) / growth.trophiesPerDay),
-                                hoursPerDay: hoursPerDay, trophyCount: count)
+                                hoursPerDay: hoursPerDay, trophyCount: count,
+                                battles: min(1, Double(s.battles) / growth.battlesPerStage), battleCount: s.battles,
+                                winPercent: s.battles > 0 ? s.battleWins * 100 / s.battles : 0)
     }
 
     /// The forms growth may take now, best first. The card's requirements are compared only among
@@ -329,13 +343,16 @@ struct EvolutionEngine: Sendable {
         // A stage that began before the app counted coding hours (no start date) evolves as before.
         guard growth.cardConditions, state.partner.stageStartedAt != nil, let current = state.partner.speciesKey,
               let line = catalog.lines[state.partner.lineID] else { return ranked }
+        let battles = growth.battleConditions
         let conditions = ranked.compactMap { catalog.condition(from: current, to: $0, in: line) }
-        let stat = conditions.filter { !$0.fallback && ($0.vital > 0 || $0.trophies > 0) }
+        let stat = conditions.filter { !$0.fallback && ($0.vital > 0 || $0.trophies > 0 || (battles && $0.battles > 0)) }
         guard !stat.isEmpty else { return ranked }
         let maxVital = Double(stat.map(\.vital).max() ?? 0)
         let maxTrophies = Double(stat.map(\.trophies).max() ?? 0)
+        let maxBattles = battles ? Double(stat.map(\.battles).max() ?? 0) : 0
         func difficulty(_ c: DigimonStepCondition) -> Double {
-            max(maxVital > 0 ? Double(c.vital) / maxVital : 0, maxTrophies > 0 ? Double(c.trophies) / maxTrophies : 0)
+            max(maxVital > 0 ? Double(c.vital) / maxVital : 0, maxTrophies > 0 ? Double(c.trophies) / maxTrophies : 0,
+                maxBattles > 0 ? Double(c.battles) / maxBattles : 0, battles ? Double(c.winRatio) / 100 : 0)
         }
         let p = performance(for: state, at: now)
         var met: [String] = []
@@ -344,8 +361,11 @@ struct EvolutionEngine: Sendable {
             if c.fallback { continue }
             let vitalOK = maxVital == 0 || p.vital + 1e-9 >= Double(c.vital) / maxVital
             let trophiesOK = maxTrophies == 0 || p.trophies + 1e-9 >= Double(c.trophies) / maxTrophies
+            // Battles compare like the others; the win ratio is the card's own percentage.
+            let battlesOK = maxBattles == 0 || p.battles + 1e-9 >= Double(c.battles) / maxBattles
+            let winOK = !battles || c.winRatio == 0 || (p.battleCount > 0 && p.winPercent >= c.winRatio)
             // A hidden evolution already earned its own condition.
-            if (vitalOK && trophiesOK) || rules.hidden[key] != nil { met.append(key) }
+            if (vitalOK && trophiesOK && battlesOK && winOK) || rules.hidden[key] != nil { met.append(key) }
         }
         if !met.isEmpty { return met }
         let easiest = ranked.min { a, b in
@@ -486,5 +506,73 @@ struct SeededGenerator: RandomNumberGenerator {
         z = (z ^ (z >> 30)) &* 0xBF58_476D_1CE4_E5B9
         z = (z ^ (z >> 27)) &* 0x94D0_49BB_1331_11EB
         return z ^ (z >> 31)
+    }
+}
+
+// MARK: Battles
+
+extension EvolutionEngine {
+    /// The user's side of a battle. The same code within a stage and a day; nil for an egg.
+    func myFighter(_ state: inout DigimonState, at now: Date) -> BattleFighter? {
+        guard let key = state.partner.speciesKey, let species = catalog.species(key) else { return nil }
+        let player = state.playerID ?? String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(12))
+        state.playerID = player
+        let day = dayKey(now)
+        let stage = Int64(state.partner.stageStartedAt?.timeIntervalSince1970 ?? 0)
+        var book = state.battleBook ?? BattleBook()
+        if let code = book.myCode, code.species == key, code.stage == stage, code.day == day, code.player == player {
+            return code
+        }
+        let p = performance(for: state, at: now)
+        let code = BattleFighter(player: player, species: key, level: species.level,
+                                 training: Int(((p.vital + p.trophies) / 2 * 100).rounded()), stage: stage, day: day,
+                                 nonce: DigimonBattle.fnv1a("\(player)|\(stage)|\(day)|\(key)"), issuedAt: now)
+        book.myCode = code
+        state.battleBook = book
+        return code
+    }
+
+    /// Practice against a wild Digimon of the same level, up to `practiceBattlesPerDay` a day.
+    /// nil for an egg or when today's practice is used up.
+    func practiceBattle(_ state: inout DigimonState, at now: Date,
+                        rng: inout some RandomNumberGenerator) -> (foe: BattleFighter, result: BattleResult)? {
+        var book = state.battleBook ?? BattleBook()
+        let day = dayKey(now)
+        if book.practiceDay != day { book.practiceDay = day; book.practiceToday = 0 }
+        guard book.practiceToday < growth.practiceBattlesPerDay, let me = myFighter(&state, at: now) else { return nil }
+        book.myCode = state.battleBook?.myCode
+        book.practiceToday += 1
+        state.battleBook = book
+        let foe = DigimonBattle.wildFoe(for: me, catalog: catalog, rng: &rng, at: now)
+        let result = DigimonBattle.fight(me: me, foe: foe, catalog: catalog)
+        recordBattle(&state, won: result.won, weight: 1)
+        return (foe, result)
+    }
+
+    /// A battle with another user's code. Each code counts once.
+    func codeBattle(_ state: inout DigimonState, code: String, at now: Date) throws -> (foe: BattleFighter, result: BattleResult) {
+        let foe = try BattleCode.decode(code, catalog: catalog, now: now)
+        guard let me = myFighter(&state, at: now) else { throw BattleCodeError.unsupported }
+        guard foe.player != me.player else { throw BattleCodeError.ownCode }
+        var book = state.battleBook ?? BattleBook()
+        let seen = "\(foe.player):\(foe.nonce)"
+        guard !book.fought.contains(seen) else { throw BattleCodeError.alreadyFought }
+        book.fought = Array((book.fought + [seen]).suffix(BattleBook.limit))
+        state.battleBook = book
+        let result = DigimonBattle.fight(me: me, foe: foe, catalog: catalog)
+        recordBattle(&state, won: result.won, weight: growth.codeBattleWeight)
+        return (foe, result)
+    }
+
+    func recordBattle(_ state: inout DigimonState, won: Bool, weight: Int) {
+        for keyPath in [\DigimonState.partner.stageSignals, \DigimonState.lifetimeSignals] {
+            state[keyPath: keyPath].battles += weight
+            if won { state[keyPath: keyPath].battleWins += weight }
+        }
+    }
+
+    func practiceLeft(_ state: DigimonState, at now: Date) -> Int {
+        guard let book = state.battleBook, book.practiceDay == dayKey(now) else { return growth.practiceBattlesPerDay }
+        return max(0, growth.practiceBattlesPerDay - book.practiceToday)
     }
 }

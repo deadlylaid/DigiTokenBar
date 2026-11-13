@@ -177,6 +177,16 @@ final class DigimonSceneHub {
 
     func broadcast(_ cmd: [String: Any]) { liveScenes.forEach { $0.command(cmd) } }
 
+    /// Play a battle (already decided) in every scene: the foe walks in and the moves fly.
+    func playBattle(foe: String, result: BattleResult) {
+        enqueue { hub in
+            guard let data = await hub.image(for: foe) else { return }
+            hub.liveScenes.forEach { $0.sprite(key: foe, dataURI: Self.dataURI(data)) }
+            let rounds: [[String: Any]] = result.rounds.map { ["a": $0.attacker == .me ? "me" : "foe", "hit": $0.hit] }
+            hub.broadcast(["type": "battle", "foe": foe, "won": result.won, "rounds": rounds])
+        }
+    }
+
     /// The sprite for a scene key, downloaded on first use. nil while offline and not cached.
     func image(for key: String) async -> Data? {
         if let data = images[key] { return data }

@@ -21,6 +21,8 @@ final class DigimonStore {
     @ObservationIgnored var onActivity: @MainActor (_ events: [DigimonEvent], _ fedTokens: Int) -> Void = { _, _ in }
     /// Called when the Digimon changed without an event: an import, a restore, or a new egg line.
     @ObservationIgnored var onLookChanged: @MainActor () -> Void = {}
+    /// Each battle, to play it in the scenes.
+    @ObservationIgnored var onBattle: @MainActor (_ foe: BattleFighter, _ result: BattleResult) -> Void = { _, _ in }
     /// Written into exports and backups so a file says which Mac it came from. The local computer
     /// name, read without a network lookup (`Host.current()` can block on DNS; backups run at launch).
     @ObservationIgnored var deviceName: () -> String = { (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? "Mac" }
@@ -149,6 +151,55 @@ final class DigimonStore {
         var next = saved
         let events = engine.choose(&next.digimon, key, at: clock())
         commit(next, events)
+    }
+
+    // MARK: Battles
+
+    struct BattleOutcome: Equatable {
+        let foe: BattleFighter
+        let result: BattleResult
+        /// Against another user's code (false: practice).
+        let withCode: Bool
+    }
+
+    /// The last battle this run, for the result line on Home.
+    private(set) var lastBattle: BattleOutcome?
+
+    var practiceLeft: Int { engine.practiceLeft(state, at: clock()) }
+    var canBattle: Bool { !isEgg }
+
+    /// The user's battle code for today and this stage (saved, so it stays the same when copied again).
+    func myBattleCode() -> String? {
+        var next = saved
+        guard let fighter = engine.myFighter(&next.digimon, at: clock()) else { return nil }
+        commit(next, [])
+        return BattleCode.encode(fighter)
+    }
+
+    /// A practice battle against a wild Digimon. nil when today's practice is used up (or an egg).
+    @discardableResult
+    func practiceBattle() -> BattleOutcome? {
+        var next = saved
+        var rng = SystemRandomNumberGenerator()
+        guard let (foe, result) = engine.practiceBattle(&next.digimon, at: clock(), rng: &rng) else { return nil }
+        commit(next, [])
+        return finish(BattleOutcome(foe: foe, result: result, withCode: false))
+    }
+
+    /// A battle with the first battle code in `text` (what the user pasted or copied).
+    @discardableResult
+    func battle(withCode text: String) throws -> BattleOutcome {
+        var next = saved
+        let (foe, result) = try engine.codeBattle(&next.digimon, code: text, at: clock())
+        commit(next, [])
+        return finish(BattleOutcome(foe: foe, result: result, withCode: true))
+    }
+
+    private func finish(_ outcome: BattleOutcome) -> BattleOutcome {
+        lastBattle = outcome
+        AppLog.write("digimon battle \(outcome.withCode ? "code" : "practice") vs \(outcome.foe.species) won=\(outcome.result.won)")
+        onBattle(outcome.foe, outcome.result)
+        return outcome
     }
 
     // MARK: Fast growth (for trying the app out)

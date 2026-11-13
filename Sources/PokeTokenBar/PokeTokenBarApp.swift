@@ -115,6 +115,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimonHub = DigimonSceneHub(digimon: digimon)
         digimonHub.language = companion.language
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
+        digimon.onBattle = { [weak self] foe, result in self?.digimonHub.playBattle(foe: foe.species, result: result) }
         digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }
         digimon.setFastGrowth(UserDefaults.standard.bool(forKey: DigimonStore.fastGrowthKey))
         updater = UpdateChecker()
