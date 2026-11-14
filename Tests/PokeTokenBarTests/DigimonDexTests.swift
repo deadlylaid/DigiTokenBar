@@ -45,6 +45,40 @@ final class DigimonDexTests: XCTestCase {
 
     /// Every Digimon must have its own named attack in the pet scene, so a catalog change cannot
     /// silently fall back to the plain "Attack".
+    /// The shape of every move is one the scene can draw (it has colors and timing for it).
+    func testEveryMoveUsesADrawnShape() throws {
+        let page = DigimonSceneHTML.page
+        let kinds = Set(page.matches(of: /kind: '(\w+)'\}/).map { String($0.1) })
+        XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind"])
+        for kind in kinds where kind != "fire" {
+            XCTAssertTrue(page.contains("  \(kind): ["), "no colors for \(kind)")
+        }
+        for kind in kinds { XCTAssertTrue(page.contains("\(kind): ["), "no timing for \(kind)") }
+    }
+
+    /// Shapes fixed in the 2026-11-14 review (tools/digimon/research/move-shape-review.json): each
+    /// was drawn as something it is not.
+    func testReviewedMovesKeepTheirShapes() {
+        let page = DigimonSceneHTML.page
+        func kind(_ key: String) -> String? {
+            page.firstMatch(of: try! Regex("\n  \(key): \\{ko: '[^\n]*?kind: '(\\w+)'"))?.output[1].substring.map(String.init)
+        }
+        let expected = [
+            "leomon": "fire",            // a lion-head ki shot from the fist, not claws
+            "hawkmon": "claw",           // pecks with its beak, not a fireball
+            "commandramon": "missile",   // an assault rifle
+            "blackwargreymon": "gaia",   // Dark Gaia Force: the sphere the shape is named after
+            "algomonadult": "bind",      // tentacles from its mouth
+            "blucomon": "ice",           // spits icicles
+            "icedevimon": "claw",        // icy claws
+            "rizegreymon": "missile",    // revolver shots
+            "airdramon": "claw",         // vacuum blades from its wings
+            "metalseadramon": "fire",    // a beam from its snout
+            "wizarmon": "gaia",          // lightning from a thundercloud
+        ]
+        for (key, shape) in expected { XCTAssertEqual(kind(key), shape, key) }
+    }
+
     func testEveryCatalogDigimonHasANamedMove() {
         let page = DigimonSceneHTML.page
         for key in catalog.species.keys.sorted() {

@@ -71,7 +71,7 @@
   "orgemon": {
    "ko": "패왕권",
    "en": "Supreme King Fist",
-   "kind": "claw"
+   "kind": "fire"
   },
   "coelamon": {
    "ko": "베리어블 다트",
@@ -91,7 +91,7 @@
   "mamemon": {
    "ko": "스마일리 봄",
    "en": "Smiley Bomb",
-   "kind": "fire"
+   "kind": "missile"
   },
   "neodevimon": {
    "ko": "길티 크로우",
@@ -136,7 +136,7 @@
   "valvemon": {
    "ko": "매드 펌프",
    "en": "Mud Pump",
-   "kind": "fire"
+   "kind": "missile"
   },
   "bigmamemon": {
    "ko": "빅 스마일리 보머",
@@ -146,7 +146,7 @@
   "waruseadramon": {
    "ko": "다크 스톰",
    "en": "Darkstrom",
-   "kind": "gaia"
+   "kind": "bind"
   },
   "orochimon": {
    "ko": "술 브레스",
@@ -231,7 +231,7 @@
   "huankunmon": {
    "ko": "고농포",
    "en": "Lonely Bubble",
-   "kind": "ice"
+   "kind": "fire"
   },
   "jazarichmon": {
    "ko": "메서 스파이럴",
@@ -316,7 +316,7 @@
   "waspmon": {
    "ko": "터보 스팅거",
    "en": "Turbo Stinger",
-   "kind": "missile"
+   "kind": "fire"
   },
   "kuwagamon": {
    "ko": "시저 암즈",
@@ -341,7 +341,7 @@
   "cannonbeemon": {
    "ko": "니트로 스팅거",
    "en": "Nitro Stinger",
-   "kind": "missile"
+   "kind": "fire"
   },
   "okuwamon": {
    "ko": "시저암즈Ω",
@@ -356,7 +356,7 @@
   "heraklekabuterimon": {
    "ko": "기가 블래스터",
    "en": "Giga Blaster",
-   "kind": "gaia"
+   "kind": "fire"
   },
   "rosemon": {
    "ko": "쏜 위프",
@@ -386,7 +386,7 @@
   "rosemonburstmode": {
    "ko": "샤리테",
    "en": "Charité",
-   "kind": "gaia"
+   "kind": "bind"
   },
   "chicomon": {
    "ko": "산성 거품",
@@ -549,13 +549,13 @@
   "impmon": {
    "ko": "서몬",
    "en": "Summon",
-   "kind": "ice",
+   "kind": "fire",
    "koSpecies": "임프몬"
   },
   "wizarmon": {
    "ko": "번쩍 구름",
    "en": "Thunder Cloud",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "위자몬"
   },
   "baalmon": {
@@ -579,7 +579,7 @@
   "beelzebumonblastmode": {
    "ko": "데스 슬링거",
    "en": "Death Slinger",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "베르제브몬: 블래스트 모드"
   },
   "cotsucomon": {
@@ -633,7 +633,7 @@
   "raijiludomon": {
    "ko": "라이트닝 버스터",
    "en": "Lightning Buster",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "라이지루도몬"
   },
   "piccolomon": {
@@ -651,13 +651,13 @@
   "manticoremon": {
    "ko": "트리니티 가스펠",
    "en": "Trinity Gospel",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "만티코어몬"
   },
   "bryweludramon": {
    "ko": "홍련 스톰",
    "en": "Crimson Storm",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "브리웨루드라몬"
   },
   "deathmonblack": {
@@ -681,13 +681,13 @@
   "fusamon": {
    "ko": "퍼피 노이즈",
    "en": "Puppy Noise",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "후사몬"
   },
   "bowmon": {
    "ko": "퍼피 스파크",
    "en": "Puppy Spark",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "바우몬"
   },
   "loogamon": {
@@ -711,13 +711,13 @@
   "loogarmon": {
    "ko": "하울링 버너",
    "en": "Howling Burner",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "루갈몬"
   },
   "filmon": {
    "ko": "라이트닝 스팅어",
    "en": "Lightning Stinger",
-   "kind": "gaia",
+   "kind": "claw",
    "koSpecies": "필몬"
   },
   "damemon": {
@@ -729,25 +729,25 @@
   "snatchmon": {
    "ko": "루인 레이저",
    "en": "Ruin Laser",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "스내치몬"
   },
   "soloogarmon": {
    "ko": "프로미넌스 레이저",
    "en": "Prominence Laser",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "솔루가몬"
   },
   "stiffilmon": {
    "ko": "기가 크림슨 다이브",
    "en": "Giga Crimson Dive",
-   "kind": "missile",
+   "kind": "claw",
    "koSpecies": "스티필몬"
   },
   "helloogarmon": {
    "ko": "하울링 버스트",
    "en": "Howling Burst",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "헬루가몬"
   },
   "destromon": {
@@ -777,7 +777,7 @@
   "hiandromon": {
    "ko": "아토믹 ･ 레이",
    "en": "Atomic Ray",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "하이안드로몬"
   },
   "rasenmonfurymode": {
@@ -795,7 +795,7 @@
   "ragnamon": {
    "ko": "라그나로크 캐논",
    "en": "Ragnarok Cannon",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "라그나몬"
   },
   "dodomon": {
@@ -831,7 +831,7 @@
   "airdramon": {
    "ko": "스피닝 니들",
    "en": "Spinning Needle",
-   "kind": "missile",
+   "kind": "claw",
    "koSpecies": "에어드라몬"
   },
   "raptordramon": {
@@ -885,13 +885,13 @@
   "chaosdramon": {
    "ko": "하이퍼 무한 캐논",
    "en": "Hyper Infinity Cannon",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "카오스드라몬"
   },
   "gundramon": {
    "ko": "데어 블리츠",
    "en": "Der Blitz",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "건드라몬"
   },
   "alphamon": {
@@ -921,7 +921,7 @@
   "patamon": {
    "ko": "공기 팡",
    "en": "Air Shot",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "파닥몬"
   },
   "ankylomon": {
@@ -957,7 +957,7 @@
   "belialvamdemon": {
    "ko": "팬더모디엄 플레임",
    "en": "Pandemonium Flame",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "베리얼묘티스몬"
   },
   "kudamon": {
@@ -969,13 +969,13 @@
   "shoutmon": {
    "ko": "록 정신",
    "en": "Rock Soul",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "샤우트몬"
   },
   "thunderballmon": {
    "ko": "썬더 볼",
    "en": "Thunder Ball",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "번개콩알몬"
   },
   "bladekuwagamon": {
@@ -1011,19 +1011,19 @@
   "metallifekuwagamon": {
    "ko": "호밍 레이저",
    "en": "Homing Laser",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "메탈리퍼쿠가몬"
   },
   "omegashoutmon": {
    "ko": "헤비 메탈 발칸",
    "en": "Heavy Metal Vulcan",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "오메가샤우트몬"
   },
   "mitamamon": {
    "ko": "굉염륜",
    "en": "Gouenrin",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "미타마몬"
   },
   "raijinmon": {
@@ -1101,7 +1101,7 @@
   "lilimon": {
    "ko": "꽃잎 포",
    "en": "Flow' Cannon",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "릴리몬"
   },
   "blossomon": {
@@ -1149,7 +1149,7 @@
   "bommon": {
    "ko": "치직치직치지직",
    "en": "Crack-Crack-Crackle",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "봄몬"
   },
   "missimon": {
@@ -1203,7 +1203,7 @@
   "metalmamemon": {
    "ko": "에너지 봄",
    "en": "Energy Bomb",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "메탈콩알몬"
   },
   "locomon": {
@@ -1227,7 +1227,7 @@
   "heavyleomon": {
    "ko": "배러지 스위퍼",
    "en": "Barrage Sweeper",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "헤비레오몬"
   },
   "grandlocomon": {
@@ -1245,7 +1245,7 @@
   "mugendramon": {
    "ko": "∞캐논",
    "en": "Infinity Cannon",
-   "kind": "missile",
+   "kind": "gaia",
    "koSpecies": "파워드라몬"
   },
   "agumonblack": {
@@ -1275,19 +1275,19 @@
   "metalgreymonalterousmode": {
    "ko": "포지트론 블래스터",
    "en": "Positron Blaster",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "메탈그레이몬: 알타라우스 모드"
   },
   "extyranomon": {
    "ko": "프리티 어택",
    "en": "Pretty Attack",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "엑스티라노몬"
   },
   "vermillimon": {
    "ko": "볼케이노 스트라이크S",
    "en": "Volcano Strike S",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "버밀리몬"
   },
   "mametyramon": {
@@ -1317,7 +1317,7 @@
   "blackwargreymon": {
    "ko": "다크 가이아 포스",
    "en": "Dark Gaia Force",
-   "kind": "missile",
+   "kind": "gaia",
    "koSpecies": "블랙워그레이몬"
   },
   "gaioumon": {
@@ -1347,7 +1347,7 @@
   "terriermon": {
    "ko": "쁘띠 트위스터",
    "en": "Petit Twister",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "테리어몬"
   },
   "galgomon": {
@@ -1377,13 +1377,13 @@
   "sinduramon": {
    "ko": "푸야바하",
    "en": "Púyaváha",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "신드라몬"
   },
   "makuramon": {
    "ko": "라우라바",
    "en": "Raurava",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "마쿠라몬"
   },
   "andiramondeva": {
@@ -1395,7 +1395,7 @@
   "pajiramon": {
    "ko": "바후니쥬바라",
    "en": "Vahnijvala",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "파지라몬"
   },
   "andiramon": {
@@ -1449,7 +1449,7 @@
   "koemon": {
    "ko": "미스치버스 후프",
    "en": "Mischievous Hoop",
-   "kind": "missile",
+   "kind": "bind",
    "koSpecies": "코에몬"
   },
   "betelgammamon": {
@@ -1515,7 +1515,7 @@
   "siriusmon": {
    "ko": "광자 블래스터",
    "en": "Photon Blaster",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "시리우스몬"
   },
   "proximamon": {
@@ -1527,7 +1527,7 @@
   "kuzuhamon": {
    "ko": "역반강술법",
    "en": "Reverse Izuna",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "쿠즈하몬"
   },
   "arcturusmon": {
@@ -1569,7 +1569,7 @@
   "icedevimon": {
    "ko": "프로스트 클로",
    "en": "Frost Claw",
-   "kind": "ice",
+   "kind": "claw",
    "koSpecies": "아이스데블몬"
   },
   "kumbhiramon": {
@@ -1581,31 +1581,31 @@
   "vikaralamon": {
    "ko": "수카라",
    "en": "Súkara",
-   "kind": "gaia",
+   "kind": "claw",
    "koSpecies": "비가라몬"
   },
   "taomon": {
    "ko": "범필섬",
    "en": "Buddhist Brush Brandish",
-   "kind": "missile",
+   "kind": "gaia",
    "koSpecies": "도사몬"
   },
   "doumon": {
    "ko": "주금찰",
    "en": "Exorcism Scrolls",
-   "kind": "gaia",
+   "kind": "bind",
    "koSpecies": "도우몬"
   },
   "caturamon": {
    "ko": "슈바보쟈나",
    "en": "Śwabhojana",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "챠츠라몬"
   },
   "indaramon": {
    "ko": "아돔크하",
    "en": "Adhomukha",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "인다라몬"
   },
   "sakuyamon": {
@@ -1617,7 +1617,7 @@
   "kuzuhamonmikomode": {
    "ko": "역반강술법",
    "en": "Reverse Izuna",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "쿠즈하몬: 무녀 모드"
   },
   "parasimon": {
@@ -1653,13 +1653,13 @@
   "stingmon": {
    "ko": "송곳돌진",
    "en": "Spiking Finish",
-   "kind": "missile",
+   "kind": "claw",
    "koSpecies": "스팅몬"
   },
   "gokimon": {
    "ko": "드림 더스트",
    "en": "Dream Dust",
-   "kind": "fire",
+   "kind": "missile",
    "koSpecies": "고키몬"
   },
   "banchostingmon": {
@@ -1695,7 +1695,7 @@
   "ryudamon": {
    "ko": "투구 회전",
    "en": "Kabutogaeshi",
-   "kind": "fire",
+   "kind": "claw",
    "koSpecies": "류우다몬"
   },
   "zubaeagermon": {
@@ -1773,7 +1773,7 @@
   "puyoyomon": {
    "ko": "존 파직파직",
    "en": "Zone Crackling",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "뿌요요몬"
   },
   "jellymon": {
@@ -1797,7 +1797,7 @@
   "karatukinumemon": {
    "ko": "셸즈 어택",
    "en": "Shell's Attack",
-   "kind": "missile",
+   "kind": "claw",
    "koSpecies": "달팽이워매몬"
   },
   "chamblemon": {
@@ -1827,13 +1827,13 @@
   "anomalocarimonxantibody": {
    "ko": "스팅거 서프라이즈",
    "en": "Stinger Surprise",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "스콜피오몬(X항체)"
   },
   "blackkingnumemon": {
    "ko": "다크 퓨필",
    "en": "Dark Pupil",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "블랙킹워매몬"
   },
   "amphimon": {
@@ -1893,7 +1893,7 @@
   "phascomon": {
    "ko": "이블 스노어",
    "en": "Evil Snore",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "파스코몬"
   },
   "gaogamon": {
@@ -1911,13 +1911,13 @@
   "lekismon": {
    "ko": "문 나이트 봄",
    "en": "Moon Night Bomb",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "레키스몬"
   },
   "leomon": {
    "ko": "수왕권",
    "en": "Beast King Fist",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "레오몬"
   },
   "madleomon": {
@@ -1947,13 +1947,13 @@
   "miragegaogamon": {
    "ko": "초승달 미라쥬",
    "en": "Double Crescent Mirage",
-   "kind": "gaia",
+   "kind": "claw",
    "koSpecies": "미라쥬가오가몬"
   },
   "apollomon": {
    "ko": "솔 블래스터",
    "en": "Sol Blaster",
-   "kind": "missile",
+   "kind": "gaia",
    "koSpecies": "아폴로몬"
   },
   "dianamon": {
@@ -1965,7 +1965,7 @@
   "gracenovamon": {
    "ko": "이클립스 핑거",
    "en": "Eclipse Finger",
-   "kind": "gaia",
+   "kind": "claw",
    "koSpecies": "그레이스노바몬"
   },
   "belphemonragemode": {
@@ -1977,7 +1977,7 @@
   "miragegaogamonburstmode": {
    "ko": "보름달 유성 충격",
    "en": "Full Moon Meteor Impact",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "미라쥬가오가몬: 버스트 모드"
   },
   "pururumon": {
@@ -1995,7 +1995,7 @@
   "hawkmon": {
    "ko": "부리 공격",
    "en": "Beak Pecker",
-   "kind": "fire",
+   "kind": "claw",
    "koSpecies": "호크몬"
   },
   "ukkomon": {
@@ -2031,7 +2031,7 @@
   "chimairamon": {
    "ko": "히트 ･ 바이퍼",
    "en": "Heat Viper",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "키메라몬"
   },
   "valkyrimon": {
@@ -2061,7 +2061,7 @@
   "dokimon": {
    "ko": "정전기",
    "en": "Static Electricity",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "도키몬"
   },
   "bibimon": {
@@ -2181,7 +2181,7 @@
   "meramon": {
    "ko": "불타는 주먹",
    "en": "Burning Fist",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "메라몬"
   },
   "tyranomon": {
@@ -2205,7 +2205,7 @@
   "flaremon": {
    "ko": "홍련수왕파",
    "en": "Crimson Beast King Wave",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "플레어몬"
   },
   "deathmeramon": {
@@ -2223,7 +2223,7 @@
   "lavogaritamon": {
    "ko": "메르다이나",
    "en": "Merudainā",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "라보가리타몬"
   },
   "groundramon": {
@@ -2379,19 +2379,19 @@
   "pyonmon": {
    "ko": "이양타",
    "en": "Ear-slap",
-   "kind": "fire",
+   "kind": "claw",
    "koSpecies": "뿅몬"
   },
   "bosamon": {
    "ko": "밋코미",
    "en": "Ear-strike",
-   "kind": "fire",
+   "kind": "claw",
    "koSpecies": "보사몬"
   },
   "angoramon": {
    "ko": "더블 래리어트",
    "en": "Double Lariat",
-   "kind": "fire",
+   "kind": "claw",
    "koSpecies": "앙고라몬"
   },
   "dracumon": {
@@ -2409,7 +2409,7 @@
   "dogmon": {
    "ko": "디스템 ･ 하울링",
    "en": "Distem Howling",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "도그몬"
   },
   "sangloupmon": {
@@ -2439,7 +2439,7 @@
   "matadrmon": {
    "ko": "사우전드 애로",
    "en": "Thousand Arrow",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "마타돌몬"
   },
   "mephismon": {
@@ -2457,7 +2457,7 @@
   "oleamon": {
    "ko": "자밀",
    "en": "Jameal",
-   "kind": "gaia",
+   "kind": "bind",
    "koSpecies": "올리아몬"
   },
   "bastemon": {
@@ -2475,7 +2475,7 @@
   "plutomon": {
    "ko": "해가드 클러스터",
    "en": "Haggard Cluster",
-   "kind": "claw",
+   "kind": "gaia",
    "koSpecies": "플루토몬"
   },
   "granddracumon": {
@@ -2499,7 +2499,7 @@
   "commandramon": {
    "ko": "M16어쌔신",
    "en": "M16 Assassin",
-   "kind": "fire",
+   "kind": "missile",
    "koSpecies": "코만드라몬"
   },
   "hicommandramon": {
@@ -2511,7 +2511,7 @@
   "deltamon": {
    "ko": "트리플렉스 포스",
    "en": "Triplex Force",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "델타몬"
   },
   "numemon": {
@@ -2529,13 +2529,13 @@
   "monzaemon": {
    "ko": "러블리 어택",
    "en": "Lovely Attack",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "퍼펫몬"
   },
   "etemon": {
    "ko": "러브 세레나데",
    "en": "Love Serenade",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "에테몬"
   },
   "tankdramon": {
@@ -2553,7 +2553,7 @@
   "shinmonzaemon": {
    "ko": "나이트메어 레인",
    "en": "Nightmare Rain",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "신퍼펫몬"
   },
   "kingetemon": {
@@ -2577,7 +2577,7 @@
   "darkdramon": {
    "ko": "다크 로어",
    "en": "Dark Roar",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "다크드라몬"
   },
   "yukimibotamon": {
@@ -2595,7 +2595,7 @@
   "blucomon": {
    "ko": "베이비 헤일",
    "en": "Baby Hail",
-   "kind": "fire",
+   "kind": "ice",
    "koSpecies": "블루코몬"
   },
   "yukidarumon": {
@@ -2733,7 +2733,7 @@
   "megaseadramon": {
    "ko": "번개창 날리기",
    "en": "Thunder Javelin",
-   "kind": "claw",
+   "kind": "fire",
    "koSpecies": "메가시드라몬"
   },
   "piranimon": {
@@ -2751,13 +2751,13 @@
   "neptunemon": {
    "ko": "볼텍스 페네트레이트",
    "en": "Vortex Penetrate",
-   "kind": "claw",
+   "kind": "missile",
    "koSpecies": "넵튠몬"
   },
   "metalseadramon": {
    "ko": "얼티메이트 스트림",
    "en": "Ultimate Stream",
-   "kind": "missile",
+   "kind": "fire",
    "koSpecies": "메탈시드라몬"
   },
   "regalecusmon": {
@@ -2769,7 +2769,7 @@
   "plesiomon": {
    "ko": "소로 블루",
    "en": "Sorrow Blue",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "플레시오몬"
   },
   "sunamon": {
@@ -2811,13 +2811,13 @@
   "gogmamon": {
    "ko": "자이언트 그레이터",
    "en": "Giant Grater",
-   "kind": "gaia",
+   "kind": "claw",
    "koSpecies": "고그마몬"
   },
   "jyagamon": {
    "ko": "스매시 포테이토",
    "en": "Smash Potato",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "쟈가몬"
   },
   "triceramon": {
@@ -2829,13 +2829,13 @@
   "scorpiomon": {
    "ko": "블랙아웃",
    "en": "Blackout",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "전갈몬"
   },
   "vulturemon": {
    "ko": "리퍼 스트라이크",
    "en": "Reaper Strike",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "벌처몬"
   },
   "mummymon": {
@@ -2847,7 +2847,7 @@
   "blastmon": {
    "ko": "다이아몬드 머신건",
    "en": "Diamond Machine Gun",
-   "kind": "missile",
+   "kind": "ice",
    "koSpecies": "블래스트몬"
   },
   "dinorexmon": {
@@ -2865,7 +2865,7 @@
   "ancientsphinxmon": {
    "ko": "다크 블래스트",
    "en": "Dark Blast",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "에이션트스핑크스몬"
   },
   "zurumon": {
@@ -2883,7 +2883,7 @@
   "ghostmon": {
    "ko": "리틀 플라즈마",
    "en": "Little Plasma",
-   "kind": "gaia",
+   "kind": "fire",
    "koSpecies": "아이고스몬"
   },
   "saberdramon": {
@@ -2937,7 +2937,7 @@
   "noblepumpmon": {
    "ko": "트릭 ･ 오어 ･ 트릿 ･ 윌리스",
    "en": "Trick or Treat Wallace",
-   "kind": "missile",
+   "kind": "gaia",
    "koSpecies": "노블펌프몬"
   },
   "piemon": {
@@ -3009,7 +3009,7 @@
   "rizegreymon": {
    "ko": "삼연발 레이저포",
    "en": "Trident Revolver",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "라이즈그레이몬"
   },
   "wingdramon": {
@@ -3081,7 +3081,7 @@
   "ghilliedhumon": {
    "ko": "코어 슛",
    "en": "Core Shoot",
-   "kind": "gaia",
+   "kind": "missile",
    "koSpecies": "길리두몬"
   },
   "kodokugumonchild": {
@@ -3093,7 +3093,7 @@
   "arresterdramonsuperiormodebravesnatcher": {
    "ko": "블레이즈 스파이커",
    "en": "Blaze Spiker",
-   "kind": "missile",
+   "kind": "claw",
    "koSpecies": "아레스타드라몬: 슈페리올 모드"
   },
   "tailmonchild": {

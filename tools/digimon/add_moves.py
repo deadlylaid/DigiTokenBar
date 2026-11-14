@@ -15,22 +15,25 @@ HERE = Path(__file__).resolve().parent
 DATA = HERE / "data" / "moves.json"
 NODES = json.loads((HERE / "data" / "evolutions.json").read_text())["nodes"]
 
-# Checked in order: the first matching shape wins.
+# Checked in order: the first matching shape wins. The rules follow the 2026-11-14 review of every
+# move (research/move-shape-review.json): beams, lasers, cries and songs are a straight shot (fire);
+# punches, kicks, tackles and bites are melee (claw); a giant sphere, lightning from the sky or a
+# huge blast is gaia. Check new moves by eye: the words only point the way.
 SHAPES = [
     # Binding moves (tentacles, vines, threads, whips): a tendril that coils around the target.
     ("bind", r"\b(binds?|binding|entangl\w*|restrain\w*|wraps?|coils?|whips?|lash\w*|ensnar\w*|snares?|vines?|ivy|"
              r"threads?|silk|webs?|bandages?|tongues?)\b"),
-    ("ice", r"\b(ice|icy|freez\w*|frost\w*|snow\w*|blizzard|cold|hail|frozen|diamond dust)\b"),
-    ("missile", r"\b(missiles?|rockets?|bullets?|guns?|gatling|cannon\w*|shells?|bombs?|torpedo\w*|grenades?|"
-                r"arrows?|darts?|needles?|spikes?|quills?|projectiles?|shoots?|launch\w*|throws?|hurls?)\b"),
-    ("claw", r"\b(claws?|slash\w*|blades?|swords?|cuts?|scratch\w*|kicks?|punch\w*|fists?|strikes?|bites?|"
-             r"tackle\w*|rams?|headbutt\w*|horns?|spears?|lances?|whips?|tails?|slams?|charges?|axes?|scythes?|"
-             r"hammers?|clubs?|stabs?|pierc\w*|rush\w*|chops?|drills?|fangs?|talons?|wings?|lunges?|swings?|"
-             r"smash\w*|crush\w*|hits?|grabs?|binds?|bash\w*|uppercut|knife|knives|katana|staff|rod|mace)\b"),
-    ("gaia", r"\b(spheres?|orbs?|balls? of|energy|beams?|lasers?|rays?|waves?|blasts?|light|lightning|thunder\w*|"
-             r"electric\w*|storms?|meteors?|explo\w*|holy|dark|cosmic|stars?|sun|moon|black hole|tornado\w*|"
-             r"whirlwind|shockwave|aura|nuclear|divine)\b"),
-    ("fire", r"\b(fire|flames?|breath\w*|burn\w*|heat|spits?|bubbles?|blows?|exhal\w*|magma|lava|sparks?)\b"),
+    ("ice", r"\b(ice|icy|icicles?|freez\w*|frost\w*|snow\w*|blizzard|cold|hail|frozen|diamond dust)\b"),
+    ("missile", r"\b(missiles?|rockets?|bullets?|guns?|gunfire|rifles?|revolvers?|gatling|autocannon|bombs?|torpedo\w*|"
+                r"grenades?|arrows?|darts?|needles?|quills?|projectiles?|throws?|hurls?|thrown)\b"),
+    ("claw", r"\b(claws?|slash\w*|blades?|swords?|cuts?|scratch\w*|kicks?|punch\w*|fists?|bites?|biting|pecks?|"
+             r"tackle\w*|rams?|ramming|headbutt\w*|horns?|spears?|lances?|slams?|charges?|charging|axes?|scythes?|"
+             r"hammers?|clubs?|stabs?|skewer\w*|pierc\w*|rush\w*|chops?|drills?|fangs?|talons?|lunges?|"
+             r"smash\w*|crush\w*|lariat|uppercut|slaps?|knife|knives|katana|mace)\b"),
+    ("fire", r"\b(beams?|lasers?|rays?|breath\w*|spits?|spew\w*|bubbles?|sparks?|static|shots?|howl\w*|bark\w*|"
+             r"cry|cries|songs?|sings?|voice|shout\w*|fireballs?|flames?|fire|blaze|burn\w*)\b"),
+    ("gaia", r"\b(spheres?|orbs?|explo\w*|lightning|thunder\w*|meteors?|darkness|cosmic|black hole|tornado\w*|"
+             r"shockwaves?|aura|earthquake|nuclear|annihilat\w*)\b"),
 ]
 
 
@@ -39,7 +42,7 @@ def shape(what, level):
     for kind, pattern in SHAPES:
         if re.search(pattern, text):
             return kind
-    return "gaia" if level in ("Perfect", "Ultimate") else "fire"
+    return "fire"
 
 
 def main():

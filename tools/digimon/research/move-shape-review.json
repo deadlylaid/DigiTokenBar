@@ -1,0 +1,4388 @@
+{
+ "meta": {
+  "description": "Review of every move shape against what the move does (2026-11-14). Four research agents compared each move description with the six drawn shapes; the reviewer then applied one rule set: beams and lasers -> fire, lightning from the sky -> gaia and from the body -> fire, cries, songs and howls -> fire (destructive sound blasts stay gaia), melee (punches, kicks, tackles, bites) -> claw, no description -> unchanged. fit: good / approximate / none; gap: the shape that is missing for approximate fits.",
+  "applied": {
+   "airdramon": "claw",
+   "angoramon": "claw",
+   "anomalocarimonxantibody": "fire",
+   "apollomon": "gaia",
+   "arresterdramonsuperiormodebravesnatcher": "claw",
+   "blackwargreymon": "gaia",
+   "blastmon": "ice",
+   "blucomon": "ice",
+   "bommon": "fire",
+   "bosamon": "claw",
+   "bowmon": "fire",
+   "bryweludramon": "fire",
+   "caturamon": "gaia",
+   "commandramon": "missile",
+   "darkdramon": "fire",
+   "dogmon": "fire",
+   "dokimon": "fire",
+   "doumon": "bind",
+   "extyranomon": "fire",
+   "filmon": "claw",
+   "flaremon": "fire",
+   "ghilliedhumon": "missile",
+   "ghostmon": "fire",
+   "gogmamon": "claw",
+   "gokimon": "missile",
+   "gracenovamon": "claw",
+   "gundramon": "missile",
+   "hawkmon": "claw",
+   "heavyleomon": "missile",
+   "helloogarmon": "fire",
+   "huankunmon": "fire",
+   "icedevimon": "claw",
+   "impmon": "fire",
+   "indaramon": "fire",
+   "jyagamon": "missile",
+   "karatukinumemon": "claw",
+   "koemon": "bind",
+   "kuzuhamon": "fire",
+   "kuzuhamonmikomode": "fire",
+   "lavogaritamon": "fire",
+   "lekismon": "fire",
+   "leomon": "fire",
+   "lilimon": "fire",
+   "loogarmon": "fire",
+   "makuramon": "gaia",
+   "mamemon": "missile",
+   "manticoremon": "fire",
+   "matadrmon": "missile",
+   "megaseadramon": "fire",
+   "meramon": "fire",
+   "metalgreymonalterousmode": "fire",
+   "metallifekuwagamon": "fire",
+   "metalmamemon": "fire",
+   "metalseadramon": "fire",
+   "miragegaogamon": "claw",
+   "miragegaogamonburstmode": "gaia",
+   "mitamamon": "fire",
+   "monzaemon": "fire",
+   "mugendramon": "gaia",
+   "neptunemon": "missile",
+   "noblepumpmon": "gaia",
+   "oleamon": "bind",
+   "omegashoutmon": "fire",
+   "orgemon": "fire",
+   "patamon": "fire",
+   "phascomon": "fire",
+   "plutomon": "gaia",
+   "puyoyomon": "fire",
+   "pyonmon": "claw",
+   "ragnamon": "fire",
+   "raijiludomon": "fire",
+   "rizegreymon": "missile",
+   "rosemonburstmode": "bind",
+   "ryudamon": "claw",
+   "scorpiomon": "fire",
+   "shinmonzaemon": "missile",
+   "shoutmon": "fire",
+   "sinduramon": "gaia",
+   "siriusmon": "fire",
+   "snatchmon": "fire",
+   "soloogarmon": "fire",
+   "stiffilmon": "claw",
+   "stingmon": "claw",
+   "taomon": "gaia",
+   "terriermon": "fire",
+   "thunderballmon": "fire",
+   "valvemon": "missile",
+   "vermillimon": "fire",
+   "vikaralamon": "claw",
+   "vulturemon": "missile",
+   "waruseadramon": "bind",
+   "waspmon": "fire",
+   "wizarmon": "gaia",
+   "ancientsphinxmon": "fire",
+   "beelzebumonblastmode": "fire",
+   "belialvamdemon": "fire",
+   "blackkingnumemon": "fire",
+   "cannonbeemon": "fire",
+   "chaosdramon": "fire",
+   "chimairamon": "fire",
+   "deltamon": "fire",
+   "heraklekabuterimon": "fire",
+   "hiandromon": "fire",
+   "etemon": "fire",
+   "fusamon": "fire",
+   "pajiramon": "fire",
+   "plesiomon": "fire"
+  }
+ },
+ "reviews": [
+  {
+   "key": "achillesmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A high-speed kick; slash marks are only a stand-in for a melee hit."
+  },
+  {
+   "key": "aerovdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "It cuts the foe with a V-shaped energy blade along its wings, which reads as flying slash marks."
+  },
+  {
+   "key": "agumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Wikimon: spits a fiery breath from its mouth, matching the orb from the mouth."
+  },
+  {
+   "key": "agumon2006animeversion",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Flaming breath from the mouth matches the fire orb."
+  },
+  {
+   "key": "agumonblack",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Flaming breath from the mouth matches the fire orb."
+  },
+  {
+   "key": "airdramon",
+   "currentShape": "missile",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Wikimon: shoots needle-shaped vacuum blades from its wings, which read as flying slash marks, not a rocket."
+  },
+  {
+   "key": "ajatarmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "A hatchet chop is a blade strike."
+  },
+  {
+   "key": "algomonadult",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Restrains the foe with tentacles, exactly what the bind tendril shows."
+  },
+  {
+   "key": "alphamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Stabs with a sword of light, a blade attack."
+  },
+  {
+   "key": "alphamonouryuken",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Attacks with its giant sword."
+  },
+  {
+   "key": "amphimon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots freezing cold air from its fist."
+  },
+  {
+   "key": "ancientmegatheriumon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Creates an absolute-zero blizzard from its cannons."
+  },
+  {
+   "key": "ancientsphinxmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Wikimon: fires a laser beam with a roar; a big dark sphere is the closest of the six to a powerful beam."
+  },
+  {
+   "key": "ancientvolcamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A super-strong lariat propelled by detonating its back volcano; the flash fits the explosion but the hit is an arm strike."
+  },
+  {
+   "key": "andiramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Hardens its body and unleashes mighty blows, i.e. punches, not slashes."
+  },
+  {
+   "key": "andiramondeva",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spins and cuts everything around it with the axe blades on its hands."
+  },
+  {
+   "key": "andromon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Opens its chest plate and fires two missiles, matching the shape exactly."
+  },
+  {
+   "key": "angemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Officially a golden glowing punch (the anime version shoots a beam of holy light from the fist); no fist shape exists."
+  },
+  {
+   "key": "angewomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots an arrow from a bow formed by its wings; arrows fit the missile shape."
+  },
+  {
+   "key": "angoramon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Mows down foes by spinning its large arms; a melee lariat, nothing like a fire orb, so the melee stand-in is closer."
+  },
+  {
+   "key": "ankylomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A leaping body slam with no blade."
+  },
+  {
+   "key": "anomalocarimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: shockwave",
+   "reason": "Crosses its forelimbs and fires a shockwave; a straight energy shot from the front is the closest stand-in."
+  },
+  {
+   "key": "anomalocarimonxantibody",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: shockwave",
+   "reason": "Same move as Anomalocarimon (a shockwave fired from crossed forelimbs); a straight shot from the front fits better than a sphere charged above the head, and keeps both versions consistent."
+  },
+  {
+   "key": "apollomon",
+   "currentShape": "missile",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a scorching solar orb generated from the flame sphere on its back, i.e. a giant fiery sphere, not a rocket."
+  },
+  {
+   "key": "aquilamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A diving horn charge from the sky, a melee ram without a blade."
+  },
+  {
+   "key": "archnemon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Chops or binds the foe with razor-sharp threads and webbing."
+  },
+  {
+   "key": "arcturusmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Pierces the foe with arm drills; a stab, not a slash."
+  },
+  {
+   "key": "arkhaiangemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: summoned familiars swarm",
+   "reason": "Summons many familiars and unleashes them at once; a big holy blast is only a stand-in."
+  },
+  {
+   "key": "armadimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Strikes with the elongated claws on its forelegs."
+  },
+  {
+   "key": "armagemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: barrage raining from above",
+   "reason": "Energy shells fired into the sky fall like rain as scattered beams; shells fit missiles but not the rain from above."
+  },
+  {
+   "key": "arresterdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "High-speed punches, not slashes."
+  },
+  {
+   "key": "arresterdramonsuperiormodebravesnatcher",
+   "currentShape": "missile",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Wikimon: a blazing palm-heel strike, a melee blow; a rocket does not fit, the melee stand-in is closer."
+  },
+  {
+   "key": "astamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires every homing bullet from its gun."
+  },
+  {
+   "key": "asuramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "The official profile calls it a punch rush from four arms (Wikimon also mentions fireballs from the fists)."
+  },
+  {
+   "key": "atlurballistamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Unleashes bolts of lightning from the claws on its back; the big blast with a flash is the closest stand-in."
+  },
+  {
+   "key": "atlurkabuterimonred",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rockets at the foe and stabs with its giant horn (the anime version fires a spiral beam); a horn charge, not a slash."
+  },
+  {
+   "key": "baalmon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Smites with its spiritual whip; whips fit the bind tendril."
+  },
+  {
+   "key": "babydmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Puffs a pungent hot gas from its mouth; an orb from the mouth is close but the move is a gas cloud."
+  },
+  {
+   "key": "bakemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Extends a giant decaying hand from under its cloak to strike; a hand blow, not claw slashes."
+  },
+  {
+   "key": "ballistamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Flings the foe with its horn, a melee move."
+  },
+  {
+   "key": "bancholilimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Tears the foe and the space around it to pieces with its yo-yos, a cutting attack."
+  },
+  {
+   "key": "banchostingmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Skewers foes with the drills on both arms; a stab, not a slash."
+  },
+  {
+   "key": "baohuckmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the sharp nails on both hands."
+  },
+  {
+   "key": "bastemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "none",
+   "gap": "support",
+   "reason": "A bewitching belly dance that confuses the foe with no damage described; no shape fits (the second move Vampire Dance would be a damaging alternative)."
+  },
+  {
+   "key": "beelzebumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Raises its sharp claws and cuts the foe to pieces."
+  },
+  {
+   "key": "beelzebumon2010animeversion",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "A fast-draw shot from the enormous gun on its right arm."
+  },
+  {
+   "key": "beelzebumonblastmode",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires a destructive wave from the arm cannon; the cannon fits missiles but the shot is an energy wave."
+  },
+  {
+   "key": "belialvamdemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "An extremely high-temperature beam fired from its shoulder cannons; cannons fit missiles but the shot is a beam."
+  },
+  {
+   "key": "belphemonragemode",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Black flames released from the chains wrapped around its body."
+  },
+  {
+   "key": "bemmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Pierces the foe with sharp claws."
+  },
+  {
+   "key": "betelgammamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Punches with flames amassed in its hands; a melee blow."
+  },
+  {
+   "key": "bibimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "A tackle laced with static electricity; the spark is what the shapes lack."
+  },
+  {
+   "key": "bigmamemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: throws its Mamemon followers",
+   "reason": "Officially uses its Mamemon followers as weapons (in the anime it makes a bomb from its fist and throws it); a lobbed exploding sphere is a fair stand-in."
+  },
+  {
+   "key": "bigukkomon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Smashes with countless huge tentacles."
+  },
+  {
+   "key": "birdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Flaps its wings to hurl feathers like meteors (fireballs in the anime); a flying fire orb fits."
+  },
+  {
+   "key": "blackkingnumemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires black beams from its round eyes."
+  },
+  {
+   "key": "blacktailmonuver",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Wikimon: attacks with its long claws, despite the name Cat Punch."
+  },
+  {
+   "key": "blackwargreymon",
+   "currentShape": "missile",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Concentrates negative energy into a sphere and hurls it; the gaia shape is exactly this move."
+  },
+  {
+   "key": "bladekuwagamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Turns into a blade of light and pierces the foe."
+  },
+  {
+   "key": "blastmon",
+   "currentShape": "missile",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires the diamond crystals on its body like a machine gun; the blue-white diamond crystal looks like what it fires, a gray rocket does not."
+  },
+  {
+   "key": "blitzgreymon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Strikes with its Plasma Stakes and sends electricity into the foe."
+  },
+  {
+   "key": "bloomlordmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: seed bullets",
+   "reason": "Shoots countless seeds like a machine gun; the gun-like burst fits but seeds are not rockets."
+  },
+  {
+   "key": "blossomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: thrown spinning flowers",
+   "reason": "Hurls flowers like shuriken that cut; a thrown object, but not a rocket."
+  },
+  {
+   "key": "blucomon",
+   "currentShape": "fire",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits countless icicles from its mouth; the ice crystal fits better than a fire orb."
+  },
+  {
+   "key": "bokomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "support",
+   "reason": "Runs away at tremendous speed when it cannot win; not an attack, so no shape fits."
+  },
+  {
+   "key": "bombermon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Attaches several bombs and sets off a chain explosion; thrown bombs fit the missile shape, fired two in a row."
+  },
+  {
+   "key": "bommon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "sound",
+   "reason": "Makes a loud crackle with the spark on its tail to frighten foes; nothing fits, but a small glowing orb is less wrong than slash marks."
+  },
+  {
+   "key": "bosamon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Slaps the foe with both ears; a melee hit, not a fire orb."
+  },
+  {
+   "key": "botamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots acid bubbles from its mouth."
+  },
+  {
+   "key": "boutmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "An axe kick into the foe's skull charged with lightning."
+  },
+  {
+   "key": "bowmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "A spark-filled bark to intimidate; a small shot from the mouth fits a baby's bark better than a giant charged sphere."
+  },
+  {
+   "key": "breakdramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: ground-splitting earthquake",
+   "reason": "Repeatedly pounds the earth with its shovel arms to split the ground; the impact flash is the closest stand-in."
+  },
+  {
+   "key": "brigadramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Gatling cannon barrage of explosive shells."
+  },
+  {
+   "key": "bryweludramon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Unleashes a blaze from its flaming wings; a flame attack, not a slash."
+  },
+  {
+   "key": "bubbmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Releases sticky bubbles that bind the foe; bubbles fit the orb."
+  },
+  {
+   "key": "bulkmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Sends the foe flying with an electricity-laced punch."
+  },
+  {
+   "key": "cannonbeemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires a super-large-caliber laser cannon; cannon fits missiles but the shot is a laser."
+  },
+  {
+   "key": "cannondramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Wikimon: fires beams from the three cannons on its back."
+  },
+  {
+   "key": "canoweissmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Tears the foe apart with its tough claws."
+  },
+  {
+   "key": "cargodramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Attacks with the Gatling gun on its fuselage."
+  },
+  {
+   "key": "caturamon",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: ground-pound earthquake",
+   "reason": "Strikes the ground with its mallet to make an earthquake and shockwave; an impact with a screen flash fits better than slashes (same as Breakdramon)."
+  },
+  {
+   "key": "cerberumon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: hell gate opening under the foe",
+   "reason": "Opens the gates of Hell in the ground and drags the foe into the Dark Area; a dark blast is only a stand-in."
+  },
+  {
+   "key": "chamblemon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Spores that attach and sprout vitality-draining mushrooms (research notes say its listed 必殺技 is Champion Bomb instead)."
+  },
+  {
+   "key": "chaosdramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires a huge energy wave from its two back cannons."
+  },
+  {
+   "key": "cherubimonvice",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Throws a spear of lightning; a thrown spear fits the missile, but its look is a lightning bolt."
+  },
+  {
+   "key": "cherubimonvirtue",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Fires a spear of lightning; a thrown spear fits the missile, but its look is a lightning bolt."
+  },
+  {
+   "key": "chibimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Hops around and rams the foe."
+  },
+  {
+   "key": "chicomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acidic bubbles."
+  },
+  {
+   "key": "chimairamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Shoots heat rays from its hands or mouth."
+  },
+  {
+   "key": "climbmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "A long-range attack throwing its pitons, like darts."
+  },
+  {
+   "key": "coelamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Falls upon the foe with its giant claws."
+  },
+  {
+   "key": "commandramon",
+   "currentShape": "fire",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its hand-held assault rifle; guns fit the missile shape, not a fire orb."
+  },
+  {
+   "key": "coredramonblue",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes searing blue flames."
+  },
+  {
+   "key": "coredramongreen",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes searing green flames."
+  },
+  {
+   "key": "coronamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Continuous punches with flame-heated fists."
+  },
+  {
+   "key": "cotsucomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Pokes the foe with the brim of its hat, a headbutt-like hit."
+  },
+  {
+   "key": "crescemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Dances in, then slashes with the twin blades it holds."
+  },
+  {
+   "key": "cresgarurumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with its crescent glaive."
+  },
+  {
+   "key": "cryspaledramon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Tears the foe with ice claws and freezes the wounds; the ice crystal fits."
+  },
+  {
+   "key": "cthyllamon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Whips the foe with three long, flexible tongues."
+  },
+  {
+   "key": "curimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows bubbles."
+  },
+  {
+   "key": "cyberdramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: space-erasing vibration waves",
+   "reason": "Sends super-oscillatory waves from its arms that erase the space around the foe, a wave field rather than a sphere."
+  },
+  {
+   "key": "cyberdramon2010animeversion",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Extends its claws to stab the foe."
+  },
+  {
+   "key": "dagomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws its trident with great force."
+  },
+  {
+   "key": "damemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Swings its tonfa in a punch, barely hitting; a blunt melee hit."
+  },
+  {
+   "key": "darkdramon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires Dark Matter as energy shots (no gun is described), so an energy orb fits better than a rocket."
+  },
+  {
+   "key": "darktyranomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes super-powerful flames."
+  },
+  {
+   "key": "deathmeramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits heated molten metal."
+  },
+  {
+   "key": "deathmonblack",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires energy arrows from the eyes on its hands."
+  },
+  {
+   "key": "deathxdorugamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires iron balls from its mouth."
+  },
+  {
+   "key": "deathxdorugoramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "A blast that blows everything away; a huge energy blast with a flash fits."
+  },
+  {
+   "key": "deathxdoruguremon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Tears through the foe's armor with its head horn; a gore, not a slash."
+  },
+  {
+   "key": "deltamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Combines energy from three heads into one powerful laser beam."
+  },
+  {
+   "key": "destromon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires the cannons on its arms."
+  },
+  {
+   "key": "devidramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with its giant claws."
+  },
+  {
+   "key": "devimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Pierces the foe with its clawed, extensible arms."
+  },
+  {
+   "key": "devitamamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Blinds the foe, then exhales a dark gas that dissolves data; the flash fits the blinding but the attack is a gas."
+  },
+  {
+   "key": "dianamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "A moonlight illusion, then an instant cut."
+  },
+  {
+   "key": "diarbbitmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Sword slashes."
+  },
+  {
+   "key": "digitamamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: mind-destroying attack",
+   "reason": "Destroys the foe's spirit (Wikimon: with rainbow bubbles or a giant heart); no shape shows a mental attack."
+  },
+  {
+   "key": "dinobeemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "A high-speed slashing dance."
+  },
+  {
+   "key": "dinorexmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Seizes and kills the foe with its huge talons."
+  },
+  {
+   "key": "divemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the sharp fins all over its body."
+  },
+  {
+   "key": "dodomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits small iron beads."
+  },
+  {
+   "key": "dogmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "A great howl that damages hearing; a shot from the mouth fits a howl better than a sphere charged above the head (same as Bowmon)."
+  },
+  {
+   "key": "dokimon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Emits static electricity from the tip of its horn; a small glowing spark fits better than slash marks."
+  },
+  {
+   "key": "dokugumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Fires a poisonous blast from its mouth."
+  },
+  {
+   "key": "dominimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Pierces with an energy blade on its arm."
+  },
+  {
+   "key": "donedevimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Claw strike piercing through the foe."
+  },
+  {
+   "key": "dorimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits iron grains while charging."
+  },
+  {
+   "key": "dorugamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires iron balls from its mouth."
+  },
+  {
+   "key": "dorugoramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "An all-out melee assault with a blast of flame; the flame blast fits, the melee part does not."
+  },
+  {
+   "key": "doruguremon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a giant iron ball more than ten times its size, a giant sphere."
+  },
+  {
+   "key": "dorulumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spins and shoots its head drill like a rocket."
+  },
+  {
+   "key": "dorumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an iron sphere from its mouth while charging; a ball shot from the mouth."
+  },
+  {
+   "key": "doumon",
+   "currentShape": "gaia",
+   "bestShape": "bind",
+   "fit": "approximate",
+   "gap": "other: talismans that wrap then explode",
+   "reason": "Wreathes talismans around the foe and detonates them; the wrapping matches bind, the explosion is not drawn."
+  },
+  {
+   "key": "dracomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows hot breath at the foe, a breath attack."
+  },
+  {
+   "key": "dracumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "other: hypnotic gaze",
+   "reason": "Hypnotizes the foe with the eyes on its palms, no projectile; second move Undead Fang is a bite (melee)."
+  },
+  {
+   "key": "drimogemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rams the foe with the spinning drill on its head; a drill strike, not a slash."
+  },
+  {
+   "key": "dukemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: lance thrust",
+   "reason": "A strong thrust with the holy lance Gram; a stab, not a slash (anime also shows a beam)."
+  },
+  {
+   "key": "dukemoncrimsonmode",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with its energy sword."
+  },
+  {
+   "key": "dukemonxantibody",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Projects greatly amplified light from its lance as a spear of light; a beam rather than a ball."
+  },
+  {
+   "key": "duramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the blades on both arms."
+  },
+  {
+   "key": "durandamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with its arm blades."
+  },
+  {
+   "key": "eosmonperfect",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Crushes the foe with its gigantic hands; a crushing blow, not a slash."
+  },
+  {
+   "key": "espimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Launches a walking time bomb at the foe; a thrown bomb."
+  },
+  {
+   "key": "etemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "none",
+   "gap": "sound",
+   "reason": "Sings a song that breaks the foe's fighting spirit; no projectile (second move Dark Spirits, a dark sphere, would fit gaia)."
+  },
+  {
+   "key": "examon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: lance impale with explosion",
+   "reason": "Impales the foe with its lance and detonates its shells inside; a stab plus explosion, not a slash."
+  },
+  {
+   "key": "exermon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "none",
+   "gap": "other: telepathic waves",
+   "reason": "A telepathic ability through its antennae that confuses the foe, no damage; second move Defib Shock is an electric palm touch."
+  },
+  {
+   "key": "extyranomon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: heart projectiles",
+   "reason": "Fires pink hearts at the foe; small shots fly straight like the orb, but they are hearts, not a giant sphere."
+  },
+  {
+   "key": "falcomon2006animeversion",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the claws on its wings."
+  },
+  {
+   "key": "fantomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cuts with a giant scythe."
+  },
+  {
+   "key": "fenriloogamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: flame burst around itself",
+   "reason": "Howls while its blue flames explode around its own body; an area burst, not a thrown sphere."
+  },
+  {
+   "key": "fenriloogamontakemikazuchi",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "A sword slash charged with flame and lightning."
+  },
+  {
+   "key": "filmon",
+   "currentShape": "gaia",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Skewers the foe with an energy stinger at close range; a stab, nothing like a giant sphere."
+  },
+  {
+   "key": "firamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Dives on the foe wrapped in flame; a body attack, though the flame matches the orb."
+  },
+  {
+   "key": "flaremon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: lion-shaped flame wave",
+   "reason": "Fires a lion-shaped wave of flame energy from its fist; a flying flame, not claw marks."
+  },
+  {
+   "key": "frosvelgrmon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Whips up a blizzard with its wings and tail."
+  },
+  {
+   "key": "frozomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A charging punch with its huge right arm."
+  },
+  {
+   "key": "fufumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits small iron spikes, like darts."
+  },
+  {
+   "key": "fumamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws steerable shuriken from its gauntlets; thrown objects."
+  },
+  {
+   "key": "funbeemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Rapid-fires tiny barbed stingers, like darts."
+  },
+  {
+   "key": "fusamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "none",
+   "gap": "sound",
+   "reason": "Lets out a high-pitched threatening cry; no projectile."
+  },
+  {
+   "key": "gabumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots flames from its mouth (Petit Fire)."
+  },
+  {
+   "key": "gabumonblack",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits a small fireball."
+  },
+  {
+   "key": "gaioumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with twin swords."
+  },
+  {
+   "key": "galgomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires the vulcan guns on both arms."
+  },
+  {
+   "key": "gammamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges and butts with its twin horns."
+  },
+  {
+   "key": "gaogamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "A dashing double claw strike."
+  },
+  {
+   "key": "gaomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A rolling uppercut punch."
+  },
+  {
+   "key": "garudamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: bird-shaped projectile",
+   "reason": "Shoots a vacuum blade seen as a black bird silhouette (anime: a flaming bird); a shaped projectile, not a ball."
+  },
+  {
+   "key": "garurumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews blue high-temperature flames from its mouth."
+  },
+  {
+   "key": "garurumonblack",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes blue flames."
+  },
+  {
+   "key": "geogreymon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews very hot flames from its mouth."
+  },
+  {
+   "key": "ghilliedhumon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots the foe through the Digicore with its rifle; a bullet, not a giant sphere."
+  },
+  {
+   "key": "ghostmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires weak energy shots from its palms; small energy shots, not a giant sphere."
+  },
+  {
+   "key": "gigadramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires organic missiles."
+  },
+  {
+   "key": "gigaseadramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an energy torpedo from its mouth cannon."
+  },
+  {
+   "key": "gigimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A burning bite."
+  },
+  {
+   "key": "ginryumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges while parrying with its armor; a body charge (its special move Tekkoujin, an iron spear fired from the mouth, would fit missile)."
+  },
+  {
+   "key": "giromon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws a powerful bomb."
+  },
+  {
+   "key": "gogmamon",
+   "currentShape": "gaia",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Grinds the foe with the crystals on its arms; close-range grinding, nothing like a giant sphere."
+  },
+  {
+   "key": "gokimon",
+   "currentShape": "fire",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: objects dropped from the sky",
+   "reason": "Makes heaps of trash fall on the foe; physical objects, not a glowing ball."
+  },
+  {
+   "key": "golemon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires superheated gas from its mouth or back stacks, like a breath attack."
+  },
+  {
+   "key": "gorimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a large explosive energy shot from its arm cannon."
+  },
+  {
+   "key": "goromon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits rocks from its mouth."
+  },
+  {
+   "key": "gracenovamon",
+   "currentShape": "gaia",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Melts the foe by touching it with energy-charged palms; a close-range touch, not a thrown sphere."
+  },
+  {
+   "key": "grademon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Crosswise sword slashes."
+  },
+  {
+   "key": "granddracumon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Instantly turns foes into ice crystals."
+  },
+  {
+   "key": "grandlocomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rams the foe with its spiked wheel at high speed."
+  },
+  {
+   "key": "grankuwagamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cuts through space with its pincers."
+  },
+  {
+   "key": "grappuleomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A turbine-spun heavy punch."
+  },
+  {
+   "key": "greymon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews very hot flames from its mouth."
+  },
+  {
+   "key": "greymonblue",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes fire."
+  },
+  {
+   "key": "groundramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Crushes the foe between its back arms; a crushing grip, not a slash."
+  },
+  {
+   "key": "growmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with plasma-charged elbow blades."
+  },
+  {
+   "key": "growmonorange",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with plasma-charged elbow blades."
+  },
+  {
+   "key": "guilmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Strikes with its sturdy front claws."
+  },
+  {
+   "key": "gulusgammamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Grabs and crushes the foe with dark flames in its hand (its Desdemona throws those flames)."
+  },
+  {
+   "key": "gumdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Flails its hammer tail in all directions."
+  },
+  {
+   "key": "gummymon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows sticky bubbles."
+  },
+  {
+   "key": "gundramon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Rapid revolver gunfire from both hands; bullets, not a giant sphere."
+  },
+  {
+   "key": "gurimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges with its horns."
+  },
+  {
+   "key": "gusokumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Strikes with sharp forelimb claws."
+  },
+  {
+   "key": "gyukimon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Binds the foe with spider silk."
+  },
+  {
+   "key": "hagurumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: thrown gear",
+   "reason": "Implants a black virus gear into the foe; a flying gear, not a ball."
+  },
+  {
+   "key": "hawkmon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Pecks the foe with its beak; a close-range peck, not a projectile."
+  },
+  {
+   "key": "heavyleomon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a long-range barrage from its shoulder autocannon; shells, not a giant sphere."
+  },
+  {
+   "key": "helloogarmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes a spreading blast of flames from its mouth; a breath attack."
+  },
+  {
+   "key": "heraklekabuterimon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires an extremely powerful energy beam from its horn; a huge blast, but a beam rather than a sphere."
+  },
+  {
+   "key": "herissmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots lightning-coated quills, like darts."
+  },
+  {
+   "key": "hexeblaumon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spreads freezing air that turns foes into ice statues."
+  },
+  {
+   "key": "hiandromon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires an annihilating beam from the energy of its shoulder turbines; a beam, not a sphere."
+  },
+  {
+   "key": "hicommandramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a multi-grenade launcher."
+  },
+  {
+   "key": "hippogriffomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes scorching hot wind, a breath attack."
+  },
+  {
+   "key": "hisyaryumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Becomes a giant steel blade and cleaves."
+  },
+  {
+   "key": "hiyarimon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews cold breath."
+  },
+  {
+   "key": "holyangemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: subspace gate",
+   "reason": "Opens a gate to subspace that swallows the foe; a portal, not a thrown sphere."
+  },
+  {
+   "key": "holydramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "light",
+   "reason": "Fires holy light energy shaped like a spiraling flame; a stream of light, not a sphere."
+  },
+  {
+   "key": "hopmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A bouncing butt strike."
+  },
+  {
+   "key": "hououmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "light",
+   "reason": "Rains purifying golden grains of light from its wings; no sphere."
+  },
+  {
+   "key": "hoverespimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires missiles."
+  },
+  {
+   "key": "huankunmon",
+   "currentShape": "ice",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: enveloping bubble",
+   "reason": "Blows a bubble from its fin that envelops the foe; a bubble, not an ice crystal, and the trapping is not drawn."
+  },
+  {
+   "key": "huckmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Rushes in slashing with its claws."
+  },
+  {
+   "key": "hudiemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Soars high and kicks from above."
+  },
+  {
+   "key": "hydramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Breathes poison gas from the mouth on its chest; a gas cloud, not a ball."
+  },
+  {
+   "key": "hyougamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A cold-packed punch."
+  },
+  {
+   "key": "icedevimon",
+   "currentShape": "ice",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with icy claws; the white-blue slash marks fit better than an ice crystal."
+  },
+  {
+   "key": "ikkakumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its horn like a missile."
+  },
+  {
+   "key": "imperialdramondragonmode",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires dark matter that annihilates a wide area."
+  },
+  {
+   "key": "imperialdramonfightermode",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires an energy beam from its arm cannon."
+  },
+  {
+   "key": "imperialdramonpaladinmode",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cleaves with a giant sword."
+  },
+  {
+   "key": "impmon",
+   "currentShape": "ice",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Summons flame and ice elementals combined into a ball and throws it; a ball, not an ice crystal."
+  },
+  {
+   "key": "indaramon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "Blows its conch shell to fire destructive ultrasonic waves; a sound blast, not a rocket."
+  },
+  {
+   "key": "jazamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Pecks with its hard beak."
+  },
+  {
+   "key": "jazarichmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges while spinning at high speed."
+  },
+  {
+   "key": "jellymon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Discharges paralyzing static electricity from its tentacles."
+  },
+  {
+   "key": "jesmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "High-speed slashes with its arm blades."
+  },
+  {
+   "key": "jewelbeemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: spear shock wave",
+   "reason": "Swings its spear at light speed to send a shock wave; close to a flying slash but not claw marks."
+  },
+  {
+   "key": "jokermon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Scythe slashes with energy blades."
+  },
+  {
+   "key": "justimonaccelarm",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A flying kick."
+  },
+  {
+   "key": "justimonblitzarm",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A flying kick."
+  },
+  {
+   "key": "justimoncriticalarm",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A flying kick."
+  },
+  {
+   "key": "jyagamon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: fired rind chunks",
+   "reason": "Fires pieces of its rind; small fired objects, not a giant sphere."
+  },
+  {
+   "key": "jyarimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits hot bubbles."
+  },
+  {
+   "key": "kabuterimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Fires a ball of electricity; the orb matches the ball but not the lightning."
+  },
+  {
+   "key": "kakkinmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rams with the corners of its shield."
+  },
+  {
+   "key": "karatukinumemon",
+   "currentShape": "missile",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Hides in its shell and tackles; a body tackle, not a fired rocket."
+  },
+  {
+   "key": "kausgammamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A gliding ramming tackle."
+  },
+  {
+   "key": "kazuchimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with twin lightning swords."
+  },
+  {
+   "key": "keemon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "water",
+   "reason": "Squirts a paint-laden water jet from its mouth."
+  },
+  {
+   "key": "ketomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Discharges acidic bubbles from its eyes."
+  },
+  {
+   "key": "kingetemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "none",
+   "gap": "other: taunting performance",
+   "reason": "A fake show that cripples the foe's fighting spirit; no projectile described."
+  },
+  {
+   "key": "kinkakumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Smashes the ground with an overhead club swing."
+  },
+  {
+   "key": "kodokugumonchild",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Scratches with poison claws."
+  },
+  {
+   "key": "koemon",
+   "currentShape": "missile",
+   "bestShape": "bind",
+   "fit": "approximate",
+   "gap": "other: thrown entangling hoop",
+   "reason": "Throws a wheel that entangles the foe's leg; the wrapping matches bind better than a rocket."
+  },
+  {
+   "key": "koromon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows bubbles from its mouth."
+  },
+  {
+   "key": "kudamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A spinning body tackle."
+  },
+  {
+   "key": "kumbhiramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Seals the foe in a hexagram barrier of clones and smashes it with a pestle."
+  },
+  {
+   "key": "kuwagamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slices with its pincers."
+  },
+  {
+   "key": "kuzuhamon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: summoned spirit foxes",
+   "reason": "Sends the pipe fox from its waist at the foe; a flying spirit, not a giant sphere."
+  },
+  {
+   "key": "kuzuhamonmikomode",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: summoned spirit foxes",
+   "reason": "Sends pipe foxes from its waist at the foe; a flying spirit, not a giant sphere."
+  },
+  {
+   "key": "kyokyomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a metal spike from its mouth, like a dart."
+  },
+  {
+   "key": "kyubimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Conjures will-o'-wisp fireballs and sends them at the foe."
+  },
+  {
+   "key": "kyukimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "wind",
+   "reason": "A tornado around the foe that minces it with vacuum blades."
+  },
+  {
+   "key": "lalamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots hard nuts from its mouth."
+  },
+  {
+   "key": "lamortmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with claws."
+  },
+  {
+   "key": "lavogaritamon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires a laser-shaped heat ray from its mouth; a straight beam, closer to a shot from the mouth than a thrown sphere."
+  },
+  {
+   "key": "lavorvomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits the largest fireball it can make; the fire orb fits."
+  },
+  {
+   "key": "leafmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acid bubbles from its mouth; a small orb fits."
+  },
+  {
+   "key": "lekismon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws hypnotic water bubbles; a round bubble reads as the fire orb, not a gray rocket."
+  },
+  {
+   "key": "leomon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a lion-head-shaped aura from its fist, a ranged ki shot; claw slashes do not fit."
+  },
+  {
+   "key": "lilamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires many slender beams from its fingers; an orb is the closest ranged energy shot."
+  },
+  {
+   "key": "lilimon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots an energy shell from a petal gun muzzle; a glowing orb fits better than a gray rocket."
+  },
+  {
+   "key": "loaderleomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: spinning drill",
+   "reason": "Attacks by spinning its drill mane at high speed; slashes only roughly suggest drilling."
+  },
+  {
+   "key": "locomon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Bombs of steam from its smokestack; the explosion flash fits, but the move is a steam (gas) cloud."
+  },
+  {
+   "key": "loogamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots magic flames from its mouth; the fire orb fits."
+  },
+  {
+   "key": "loogarmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Gathers flames in its mouth and fires them as a beam, a breath attack; fire fits better than a charged sphere."
+  },
+  {
+   "key": "ludomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Bashes with the shields on its arms; slash marks stand in for a blunt shield strike."
+  },
+  {
+   "key": "lunamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Claw scratch; claw fits."
+  },
+  {
+   "key": "luxmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A punch imitating Angemon; slashes stand in for a fist."
+  },
+  {
+   "key": "machgaogamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "High-speed punch barrage; slashes stand in for punches."
+  },
+  {
+   "key": "machmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Tears the foe apart with blades on its body; claw fits."
+  },
+  {
+   "key": "madleomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires lion-face-shaped spirit energy at the foe; a ranged energy shot fits the orb."
+  },
+  {
+   "key": "magnakidmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Stabs with gun barrels on its hip magazines and fires inside the foe; guns fit but the stab does not."
+  },
+  {
+   "key": "mailbirdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Plasma shot from its mouth; the orb fits."
+  },
+  {
+   "key": "majiramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires 108 shining arrows from a swirl of light; arrows are missile projectiles."
+  },
+  {
+   "key": "makuramon",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: trapping orb",
+   "reason": "Traps the foe in a jewel orb and crushes it; a sphere landing on the foe is closer than claw slashes."
+  },
+  {
+   "key": "mamemon",
+   "currentShape": "fire",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its detachable hand as an explosive bomb; a thrown bomb fits missile better than an orb."
+  },
+  {
+   "key": "mametyramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rapid-fire bites; slashes stand in for bites."
+  },
+  {
+   "key": "mammon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its tusks like missiles; missile fits."
+  },
+  {
+   "key": "manticoremon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires energy shots from three mouths; small energy shots fit the fire orb, not a charged giant sphere."
+  },
+  {
+   "key": "marinchimairamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "water",
+   "reason": "Spins to create a large whirlpool; no water shape exists, the big blast is the closest."
+  },
+  {
+   "key": "marsmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A flame-clad aerial body strike; slashes stand in for the blow."
+  },
+  {
+   "key": "mastertyranomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes intense flames; fire fits."
+  },
+  {
+   "key": "matadrmon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires countless rapiers from its sleeves like darts; projectiles fit missile, not a charged sphere."
+  },
+  {
+   "key": "megadramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires organic missiles from both arms; missile fits."
+  },
+  {
+   "key": "megalogrowmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the Pendulum Blades on its arms; claw fits."
+  },
+  {
+   "key": "megalogrowmonorange",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with the Pendulum Blades on its arms; claw fits."
+  },
+  {
+   "key": "megaseadramon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Fires lightning from its horn; a ranged orb is closer than claw slashes for a bolt."
+  },
+  {
+   "key": "megidramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "A howl that releases a powerful shockwave; the big blast and flash stand in for the sound wave."
+  },
+  {
+   "key": "mephismon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "A dark death-curse (also shown as a dark shockwave from its hand); gaia covers dark power."
+  },
+  {
+   "key": "meramon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Its burning fists throw fireballs (Digimon World, card 'Fireball'); the official text is a flaming punch, so fire beats slashes."
+  },
+  {
+   "key": "mercurymon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rapid barrage of punches; slashes stand in for fists."
+  },
+  {
+   "key": "mermaimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Pierces the foe with its golden anchor; slashes stand in for a thrust."
+  },
+  {
+   "key": "metaletemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws a banana peel to trip the foe; a thrown object fits missile."
+  },
+  {
+   "key": "metalgarurumon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes absolute-zero cold air that freezes the foe (Wikimon); ice fits."
+  },
+  {
+   "key": "metalgarurumonblack",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Absolute-zero freezing breath; ice fits."
+  },
+  {
+   "key": "metalgreymon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Launches organic missiles from its chest hatch (Wikimon); missile fits."
+  },
+  {
+   "key": "metalgreymon2010animeversion",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Strikes with the super-hot claws on its left arm; claw fits."
+  },
+  {
+   "key": "metalgreymonalterousmode",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires concentrated energy bombardments from its arm cannon; an energy shot reads as the orb, not a gray rocket."
+  },
+  {
+   "key": "metalgreymonvirus",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires missiles from its chest hatch; missile fits."
+  },
+  {
+   "key": "metallicdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "A straight laser beam from its tail gun; the orb is the closest straight energy shot."
+  },
+  {
+   "key": "metallifekuwagamon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Homing lasers from its fingertips; a small straight shot is closer than a charged giant sphere."
+  },
+  {
+   "key": "metalmamemon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an energy blast from its arm cannon; an energy shot fits the orb better than a rocket."
+  },
+  {
+   "key": "metalseadramon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "A massive energy beam from its snout cannon; an energy orb from the head is closer than rockets."
+  },
+  {
+   "key": "metaltyranomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a large missile from its right arm; missile fits."
+  },
+  {
+   "key": "mihiramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: ground shockwave",
+   "reason": "Slams its staff into the ground for an all-around shockwave; the landing flash is the closest."
+  },
+  {
+   "key": "minomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws a hard pinecone; a thrown object fits missile."
+  },
+  {
+   "key": "miragegaogamon",
+   "currentShape": "gaia",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires crescent-moon shockwaves from its hands; flying slash arcs match better than a charged sphere."
+  },
+  {
+   "key": "miragegaogamonburstmode",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Strikes with a sphere of light holding planetary-class energy; this is the giant energy sphere."
+  },
+  {
+   "key": "missimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rams the foe like a missile with its body; rockets stand in for the tackle."
+  },
+  {
+   "key": "mitamamon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires blazing wheels on a gust of wind; flaming projectiles fit the fire orb better than a charged sphere."
+  },
+  {
+   "key": "mochimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits elastic bubbles; the orb fits."
+  },
+  {
+   "key": "mokumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "poison",
+   "reason": "Spreads a smokescreen from its body to escape, not an attack; nothing looks like a smoke cloud."
+  },
+  {
+   "key": "monochromon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits a powerful flame shot; fire fits."
+  },
+  {
+   "key": "monodramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A bite; slashes stand in for teeth."
+  },
+  {
+   "key": "monzaemon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: hearts",
+   "reason": "Shoots hearts; a glowing orb is closer to a heart than a gray rocket."
+  },
+  {
+   "key": "morphomon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Scatters glittering scales from its wings that soothe or paralyze; the crystal stands in for a scale powder."
+  },
+  {
+   "key": "mugendramon",
+   "currentShape": "missile",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires huge energy waves from its two back cannons; a huge energy blast fits gaia better than rockets."
+  },
+  {
+   "key": "mummymon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Bandages coil around the foe like a snake; bind fits."
+  },
+  {
+   "key": "musyamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Glowing sword slash; claw fits."
+  },
+  {
+   "key": "namakemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws poop; a thrown object fits missile."
+  },
+  {
+   "key": "neodevimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Stretches its clawed arms into the foe (powered-up Death Claw); claw fits."
+  },
+  {
+   "key": "neovamdemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: bat swarm",
+   "reason": "Fires energy-draining bat familiars; dark power fits but nothing looks like a bat swarm."
+  },
+  {
+   "key": "neptunemon",
+   "currentShape": "claw",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Pierces the foe with a spear that homes in by itself; a projectile is closer than slashes."
+  },
+  {
+   "key": "nidhoggmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Red-hot beams from its eyes; the orb is the closest straight energy shot."
+  },
+  {
+   "key": "noblepumpmon",
+   "currentShape": "missile",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Conjures giant pumpkin bombs in the air that blow up everything; a big object above that explodes fits gaia."
+  },
+  {
+   "key": "numemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws poop; a thrown object fits missile."
+  },
+  {
+   "key": "nyokimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits popping seeds to startle the foe; a small spit fits the fire orb."
+  },
+  {
+   "key": "oboromon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Katana slashes; claw fits."
+  },
+  {
+   "key": "octmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots a toxic ink bullet from its gun; a bullet fits missile."
+  },
+  {
+   "key": "okuwamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slices with its scissor pincers; claw fits."
+  },
+  {
+   "key": "oleamon",
+   "currentShape": "gaia",
+   "bestShape": "bind",
+   "fit": "approximate",
+   "gap": "other: engulf",
+   "reason": "Spreads its petals to engulf and devour prey drawn in by its scent; wrapping is closer than an energy sphere."
+  },
+  {
+   "key": "omegamon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Absolute-zero freezing shots from its arm cannon; ice fits."
+  },
+  {
+   "key": "omegamonzwart",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Absolute-zero freezing shots from its arm cannon; ice fits."
+  },
+  {
+   "key": "omegashoutmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "A hail of fiery shots from its chest; fire orbs from the chest fit better than a charged sphere."
+  },
+  {
+   "key": "orgemon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a dark version of Leomon's lion-head ki shot from its fist (Wikimon); a ranged energy shot fits better than slashes."
+  },
+  {
+   "key": "orochimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Breathes alcohol-laden breath that makes the foe drunk; it is a gas, not a ball."
+  },
+  {
+   "key": "ouryumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an attack from its twin swords; sword slashes fit claw."
+  },
+  {
+   "key": "pagumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits poison bubbles; the orb fits."
+  },
+  {
+   "key": "paildramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Thrusts with the spikes from its arm shells (fencing); slashes stand in for stabs."
+  },
+  {
+   "key": "pajiramon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "Bellows a sleep-inducing sound wave; nothing draws sound, the big blast is a stand-in."
+  },
+  {
+   "key": "paledramon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Freezing breath; ice fits."
+  },
+  {
+   "key": "palmon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Entangles the foe with poison ivy from its fingers; bind fits."
+  },
+  {
+   "key": "pandamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with claws hidden in its paws; claw fits."
+  },
+  {
+   "key": "panjyamon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a lion-head freezing blast from its fist; ice fits."
+  },
+  {
+   "key": "parasaurmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Spews a numbing gas from its mouth; it is a gas cloud, not a ball."
+  },
+  {
+   "key": "parasimon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Binds the foe with tentacles and shocks it; bind fits."
+  },
+  {
+   "key": "parrotmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "Flies at the speed of sound and mows foes down with the shockwave; no shape draws a sonic shockwave."
+  },
+  {
+   "key": "patamon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews a burst of air from its mouth; a small shot from the mouth fits fire, not a giant charged sphere."
+  },
+  {
+   "key": "peckmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spins and strikes with giant claws; claw fits."
+  },
+  {
+   "key": "petimeramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits small fireballs; fire fits."
+  },
+  {
+   "key": "petitmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots a small fireball from its mouth; fire fits."
+  },
+  {
+   "key": "pharaohmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Emits a fear gas that desiccates foes; dark power fits but it is a gas cloud."
+  },
+  {
+   "key": "phascomon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "other: sleep waves",
+   "reason": "Sleep waves from its eyes; a small straight shot from the head is closer than a giant charged sphere."
+  },
+  {
+   "key": "phelesmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: petrification",
+   "reason": "Turns the foe into a black stone statue; dark power stands in for petrification."
+  },
+  {
+   "key": "piccolomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Conjures a flying bat-shaped bomb; a thrown bomb fits missile."
+  },
+  {
+   "key": "pidmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Showers feathers that burst into holy flames like meteors; flaming projectiles fit the fire orb."
+  },
+  {
+   "key": "piemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Flings several swords at the foe; thrown objects fit missile."
+  },
+  {
+   "key": "piranimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Impales the foe with its hook-sharp tail fin and drags it underwater; slashes stand in for the impale."
+  },
+  {
+   "key": "pistmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots thorns from its handlebars like darts; missile fits."
+  },
+  {
+   "key": "pitchmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits bubbles; the orb fits."
+  },
+  {
+   "key": "piyomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots a spiral of phantom flames; fire fits."
+  },
+  {
+   "key": "platinumnumemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws a lump of refining residue (poop); a thrown object fits missile."
+  },
+  {
+   "key": "plesiomon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "Sings in a crystal-clear voice that saps the will; nothing draws sound, the big blast is a stand-in."
+  },
+  {
+   "key": "plutomon",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Releases an all-devouring darkness from the fangs on its chest; dark power fits gaia better than claw slashes."
+  },
+  {
+   "key": "pokomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Turns to stone and spews poison gas; it is a gas cloud, not a ball."
+  },
+  {
+   "key": "poromon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "wind",
+   "reason": "Flaps its wings to raise a sand cloud and flee, not an attack; nothing draws a wing gust."
+  },
+  {
+   "key": "proximamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "A black particle cloud that disintegrates everything; cosmic power fits but it is a cloud, not a sphere."
+  },
+  {
+   "key": "publimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Crushes the foe between two giant windows; slashes stand in for a squash."
+  },
+  {
+   "key": "pukamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits air bubbles; the orb fits."
+  },
+  {
+   "key": "pulsemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A lightning-fast ramming tackle (speed, not electricity); slashes stand in for the tackle."
+  },
+  {
+   "key": "pumpmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Conjures a giant pumpkin in the air and drops it on the foe; gaia fits."
+  },
+  {
+   "key": "punimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acidic bubbles; the orb fits."
+  },
+  {
+   "key": "pururumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acid bubbles; the orb fits."
+  },
+  {
+   "key": "puyomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Gives off crackling static, a way of communicating rather than an attack; a small orb stands in for the static."
+  },
+  {
+   "key": "puyoyomon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Sends out a bursting streak of static electricity; a small shot is closer than a giant charged sphere for a baby."
+  },
+  {
+   "key": "pyocomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows soap bubbles; the orb fits."
+  },
+  {
+   "key": "pyonmon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Slaps the foe with its big ear; a strike mark is closer than a flying orb."
+  },
+  {
+   "key": "rafflesimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its sleeve like a cannon; a gun shot fits missile."
+  },
+  {
+   "key": "ragnalordmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cleaves the foe with a downward sword stroke; claw fits."
+  },
+  {
+   "key": "ragnamon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "A massive energy beam from its chest cannon; an energy orb from the chest is closer than rockets."
+  },
+  {
+   "key": "raidenmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "A 45,000-volt corona discharge; the big blast and flash stand in for electricity."
+  },
+  {
+   "key": "raijiludomon",
+   "currentShape": "claw",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Strikes with a high-output electric blast from its head; a ranged shot is closer than slashes."
+  },
+  {
+   "key": "raijinmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Discharges intense lightning from its shoulders (the name means electric ball); the charged sphere stands in for lightning."
+  },
+  {
+   "key": "rapidmonperfect",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Rapid-fires homing missiles; missile fits."
+  },
+  {
+   "key": "raptordramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Armored charging tackle with sharp armor; slashes stand in for the charge."
+  },
+  {
+   "key": "raremon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spews sludge from its mouth; spit fits the fire orb."
+  },
+  {
+   "key": "rareraremon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: swallow/engulf",
+   "reason": "Swallows the foe whole with the mouth on its head; nothing draws a swallow."
+  },
+  {
+   "key": "rasenmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Punches with spinning arm blades that cut; claw fits."
+  },
+  {
+   "key": "rasenmonfurymode",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: pierce/stab",
+   "reason": "Skewers the foe again and again with its spiral tails; slashes stand in for the stabs."
+  },
+  {
+   "key": "ravmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spinning charge that tears with its arm claws, so slash marks fit."
+  },
+  {
+   "key": "ravmonburstmode",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: wide aura wave from wings",
+   "reason": "Giant wings release a wave of dark purple aura; gaia's dark power and flash is closest, but it is a wave, not a thrown sphere."
+  },
+  {
+   "key": "rebellimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a barrage of missiles from its arm."
+  },
+  {
+   "key": "regalecusmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Pierces the foe with its sword (with a lightning flash), a blade attack."
+  },
+  {
+   "key": "regulusmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A bite with the jaw-shaped shield on its arm; claw marks are only the closest stand-in for a bite."
+  },
+  {
+   "key": "relemon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "none",
+   "gap": "support",
+   "reason": "Not an attack: it transforms into an object to hide, so no attack shape fits."
+  },
+  {
+   "key": "renamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: barrage of sharp leaves",
+   "reason": "Fires a barrage of sharpened leaves; missile covers thrown objects, but rockets with smoke do not look like leaves (claw blades would be the other option)."
+  },
+  {
+   "key": "reppamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Somersault slash with its bladed tail."
+  },
+  {
+   "key": "rizegreymon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Rapidly fires three shots from the giant revolver on its arm, which is gunfire, not a charged energy sphere."
+  },
+  {
+   "key": "rosemon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Lashes the foe with a thorn whip."
+  },
+  {
+   "key": "rosemonburstmode",
+   "currentShape": "gaia",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Gently wraps its amplified aura mantle around the foe to annihilate it, which is a wrapping attack."
+  },
+  {
+   "key": "runnermon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A super-speed body charge with no blade."
+  },
+  {
+   "key": "rusttyranomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires the large electromagnetic cannon on its back."
+  },
+  {
+   "key": "ryudamon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Blocks with its helmet and armor, then counterattacks up close; the counter's exact form is not described, but a ball from the mouth does not fit."
+  },
+  {
+   "key": "saberdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Dives and strikes with the talons on its feet."
+  },
+  {
+   "key": "saintgalgomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires all of its guns and missiles at once."
+  },
+  {
+   "key": "sakumon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "No move description exists on Wikimon or the official reference; the name is a cutting sound ('Cutting Easily') and the profile says it swings its head blade, so a cut is inferred."
+  },
+  {
+   "key": "sakuttomon",
+   "currentShape": "fire",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "No move description exists on Wikimon or the official reference; the name is a cutting sound and it has two blades on its sides, so a cut is inferred."
+  },
+  {
+   "key": "sakuyamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: summoned fox spirits",
+   "reason": "Summons four elemental fox spirits that fight for it; nothing draws summoned creatures, gaia's holy power is kept as closest."
+  },
+  {
+   "key": "sakuyamonxantibody",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "wind",
+   "reason": "Engulfs the foe in a storm of flower petals made from its surroundings; a petal storm, not a sphere."
+  },
+  {
+   "key": "sandiramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Spits a spear of light from its mouth to impale the foe; a straight light lance drawn as a ball."
+  },
+  {
+   "key": "sangloupmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Flings thousands of tiny blades that skewer the foe."
+  },
+  {
+   "key": "sangomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Spreads a poisonous mist; a gas cloud drawn as a ball."
+  },
+  {
+   "key": "saviorhuckmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Skewers the foe from a flying kick with the blades on its feet."
+  },
+  {
+   "key": "scorpiomon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Sprays a blinding, slightly poisonous mist; a spray is closer to a shot than to a charged giant sphere."
+  },
+  {
+   "key": "seadramon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes absolute-zero air that freezes and is fired at the foe."
+  },
+  {
+   "key": "sealsdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Stabs the foe from behind with a knife."
+  },
+  {
+   "key": "seraphimon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires seven superheated spheres of holy light."
+  },
+  {
+   "key": "shakamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: illusion trap on its palm",
+   "reason": "Traps the foe fighting an illusion on its palm (in one game, slams with two giant hands); holy power is kept as closest."
+  },
+  {
+   "key": "shakkoumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots exploding clay discs from its waist, like thrown bombs."
+  },
+  {
+   "key": "shellmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "water",
+   "reason": "Shoots a high-pressure water jet from its head."
+  },
+  {
+   "key": "shinegreymon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Concentrates red-hot solar energy and fires it as a huge blast."
+  },
+  {
+   "key": "shinegreymonburstmode",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with a flaming greatsword."
+  },
+  {
+   "key": "shinmonzaemon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: barrage of body parts",
+   "reason": "Sends countless parts of its body flying at the foe; a barrage of thrown objects is closer to missiles than to one energy sphere."
+  },
+  {
+   "key": "shivamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an orb of light energy from its palms."
+  },
+  {
+   "key": "shootmon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires balls from its cannon."
+  },
+  {
+   "key": "shoutmon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Makes an eighth-note-shaped ball of flame and throws it, which is a fireball, not a rocket."
+  },
+  {
+   "key": "shoutmondx",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Claw strike with its arm weapon."
+  },
+  {
+   "key": "shoutmonx4",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Single-stroke sword slash."
+  },
+  {
+   "key": "shoutmonx7",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Sets its microphone on fire and swings it down, a blunt weapon blow rather than a blade cut."
+  },
+  {
+   "key": "shroudmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Rapid combo punches with aura-clad iron fists."
+  },
+  {
+   "key": "siesamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "light",
+   "reason": "The shown move Tiida Iya fires countless holy arrows of sunlight (the input 'what' describes its other move, the Sekkantou barrier); arrows fit missile, but these are light, not rockets."
+  },
+  {
+   "key": "silphymon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an energy blast from its outstretched arms."
+  },
+  {
+   "key": "sinduramon",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Unleashes an intense lightning strike from its pestle; gaia's landing flash is closer to lightning than claw slash marks."
+  },
+  {
+   "key": "siriusmon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires light-beam shots from its cannon-blades; an energy shot is closer than a smoking rocket."
+  },
+  {
+   "key": "skullgreymon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires an organic missile from its spine."
+  },
+  {
+   "key": "skullmammon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spins and hurls one of its vertebrae, a thrown object."
+  },
+  {
+   "key": "slayerdramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spinning sword slash."
+  },
+  {
+   "key": "snatchmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "A laser fired from its arms; a fast shot fits better than a slow giant sphere."
+  },
+  {
+   "key": "snimon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Sickle slash that sends a blade shockwave."
+  },
+  {
+   "key": "soloogarmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Shoots a focused flame laser from its fingers at distant foes; a straight flame shot fits better than a giant sphere."
+  },
+  {
+   "key": "spinomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots the blades on its back all at once."
+  },
+  {
+   "key": "stiffilmon",
+   "currentShape": "missile",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges while spinning at high speed and hits with its quills; it does not fire anything, so missiles do not fit."
+  },
+  {
+   "key": "stingmon",
+   "currentShape": "missile",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Skewers the foe with the spikes on its arms, a blade-like stab, not a launched projectile."
+  },
+  {
+   "key": "strikedramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Turns its whole body into flames and rams the foe, a body tackle."
+  },
+  {
+   "key": "sunamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: thrown sand spray",
+   "reason": "Throws a large amount of sand; a loose spray, not a solid projectile."
+  },
+  {
+   "key": "sunarizamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Turns its forelimbs into claws and scratches."
+  },
+  {
+   "key": "sunflowmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires rays of sunlight from its petals."
+  },
+  {
+   "key": "symbareangoramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A barrage of quick kicks on one leg."
+  },
+  {
+   "key": "tailmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Attacks with its long claws."
+  },
+  {
+   "key": "tailmonchild",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Same Cat Punch move as Tailmon, which Wikimon describes as an attack with its long claws."
+  },
+  {
+   "key": "tanemon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows sticky bubbles."
+  },
+  {
+   "key": "tankdramon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires a nuclear-warhead cannon shell."
+  },
+  {
+   "key": "taomon",
+   "currentShape": "missile",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: painted glyph",
+   "reason": "Paints a glowing Sanskrit glyph in midair and hurls it so it explodes; a magic energy shape with an explosion is closer to gaia than to a rocket."
+  },
+  {
+   "key": "tempomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Dance martial arts with capoeira-style kicks."
+  },
+  {
+   "key": "tentomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Fires static electricity amplified by its wings; lightning drawn as a ball."
+  },
+  {
+   "key": "terriermon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "wind",
+   "reason": "Spins its ears to make a tiny tornado; a small whirlwind is closer to a small shot than to a giant charged sphere."
+  },
+  {
+   "key": "teslajellymon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Sends an electric shock from its palms into the foe at close range."
+  },
+  {
+   "key": "thetismon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Electrified punches with charged palms."
+  },
+  {
+   "key": "thunderballmon",
+   "currentShape": "gaia",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires spheres of electricity, balls that fly straight rather than one giant charged sphere."
+  },
+  {
+   "key": "tialudomon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws the shields on its arms like discs."
+  },
+  {
+   "key": "tigervespamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Stabs the foe with twin blades."
+  },
+  {
+   "key": "tobiumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires organic missiles from its abdomen."
+  },
+  {
+   "key": "togemon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots its thorns like needles (anime version); the official text instead describes rapid strikes with its thorny arms."
+  },
+  {
+   "key": "toropiamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "poison",
+   "reason": "Scatters a large cloud of explosive pollen; the explosion fits gaia, the pollen cloud does not."
+  },
+  {
+   "key": "tortamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires the blades on its shell like multiple-warhead missiles."
+  },
+  {
+   "key": "triceramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges into the foe with its three horns."
+  },
+  {
+   "key": "tsubumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits bubbles."
+  },
+  {
+   "key": "tunomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acidic bubbles from its mouth."
+  },
+  {
+   "key": "turuiemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Leaping combo strikes with the claws on both arms."
+  },
+  {
+   "key": "tyilinmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Dives from the sky and impales the foe with its horn, a charge rather than a blade slash."
+  },
+  {
+   "key": "tyranomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes fire."
+  },
+  {
+   "key": "tyrantkabuterimon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Unleashes an incandescent explosion from its whole body."
+  },
+  {
+   "key": "ukkomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Spins like a top and rams the foe."
+  },
+  {
+   "key": "ulforcevdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Fires a ray of energy from the V on its chest."
+  },
+  {
+   "key": "upamon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "An ultrasonic shout that makes the foe flinch."
+  },
+  {
+   "key": "vajramon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: ground fissure and flying rocks",
+   "reason": "Strikes the ground with its swords, opening fissures and hurling rocks; the blades hit the ground, not the foe."
+  },
+  {
+   "key": "valkyrimon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "A slash that freezes the foe with an absolute-zero sword; ice shows the freezing (claw would also suit the slash)."
+  },
+  {
+   "key": "valvemon",
+   "currentShape": "fire",
+   "bestShape": "missile",
+   "fit": "approximate",
+   "gap": "other: summoned soldiers",
+   "reason": "Sends out soldiers from inside its body (in one game, a stream of mini-Valvemon projectiles); a stream of objects is closer to missiles than to a single ball."
+  },
+  {
+   "key": "vamdemon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "other: bat swarm",
+   "reason": "Sends a swarm of countless bats in a surprise attack; dark power kept as closest."
+  },
+  {
+   "key": "vdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Spews a V-shaped heat ray from its mouth."
+  },
+  {
+   "key": "vegimon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Throws poop, a thrown object."
+  },
+  {
+   "key": "vermillimon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots a powerful fireball, which is a ball, not a rocket."
+  },
+  {
+   "key": "victorygreymon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Smashes the foe with its giant sword."
+  },
+  {
+   "key": "vikaralamon",
+   "currentShape": "gaia",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: spinning treasure wheel",
+   "reason": "Bores through the foe with its red treasure wheel; a cutting wheel is closer to blade marks than to a charged energy sphere."
+  },
+  {
+   "key": "vikemon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "A freezing blizzard."
+  },
+  {
+   "key": "vmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Swings both arms in circles to punch."
+  },
+  {
+   "key": "volcamon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "A heavy-bass microphone performance that stuns the foe."
+  },
+  {
+   "key": "volcanicdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes scorching flames."
+  },
+  {
+   "key": "vorvomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits a small hot flame."
+  },
+  {
+   "key": "vulturemon",
+   "currentShape": "gaia",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots the foe's vitals with the rifle on its arm, which is gunfire, not a charged energy sphere."
+  },
+  {
+   "key": "wanyamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A sudden surprise bite."
+  },
+  {
+   "key": "wargreymon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "good",
+   "gap": null,
+   "reason": "Concentrates the atmosphere's energy into one spot and fires it as a dense, hot energy shot (the Gaia Force sphere)."
+  },
+  {
+   "key": "waruseadramon",
+   "currentShape": "gaia",
+   "bestShape": "bind",
+   "fit": "approximate",
+   "gap": "water",
+   "reason": "Engulfs the foe in a whirlpool of dark power; the purple strand winding around the target is closer to a dark whirlpool than a thrown sphere."
+  },
+  {
+   "key": "waspmon",
+   "currentShape": "missile",
+   "bestShape": "fire",
+   "fit": "approximate",
+   "gap": "beam",
+   "reason": "Shoots a laser beam from its tail cannon; an energy shot is closer than a smoking rocket."
+  },
+  {
+   "key": "wendimon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "sound",
+   "reason": "Howls out a destructive shockwave."
+  },
+  {
+   "key": "weregarurumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cuts the foe to pieces with the sharp claws on both hands."
+  },
+  {
+   "key": "weregarurumonblack",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Slashes with its claws."
+  },
+  {
+   "key": "weregarurumonsagittariusmode",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Shoots sharp blades from its bow that fly at the foe in an arc."
+  },
+  {
+   "key": "wezengammamon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires heavy shells from its twin cannons."
+  },
+  {
+   "key": "wingdramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Releases a supersonic heat blast from its mouth."
+  },
+  {
+   "key": "wizarmon",
+   "currentShape": "claw",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Summons a thundercloud that strikes with lightning; gaia's charge overhead and landing flash are closer than claw slash marks."
+  },
+  {
+   "key": "wormmon",
+   "currentShape": "bind",
+   "bestShape": "bind",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits a sticky net that binds the foe."
+  },
+  {
+   "key": "xiangpengmon",
+   "currentShape": "gaia",
+   "bestShape": "gaia",
+   "fit": "approximate",
+   "gap": "electric",
+   "reason": "Summons thunderclouds that rain countless lightning bolts on the area."
+  },
+  {
+   "key": "xiquemon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A high-speed underwater dash into a surprise attack, a body charge."
+  },
+  {
+   "key": "xvmon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "A powerful bite."
+  },
+  {
+   "key": "yaegerdorulumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "other: drill lance thrust",
+   "reason": "Pierces the foe with its drill lance, a drilling thrust rather than a slash."
+  },
+  {
+   "key": "yarmon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits ink from its mouth."
+  },
+  {
+   "key": "yatagaramon2006animeversion",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Concentrates energy in its forelegs and fires it."
+  },
+  {
+   "key": "youkomon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Conjures scorching fireballs and controls them."
+  },
+  {
+   "key": "yukidarumon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "A punch that freezes the foe solid (or fires freezing air)."
+  },
+  {
+   "key": "yukimibotamon",
+   "currentShape": "ice",
+   "bestShape": "ice",
+   "fit": "good",
+   "gap": null,
+   "reason": "Breathes freezing cold air."
+  },
+  {
+   "key": "yuramon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Blows sticky bubbles."
+  },
+  {
+   "key": "zanbamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cleaves through the foe's armor with its giant sword."
+  },
+  {
+   "key": "zanmetsumon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Successive slashes with its five blades."
+  },
+  {
+   "key": "zdgarurumon",
+   "currentShape": "missile",
+   "bestShape": "missile",
+   "fit": "good",
+   "gap": null,
+   "reason": "Fires its back-mounted cannon."
+  },
+  {
+   "key": "zekegreymon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "good",
+   "gap": null,
+   "reason": "Cleaves the foe with its claws in one blow."
+  },
+  {
+   "key": "zerimon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits acidic bubbles."
+  },
+  {
+   "key": "zubaeagermon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Thrusts headlong into the foe's chest, a body charge."
+  },
+  {
+   "key": "zubamon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Charges head-first at the foe."
+  },
+  {
+   "key": "zudomon",
+   "currentShape": "claw",
+   "bestShape": "claw",
+   "fit": "approximate",
+   "gap": "melee",
+   "reason": "Swings down its hammer to hit with the shockwave and sparks, a blunt blow."
+  },
+  {
+   "key": "zurumon",
+   "currentShape": "fire",
+   "bestShape": "fire",
+   "fit": "good",
+   "gap": null,
+   "reason": "Spits severely toxic bubbles."
+  }
+ ]
+}
