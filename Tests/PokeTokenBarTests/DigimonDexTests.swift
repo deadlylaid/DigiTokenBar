@@ -95,6 +95,18 @@ final class DigimonDexTests: XCTestCase {
         for (key, shape) in expected { XCTAssertEqual(kind(key), shape, key) }
     }
 
+    func testLinesAreListedByTheirShownNames() {
+        let lines = ["piyomon", "agumon", "tentomon", "gabumon"].compactMap { catalog.lines[$0] }
+        let ko = DigimonText(.ko).sortedLines(lines, catalog: catalog).map(\.id)
+        XCTAssertEqual(ko, ["agumon", "tentomon", "gabumon", "piyomon"], "아구몬, 텐타몬, 파피몬, 피요몬")
+        let en = DigimonText(.en).sortedLines(lines, catalog: catalog).map(\.id)
+        XCTAssertEqual(en, ["agumon", "gabumon", "piyomon", "tentomon"])
+        let agumon = catalog.lines["agumon"]!
+        XCTAssertEqual(DigimonText(.ko).lineMenuName(agumon, catalog: catalog, graduated: 2), "아구몬 · 졸업 2번")
+        XCTAssertEqual(DigimonText(.ko).lineMenuName(agumon, catalog: catalog, graduated: 0), "아구몬")
+        XCTAssertEqual(DigimonText(.ko).sortedLines(Array(catalog.lines.values), catalog: catalog).count, catalog.lines.count)
+    }
+
     func testEveryCatalogDigimonHasANamedMove() {
         let page = DigimonSceneHTML.page
         for key in catalog.species.keys.sorted() {

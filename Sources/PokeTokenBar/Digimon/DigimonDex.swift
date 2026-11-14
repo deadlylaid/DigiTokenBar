@@ -102,6 +102,21 @@ extension DigimonText {
     func lineName(_ line: DigimonLine, catalog: DigimonCatalog) -> String {
         name(catalog.species(line.id))
     }
+    /// Lines in the order of their shown names (가나다 in Korean), the id breaking ties.
+    func sortedLines(_ lines: [DigimonLine], catalog: DigimonCatalog) -> [DigimonLine] {
+        let locale = Locale(identifier: ko ? "ko_KR" : "en_US")
+        return lines.sorted { a, b in
+            let order = lineName(a, catalog: catalog).compare(lineName(b, catalog: catalog), options: [.caseInsensitive],
+                                                              range: nil, locale: locale)
+            return order == .orderedSame ? a.id < b.id : order == .orderedAscending
+        }
+    }
+    /// A line in the dex menu, with how often it graduated.
+    func lineMenuName(_ line: DigimonLine, catalog: DigimonCatalog, graduated: Int) -> String {
+        let name = lineName(line, catalog: catalog)
+        guard graduated > 0 else { return name }
+        return ko ? "\(name) · 졸업 \(graduated)번" : "\(name) · \(graduated) graduated"
+    }
     var chooseEggTitle: String { ko ? "어떤 알을 키울까요?" : "Which egg will you raise?" }
     var chooseEggHint: String { ko ? "부화하기 전까지 바꿀 수 있어요." : "You can switch until it hatches." }
     var raisedLinesMenu: String { ko ? "키워 본 줄기에서 고르기" : "Pick a line you've raised" }
@@ -133,7 +148,10 @@ struct DigimonDexView: View {
                     .monospacedDigit()
                 Spacer()
                 Picker("", selection: Binding(get: { shownLine?.id ?? "" }, set: { lineID = $0; selected = nil })) {
-                    ForEach(digimon.lines, id: \.id) { Text(t.lineName($0, catalog: catalog)).tag($0.id) }
+                    let graduated = Dictionary(grouping: digimon.state.graduates, by: \.lineID).mapValues(\.count)
+                    ForEach(t.sortedLines(digimon.lines, catalog: catalog), id: \.id) { line in
+                        Text(t.lineMenuName(line, catalog: catalog, graduated: graduated[line.id] ?? 0)).tag(line.id)
+                    }
                 }
                 .pickerStyle(.menu)
                 .labelsHidden()

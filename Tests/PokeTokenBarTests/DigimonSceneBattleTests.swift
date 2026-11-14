@@ -86,4 +86,43 @@ final class DigimonSceneBattleTests: XCTestCase {
             XCTAssertEqual(result["fight"] as? Bool, false, "\(me) vs \(foe) ends")
         }
     }
+
+    /// A line without its own fire colors fires in its egg color; a very dark egg is lightened.
+    func testANewLinesFireTakesItsEggColor() async throws {
+        let scene = DigimonScene(mode: .popover)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "3D6FC9"))
+        scene.sprite(key: "gaomon", dataURI: "data:image/png;base64," + png.base64EncodedString())
+        scene.apply(["key": "gaomon", "line": "gaomon", "lineColor": "3D6FC9", "stage": 3, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let fire = try await js(scene, "pet.shotFrom('fire', pet.x, pet.bb(), 1, S.line).pal[1]") as? String
+        XCTAssertEqual(fire, "#3d6fc9", "Gaomon's line fires in its blue egg color")
+        let beam = try await js(scene, "pet.shotFrom('beam', pet.x, pet.bb(), 1, S.line).pal[1]") as? String
+        XCTAssertEqual(beam, "#3d6fc9")
+        let foe = try await js(scene, "pet.shotFrom('fire', pet.x, pet.bb(), 1, '').pal[1]") as? String
+        XCTAssertEqual(foe, "#ffb53b", "a foe keeps the default fire")
+        let agumon = try await js(scene, "linePal('agumon')[1]") as? String
+        XCTAssertEqual(agumon, "#ffb53b", "a line with its own colors keeps them")
+        _ = try await js(scene, "app.apply({line: 'gabumonblack', lineColor: '2F4A6B'}); 1")
+        let dark = try await js(scene, "linePal('gabumonblack')[1]") as? String
+        XCTAssertNotNil(dark)
+        XCTAssertNotEqual(dark, "#2f4a6b", "a dark egg is lightened so the fire glows")
+        _ = try await js(scene, "app.apply({line: 'agumonblack', lineColor: '4A4038'}); 1")
+        let gray = try await js(scene, "pet.shotFrom('fire', pet.x, pet.bb(), 1, S.line).pal[1]") as? String
+        XCTAssertEqual(gray, "#ffb53b", "a dull dark egg keeps the usual fire")
+        _ = try await js(scene, "app.apply({line: 'angoramon', lineColor: 'E9A9C8'}); 1")
+        let pastel = try await js(scene, "linePal('angoramon')[1]") as? String
+        XCTAssertEqual(pastel, "#e9a9c8", "a bright pastel keeps its color")
+    }
 }

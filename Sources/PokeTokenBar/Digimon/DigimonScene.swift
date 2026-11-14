@@ -221,6 +221,8 @@ final class DigimonSceneHub {
         var state: [String: Any] = ["key": currentKey, "line": partner.lineID, "stage": partner.level.order,
                                     "sleeping": sleeping, "lang": language == .ko ? "ko" : "en"]
         state["mood"] = mood ?? NSNull()
+        // The line's egg color, for the fire of lines without their own colors.
+        state["lineColor"] = digimon.engine.catalog.lines[partner.lineID]?.eggColorHex ?? NSNull()
         return state
     }
 

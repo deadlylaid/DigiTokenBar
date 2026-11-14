@@ -305,7 +305,7 @@ struct DigimonStatusView: View {
     private var eggChoice: some View {
         let catalog = digimon.engine.catalog
         let offered = digimon.eggOfferLines
-        let others = digimon.otherEggLines
+        let others = t.sortedLines(digimon.otherEggLines, catalog: catalog)
         let current = digimon.state.partner.lineID
         return VStack(alignment: .leading, spacing: 6) {
             Text(t.chooseEggTitle).font(.callout.weight(.semibold))

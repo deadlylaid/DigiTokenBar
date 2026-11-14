@@ -84,6 +84,23 @@ const PAL = {
   tint_metal: ['#ffffff', '#c8ccd4', '#6e7480'],
   tint_leaf: ['#eaffd8', '#9fd36b', '#4e8f3a'],
 };
+// Fire colors for a line: its own (PAL.fire_<line>), else made from its egg color: a light core, the
+// egg color, a darker rim. A dark egg (Gabumon (Black)) is lightened so the fire still glows; a gray or
+// dull dark egg (Agumon (Black)'s brown-gray) keeps the usual fire, which would look like smoke.
+const firePals = {};
+function linePal(line) {
+  if (PAL['fire_' + line]) return PAL['fire_' + line];
+  if (!line || line !== S.line || !/^[0-9a-fA-F]{6}$/.test(S.lineColor || '')) return null;
+  if (firePals[S.lineColor]) return firePals[S.lineColor];
+  const rgb = [0, 2, 4].map(i => parseInt(S.lineColor.slice(i, i + 2), 16));
+  const lum = (.299 * rgb[0] + .587 * rgb[1] + .114 * rgb[2]) / 255;
+  const sat = (Math.max(...rgb) - Math.min(...rgb)) / Math.max(1, Math.max(...rgb));
+  if (sat < .2 || (sat < .3 && lum < .4)) return null;   // gray or dull-dark; a bright pastel keeps its color
+  const mix = (c, to, k) => c.map(v => Math.round(v + (to - v) * k));
+  const mid = lum < .3 ? mix(rgb, 255, .35) : rgb;
+  const hex = c => '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
+  return (firePals[S.lineColor] = [hex(mix(mid, 255, .78)), hex(mid), hex(mix(mid, 0, .38))]);
+}
 const HEART = ['.##.##.', '#######', '#######', '.#####.', '..###..', '...#...'];
 // Shapes without muzzle sparks or a generic trail (they draw their own).
 const SOFT = ['bind', 'melee', 'gas', 'wave', 'wind', 'water', 'light', 'swarm', 'heart', 'quake'];
@@ -171,7 +188,7 @@ class Pet {
   shotFrom(kind, x, b, f, line, n = 0, lift = 0, lean = 0, tint = null) {
     const gy = this.ground() - lift, h = b.b - b.t, st = Math.max(1, S.stage - 2);
     let mx = (f < 0 ? x + b.l : x + b.r) + lean, my = gy - h * .66;
-    let speed = 110 + st * 12, r = 2.6 + st, pal = PAL['fire_' + line] || PAL.fire_agumon;
+    let speed = 110 + st * 12, r = 2.6 + st, pal = linePal(line) || PAL.fire_agumon;
     if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 150; r = 3; pal = PAL.missile; }
     if (kind === 'gaia') { mx = x + (b.l + b.r) / 2 + f * 4; my = gy - h - 9; speed = 95; r = 9; pal = PAL.gaia; }
     if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6; pal = PAL.claw; }
@@ -180,7 +197,7 @@ class Pet {
     // A punch or charge: a fast shock ahead of the lunge, an impact star where it lands.
     if (kind === 'melee') { my = gy - h * .5; speed = 300; r = 5; pal = PAL.melee; }
     // A beam and a bolt: a line from where they start to their tip, which stays a moment on a hit.
-    if (kind === 'beam') { my = gy - h * .62; speed = 460; r = 3; pal = line ? (PAL['fire_' + line] || PAL.beam) : PAL.beam; }
+    if (kind === 'beam') { my = gy - h * .62; speed = 460; r = 3; pal = linePal(line) || PAL.beam; }
     if (kind === 'electric') { my = gy - h * .6; speed = 520; r = 3; pal = PAL.electric; }
     // A drifting cloud, rings of a sound or a mind, a small tornado on the ground, a water jet,
     // a twinkling light, a flock, a heart, a crack running along the ground.
@@ -645,7 +662,7 @@ class Pet {
     if (this.state === 'attack' && this.d.kind === 'beam' && !this.d.fired) {
       // Light gathers in front of the mouth before the beam.
       const p = Math.min(1, this.t / TIMING.beam[0]), r = 1 + 3.5 * p + Math.sin(this.t / 25) * .5 * p;
-      const pal = PAL['fire_' + S.line] || PAL.beam, bx = this.facing < 0 ? this.x + bb.l + this.lean : this.x + bb.r + this.lean;
+      const pal = linePal(S.line) || PAL.beam, bx = this.facing < 0 ? this.x + bb.l + this.lean : this.x + bb.r + this.lean;
       const by = gy - this.y - hgt * .62;
       this.pixBall(c, bx, by, r, pal[2]); this.pixBall(c, bx, by, r * .6, pal[1]); this.pixBall(c, bx, by, r * .3, pal[0]);
     }
