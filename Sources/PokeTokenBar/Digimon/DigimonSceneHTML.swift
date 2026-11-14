@@ -104,6 +104,14 @@ function linePal(line) {
 const HEART = ['.##.##.', '#######', '#######', '.#####.', '..###..', '...#...'];
 // Shapes without muzzle sparks or a generic trail (they draw their own).
 const SOFT = ['bind', 'melee', 'gas', 'wave', 'wind', 'water', 'light', 'swarm', 'heart', 'quake'];
+// Attacks grow with the stage of whoever makes them: Child (and babies) 1x, Adult 1.3x, Perfect 1.7x,
+// Ultimate 2.1x. Gaia Force, already the biggest, grows half as much. Each shape scales its own
+// lengths and thicknesses (whole pixels), so it stays crisp instead of a blurred zoom.
+const sizeOf = stage => stage <= 3 ? 1 : stage === 4 ? 1.3 : stage === 5 ? 1.7 : 2.1;
+const gaiaSize = z => 1 + (z - 1) * .5;
+const wpx = (n, z) => Math.max(1, Math.round(n * z));   // n whole pixels at size z
+// Heavy hits from a Perfect or an Ultimate shake the scene a little.
+const HEAVY = ['fire', 'gaia', 'claw', 'ice', 'melee', 'beam', 'electric'];
 // Timing per attack shape: [charge, release, recover] (ms)
 const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380], bind: [240, 140, 420],
                 melee: [200, 170, 360], beam: [380, 260, 380], electric: [260, 160, 380],
@@ -186,33 +194,34 @@ class Pet {
   // One move's projectile from a Digimon at x (box b, facing f, lifted by lift). Bug attacks and
   // battles both use it, so a move looks the same everywhere.
   shotFrom(kind, x, b, f, line, n = 0, lift = 0, lean = 0, tint = null, stage = S.stage) {
-    const gy = this.ground() - lift, h = b.b - b.t, st = Math.max(1, S.stage - 2);
+    // The size follows the stage of whoever fires (a battle foe passes its own).
+    const gy = this.ground() - lift, h = b.b - b.t, st = Math.max(1, stage - 2), z = sizeOf(stage);
     let mx = (f < 0 ? x + b.l : x + b.r) + lean, my = gy - h * .66;
-    let speed = 110 + st * 12, r = 2.6 + st, pal = linePal(line) || PAL.fire_agumon;
-    // A missile grows with the stage of whoever fires it, starts slow and speeds up.
-    const mk = stage <= 3 ? 1 : stage === 4 ? 1.3 : stage === 5 ? 1.7 : 2.1;
-    if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 110; r = 3 * mk; pal = PAL.missile; }
-    if (kind === 'gaia') { mx = x + (b.l + b.r) / 2 + f * 4; my = gy - h - 9; speed = 95; r = 9; pal = PAL.gaia; }
-    if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6; pal = PAL.claw; }
-    if (kind === 'ice') { speed = 135; r = 5; pal = PAL.ice; }
-    if (kind === 'bind') { my = gy - h * .55; speed = 210; r = 2.5; pal = PAL.bind; }
+    let speed = 110 + st * 12, r = 3.6 * z, pal = linePal(line) || PAL.fire_agumon;
+    // A missile starts slow and speeds up.
+    if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 110; r = 3 * z; pal = PAL.missile; }
+    // Gaia Force forms over the head, kept inside the scene for a tall Digimon.
+    if (kind === 'gaia') { r = 9 * gaiaSize(z); mx = x + (b.l + b.r) / 2 + f * 4; my = Math.max(r + 1, gy - h - r); speed = 95; pal = PAL.gaia; }
+    if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6 * z; pal = PAL.claw; }
+    if (kind === 'ice') { speed = 135; r = 5 * z; pal = PAL.ice; }
+    if (kind === 'bind') { my = gy - h * .55; speed = 210; r = 2.5 * z; pal = PAL.bind; }
     // A punch or charge: a fast shock ahead of the lunge, an impact star where it lands.
-    if (kind === 'melee') { my = gy - h * .5; speed = 300; r = 5; pal = PAL.melee; }
+    if (kind === 'melee') { my = gy - h * .5; speed = 300; r = 5 * z; pal = PAL.melee; }
     // A beam and a bolt: a line from where they start to their tip, which stays a moment on a hit.
-    if (kind === 'beam') { my = gy - h * .62; speed = 460; r = 3; pal = linePal(line) || PAL.beam; }
-    if (kind === 'electric') { my = gy - h * .6; speed = 520; r = 3; pal = PAL.electric; }
+    if (kind === 'beam') { my = gy - h * .62; speed = 460; r = 3 * z; pal = linePal(line) || PAL.beam; }
+    if (kind === 'electric') { my = gy - h * .6; speed = 520; r = 3 * z; pal = PAL.electric; }
     // A drifting cloud, rings of a sound or a mind, a small tornado on the ground, a water jet,
     // a twinkling light, a flock, a heart, a crack running along the ground.
-    if (kind === 'gas') { my = gy - h * .55; speed = 95; r = 4; pal = PAL.gas; }
-    if (kind === 'wave') { my = gy - h * .6; speed = 170; r = 5; pal = PAL.wave; }
-    if (kind === 'wind') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 11 + lift; speed = 125; r = 7; pal = PAL.wind; }
-    if (kind === 'water') { my = gy - h * .6; speed = 330; r = 3; pal = PAL.water; }
-    if (kind === 'light') { my = gy - h * .7; speed = 160; r = 4; pal = PAL.light; }
-    if (kind === 'swarm') { my = gy - h * .6; speed = 140; r = 6; pal = PAL.swarm; }
-    if (kind === 'heart') { my = gy - h * .6; speed = 130; r = 4; pal = PAL.heart; }
-    if (kind === 'quake') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 2 + lift; speed = 170; r = 5; pal = PAL.quake; }
+    if (kind === 'gas') { my = gy - h * .55; speed = 95; r = 4 * z; pal = PAL.gas; }
+    if (kind === 'wave') { my = gy - h * .6; speed = 170; r = 5 * z; pal = PAL.wave; }
+    if (kind === 'wind') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 11 + lift; speed = 125; r = 7 * z; pal = PAL.wind; }
+    if (kind === 'water') { my = gy - h * .6; speed = 330; r = 3 * z; pal = PAL.water; }
+    if (kind === 'light') { my = gy - h * .7; speed = 160; r = 4 * z; pal = PAL.light; }
+    if (kind === 'swarm') { my = gy - h * .6; speed = 140; r = 6 * z; pal = PAL.swarm; }
+    if (kind === 'heart') { my = gy - h * .6; speed = 130; r = 4 * z; pal = PAL.heart; }
+    if (kind === 'quake') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 2 + lift; speed = 170; r = 5 * z; pal = PAL.quake; }
     if (tint && PAL['tint_' + tint]) pal = PAL['tint_' + tint];
-    return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0, size: kind === 'missile' ? mk : 1};
+    return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0, size: z};
   }
   fire(kind, n = 0) {
     const s = this.shotFrom(kind, this.x, this.bb(), this.facing, S.line, n, this.y, this.lean, moveOf(this.key).tint), f = this.facing;
@@ -221,17 +230,27 @@ class Pet {
       // A battle: the shot flies at the foe and lands as the app decided.
       const fb = assets[F.foe].bb;
       Object.assign(s, {duel: true, mine: true, hit: F.pending.hit, tx: F.fx + (fb.l + fb.r) / 2, body: fb});
+      this.aimAtBody(s);
     } else if (g && !g.dead && Math.sign(g.x + 5 - s.x) === f && kind !== 'wind' && kind !== 'quake') {
       s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
     }
     this.shots.push(s);
     if (kind === 'missile') this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});   // launch flash
-    if (!SOFT.includes(kind)) for (let i = 0; i < 6; i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: 1});
+    if (!SOFT.includes(kind)) for (let i = 0; i < Math.round(6 * s.size); i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40) * s.size, vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: wpx(.8, s.size)});
+  }
+  // In a battle a shot flies at the middle of the other Digimon's body, the way it aims at a bug.
+  // Flying level from where it starts, a tall Digimon's shot passed over a short foe's head and
+  // Gaia Force (formed over the head) burst in the air. A tornado and a quake run along the ground.
+  aimAtBody(s) {
+    if (!s.body || s.kind === 'wind' || s.kind === 'quake') return;
+    s.ty = this.ground() - (s.body.b - s.body.t) * .5;
+    s.vy = (s.ty - s.y) / Math.max(.05, Math.abs(s.tx - s.x) / Math.abs(s.vx));
   }
   boom(x, y, s) {
     if (s.kind === 'gaia') this.flash = Math.max(this.flash, .45);
     if (s.kind === 'electric' || s.kind === 'light') this.flash = Math.max(this.flash, .22);
     if (s.kind === 'quake') this.shake = 260;
+    if ((s.size || 1) >= 1.7 && HEAVY.includes(s.kind)) this.shake = Math.max(this.shake || 0, 140);
     if (s.kind === 'missile') {
       const k = s.size || 1;
       this.flash = Math.max(this.flash, .08 * k);
@@ -244,13 +263,22 @@ class Pet {
     this.booms.push(Object.assign({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal, kind: s.kind,
                                    life: ({bind: 650, melee: 300, gas: 760, wind: 460, quake: 480, light: 440, swarm: 460, heart: 520, missile: 600}[s.kind]) || 320,
                                    size: s.size || 1}, coil));
-    if (!['gas', 'wave', 'wind', 'heart', 'swarm'].includes(s.kind)) for (let i = 0; i < 12; i++) { const a = TAU * i / 12, sp = rand(20, 55); this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? 2 : 1}); }
+    const z = s.size || 1, n = Math.round(12 * z);
+    if (!['gas', 'wave', 'wind', 'heart', 'swarm'].includes(s.kind)) for (let i = 0; i < n; i++) { const a = TAU * i / n, sp = rand(20, 55) * z; this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? wpx(2, z) : wpx(1, z)}); }
   }
   // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
   spawnBug() {
     const fromLeft = Math.random() < .5, big = Math.random() < 1 / 6, sc = big ? 2 : 1;
     this.bug = {x: fromLeft ? -11 * sc - 1 : this.worldW + 1, dir: fromLeft ? 1 : -1, t: 0, dead: false, noticed: false,
                 big, sc, hp: big ? 3 : 1, hit: 0};
+  }
+  // One flier of a flock: two flapping wings and a body, `z` times as big.
+  drawFlier(c, x, y, up, pal, z = 1) {
+    const W = wpx(3, z), w = wpx(2, z), T = wpx(1, z), u = up * T;
+    c.fillStyle = pal[2];
+    c.fillRect(x - W - w + T, y - T - u, W, T); c.fillRect(x - w, y - u, w, T);
+    c.fillRect(x + w, y - T - u, W, T); c.fillRect(x + T, y - u, w, T);
+    c.fillStyle = pal[1]; c.fillRect(x - T, y - T, 2 * T, 2 * T);
   }
   drawHeart(c, x, y, pal, k = 1) {
     const hx = Math.round(x - 3.5 * k), hy = Math.round(y - 3 * k);
@@ -398,10 +426,12 @@ class Pet {
         const fb = assets[F.foe].bb, mb = this.bb();
         const fm = moveOf(F.foe), s = this.shotFrom(fm.kind, F.fx, fb, F.dir, '', 0, 0, 0, fm.tint, F.stage);
         Object.assign(s, {duel: true, mine: false, hit: !!r.hit, tx: this.x + (mb.l + mb.r) / 2, body: mb});
+        this.aimAtBody(s);
         this.shots.push(s);
         if (fm.kind === 'missile') {
           const s2 = this.shotFrom('missile', F.fx, fb, F.dir, '', 1, 0, 0, fm.tint, F.stage);
           Object.assign(s2, {duel: true, mine: false, hit: !!r.hit, tx: s.tx, body: mb, x: s2.x - F.dir * 14 * s2.size});
+          this.aimAtBody(s2);
           this.shots.push(s2);
           this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});
         }
@@ -486,21 +516,23 @@ class Pet {
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
-        // Speeds up; against a bug it steers to it (the speed changes, so the aim is redone).
+        // Speeds up, so it steers to its target every frame: the other Digimon's body or a bug.
         const k = s.size || 1, sp = Math.min(300, Math.abs(s.vx) + 300 * dt / 1000);
         s.vx = (Math.sign(s.vx) || 1) * sp;
         const g = this.bug;
-        if (!s.duel && g && !g.dead) s.vy = (this.ground() - 4 * g.sc - s.y) / Math.max(.06, Math.abs(g.x + 5 * g.sc - s.x) / sp);
+        if (s.duel && s.ty !== undefined) s.vy = (s.ty - s.y) / Math.max(.06, Math.abs(s.tx - s.x) / sp);
+        else if (!s.duel && g && !g.dead) s.vy = (this.ground() - 4 * g.sc - s.y) / Math.max(.06, Math.abs(g.x + 5 * g.sc - s.x) / sp);
         // A thick smoke trail with sparks from the exhaust.
         const tail = s.x + back * 5 * k;
         for (let i = 0; i < Math.ceil(k * 1.5); i++) this.parts.push({x: tail + back * rand(0, 3 * k), y: s.y + rand(-k, k), vx: back * rand(3, 10), vy: rand(-10, -2), t: 0, life: rand(380, 700), c: Math.random() < .5 ? '#d5d9df' : '#9aa0aa', s: Math.random() < .5 ? Math.round(2 * k) : Math.round(1.5 * k) || 1});
         if (Math.random() < .5) this.parts.push({x: tail, y: s.y, vx: back * rand(10, 25), vy: rand(-6, 6), t: 0, life: rand(120, 220), c: Math.random() < .5 ? '#ffb53b' : '#fff3c4', s: 1});
       } else if (s.kind === 'ice') {
-        for (let i = 0; i < 2; i++) this.parts.push({x: s.x + back * rand(0, s.r * 1.5), y: s.y + rand(-s.r, s.r), vx: s.vx * .1, vy: rand(-6, 6), t: 0, life: rand(250, 500), c: Math.random() < .5 ? '#ffffff' : '#c7f3ff', s: Math.random() < .5 ? 2 : 1});
+        for (let i = 0; i < 2; i++) this.parts.push({x: s.x + back * rand(0, s.r * 1.5), y: s.y + rand(-s.r, s.r), vx: s.vx * .1, vy: rand(-6, 6), t: 0, life: rand(250, 500), c: Math.random() < .5 ? '#ffffff' : '#c7f3ff', s: Math.random() < .5 ? wpx(2, s.size || 1) : wpx(1, s.size || 1)});
       } else if (s.kind === 'light') {
-        for (let i = 0; i < 2; i++) if (Math.random() < .8) this.parts.push({x: s.x + back * rand(2, 8), y: s.y + rand(-4, 4), vx: back * rand(4, 14), vy: rand(-8, 8), t: 0, life: rand(300, 550), c: [s.pal[2], s.pal[1], s.pal[0]][Math.floor(rand(0, 3))], s: Math.random() < .4 ? 2 : 1});
+        const z = s.size || 1;
+        for (let i = 0; i < 2; i++) if (Math.random() < .8) this.parts.push({x: s.x + back * rand(2, 8) * z, y: s.y + rand(-4, 4) * z, vx: back * rand(4, 14), vy: rand(-8, 8), t: 0, life: rand(300, 550), c: [s.pal[2], s.pal[1], s.pal[0]][Math.floor(rand(0, 3))], s: Math.random() < .4 ? wpx(2, z) : wpx(1, z)});
       } else if (s.kind !== 'claw' && s.kind !== 'beam' && s.kind !== 'electric' && !SOFT.includes(s.kind)) {
-        for (let i = 0; i < (s.kind === 'gaia' ? 2 : 1); i++) if (Math.random() < .75) this.parts.push({x: s.x + back * s.r * .7 + rand(-1, 1), y: s.y + rand(-s.r * .5, s.r * .5), vx: -s.vx * .05, vy: rand(-14, -4), t: 0, life: rand(200, 380), c: s.pal[Math.random() < .5 ? 1 : 2], s: 1});
+        for (let i = 0; i < (s.kind === 'gaia' ? 2 : 1) * Math.round(s.size || 1); i++) if (Math.random() < .75) this.parts.push({x: s.x + back * s.r * .7 + rand(-1, 1), y: s.y + rand(-s.r * .5, s.r * .5), vx: -s.vx * .05, vy: rand(-14, -4), t: 0, life: rand(200, 380), c: s.pal[Math.random() < .5 ? 1 : 2], s: wpx(.8, s.size || 1)});
       }
       if (s.duel) {
         if (!s.done && (s.vx > 0 ? s.x >= s.tx : s.x <= s.tx)) {
@@ -720,18 +752,18 @@ class Pet {
     if (!desk && this.dim > 0) { c.fillStyle = `rgba(12,16,34,${.38 * this.dim})`; c.fillRect(0, 0, W, H); }
     if (this.state === 'attack' && this.d.kind === 'beam' && !this.d.fired) {
       // Light gathers in front of the mouth before the beam.
-      const p = Math.min(1, this.t / TIMING.beam[0]), r = 1 + 3.5 * p + Math.sin(this.t / 25) * .5 * p;
+      const p = Math.min(1, this.t / TIMING.beam[0]), r = (1 + 3.5 * p + Math.sin(this.t / 25) * .5 * p) * sizeOf(S.stage);
       const pal = linePal(S.line) || PAL.beam, bx = this.facing < 0 ? this.x + bb.l + this.lean : this.x + bb.r + this.lean;
       const by = gy - this.y - hgt * .62;
       this.pixBall(c, bx, by, r, pal[2]); this.pixBall(c, bx, by, r * .6, pal[1]); this.pixBall(c, bx, by, r * .3, pal[0]);
     }
     if (this.state === 'attack' && this.d.kind === 'gaia' && !this.d.fired) {
-      const p = easeIO(Math.min(1, this.t / TIMING.gaia[0])), r = 9 * p + Math.sin(this.t / 30) * .5 * p;
-      const bx = cx + this.facing * 4, by = gy - this.y - hgt - 9;
+      const g = gaiaSize(sizeOf(S.stage)), p = easeIO(Math.min(1, this.t / TIMING.gaia[0])), r = (9 * p + Math.sin(this.t / 30) * .5 * p) * g;
+      const bx = cx + this.facing * 4, by = Math.max(9 * g + 1, gy - this.y - hgt - 9 * g);
       if (r > .8) { this.pixBall(c, bx, by, r, PAL.gaia[2]); this.pixBall(c, bx, by, r * .7, PAL.gaia[1]); this.pixBall(c, bx, by, r * .35, PAL.gaia[0]); }
     }
     for (const s of this.shots) {
-      const back = -Math.sign(s.vx);
+      const back = -Math.sign(s.vx), z = s.size || 1;
       if (s.kind === 'missile') {
         // A rocket that scales with the stage: flickering exhaust, fins, a body with a highlight, a red nose.
         const k = s.size || 1, L = Math.round(8 * k), H = Math.max(2, Math.round(2.4 * k)), F = Math.round((3 + Math.random() * 3) * k);
@@ -745,14 +777,15 @@ class Pet {
         c.fillRect(L / 2 + Math.max(1, Math.round(2 * k)), -Math.ceil(H / 4), Math.max(1, Math.round(k)), Math.max(1, Math.ceil(H / 2)));
         c.restore();
       } else if (s.kind === 'claw') {
-        for (let i = -1; i <= 1; i++) for (let k = 0; k < 10; k++) {
-          const px = Math.round(s.x + i * 3 * -back + back * (k - 5) * .45 + Math.sin(k / 9 * Math.PI) * -back * 1.2), py = Math.round(s.y - 7 + k * 1.4);
-          c.fillStyle = s.pal[2]; c.fillRect(px + back, py, 1, 1);
-          c.fillStyle = s.pal[0]; c.fillRect(px, py, 1, 1);
+        const n = Math.round(10 * z), T = wpx(1, z);
+        for (let i = -1; i <= 1; i++) for (let k = 0; k < n; k++) {
+          const cx0 = Math.round(s.x + i * 3 * z * -back + back * (k - n / 2) * .45 + Math.sin(k / (n - 1) * Math.PI) * -back * 1.2 * z), cy0 = Math.round(s.y - 7 * z + k * 1.4);
+          c.fillStyle = s.pal[2]; c.fillRect(cx0 + back * T, cy0, T, T);
+          c.fillStyle = s.pal[0]; c.fillRect(cx0, cy0, T, T);
         }
       } else if (s.kind === 'gas') {
         // A drifting cloud: puffs that swell as it travels.
-        const R = s.r + 2.5 * Math.min(1, s.t / 500);
+        const R = s.r + 2.5 * z * Math.min(1, s.t / 500);
         c.globalAlpha = .85;
         for (let i = 0; i < 4; i++) {
           const a = i * TAU / 4 + s.t / 260, px = s.x + Math.cos(a) * R * .8, py = s.y + Math.sin(a) * R * .5;
@@ -763,103 +796,106 @@ class Pet {
       } else if (s.kind === 'wave') {
         // Rings of a sound (or a mind's power) opening as they fly.
         const dir = Math.sign(s.vx) || 1;
+        const D = wpx(2, z);
         for (let i = 0; i < 3; i++) {
-          const R = 5 + i * 4 + Math.min(5, s.t / 100), cx0 = s.x - dir * i * 5;
+          const R = (5 + i * 4 + Math.min(5, s.t / 100)) * z, cx0 = s.x - dir * i * 5 * z;
           c.fillStyle = i === 0 ? s.pal[2] : s.pal[1];
-          for (let a = -1.1; a <= 1.1; a += .08) c.fillRect(Math.round(cx0 + dir * Math.cos(a) * R * .55), Math.round(s.y + Math.sin(a) * R), 2, 2);
+          for (let a = -1.1; a <= 1.1; a += .08 / z) c.fillRect(Math.round(cx0 + dir * Math.cos(a) * R * .55), Math.round(s.y + Math.sin(a) * R), D, D);
         }
       } else if (s.kind === 'wind') {
         // A small tornado: spinning streaks in a funnel, wide at the top.
+        // Its foot stays on the ground; it grows taller and wider.
         for (let k = 0; k < 12; k++) {
-          const w = 2 + k * 1.3, yy = s.y + 9 - k * 2;
+          const w = (2 + k * 1.3) * z, yy = s.y + 9 - k * 2 * z;
           for (let j = 0; j < 4; j++) {
             const a = s.t / 60 + j * TAU / 4 + k * .5;
             c.fillStyle = Math.sin(a) > 0 ? s.pal[1] : s.pal[2];
-            c.fillRect(Math.round(s.x + Math.cos(a) * w), Math.round(yy), 3, 2);
+            c.fillRect(Math.round(s.x + Math.cos(a) * w), Math.round(yy), wpx(3, z), wpx(2, z));
           }
         }
       } else if (s.kind === 'water') {
         // A jet from the mouth with droplets along it; it stays a moment where it lands.
         const fade = s.hold !== undefined ? Math.max(0, s.hold / 220) : 1, len = Math.abs(s.x - s.ox), dir = Math.sign(s.x - s.ox) || 1;
         c.globalAlpha = fade;
-        this.pixLine(c, s.ox, s.oy, s.x, s.y, 3, s.pal[2]); this.pixLine(c, s.ox, s.oy, s.x, s.y, 1, s.pal[1]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, wpx(3, z), s.pal[2]); this.pixLine(c, s.ox, s.oy, s.x, s.y, wpx(1, z), s.pal[1]);
         c.fillStyle = s.pal[0];
-        for (let i = 4; i < len; i += 7) c.fillRect(Math.round(s.ox + dir * i), Math.round(s.oy + (s.y - s.oy) * i / (len || 1) - 2 + Math.sin(i + s.t / 40)), 1, 1);
-        this.pixBall(c, s.x, s.y, 2.4, s.pal[1]);
+        for (let i = 4; i < len; i += 7) c.fillRect(Math.round(s.ox + dir * i), Math.round(s.oy + (s.y - s.oy) * i / (len || 1) - 2 * z + Math.sin(i + s.t / 40) * z), wpx(1, z), wpx(1, z));
+        this.pixBall(c, s.x, s.y, 2.4 * z, s.pal[1]);
         c.globalAlpha = 1;
       } else if (s.kind === 'light') {
         // A twinkling star; its glitter is left behind in update.
-        const tw = 5 + Math.sin(s.t / 45) * 2;
+        const tw = (5 + Math.sin(s.t / 45) * 2) * z, T = wpx(.8, z), o = Math.floor(T / 2);
         c.fillStyle = s.pal[2];
-        c.fillRect(Math.round(s.x - tw), Math.round(s.y), Math.round(tw * 2 + 1), 1);
-        c.fillRect(Math.round(s.x), Math.round(s.y - tw), 1, Math.round(tw * 2 + 1));
+        c.fillRect(Math.round(s.x - tw), Math.round(s.y) - o, Math.round(tw * 2 + 1), T);
+        c.fillRect(Math.round(s.x) - o, Math.round(s.y - tw), T, Math.round(tw * 2 + 1));
         c.fillStyle = s.pal[1];
-        c.fillRect(Math.round(s.x - tw * .5), Math.round(s.y - tw * .5), 1, 1); c.fillRect(Math.round(s.x + tw * .5), Math.round(s.y + tw * .5), 1, 1);
-        c.fillRect(Math.round(s.x - tw * .5), Math.round(s.y + tw * .5), 1, 1); c.fillRect(Math.round(s.x + tw * .5), Math.round(s.y - tw * .5), 1, 1);
-        this.pixBall(c, s.x, s.y, 2.4, s.pal[1]); this.pixBall(c, s.x, s.y, 1.3, s.pal[0]);
+        c.fillRect(Math.round(s.x - tw * .5), Math.round(s.y - tw * .5), T, T); c.fillRect(Math.round(s.x + tw * .5), Math.round(s.y + tw * .5), T, T);
+        c.fillRect(Math.round(s.x - tw * .5), Math.round(s.y + tw * .5), T, T); c.fillRect(Math.round(s.x + tw * .5), Math.round(s.y - tw * .5), T, T);
+        this.pixBall(c, s.x, s.y, 2.4 * z, s.pal[1]); this.pixBall(c, s.x, s.y, 1.3 * z, s.pal[0]);
       } else if (s.kind === 'swarm') {
         // A flock: small fliers flapping around the group's center.
-        for (let i = 0; i < 6; i++) {
-          const a = i * 2.4 + s.t / 180, px = Math.round(s.x + Math.cos(a) * (4 + (i % 3) * 3)), py = Math.round(s.y + Math.sin(a * 1.3) * 6);
-          const up = Math.floor(s.t / 90 + i) % 2;
-          c.fillStyle = s.pal[2];
-          c.fillRect(px - 4, py - 1 - up, 3, 1); c.fillRect(px - 2, py - up, 2, 1);
-          c.fillRect(px + 2, py - 1 - up, 3, 1); c.fillRect(px + 1, py - up, 2, 1);
-          c.fillStyle = s.pal[1]; c.fillRect(px - 1, py - 1, 2, 2);
+        // A bigger Digimon's flock is bigger and has more fliers.
+        const n = 6 + Math.round((z - 1) * 5);
+        for (let i = 0; i < n; i++) {
+          const a = i * 2.4 + s.t / 180, fx = Math.round(s.x + Math.cos(a) * (4 + (i % 3) * 3) * z), fy = Math.round(s.y + Math.sin(a * 1.3) * 6 * z);
+          this.drawFlier(c, fx, fy, Math.floor(s.t / 90 + i) % 2, s.pal, z);
         }
       } else if (s.kind === 'heart') {
-        this.drawHeart(c, s.x, s.y + Math.sin(s.t / 90) * 1.5, s.pal, 2);
+        this.drawHeart(c, s.x, s.y + Math.sin(s.t / 90) * 1.5 * z, s.pal, wpx(2, z));
       } else if (s.kind === 'quake') {
         // A crack running along the ground with rocks hopping at its tip.
         const dir = Math.sign(s.x - s.ox) || 1, len = Math.abs(s.x - s.ox);
+        const T = wpx(1, z), R = wpx(2, z);
         c.fillStyle = s.pal[2];
-        for (let i = 0; i < len; i += 2) c.fillRect(Math.round(s.ox + dir * i), Math.round(s.y + ((i / 2) % 2 ? 1 : 0)), 2, 1);
+        for (let i = 0; i < len; i += 2) c.fillRect(Math.round(s.ox + dir * i), Math.round(s.y + ((i / 2) % 2 ? T : 0)), 2, T);
         for (let k = 0; k < 3; k++) {
-          const hop = Math.abs(Math.sin(s.t / 90 + k)) * 5;
+          const hop = Math.abs(Math.sin(s.t / 90 + k)) * 5 * z;
           c.fillStyle = k ? s.pal[1] : s.pal[0];
-          c.fillRect(Math.round(s.x - dir * k * 3), Math.round(s.y - 2 - hop), 2, 2);
+          c.fillRect(Math.round(s.x - dir * k * 3 * z), Math.round(s.y - R - hop), R, R);
         }
       } else if (s.kind === 'beam') {
         const fade = s.hold !== undefined ? Math.max(0, s.hold / 220) : 1;
         c.globalAlpha = fade;
-        this.pixLine(c, s.ox, s.oy, s.x, s.y, 5, s.pal[2]);
-        this.pixLine(c, s.ox, s.oy, s.x, s.y, 3, s.pal[1]);
-        this.pixLine(c, s.ox, s.oy, s.x, s.y, 1, s.pal[0]);
-        this.pixBall(c, s.ox, s.oy, 3.2, s.pal[1]); this.pixBall(c, s.ox, s.oy, 1.6, s.pal[0]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, wpx(5, z), s.pal[2]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, wpx(3, z), s.pal[1]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, wpx(1, z), s.pal[0]);
+        this.pixBall(c, s.ox, s.oy, 3.2 * z, s.pal[1]); this.pixBall(c, s.ox, s.oy, 1.6 * z, s.pal[0]);
         c.globalAlpha = 1;
       } else if (s.kind === 'electric') {
         // A jagged bolt, new zigzags every frame so it flickers.
         const dx = s.x - s.ox, dy = s.y - s.oy, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
         const pts = [[s.ox, s.oy]];
-        for (let i = 6; i < len - 3; i += 6) { const j = rand(-4, 4); pts.push([s.ox + dx * i / len + nx * j, s.oy + dy * i / len + ny * j]); }
+        for (let i = 6; i < len - 3; i += 6) { const j = rand(-4, 4) * z; pts.push([s.ox + dx * i / len + nx * j, s.oy + dy * i / len + ny * j]); }
         pts.push([s.x, s.y]);
         c.globalAlpha = s.hold !== undefined ? Math.max(0, s.hold / 220) : 1;
         for (let i = 1; i < pts.length; i++) {
-          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], 3, s.pal[2]);
-          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], 1, s.pal[0]);
+          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], wpx(3, z), s.pal[2]);
+          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], wpx(1, z), s.pal[0]);
         }
         c.globalAlpha = 1;
       } else if (s.kind === 'melee') {
         // The shock of a punch or charge, with speed lines behind it.
         const back = -Math.sign(s.vx) || -1;
+        const L = Math.round(7 * z), T = wpx(1, z);
         c.fillStyle = s.pal[1];
-        for (let k = -1; k <= 1; k++) c.fillRect(Math.round(s.x + back * (5 + Math.abs(k) * 3) - (back < 0 ? 7 : 0)), Math.round(s.y + k * 3), 7, 1);
-        this.pixBall(c, s.x, s.y, 2.6, s.pal[2]); this.pixBall(c, s.x, s.y, 1.4, s.pal[0]);
+        for (let k = -1; k <= 1; k++) c.fillRect(Math.round(s.x + back * (5 + Math.abs(k) * 3) * z - (back < 0 ? L : 0)), Math.round(s.y + k * 3 * z), L, T);
+        this.pixBall(c, s.x, s.y, 2.6 * z, s.pal[2]); this.pixBall(c, s.x, s.y, 1.4 * z, s.pal[0]);
       } else if (s.kind === 'bind') {
         // A wavy tendril from where it was thrown to its tip.
         const dir = Math.sign(s.vx) || 1, len = Math.abs(s.x - s.ox);
-        const wave = i => Math.sin(i / 4.5 - s.t / 55) * 2.4 * Math.min(1, i / 8);
+        const wave = i => Math.sin(i / (4.5 * z) - s.t / 55) * 2.4 * z * Math.min(1, i / 8), T = wpx(1, z);
         for (let i = 0; i <= len; i++) {
-          const px = Math.round(s.ox + dir * i), py = Math.round(s.y + wave(i));
-          c.fillStyle = s.pal[2]; c.fillRect(px, py - 1, 1, 3);
-          c.fillStyle = s.pal[1]; c.fillRect(px, py, 1, 1);
+          const tx = Math.round(s.ox + dir * i), ty = Math.round(s.oy + (s.y - s.oy) * i / (len || 1) + wave(i));
+          c.fillStyle = s.pal[2]; c.fillRect(tx, ty - T, 1, 2 * T + 1);
+          c.fillStyle = s.pal[1]; c.fillRect(tx, ty, 1, T);
         }
-        this.pixBall(c, s.x, s.y + wave(len), 2.4, s.pal[2]); this.pixBall(c, s.x, s.y + wave(len), 1.2, s.pal[0]);
+        this.pixBall(c, s.x, s.y + wave(len), 2.4 * z, s.pal[2]); this.pixBall(c, s.x, s.y + wave(len), 1.2 * z, s.pal[0]);
       } else if (s.kind === 'ice') {
         const r = s.r;
         c.fillStyle = s.pal[2]; for (let dy = -r; dy <= r; dy++) { const w = Math.round((r - Math.abs(dy)) * 1.6); c.fillRect(Math.round(s.x - w), Math.round(s.y + dy), w * 2 + 1, 1); }
-        c.fillStyle = s.pal[1]; for (let dy = -(r - 2); dy <= r - 2; dy++) { const w = Math.round((r - 2 - Math.abs(dy)) * 1.6); c.fillRect(Math.round(s.x - w), Math.round(s.y + dy), w * 2 + 1, 1); }
-        c.fillStyle = s.pal[0]; c.fillRect(Math.round(s.x - back), Math.round(s.y - 1), 2, 2);
+        const ri = r - 2 * z;
+        c.fillStyle = s.pal[1]; for (let dy = -ri; dy <= ri; dy++) { const w = Math.round((ri - Math.abs(dy)) * 1.6); c.fillRect(Math.round(s.x - w), Math.round(s.y + dy), w * 2 + 1, 1); }
+        c.fillStyle = s.pal[0]; c.fillRect(Math.round(s.x - back * z), Math.round(s.y - z), wpx(2, z), wpx(2, z));
       } else {
         const r = s.r + Math.sin(s.t / 40) * (s.kind === 'gaia' ? .8 : .4);
         this.pixBall(c, s.x + back * r * .8, s.y, r * .75, s.pal[2]);
@@ -869,7 +905,7 @@ class Pet {
       }
     }
     for (const b of this.booms) {
-      const bp = b.t / (b.life || 320);
+      const bp = b.t / (b.life || 320), z = b.size || 1;
       if (b.kind === 'missile') {
         // A fireball that swells fast, then smoke rolling up and out.
         const k = b.size || 1, R = (3 + 7 * Math.min(1, bp * 3)) * k;
@@ -887,7 +923,7 @@ class Pet {
       }
       if (b.kind === 'gas') {
         // The cloud wraps the target, spreads and thins out.
-        const R = 5 + 8 * Math.min(1, bp * 2);
+        const R = (5 + 8 * Math.min(1, bp * 2)) * z;
         c.globalAlpha = .8 * (1 - bp);
         for (let i = 0; i < 6; i++) {
           const a = i * TAU / 6 + bp * 2, px = b.x + Math.cos(a) * R * .7, py = b.y + Math.sin(a) * R * .4;
@@ -899,9 +935,9 @@ class Pet {
       if (b.kind === 'wave') {
         c.globalAlpha = 1 - bp;
         for (let k = 0; k < 2; k++) {
-          const R = 4 + 12 * Math.min(1, bp * 1.6 + k * .3);
+          const R = (4 + 12 * Math.min(1, bp * 1.6 + k * .3)) * z;
           c.fillStyle = k ? b.pal[1] : b.pal[2];
-          for (let a = 0; a < TAU; a += .12) c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .8), 2, 2);
+          for (let a = 0; a < TAU; a += .12 / z) c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .8), wpx(2, z), wpx(2, z));
         }
         c.globalAlpha = 1;
         continue;
@@ -911,7 +947,7 @@ class Pet {
         for (let j = 0; j < 4; j++) {
           const a0 = j * TAU / 4 + bp * 6;
           c.fillStyle = j % 2 ? b.pal[1] : b.pal[2];
-          for (let i = 0; i < 8; i++) { const a = a0 + i * .25, R = 3 + i * 1.2 + bp * 8; c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .6), 1, 1); }
+          for (let i = 0; i < 8; i++) { const a = a0 + i * .25, R = (3 + i * 1.2 + bp * 8) * z; c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .6), wpx(1, z), wpx(1, z)); }
         }
         c.globalAlpha = 1;
         continue;
@@ -919,37 +955,37 @@ class Pet {
       if (b.kind === 'water') {
         c.globalAlpha = 1 - bp;
         for (let i = 0; i < 7; i++) {
-          const a = Math.PI + i * Math.PI / 6, R = 3 + 10 * bp;
+          const a = Math.PI + i * Math.PI / 6, R = (3 + 10 * bp) * z;
           c.fillStyle = i % 2 ? b.pal[0] : b.pal[1];
-          c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R + 12 * bp * bp), 2, 2);
+          c.fillRect(Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R + 12 * bp * bp * z), wpx(2, z), wpx(2, z));
         }
         c.globalAlpha = 1;
         continue;
       }
       if (b.kind === 'light') {
-        const R = 5 + 14 * Math.min(1, bp * 2);
+        const R = (5 + 14 * Math.min(1, bp * 2)) * z, T = wpx(.8, z);
         c.globalAlpha = 1 - bp;
         for (let a = 0; a < 8; a++) {
           const ang = a * TAU / 8;
           c.fillStyle = a % 2 ? b.pal[1] : b.pal[0];
-          for (let i = 2; i < R * (a % 2 ? .6 : 1); i++) c.fillRect(Math.round(b.x + Math.cos(ang) * i), Math.round(b.y + Math.sin(ang) * i), 1, 1);
+          for (let i = 2; i < R * (a % 2 ? .6 : 1); i++) c.fillRect(Math.round(b.x + Math.cos(ang) * i), Math.round(b.y + Math.sin(ang) * i), T, T);
         }
-        this.pixBall(c, b.x, b.y, 3 * (1 - bp) + 1, b.pal[0]);
+        this.pixBall(c, b.x, b.y, (3 * (1 - bp) + 1) * z, b.pal[0]);
         c.globalAlpha = 1;
         continue;
       }
       if (b.kind === 'swarm') {
         c.globalAlpha = 1 - bp;
-        for (let i = 0; i < 6; i++) {
-          const a = i * TAU / 6 + .3, R = 3 + 16 * bp, px = Math.round(b.x + Math.cos(a) * R), py = Math.round(b.y + Math.sin(a) * R * .7 - 6 * bp);
-          c.fillStyle = b.pal[2]; c.fillRect(px - 4, py - 1, 3, 1); c.fillRect(px - 2, py, 2, 1); c.fillRect(px + 2, py - 1, 3, 1); c.fillRect(px + 1, py, 2, 1);
+        for (let i = 0; i < 6 + Math.round((z - 1) * 5); i++) {
+          const a = i * TAU / (6 + Math.round((z - 1) * 5)) + .3, R = (3 + 16 * bp) * z;
+          this.drawFlier(c, Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .7 - 6 * bp * z), 0, b.pal, z);
         }
         c.globalAlpha = 1;
         continue;
       }
       if (b.kind === 'heart') {
         c.globalAlpha = 1 - bp;
-        for (let k = -1; k <= 1; k++) this.drawHeart(c, b.x + k * 6, b.y - 4 - bp * 12 - Math.abs(k) * 2, b.pal);
+        for (let k = -1; k <= 1; k++) this.drawHeart(c, b.x + k * 6 * z, b.y - (4 + bp * 12 + Math.abs(k) * 2) * z, b.pal, wpx(1, z));
         c.globalAlpha = 1;
         continue;
       }
@@ -958,26 +994,27 @@ class Pet {
         const gy0 = this.ground();
         c.globalAlpha = 1 - bp * bp;
         for (let i = 0; i < 5; i++) {
-          const t = bp * .48, px = b.x + (i - 2) * 9 * t, py = gy0 - 2 + (-38 - (i % 2) * 14) * t + 140 * t * t;
-          c.fillStyle = i % 2 ? b.pal[1] : b.pal[2]; c.fillRect(Math.round(px), Math.round(Math.min(py, gy0 - 1)), 2, 2);
+          // A bigger quake throws rocks higher and wider (the same arc, `z` times as big).
+          const t = bp * .48, rx = b.x + (i - 2) * 9 * t * z, ry = gy0 - 2 + ((-38 - (i % 2) * 14) * t + 140 * t * t) * z;
+          c.fillStyle = i % 2 ? b.pal[1] : b.pal[2]; c.fillRect(Math.round(rx), Math.round(Math.min(ry, gy0 - 1)), wpx(2, z), wpx(2, z));
         }
         c.fillStyle = b.pal[2];
-        for (let i = -8; i <= 8; i += 2) c.fillRect(Math.round(b.x + i), gy0 - 1 + ((i / 2) % 2 ? 1 : 0), 2, 1);
+        for (let i = -8 * z; i <= 8 * z; i += 2) c.fillRect(Math.round(b.x + i), gy0 - 1 + ((Math.round(i / 2)) % 2 ? 1 : 0), 2, 1);
         c.globalAlpha = 1;
         continue;
       }
       if (b.kind === 'melee') {
         // An impact star: eight spikes, long and short, flung out and fading.
-        const p = b.t / b.life, R = 4 + 10 * Math.min(1, p * 2.4);
+        const p = b.t / b.life, R = (4 + 10 * Math.min(1, p * 2.4)) * z, T = wpx(1, z), C = wpx(3, z);
         c.globalAlpha = 1 - p * p;
         for (let a = 0; a < 8; a++) {
           const ang = a * TAU / 8 + .2, len = a % 2 ? R * .55 : R;
           for (let i = 2; i < len; i++) {
             c.fillStyle = i < len * .5 ? b.pal[0] : b.pal[1];
-            c.fillRect(Math.round(b.x + Math.cos(ang) * i), Math.round(b.y + Math.sin(ang) * i), 1, 1);
+            c.fillRect(Math.round(b.x + Math.cos(ang) * i), Math.round(b.y + Math.sin(ang) * i), T, T);
           }
         }
-        c.fillStyle = b.pal[0]; c.fillRect(Math.round(b.x) - 1, Math.round(b.y) - 1, 3, 3);
+        c.fillStyle = b.pal[0]; c.fillRect(Math.round(b.x) - Math.floor(C / 2), Math.round(b.y) - Math.floor(C / 2), C, C);
         c.globalAlpha = 1;
         continue;
       }

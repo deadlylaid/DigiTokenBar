@@ -201,4 +201,157 @@ final class DigimonSceneBattleTests: XCTestCase {
         let state = try await js(scene, "pet.state") as? String
         XCTAssertEqual(state, "evolve", "the evolution plays after it")
     }
+
+    /// Every shape grows with the stage of whoever fires it, like the missile: drawn for real, an
+    /// Ultimate's shot and impact cover clearly more of the scene than a Child's and reach further
+    /// (wider or taller; area alone grows with thicker dots even at the same size). A foe's shot
+    /// follows the foe's stage, not the user's Digimon's.
+    func testEveryShapeGrowsWithTheStage() async throws {
+        let scene = DigimonScene(mode: .popover)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "F28C3E"))
+        scene.sprite(key: "agumon", dataURI: "data:image/png;base64," + png.base64EncodedString())
+        scene.apply(["key": "agumon", "line": "agumon", "stage": 3, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let seen = try await js(scene, """
+        (() => {
+          const kinds = ['fire', 'missile', 'gaia', 'claw', 'ice', 'bind', 'melee', 'beam', 'electric', 'gas', 'wave', 'wind',
+                         'water', 'light', 'swarm', 'heart', 'quake'];
+          const W = pet.worldW, rnd = Math.random;
+          const cw = pet.cv.width;
+          let base = null;
+          // What the shot or impact painted over the empty scene: pixels, width and height.
+          const paint = () => {
+            pet.bug = null; pet.callout = null; pet.parts = []; pet.shake = 0; pet.flash = 0;
+            Math.random = () => .5; pet.draw(); Math.random = rnd;
+            const d = pet.ctx.getImageData(0, 0, cw, pet.cv.height).data;
+            if (!base) { base = d; return [0, 0, 0]; }
+            let n = 0, x0 = 1e9, x1 = -1, y0 = 1e9, y1 = -1;
+            for (let i = 0; i < d.length; i += 4) {
+              if (d[i] === base[i] && d[i + 1] === base[i + 1] && d[i + 2] === base[i + 2] && d[i + 3] === base[i + 3]) continue;
+              const x = (i / 4) % cw, y = Math.floor(i / 4 / cw);
+              n++; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+            }
+            return n ? [n, x1 - x0 + 1, y1 - y0 + 1] : [0, 0, 0];
+          };
+          pet.enter('idle', {dur: 99999}); pet.shots = []; pet.booms = [];
+          paint();
+          const out = {sizes: {}, shot: {}, boom: {}};
+          for (const kind of kinds) {
+            out.sizes[kind] = [3, 4, 5, 6].map(st => pet.shotFrom(kind, pet.x, pet.bb(), 1, S.line, 0, 0, 0, null, st).size);
+            for (const st of [3, 6]) {
+              const s = pet.shotFrom(kind, pet.x, pet.bb(), 1, S.line, 0, 0, 0, null, st);
+              s.ox = W * .45; s.x = W * .72; s.t = 120;
+              pet.shots = [s]; pet.booms = [];
+              (out.shot[kind] = out.shot[kind] || []).push(paint());
+              pet.shots = []; pet.boom(s.x, s.y, s); pet.booms.forEach(b => b.t = (b.life || 320) * .3);
+              (out.boom[kind] = out.boom[kind] || []).push(paint());
+              pet.booms = [];
+            }
+          }
+          out.foeFire = pet.shotFrom('fire', pet.x, pet.bb(), 1, '', 0, 0, 0, null, 6).r;
+          return JSON.stringify(out);
+        })()
+        """) as? String
+        let result = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+        let sizes = try XCTUnwrap(result["sizes"] as? [String: [Double]])
+        let shot = try XCTUnwrap(result["shot"] as? [String: [[Double]]])
+        let boom = try XCTUnwrap(result["boom"] as? [String: [[Double]]])
+        /// Ultimate against Child: more pixels, and wider or taller.
+        func bigger(_ m: [[Double]]) -> Bool {
+            let child = m[0], ultimate = m[1]
+            return ultimate[0] > child[0] * 1.5 && max(ultimate[1] / child[1], ultimate[2] / child[2]) > 1.3
+        }
+        XCTAssertEqual(sizes.count, 17)
+        for (kind, size) in sizes {
+            XCTAssertEqual(size, [1, 1.3, 1.7, 2.1], kind)
+            let s = try XCTUnwrap(shot[kind]), b = try XCTUnwrap(boom[kind])
+            XCTAssertGreaterThan(s[0][0], 0, "\(kind) is drawn")
+            XCTAssertTrue(bigger(s), "an Ultimate's \(kind) is bigger: \(s)")
+            // A tendril wraps the target's body: its coil follows the target, not the attacker.
+            if kind != "bind" { XCTAssertTrue(bigger(b), "an Ultimate's \(kind) impact is bigger: \(b)") }
+        }
+        XCTAssertEqual(result["foeFire"] as? Double ?? 0, 3.6 * 2.1, accuracy: 0.001,
+                       "an Ultimate foe's fire, while the user's Digimon is a Child")
+    }
+
+    /// A plain block `height` pixels tall standing at the bottom of a 64x64 sprite.
+    private func blockSprite(height: Int) throws -> String {
+        let rep = try XCTUnwrap(NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: 64, pixelsHigh: 64, bitsPerSample: 8,
+                                                 samplesPerPixel: 4, hasAlpha: true, isPlanar: false, colorSpaceName: .deviceRGB,
+                                                 bytesPerRow: 0, bitsPerPixel: 0))
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+        NSColor.clear.setFill()
+        NSRect(x: 0, y: 0, width: 64, height: 64).fill()
+        NSColor.systemGreen.setFill()
+        NSRect(x: 20, y: 0, width: 24, height: height).fill()   // drawn from the bottom
+        NSGraphicsContext.restoreGraphicsState()
+        let png = try XCTUnwrap(rep.representation(using: .png, properties: [:]))
+        return "data:image/png;base64," + png.base64EncodedString()
+    }
+
+    /// A battle shot lands on the other Digimon's body whatever their sizes. Shots used to fly level
+    /// from where they started: a tall Digimon's passed over a short foe's head, and Gaia Force, made
+    /// over the head, always burst in the air (the egg-art sprites in the other tests are all one size).
+    func testBattleShotsLandOnTheBodyOfATallerOrShorterFoe() async throws {
+        // (me, my move's shape, my height, foe, the foe's height): tall against short, and short against a
+        // tall foe that fires a pair of missiles.
+        for (me, myKind, myHeight, foe, foeHeight) in [("wargreymon", "gaia", 60, "blastmon", 14), ("ancientsphinxmon", "beam", 60, "keemon", 14),
+                                                      ("archnemon", "bind", 60, "atlurballistamon", 14), ("keemon", "water", 14, "metalgreymon", 60)] {
+            let scene = DigimonScene(mode: .popover)
+            let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                                  backing: .buffered, defer: false)
+            window.isReleasedWhenClosed = false
+            scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+            window.contentView = scene.webView
+            window.orderFront(nil)
+            defer { window.close() }
+            scene.sprite(key: me, dataURI: try blockSprite(height: myHeight))
+            scene.sprite(key: foe, dataURI: try blockSprite(height: foeHeight))
+            scene.apply(["key": me, "line": "agumon", "stage": 6, "sleeping": false, "lang": "ko"])
+            var ready = false
+            for _ in 0..<100 where !ready {
+                try await Task.sleep(for: .milliseconds(100))
+                ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+            }
+            XCTAssertTrue(ready, "the scene did not start")
+            scene.command(["type": "battle", "foe": foe, "foeStage": 6, "won": true,
+                           "rounds": [["a": "me", "hit": true], ["a": "foe", "hit": true]]])
+            try await Task.sleep(for: .milliseconds(300))
+            let seen = try await js(scene, """
+            (() => {
+              const out = [];
+              const tops = () => ({me: pet.ground() - (pet.bb().b - pet.bb().t), foe: pet.ground() - (assets['\(foe)'].bb.b - assets['\(foe)'].bb.t)});
+              const t = tops(), seen = new Set();
+              for (let i = 0; i < 220; i++) {
+                pet.update(33);
+                for (const b of pet.booms) if (b.kind && !seen.has(b)) { seen.add(b); out.push({kind: b.kind, y: b.y, x: b.x}); }
+              }
+              return JSON.stringify({booms: out, myTop: t.me, foeTop: t.foe, ground: pet.ground(), fx: pet.fight ? pet.fight.fx : null});
+            })()
+            """) as? String
+            let result = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+            let booms = try XCTUnwrap(result["booms"] as? [[String: Any]])
+            let ground = try XCTUnwrap(result["ground"] as? Double)
+            let myTop = try XCTUnwrap(result["myTop"] as? Double), foeTop = try XCTUnwrap(result["foeTop"] as? Double)
+            XCTAssertEqual(booms.count, foe == "metalgreymon" ? 3 : 2, "\(me) vs \(foe): every hit lands: \(booms)")
+            for boom in booms {
+                let y = try XCTUnwrap(boom["y"] as? Double), kind = boom["kind"] as? String ?? ""
+                let top = kind == myKind ? foeTop : myTop   // my shot hits the foe, its shot hits me
+                XCTAssertTrue(y >= top - 1 && y <= ground + 1, "\(me) vs \(foe): \(kind) lands at \(y), body \(top)...\(ground)")
+            }
+        }
+    }
 }
