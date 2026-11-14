@@ -102,6 +102,10 @@ struct DigimonState: Codable, Sendable, Equatable {
     var playerID: String?
     /// Battle bookkeeping. Optional so saves from before battles decode unchanged.
     var battleBook: BattleBook?
+    /// A full stage waiting for a friend's Jogress code (`EvolutionEngine.jogress`). nil when none.
+    var jogressWait: JogressWait?
+    /// Friend codes already used for a Jogress, as "player:nonce", newest last.
+    var jogressCodes: [String]?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
@@ -119,6 +123,13 @@ struct BattleBook: Codable, Sendable, Equatable {
     static let limit = 200
 }
 
+/// A full stage that can merge, waiting for a friend's code (`GrowthRules.jogressWait`).
+struct JogressWait: Codable, Sendable, Equatable {
+    var openedAt: Date
+    /// Skipped or timed out: the stage grows as usual.
+    var over: Bool
+}
+
 /// Things the UI animates. The engine never touches the UI.
 enum DigimonEvent: Equatable, Sendable {
     case hatched(species: String)
@@ -126,4 +137,8 @@ enum DigimonEvent: Equatable, Sendable {
     case choiceOffered(candidates: [String])
     case graduated(lineID: String, path: [String])
     case newEgg(lineID: String)
+    /// A full stage can merge: it waits for a friend's code (the possible results).
+    case jogressOffered(options: [String])
+    /// Merged with a friend's Digimon.
+    case jogressed(from: String, partner: String, to: String)
 }

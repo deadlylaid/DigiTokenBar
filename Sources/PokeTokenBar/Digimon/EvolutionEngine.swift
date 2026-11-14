@@ -36,6 +36,8 @@ struct GrowthRules: Sendable, Equatable {
     /// most 2 (coding, no full limit), so coding every day within limits is enough; a day with two
     /// tools gives 3 and makes up for a missed day.
     var trophiesPerDay = 2.0
+    /// How long a full stage that can merge waits for a friend's code before it grows as usual.
+    var jogressWait: TimeInterval = 24 * 60 * 60
 
     static let standard = GrowthRules()
 
@@ -73,6 +75,10 @@ struct EvolutionRules: Sendable {
     /// no backup slot, so the partner counts once it is in the dex (raised before). It takes the place
     /// of graduation when the stage is full.
     var specialJogress: [SpecialJogress] = []
+    /// Merges come from a friend's code (`EvolutionEngine.jogress`): a full stage with a Jogress route
+    /// waits for one. Off = the card's merges are never taken and a named Jogress happens by itself
+    /// once its partner was raised before.
+    var friendJogress = true
 
     struct SpecialJogress: Sendable, Equatable, Hashable {
         let from: String
@@ -163,6 +169,11 @@ struct EvolutionEngine: Sendable {
             // Waiting for the user's pick: keep the bar full, don't overflow.
             state.partner.stageExp = min(state.partner.stageExp, growth.threshold(for: state.partner.level))
         }
+        if state.jogressWait?.over == false {
+            // Waiting for a friend: experience keeps counting and carries into the next stage, less
+            // than a stage's worth so the next stage never fills at once (thresholds only grow).
+            state.partner.stageExp = min(state.partner.stageExp, 2 * growth.threshold(for: state.partner.level) - 1)
+        }
         return advance(&state, at: date)
     }
 
@@ -199,6 +210,9 @@ struct EvolutionEngine: Sendable {
     func tick(_ state: inout DigimonState, now: Date) -> [DigimonEvent] {
         if let offered = state.eggChoiceOfferedAt, now.timeIntervalSince(offered) >= growth.choiceTimeout {
             return chooseEggLine(&state, autoEggLine(for: state), at: now)
+        }
+        if let wait = state.jogressWait, !wait.over, now.timeIntervalSince(wait.openedAt) >= growth.jogressWait {
+            return advance(&state, at: now)   // no friend's code came: grow as usual
         }
         guard let pending = state.pendingChoice, let first = pending.candidates.first else { return [] }
         // A choice saved before choosing was turned off resolves at once.
@@ -443,8 +457,20 @@ struct EvolutionEngine: Sendable {
         var events: [DigimonEvent] = []
         while state.pendingChoice == nil, state.eggChoiceOfferedAt == nil,
               state.partner.stageExp >= growth.threshold(for: state.partner.level) {
+            // A stage that can merge waits for a friend's code first (`jogress`), then grows as usual.
+            if state.jogressWait?.over != true {
+                let merges = jogressOptions(for: state)
+                if !merges.isEmpty {
+                    if state.jogressWait == nil {
+                        state.jogressWait = JogressWait(openedAt: date, over: false)
+                        events.append(.jogressOffered(options: merges.map(\.to).orderedUnique()))
+                    }
+                    if let wait = state.jogressWait, date.timeIntervalSince(wait.openedAt) < growth.jogressWait { break }
+                    state.jogressWait?.over = true
+                }
+            }
             let options = Array(growthOptions(for: state, at: date).prefix(growth.maxChoices))
-            if let jogress = rules.specialJogress(for: state, in: catalog) {
+            if !rules.friendJogress, let jogress = rules.specialJogress(for: state, in: catalog) {
                 events += evolve(&state, to: jogress.to, at: date)   // instead of graduating
             } else if state.partner.level == .ultimate || options.isEmpty {
                 events += graduate(&state, at: date)
@@ -468,6 +494,7 @@ struct EvolutionEngine: Sendable {
         state.partner.stageExp = leftover
         state.partner.stageSignals = GrowthSignals()
         state.partner.stageStartedAt = date
+        state.jogressWait = nil
         state.partner.path.append(key)
         state.dex.insert(key)
         state.eggOffer = nil   // hatched: the draw is used up
@@ -484,6 +511,7 @@ struct EvolutionEngine: Sendable {
         state.graduates.append(GraduateRecord(lineID: line, path: path, graduatedAt: date))
         state.partner = DigimonPartner(lineID: line, speciesKey: nil, level: .digitama)
         state.pendingChoice = nil
+        state.jogressWait = nil
         offerEggLines(&state, at: date)   // the new egg waits for the user to pick its line
         return [.graduated(lineID: line, path: path), .newEgg(lineID: state.partner.lineID)]
     }
@@ -574,5 +602,80 @@ extension EvolutionEngine {
     func practiceLeft(_ state: DigimonState, at now: Date) -> Int {
         guard let book = state.battleBook, book.practiceDay == dayKey(now) else { return growth.practiceBattlesPerDay }
         return max(0, growth.practiceBattlesPerDay - book.practiceToday)
+    }
+}
+
+enum JogressError: Error, Equatable {
+    /// No merge is open: the stage is not full, has no Jogress route, or the wait is over.
+    case notOpen
+    /// The friend's Digimon (this species) is not a partner any route here takes.
+    case partnerDoesNotFit(species: String)
+    /// This code was already used for a Jogress.
+    case alreadyUsed
+}
+
+// MARK: Jogress with a friend's code
+//
+// A full stage with a Jogress route waits up to `GrowthRules.jogressWait` for a friend's code (the
+// same code as for battles). A code whose Digimon fits a route merges into its result; without one
+// the stage grows as usual. A named Jogress between two Ultimates (War Greymon + Metal Garurumon)
+// also needs the partner raised before.
+
+extension EvolutionEngine {
+    /// The merges this stage could do with a fitting friend's code: the card's Jogress routes from this
+    /// Digimon, or for an Ultimate the named Jogress whose partner the user raised before.
+    func jogressOptions(for state: DigimonState) -> [DigimonJogress] {
+        guard rules.friendJogress, let current = state.partner.speciesKey,
+              let line = catalog.lines[state.partner.lineID] else { return [] }
+        if state.partner.level == .ultimate {
+            return rules.specialJogress
+                .filter { $0.from == current && state.dex.contains($0.partner) && line.members.contains($0.to)
+                    && catalog.species($0.to) != nil }
+                .map { DigimonJogress("\($0.from)>\($0.to)", species: $0.partner) }
+        }
+        return line.jogress.filter { $0.from == current && catalog.species($0.to) != nil }
+    }
+
+    func isJogressOpen(_ state: DigimonState) -> Bool { state.jogressWait?.over == false }
+
+    /// When an open wait ends and the stage grows as usual.
+    func jogressDeadline(_ state: DigimonState) -> Date? {
+        guard let wait = state.jogressWait, !wait.over else { return nil }
+        return wait.openedAt.addingTimeInterval(growth.jogressWait)
+    }
+
+    /// Merges with the friend's Digimon in the first code in `code`. On every card a partner fits at
+    /// most one result per Digimon (`testAPartnerFitsAtMostOneResult`), so the code decides it.
+    func jogress(_ state: inout DigimonState, code: String, at now: Date) throws -> (partner: BattleFighter, events: [DigimonEvent]) {
+        guard isJogressOpen(state), let current = state.partner.speciesKey else { throw JogressError.notOpen }
+        let partner = try BattleCode.decode(code, catalog: catalog, now: now)
+        guard partner.player != state.playerID else { throw BattleCodeError.ownCode }
+        let seen = "\(partner.player):\(partner.nonce)"
+        guard !(state.jogressCodes ?? []).contains(seen) else { throw JogressError.alreadyUsed }
+        // `decode` already refused a Digimon this catalog does not know.
+        let species = catalog.species(partner.species)
+        guard let to = jogressOptions(for: state).first(where: { species.map($0.accepts) == true })?.to else {
+            throw JogressError.partnerDoesNotFit(species: partner.species)
+        }
+        state.jogressCodes = Array(((state.jogressCodes ?? []) + [seen]).suffix(BattleBook.limit))
+        _ = evolve(&state, to: to, at: now)   // its .evolved is told as the merge
+        let events: [DigimonEvent] = [.jogressed(from: current, partner: partner.species, to: to)] + settle(&state, at: now)
+        return (partner, events)
+    }
+
+    /// Grows as usual now instead of waiting for a friend's code.
+    @discardableResult
+    func skipJogress(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
+        guard isJogressOpen(state) else { return [] }
+        state.jogressWait?.over = true
+        return settle(&state, at: date)
+    }
+}
+
+extension Array where Element: Hashable {
+    /// The elements in order, each once.
+    func orderedUnique() -> [Element] {
+        var seen = Set<Element>()
+        return filter { seen.insert($0).inserted }
     }
 }

@@ -154,7 +154,15 @@ final class DigimonSceneHub {
                     hub.broadcast(["type": "graduate"])
                     try? await Task.sleep(for: .seconds(1.8))
                     target = nil
-                case .choiceOffered: target = nil
+                case .jogressed(_, let partner, let to):
+                    // The friend's Digimon walks in and both merge, then the evolution plays.
+                    if let data = await hub.image(for: partner) {
+                        hub.liveScenes.forEach { $0.sprite(key: partner, dataURI: Self.dataURI(data)) }
+                        hub.broadcast(["type": "jogress", "partner": partner])
+                        try? await Task.sleep(for: .seconds(2.2))
+                    }
+                    target = to
+                case .choiceOffered, .jogressOffered: target = nil
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
                 hub.liveScenes.forEach { $0.sprite(key: target, dataURI: Self.dataURI(data)) }

@@ -157,7 +157,10 @@ final class DigimonLinesTests: XCTestCase {
         var s = state(at: "apollomon", line: "gaomon")
         s.dex = ["dianamon"]
         s.partner.stageExp = engine.growth.threshold(for: .ultimate)
-        XCTAssertEqual(engine.settle(&s, at: Date()), [.evolved(from: "apollomon", to: "gracenovamon")])
+        let now = Date()
+        XCTAssertEqual(engine.settle(&s, at: now), [.jogressOffered(options: ["gracenovamon"])])
+        XCTAssertEqual(try engine.jogress(&s, code: friendCode("dianamon", at: now), at: now).events,
+                       [.jogressed(from: "apollomon", partner: "dianamon", to: "gracenovamon")])
     }
 
     /// Wikimon writes a Vital Bracelet merge as "(with a ... Adult ...)" without the word Jogress;
@@ -190,45 +193,35 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertFalse(engine.candidates(for: andromon).contains("blitzgreymon"), "still hidden where there is another way")
     }
 
+    /// A merge-only Digimon shows the friend Jogress that leads there (and the step as an evolution);
+    /// with friends' codes off it is marked as out of reach.
     func testTheDexMarksMergeOnlyDigimon() {
-        let rows = DigimonDex.rows(for: catalog.lines["vmon"]!, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: engine.rules)
-        XCTAssertEqual(rows.flatMap(\.entries).first { $0.id == "digitamamon" }?.secret, .mergeOnly)
+        let line = catalog.lines["vmon"]!
+        let rows = DigimonDex.rows(for: line, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: engine.rules)
+        let digitamamon = rows.flatMap(\.entries).first { $0.id == "digitamamon" }
+        XCTAssertEqual(digitamamon?.secret, .friendJogress(routes: line.jogress.filter { $0.to == "digitamamon" }))
+        XCTAssertEqual(Set(digitamamon?.previous.map(\.key) ?? []), Set(line.jogress.filter { $0.to == "digitamamon" }.map(\.from)))
+        XCTAssertFalse(digitamamon?.previous.isEmpty ?? true)
         XCTAssertNil(rows.flatMap(\.entries).first { $0.id == "vdramon" }?.secret)
+        var rules = engine.rules
+        rules.friendJogress = false
+        let solo = DigimonDex.rows(for: line, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: rules)
+        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "digitamamon" }?.secret, .mergeOnly)
+        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "digitamamon" }?.previous, [])
     }
 
-    /// War Greymon + Metal Garurumon = Omegamon. The partner counts once it is in the dex.
-    func testAFullWarGreymonMergesIntoOmegamonOnceMetalGarurumonWasRaised() {
-        var s = state(at: "wargreymon", line: "agumon")
-        s.partner.path = ["botamon", "koromon", "agumon", "greymon", "metalgreymon", "wargreymon"]
-        s.partner.stageExp = 299
-        var alone = s
-        let graduated = engine.addUsage(&alone, tokens: 200_000, provider: "claude_code", at: Date())
-        XCTAssertTrue(graduated.contains { if case .graduated = $0 { return true } else { return false } },
-                      "without the partner it graduates as before")
-
-        s.dex.insert("metalgarurumon")
-        let merged = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date())
-        XCTAssertEqual(merged, [.evolved(from: "wargreymon", to: "omegamon")])
-        XCTAssertEqual(s.partner.speciesKey, "omegamon")
-        XCTAssertTrue(s.discoveredEvolutions.contains("wargreymon>omegamon"))
-
-        s.partner.stageExp = engine.growth.threshold(for: .ultimate) - 1
-        let after = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date())
-        guard case .graduated(_, let path)? = after.first else { return XCTFail("Omegamon graduates: \(after)") }
-        XCTAssertEqual(path.suffix(2), ["wargreymon", "omegamon"])
-    }
-
-    func testMetalGarurumonMergesTheSameWayAndNormalGrowthNeverOffersOmegamon() {
-        var s = state(at: "metalgarurumon", line: "gabumon")
-        s.dex = ["wargreymon"]
-        s.partner.stageExp = 299
-        XCTAssertEqual(engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date()),
-                       [.evolved(from: "metalgarurumon", to: "omegamon")])
+    /// Growth never offers a named merge's result; only a Jogress reaches it (`DigimonJogressTests`).
+    func testNormalGrowthNeverOffersOmegamon() {
         for line in catalog.lines.values {
             for key in line.members {
                 XCTAssertFalse(engine.candidates(for: state(at: key, line: line.id)).contains("omegamon"), key)
             }
         }
+        var s = state(at: "metalgarurumon", line: "gabumon")
+        s.dex = ["wargreymon"]
+        s.partner.stageExp = 299
+        XCTAssertEqual(engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date()),
+                       [.jogressOffered(options: ["omegamon"])], "Metal Garurumon waits the same way")
     }
 
     func testTendencyFollowsHowTheStageWasUsed() {

@@ -108,6 +108,46 @@ final class DigimonStoreTests: XCTestCase {
                             engine: EvolutionEngine(calendar: calendar), clock: { [unowned self] in self.now })
     }
 
+    /// A Greymon whose full stage waits for a friend's Jogress code, saved before the store opens.
+    private func waitingGreymon() throws {
+        var s = DigimonState.newEgg(lineID: "agumon")
+        s.partner.speciesKey = "greymon"
+        s.partner.level = .adult
+        s.partner.path = ["botamon", "koromon", "agumon", "greymon"]
+        s.dex = Set(s.partner.path)
+        s.partner.stageStartedAt = now.addingTimeInterval(-3 * 24 * 3600)
+        s.partner.stageExp = 200
+        s.jogressWait = JogressWait(openedAt: now, over: false)
+        try JSONEncoder().encode(DigimonStore.Saved(digimon: s)).write(to: dir.appendingPathComponent("digimon-state.json"))
+    }
+
+    func testAFriendsCodeMergesThroughTheStoreAndIsSaved() throws {
+        try waitingGreymon()
+        let store = makeStore()
+        XCTAssertTrue(store.isJogressOpen, "the wait survives a restart")
+        XCTAssertEqual(Set(store.jogressOptions.map(\.to)), ["andromon", "neodevimon"])
+        XCTAssertEqual(store.jogressDeadline, now.addingTimeInterval(24 * 3600))
+        var activity: [DigimonEvent] = []
+        store.onActivity = { events, _ in activity += events }
+        XCTAssertThrowsError(try store.jogress(withCode: "no code"))
+        XCTAssertTrue(activity.isEmpty)
+        XCTAssertEqual(try store.jogress(withCode: friendCode("devimon", at: now)), "devimon")
+        XCTAssertEqual(activity, [.jogressed(from: "greymon", partner: "devimon", to: "neodevimon")], "the scene plays the merge")
+        XCTAssertFalse(store.isJogressOpen)
+        XCTAssertEqual(makeStore().state.partner.speciesKey, "neodevimon", "saved")
+    }
+
+    func testSkippingTheJogressEvolvesNow() throws {
+        try waitingGreymon()
+        let store = makeStore()
+        var activity: [DigimonEvent] = []
+        store.onActivity = { events, _ in activity += events }
+        store.skipJogress()
+        guard case .evolved(from: "greymon", _)? = activity.first else { return XCTFail("\(activity)") }
+        XCTAssertFalse(store.isJogressOpen)
+        XCTAssertTrue(store.jogressOptions.isEmpty)
+    }
+
     func testNewTokensAfterInstallGrowTheEgg() {
         let store = makeStore()
         var activity: [([DigimonEvent], Int)] = []

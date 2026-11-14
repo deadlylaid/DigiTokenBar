@@ -152,4 +152,53 @@ final class DigimonSceneBattleTests: XCTestCase {
         let sizes = try await js(scene, "[3, 4, 5, 6].map(st => pet.shotFrom('missile', pet.x, pet.bb(), 1, S.line, 0, 0, 0, null, st).size)") as? [Double]
         XCTAssertEqual(sizes, [1, 1.3, 1.7, 2.1], "Child, Adult, Perfect, Ultimate")
     }
+
+    /// A Jogress plays in the scene: the friend's Digimon fades in, both meet in the middle and glow,
+    /// one flash, and the scene is free for the evolution the app sends next.
+    func testAJogressBringsInTheFriendsDigimonAndMerges() async throws {
+        let scene = DigimonScene(mode: .popover)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "F28C3E"))
+        let uri = "data:image/png;base64," + png.base64EncodedString()
+        for key in ["wargreymon", "metalgarurumon", "omegamon"] { scene.sprite(key: key, dataURI: uri) }
+        scene.apply(["key": "wargreymon", "line": "agumon", "stage": 6, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        scene.command(["type": "jogress", "partner": "metalgarurumon"])
+        try await Task.sleep(for: .milliseconds(300))
+        let seen = try await js(scene, """
+        (() => {
+          const out = {start: pet.state, partner: pet.fight && pet.fight.foe, gap: 999, white: false, flash: 0};
+          for (let i = 0; i < 90; i++) {
+            pet.update(33);
+            if (pet.fight) { out.gap = Math.min(out.gap, Math.abs(pet.fight.fx - pet.x)); out.white = out.white || pet.fight.white; }
+            out.flash = Math.max(out.flash, pet.flash);
+          }
+          out.end = pet.state; out.fight = !!pet.fight;
+          return JSON.stringify(out);
+        })()
+        """) as? String
+        let result = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+        XCTAssertEqual(result["start"] as? String, "merge")
+        XCTAssertEqual(result["partner"] as? String, "metalgarurumon")
+        XCTAssertLessThan(result["gap"] as? Double ?? 999, 30, "they meet in the middle")
+        XCTAssertEqual(result["white"] as? Bool, true, "both glow before merging")
+        XCTAssertGreaterThan(result["flash"] as? Double ?? 0, 0.5)
+        XCTAssertNotEqual(result["end"] as? String, "merge", "over: the scene is free (idle, or already walking)")
+        XCTAssertEqual(result["fight"] as? Bool, false, "the friend's Digimon is gone")
+        scene.command(["type": "evolve", "key": "omegamon"])
+        try await Task.sleep(for: .milliseconds(200))
+        let state = try await js(scene, "pet.state") as? String
+        XCTAssertEqual(state, "evolve", "the evolution plays after it")
+    }
 }

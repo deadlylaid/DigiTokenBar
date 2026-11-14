@@ -98,6 +98,34 @@ def edge_kind(e):
 
 
 CONDITIONS = {}   # line id -> {(from, to): (vital values, trophies, battles, win ratio %, fallback)}
+PARTNERS = {}     # line id -> {(from, to): [partner, ...]}: who a Jogress route merges with (see jogress_partner)
+
+PARTNER_LEVELS = {"child": "child", "rookie": "child", "adult": "adult", "champion": "adult", "perfect": "perfect"}
+ATTRIBUTES = ("vaccine", "data", "virus", "free")
+
+
+def jogress_partner(e, names):
+    """Who a Jogress route merges with: ("kind", level, (attributes...)) for "Jogress with Vaccine or
+    Free Adult", or ("species", key) for a named Digimon. Adventure conditions in the same note
+    ("Stage 15 cleared") are not used. None when the note cannot be read."""
+    j = (e.get("requirements") or {}).get("jogress")
+    if isinstance(j, dict) and j.get("partnerAttributes") and j.get("partnerStage"):
+        return ("kind", PARTNER_LEVELS[j["partnerStage"].lower()], tuple(sorted(a.lower() for a in j["partnerAttributes"])))
+    if isinstance(j, dict) and j.get("partner") and not j.get("partnerAttributes"):
+        text = j["partner"]
+    else:
+        m = re.search(r"[Jj]ogress with (?:an? )?(.+)", j if isinstance(j, str) else (e.get("raw") or ""))
+        if not m:
+            return None
+        text = m.group(1)
+    text = re.split(r" from the | after |\.|\"", text)[0].strip()
+    words = [w.lower() for w in re.findall(r"[A-Za-z]+", text)]
+    attrs = tuple(sorted({w for w in words if w in ATTRIBUTES}))
+    levels = [PARTNER_LEVELS[w] for w in words if w in PARTNER_LEVELS]
+    if attrs and levels:
+        return ("kind", levels[0], attrs)
+    key = re.sub(r"[^a-z0-9]", "", text.lower())
+    return ("species", names[key]) if key in names else None
 
 
 def req_number(value):
@@ -140,6 +168,10 @@ def step_conditions(edges):
     return out
 
 
+# Names as research notes write them ("Metal Garurumon (Black)") -> species keys.
+NAME_KEYS = {re.sub(r"[^a-z0-9]", "", n["name"].lower()): k for k, n in DATA["nodes"].items()}
+
+
 def research_cards():
     """{line id: [(from, to, kind), ...]}: the routes on each researched line's card."""
     out = {}
@@ -151,6 +183,14 @@ def research_cards():
             out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in card["edges"] + card.get("extraEdges", [])
                             if e.get("onCard", True) is not False]
             CONDITIONS[line_id] = step_conditions(card["edges"] + card.get("extraEdges", []))
+            partners = PARTNERS.setdefault(line_id, {})
+            for e in card["edges"] + card.get("extraEdges", []):
+                if e.get("onCard", True) is not False and edge_kind(e) == "jogress":
+                    p = jogress_partner(e, NAME_KEYS)
+                    if p is None:
+                        raise SystemExit(f"{line_id}: {e['from']}>{e['to']}: cannot read the Jogress partner")
+                    if p not in partners.setdefault((e["from"], e["to"]), []):
+                        partners[(e["from"], e["to"])].append(p)
     return out
 
 
@@ -370,6 +410,18 @@ def main():
         out.append(f"                    firstBaby: {swift_str(baby1)}, members: [{members}],")
         out.append(f"                    steps: [{steps}],")
         out.append(f"                    mergeSteps: [{merges}],")
+        rows = []
+        for ab in sorted(steps_of[line_id], key=order):
+            for p in PARTNERS.get(line_id, {}).get(ab, []):
+                if p[0] == "species":
+                    if p[1] not in keyset:
+                        print(f"{line_id}: {ab[0]}>{ab[1]}: partner {p[1]} is not in the catalog, left out")
+                        continue
+                    rows.append(f".init({step(ab)}, species: {swift_str(p[1])})")
+                else:
+                    attrs = ", ".join("." + a for a in p[2])
+                    rows.append(f".init({step(ab)}, level: .{p[1]}, attributes: [{attrs}])")
+        out.append(f"                    jogress: [{', '.join(rows)}],")
         conds = CONDITIONS.get(line_id, {})
         rows = []
         for ab in sorted(steps_of[line_id], key=order):

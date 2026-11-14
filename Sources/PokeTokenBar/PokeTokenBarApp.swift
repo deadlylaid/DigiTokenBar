@@ -322,6 +322,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             case .choiceOffered(let candidates):
                 let hours = Int(digimon.engine.growth.choiceTimeout / 3600)
                 DigimonNotifier.post(t.chooseNotifyTitle, t.chooseNotifyBody(candidates.map(name), hours: hours))
+            case .jogressOffered:
+                let hours = Int(digimon.engine.growth.jogressWait / 3600)
+                DigimonNotifier.post(t.jogressWaitTitle, t.jogressOfferBody(hours: hours))
+            case .jogressed(let from, let partner, let to):
+                DigimonNotifier.post(t.jogressTitle, "\(name(from)) + \(name(partner)) → \(name(to))")
             case .graduated(_, let path):
                 DigimonNotifier.post(t.graduatedTitle, t.graduatedBody(path.last.map(name) ?? name("")))
             case .newEgg:

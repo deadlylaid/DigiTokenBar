@@ -9,6 +9,8 @@ struct DigimonDex {
         case locked
         /// Only a Jogress (a merge with another Digimon) leads here, and growth does not merge.
         case mergeOnly
+        /// Only a Jogress leads here: a friend's code with a fitting partner (these routes).
+        case friendJogress(routes: [DigimonJogress])
         /// A named Jogress the app does: raise both partners (e.g. War Greymon and Metal Garurumon).
         case specialJogress(partners: [String])
     }
@@ -38,21 +40,23 @@ struct DigimonDex {
     static func rows(for line: DigimonLine, state: DigimonState, catalog: DigimonCatalog,
                      rules: EvolutionRules) -> [Row] {
         let members = line.members.compactMap(catalog.species)
-        // Jogress-only steps are not growth routes, so the dex does not hint at them; the special
-        // Jogress the app does is shown as an evolution.
+        // A merge-only step shows as an evolution when friends' codes can take it; the special Jogress
+        // the app does is shown as one too.
         let special = rules.specialJogress.filter { line.members.contains($0.from) && line.members.contains($0.to) }
             .map { DigimonEvolution(from: $0.from, to: $0.to, sources: [.vitalBracelet], canon: false) }
+        let friendSteps = rules.friendJogress ? Set(line.jogress.map(\.step)) : []
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
-            .filter { !rules.isLocked($0.from, $0.to, in: line) } + special
+            .filter { !rules.isLocked($0.from, $0.to, in: line) || friendSteps.contains("\($0.from)>\($0.to)") } + special
         let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
             let incoming = allSteps.filter { $0.to == species.key }
             let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
                 && incoming.allSatisfy { rules.isLocked($0.from, $0.to, in: line) }
             let jogressFrom = rules.specialJogress.filter { $0.to == species.key }.map(\.from)
+            let friendRoutes = rules.friendJogress ? line.jogress.filter { $0.to == species.key } : []
             let secret: Secret? = !jogressFrom.isEmpty ? .specialJogress(partners: Array(Set(jogressFrom)).sorted())
                 : rules.locked.contains(species.key) ? .locked
-                : mergeOnly ? .mergeOnly
+                : mergeOnly ? (friendRoutes.isEmpty ? .mergeOnly : .friendJogress(routes: friendRoutes))
                 : rules.hidden[species.key].map { .hidden($0) }
             let link = { (from: String, to: String, other: String) in
                 Link(key: other, discovered: state.discoveredEvolutions.contains("\(from)>\(to)"))
@@ -87,14 +91,20 @@ extension DigimonText {
     var evolvesTo: String { ko ? "진화 후" : "Into" }
     var noLinks: String { ko ? "없음" : "None" }
     var graduatesTitle: String { ko ? "졸업 기록" : "Graduates" }
-    func secretHint(_ secret: DigimonDex.Secret) -> String {
+    func secretHint(_ secret: DigimonDex.Secret, catalog: DigimonCatalog) -> String {
         switch secret {
         case .locked: return ko ? "아직 만날 수 없어요." : "Not reachable yet."
         case .mergeOnly: return ko ? "다른 디지몬과 합체(조그레스)해야 만날 수 있어요. 아직은 만날 수 없어요."
                                   : "Only a Jogress (a merge) leads here, so it cannot be met yet."
+        case .friendJogress(let routes):
+            // "아르고몬 + 백신·프리 성숙기", one per route.
+            let ways = routes.map { "\(name(catalog.species($0.from))) + \(jogressPartner($0, catalog: catalog))" }.orderedUnique()
+            return ko ? "친구와 합체해야 만날 수 있어요. 단계를 다 채운 뒤 맞는 짝을 키우는 친구의 코드로 합체해요: \(ways.joined(separator: ", "))"
+                      : "Only a Jogress with a friend leads here. Once the stage is full, merge with a fitting friend's code: \(ways.joined(separator: ", "))"
         case .specialJogress(let partners):
-            return ko ? "\(partners.count)마리를 모두 키워 보면, 궁극체를 다 채운 순간 졸업 대신 합체 진화해요."
-                      : "Raise all \(partners.count) of them and a full Ultimate merges into this instead of graduating."
+            let names = partners.map { name(catalog.species($0)) }.joined(separator: ", ")
+            return ko ? "\(names)를 모두 키워 본 적이 있으면, 궁극체를 다 채운 뒤 친구의 짝 디지몬 코드로 합체 진화해요."
+                      : "Once you have raised \(names), a full Ultimate merges into this with a friend's code for its partner."
         case .hidden(.bugsDefeated): return ko ? "버그를 많이 잡은 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says bug hunters turn into this."
         case .hidden(.limitHits): return ko ? "한도를 자주 넘긴 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says hitting your limits often leads here."
         }
@@ -191,7 +201,8 @@ struct DigimonDexView: View {
                     PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen)
                         .frame(width: 44, height: 44)
                     if entry.secret != nil, !entry.seen {
-                        Image(systemName: entry.secret == .locked || entry.secret == .mergeOnly ? "lock.fill" : "sparkles")
+                        Image(systemName: entry.secret == .locked || entry.secret == .mergeOnly ? "lock.fill"
+                              : { if case .friendJogress = entry.secret { return "person.2.fill" } else { return "sparkles" } }())
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
@@ -223,7 +234,8 @@ struct DigimonDexView: View {
                 }
             }
             if let secret = entry.secret, !entry.seen {
-                Text(t.secretHint(secret)).font(.caption).foregroundStyle(.secondary)
+                Text(t.secretHint(secret, catalog: digimon.engine.catalog)).font(.caption).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             links(t.evolvesFrom, entry.previous)
             links(t.evolvesTo, entry.next)

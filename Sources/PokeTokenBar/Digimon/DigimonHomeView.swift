@@ -42,6 +42,51 @@ struct DigimonText {
     }
 
     var jogressLabel: String { ko ? "합체 진화까지" : "Until it merges" }
+    var jogressWaiting: String { ko ? "친구의 합체 코드를 기다리는 중" : "Waiting for a friend's Jogress code" }
+
+    // Jogress with a friend's code
+    var jogressWaitTitle: String { ko ? "친구와 합체할 수 있어요" : "Jogress with a friend" }
+    func jogressTimeLeft(_ seconds: TimeInterval) -> String {
+        let total = max(0, Int(seconds) / 60), h = total / 60, m = total % 60
+        if ko { return h > 0 ? "\(h)시간 \(m)분 남음" : "\(m)분 남음" }
+        return h > 0 ? "\(h) h \(m) min left" : "\(m) min left"
+    }
+    var jogressExplain: String {
+        ko ? "아래 짝에 맞는 디지몬을 키우는 친구에게 코드를 받아 복사한 뒤 '받은 코드로 합체'를 눌러 주세요. 친구는 배틀 칸의 '내 코드 복사'로 코드를 만들어요. 시간이 지나면 평소처럼 진화하고, 기다리는 동안 쌓인 경험치는 다음 단계로 넘어가요."
+           : "Get a code from a friend whose Digimon fits a partner below, copy it and press 'Jogress with a code'. Friends make one with 'Copy my code' under Battle. When time runs out it evolves as usual; EXP earned while waiting carries over."
+    }
+    /// The partner a route needs: a named Digimon, or attributes and a level ("백신·프리 성숙기").
+    func jogressPartner(_ jogress: DigimonJogress, catalog: DigimonCatalog) -> String {
+        if let key = jogress.species { return name(catalog.species(key)) }
+        let attributes = jogress.attributes.sorted { $0.rawValue < $1.rawValue }.compactMap(attribute)
+        return attributes.joined(separator: ko ? "·" : "/") + " " + (jogress.level.map(level) ?? "")
+    }
+    var jogressCodeButton: String { ko ? "받은 코드로 합체" : "Jogress with a code" }
+    func skipJogressButton(_ level: DigimonLevel) -> String {
+        level == .ultimate ? (ko ? "합체 없이 졸업" : "Graduate without it") : (ko ? "합체 없이 진화" : "Evolve without it")
+    }
+    func jogressOfferBody(hours: Int) -> String {
+        ko ? "\(hours)시간 안에 친구의 코드로 합체 진화할 수 있어요. 코드가 없으면 평소처럼 진화해요."
+           : "For \(hours) hours a friend's code can merge it. Without one it evolves as usual."
+    }
+    func jogressDone(partner: String, into: String) -> String {
+        ko ? "\(partner)와(과) 합체해서 \(into)(으)로 진화했어요!" : "Merged with \(partner) into \(into)!"
+    }
+    func jogressError(_ error: Error, catalog: DigimonCatalog) -> String {
+        switch error {
+        case JogressError.notOpen: return ko ? "지금은 합체할 수 없어요." : "No Jogress right now."
+        case JogressError.partnerDoesNotFit(let key):
+            let s = catalog.species(key)
+            let what = [s.map { level($0.level) }, s.flatMap { attribute($0.attribute) }].compactMap { $0 }.joined(separator: " · ")
+            return ko ? "짝이 맞지 않아요. 받은 코드의 디지몬: \(name(s)) (\(what))" : "Not a fitting partner. The code holds \(name(s)) (\(what))."
+        case JogressError.alreadyUsed: return ko ? "이미 합체에 쓴 코드예요." : "That code was already used for a Jogress."
+        case BattleCodeError.notACode:
+            return ko ? "클립보드에 코드가 없어요. 친구가 보낸 코드(DTB1.로 시작)를 복사한 뒤 눌러 주세요."
+                      : "No code on the clipboard. Copy the code your friend sent (it starts with DTB1.) first."
+        case BattleCodeError.ownCode: return ko ? "내 코드예요. 친구가 보낸 코드를 복사해 주세요." : "That is your own code. Copy your friend's."
+        default: return battleError(error)
+        }
+    }
     var jogressTitle: String { ko ? "합체 진화했어요" : "Jogress evolution" }
     func todayExp(_ exp: Int, cap: Int) -> String { ko ? "오늘 \(exp)/\(cap) EXP" : "Today \(exp)/\(cap) EXP" }
     func todayExpFull(cap: Int) -> String {
@@ -251,11 +296,56 @@ struct DigimonStatusView: View {
         VStack(alignment: .leading, spacing: 10) {
             nameRow
             progress
+            if digimon.isJogressOpen { jogressWait }
             if !digimon.tendencies.isEmpty { tendency }
             if !digimon.candidates.isEmpty { choice }
             if digimon.canChooseEggLine { eggChoice }
             if digimon.canBattle { battle }
         }
+    }
+
+    /// A full stage that can merge: the partners it takes, a friend's code, or evolving as usual.
+    private var jogressWait: some View {
+        let catalog = digimon.engine.catalog
+        // One row per partner, with every result that partner leads to (unseen ones as ???).
+        var rows: [(partner: String, results: [String])] = []
+        for option in digimon.jogressOptions {
+            let partner = t.jogressPartner(option, catalog: catalog)
+            let result = digimon.state.dex.contains(option.to) ? t.name(catalog.species(option.to)) : t.unknownName
+            if let i = rows.firstIndex(where: { $0.partner == partner }) {
+                if !rows[i].results.contains(result) { rows[i].results.append(result) }
+            } else {
+                rows.append((partner, [result]))
+            }
+        }
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(t.jogressWaitTitle).font(.callout.weight(.semibold))
+                Spacer()
+                if let deadline = digimon.jogressDeadline {
+                    Text(t.jogressTimeLeft(deadline.timeIntervalSinceNow)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                }
+            }
+            ForEach(rows, id: \.partner) { row in
+                Text("\(row.partner)  →  \(row.results.joined(separator: ", "))").font(.caption)
+            }
+            HStack(spacing: 6) {
+                Button(t.jogressCodeButton) {
+                    let text = NSPasteboard.general.string(forType: .string) ?? ""
+                    do {
+                        let partner = try digimon.jogress(withCode: text)
+                        battleMessage = t.jogressDone(partner: t.name(catalog.species(partner)),
+                                                      into: t.name(catalog.species(digimon.state.partner.speciesKey ?? "")))
+                    } catch { battleMessage = t.jogressError(error, catalog: catalog) }
+                }
+                .buttonStyle(.borderedProminent)
+                Button(t.skipJogressButton(digimon.state.partner.level)) { digimon.skipJogress() }
+            }
+            .controlSize(.small)
+            Text(t.jogressExplain).font(.caption2).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor.opacity(0.08)))
     }
 
     /// Practice and code battles. The scene above plays each battle.
@@ -384,9 +474,11 @@ struct DigimonStatusView: View {
     private var progress: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(digimon.canSpecialJogress ? t.jogressLabel : t.progressLabel(digimon.state.partner.level))
+                Text(digimon.isJogressOpen ? t.jogressWaiting
+                     : digimon.canSpecialJogress ? t.jogressLabel : t.progressLabel(digimon.state.partner.level))
                 Spacer()
-                Text("\(digimon.state.partner.stageExp) / \(digimon.threshold) EXP").monospacedDigit()
+                // While waiting for a friend, EXP past the bar carries into the next stage.
+                Text("\(min(digimon.state.partner.stageExp, digimon.threshold)) / \(digimon.threshold) EXP").monospacedDigit()
             }
             .font(.caption)
             .foregroundStyle(.secondary)

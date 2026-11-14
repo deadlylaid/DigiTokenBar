@@ -144,8 +144,35 @@ final class DigimonStore {
         guard engine.growth.cardConditions, !isEgg, state.partner.stageStartedAt != nil else { return nil }
         return engine.performance(for: state, at: clock())
     }
-    /// A full stage will merge (special Jogress) instead of graduating.
-    var canSpecialJogress: Bool { engine.rules.specialJogress(for: state, in: engine.catalog) != nil }
+    /// A full stage will merge by itself (named Jogress without friends' codes) instead of graduating.
+    var canSpecialJogress: Bool {
+        !engine.rules.friendJogress && engine.rules.specialJogress(for: state, in: engine.catalog) != nil
+    }
+
+    // MARK: Jogress with a friend's code
+
+    /// A full stage is waiting for a friend's code.
+    var isJogressOpen: Bool { engine.isJogressOpen(state) }
+    /// What the open wait can merge into, and with whom.
+    var jogressOptions: [DigimonJogress] { isJogressOpen ? engine.jogressOptions(for: state) : [] }
+    /// When the wait ends and it grows as usual.
+    var jogressDeadline: Date? { engine.jogressDeadline(state) }
+
+    /// Merges with the friend's Digimon in the first code in `text`. Returns the friend's species.
+    @discardableResult
+    func jogress(withCode text: String) throws -> String {
+        var next = saved
+        let (partner, events) = try engine.jogress(&next.digimon, code: text, at: clock())
+        commit(next, events)
+        return partner.species
+    }
+
+    /// Grows as usual now instead of waiting for a friend's code.
+    func skipJogress() {
+        var next = saved
+        let events = engine.skipJogress(&next.digimon, at: clock())
+        commit(next, events)
+    }
 
     func choose(_ key: String) {
         var next = saved

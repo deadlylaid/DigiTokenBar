@@ -51,8 +51,42 @@ struct DigimonLine: Sendable, Hashable {
     var steps: Set<String>? = nil
     /// Steps that are a Jogress (a merge) on this card: kept in the data, never taken by growth.
     var mergeSteps: Set<String> = []
+    /// Who each Jogress route on the card merges with (a step can also have a normal route). A friend's
+    /// code that fits takes it (`EvolutionEngine.jogressOptions`).
+    var jogress: [DigimonJogress] = []
     /// What the card requires for each step (not for merges). Empty = no card data (test catalogs).
     var conditions: [DigimonStepCondition] = []
+}
+
+/// A Jogress route: the step and the partner it needs, either a named Digimon or any Digimon of one
+/// of these attributes at this level ("Jogress with Vaccine or Free Adult").
+struct DigimonJogress: Sendable, Hashable {
+    let step: String
+    let species: String?
+    let level: DigimonLevel?
+    let attributes: [DigimonAttribute]
+
+    init(_ step: String, level: DigimonLevel, attributes: [DigimonAttribute]) {
+        self.step = step
+        species = nil
+        self.level = level
+        self.attributes = attributes
+    }
+
+    init(_ step: String, species: String) {
+        self.step = step
+        self.species = species
+        level = nil
+        attributes = []
+    }
+
+    var from: String { String(step.split(separator: ">").first ?? "") }
+    var to: String { String(step.split(separator: ">").last ?? "") }
+
+    func accepts(_ partner: DigimonSpecies) -> Bool {
+        if let species { return partner.key == species }
+        return partner.level == level && attributes.contains(partner.attribute)
+    }
 }
 
 /// A Vital Bracelet card's requirement for one step, as the device states it (0 = not required).

@@ -413,6 +413,37 @@ class Pet {
       this.callout = {text: F.won ? (ko ? '이겼다!' : 'Won!') : (ko ? '졌다…' : 'Lost…'), t: 0, life: 2300};
     }
   }
+  // ---- Jogress (merged with a friend's Digimon; the app sends the evolution right after) ----
+  merge(c) {
+    if (this.isEgg() || !assets[c.partner]) return;
+    this.bug = null; this.chip = null; this.note = null; this.shots = [];
+    const W = this.worldW, onLeft = this.x + 32 < W / 2;
+    this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
+    this.facing = onLeft ? 1 : -1;
+    this.fight = {foe: c.partner, merge: true, fx: onLeft ? W * .75 - 32 : W * .25 - 32, dir: onLeft ? -1 : 1,
+                  alpha: 0, hurt: 0, foeHurt: 0, lunge: 0, done: 0, won: false, rounds: [], white: false};
+    this.callout = {text: S.lang === 'ko' ? '합체 진화!' : 'Jogress!', t: 0, life: 1900};
+    this.enter('merge', {x0: this.x, fx0: this.fight.fx});
+  }
+  updateMerge(dt) {
+    const F = this.fight, d = this.d, t = this.t;
+    if (!F) { this.enter('idle', {dur: 600}); return; }
+    // The friend's Digimon fades in, both walk to the middle, glow white faster and faster, then one flash.
+    F.alpha = Math.min(1, t / 400);
+    const mid = this.worldW / 2 - 32, k = Math.min(1, Math.max(0, (t - 450) / 900)), e = k * k * (3 - 2 * k);
+    this.x = d.x0 + (mid - this.facing * 9 - d.x0) * e;
+    F.fx = d.fx0 + (mid + this.facing * 9 - d.fx0) * e;
+    if (k > 0 && k < 1) this.y = Math.abs(Math.sin(t / 85)) * 2;
+    if (t > 1350) {
+      const iv = Math.max(35, 190 - (t - 1350) / 4);
+      F.white = d.white = Math.floor((t - 1350) / iv) % 2 === 0;
+    }
+    if (t > 2000 && !d.flashed) {
+      d.flashed = true; this.flash = 1; this.fight = null; d.white = false;
+      const b = this.bb(); this.sparkle(this.x + (b.l + b.r) / 2, this.ground() - 64 + (b.t + b.b) / 2, 24);
+    }
+    if (t > 2300) this.enter('idle', {dur: 1200});   // the evolution comes from the app
+  }
   drawFoe(c, gy, dark) {
     const F = this.fight, A = assets[F.foe];
     if (!A) return;
@@ -422,7 +453,9 @@ class Pet {
     c.beginPath(); c.ellipse(cx, gy + .5, (bb.r - bb.l) * .39, this.desk ? 2 : 2.4, 0, 0, TAU); c.fill();
     const flash = F.foeHurt > 0 && Math.floor(F.foeHurt / 80) % 2 === 0;
     c.save(); c.translate(cx + F.dir * 2 * Math.sin(Math.PI * (F.lunge || 0) / 260), gy); c.scale(F.dir === 1 ? -1 : 1, lost ? .92 : 1);
-    c.drawImage(flash ? A.sil[1] : A.img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
+    // Merging flickers in silhouette like an evolution (dark on a light scene, light on a dark one).
+    const img = F.white ? A.sil[(dark && !this.desk) ? 1 : 0] : flash ? A.sil[1] : A.img;
+    c.drawImage(img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
     c.restore();
     c.globalAlpha = 1;
   }
@@ -439,7 +472,7 @@ class Pet {
     if (this.shake > 0) this.shake -= dt;
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
-    if (this.fight && this.state !== 'duel' && this.state !== 'attack') this.fight = null;   // interrupted (sleep, evolution, ...)
+    if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') this.fight = null;   // interrupted (sleep, evolution, ...)
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
       if (this.moodT > 4200) {
@@ -519,6 +552,7 @@ class Pet {
     const idleBreath = () => { this.breath = .03 * (.5 + .5 * Math.sin(TAU * T / 1900)); this.sway = .6 * Math.sin(TAU * T / 3700); };
     switch (this.state) {
       case 'duel': idleBreath(); this.updateDuel(dt); break;
+      case 'merge': idleBreath(); this.updateMerge(dt); break;
       case 'idle':
         idleBreath();
         if (this.bug && !this.bug.dead && this.bug.noticed && this.t > 350) { this.attack(); break; }
@@ -667,6 +701,7 @@ class Pet {
       c.restore();
     }
     if (this.fight && this.fight.hurt > 0 && Math.floor(this.fight.hurt / 80) % 2 === 0 && !evolving) img = A.sil[1];
+    if (this.state === 'merge' && this.d.white) img = A.sil[(dark && !desk) ? 1 : 0];
     c.save();
     c.translate(cx, gy - this.y);
     if (this.rot) c.rotate(this.rot);
@@ -1068,6 +1103,7 @@ window.app = {
   cmd(c) {
     if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key); }); return; }
     if (c.type === 'battle') { whenAsset(c.foe, () => { if (pet) pet.duel(c); }); return; }
+    if (c.type === 'jogress') { whenAsset(c.partner, () => { if (pet) pet.merge(c); }); return; }
     // Agent state is kept, so a pet created later (sprite still loading) shows it too.
     if (c.type === 'agent') { S.agent = c; if (pet) pet.setAgent(c); return; }
     if (!pet) return;
