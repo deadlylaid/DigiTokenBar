@@ -12,7 +12,9 @@ final class DigimonSceneBattleTests: XCTestCase {
         try await scene.webView.evaluateJavaScript(code)
     }
 
-    func testABattleThrowsEachDigimonsOwnMove() async throws {
+    /// Plays a battle between `me` and `foe` in the real scene script and reports what flew and
+    /// what it left: shots as "me:<kind>" / "foe:<kind>", impact kinds, held lines, and the end state.
+    private func battle(me: String, foe: String) async throws -> [String: Any] {
         let scene = DigimonScene(mode: .popover)
         let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
                               backing: .buffered, defer: false)
@@ -23,38 +25,53 @@ final class DigimonSceneBattleTests: XCTestCase {
         defer { window.close() }
         let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "F28C3E"))
         let uri = "data:image/png;base64," + png.base64EncodedString()
-        scene.sprite(key: "algomonadult", dataURI: uri)
-        scene.sprite(key: "greymon", dataURI: uri)
-        scene.apply(["key": "algomonadult", "line": "agumon", "stage": 4, "sleeping": false, "lang": "ko"])
+        scene.sprite(key: me, dataURI: uri)
+        scene.sprite(key: foe, dataURI: uri)
+        scene.apply(["key": me, "line": "agumon", "stage": 4, "sleeping": false, "lang": "ko"])
         var ready = false
         for _ in 0..<100 where !ready {
             try await Task.sleep(for: .milliseconds(100))
-            ready = (try? await js(scene, "!!(window.pet || (typeof pet !== 'undefined' && pet))")) as? Bool ?? false
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
         }
         XCTAssertTrue(ready, "the scene did not start")
-        let algomon = try await js(scene, "moveOf('algomonadult').kind") as? String
-        let greymon = try await js(scene, "moveOf('greymon').kind") as? String
-        XCTAssertEqual(algomon, "bind")
-        XCTAssertEqual(greymon, "fire")
-
-        scene.command(["type": "battle", "foe": "greymon", "won": true,
+        scene.command(["type": "battle", "foe": foe, "won": true,
                        "rounds": [["a": "me", "hit": true], ["a": "foe", "hit": true]]])
         try await Task.sleep(for: .milliseconds(300))
         let seen = try await js(scene, """
         (() => {
-          const shots = [], coils = [];
+          const shots = [], booms = [], held = [];
           for (let i = 0; i < 220; i++) {
             pet.update(33);
-            for (const s of pet.shots) if (s.duel && !shots.includes((s.mine ? 'me:' : 'foe:') + s.kind)) shots.push((s.mine ? 'me:' : 'foe:') + s.kind);
-            if (pet.booms.some(b => b.kind === 'bind') && !coils.length) coils.push('coil');
+            for (const s of pet.shots) {
+              const tag = (s.mine ? 'me:' : 'foe:') + s.kind;
+              if (s.duel && !shots.includes(tag)) shots.push(tag);
+              if (s.duel && s.hold !== undefined && !held.includes(s.kind)) held.push(s.kind);
+            }
+            for (const b of pet.booms) if (b.kind && !booms.includes(b.kind)) booms.push(b.kind);
           }
-          return JSON.stringify({shots, coils, state: pet.state, fight: !!pet.fight});
+          return JSON.stringify({shots, booms, held, state: pet.state, fight: !!pet.fight});
         })()
         """) as? String
-        let result = try JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any]
-        XCTAssertEqual(Set(result?["shots"] as? [String] ?? []), ["me:bind", "foe:fire"])
-        XCTAssertEqual(result?["coils"] as? [String], ["coil"], "a binding hit coils around the foe")
-        XCTAssertEqual(result?["fight"] as? Bool, false, "the battle ends")
-        XCTAssertNotEqual(result?["state"] as? String, "duel", "back to its usual life (idle, a walk, ...)")
+        return try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+    }
+
+    func testABattleThrowsEachDigimonsOwnMove() async throws {
+        let result = try await battle(me: "algomonadult", foe: "greymon")
+        XCTAssertEqual(Set(result["shots"] as? [String] ?? []), ["me:bind", "foe:fire"])
+        XCTAssertTrue((result["booms"] as? [String] ?? []).contains("bind"), "a binding hit coils around the foe")
+        XCTAssertEqual(result["fight"] as? Bool, false, "the battle ends")
+        XCTAssertNotEqual(result["state"] as? String, "duel", "back to its usual life (idle, a walk, ...)")
+    }
+
+    /// The three shapes added for punches, beams and lightning fly and land in a battle.
+    func testMeleeBeamAndElectricMovesFlyAndLand() async throws {
+        let punchVsBolt = try await battle(me: "vmon", foe: "kabuterimon")
+        XCTAssertEqual(Set(punchVsBolt["shots"] as? [String] ?? []), ["me:melee", "foe:electric"])
+        XCTAssertTrue((punchVsBolt["booms"] as? [String] ?? []).contains("melee"), "a punch lands as an impact star")
+        XCTAssertEqual(punchVsBolt["held"] as? [String], ["electric"], "a bolt stays a moment where it struck")
+        let beam = try await battle(me: "hiandromon", foe: "vmon")
+        XCTAssertEqual(Set(beam["shots"] as? [String] ?? []), ["me:beam", "foe:melee"])
+        XCTAssertEqual(beam["held"] as? [String], ["beam"], "a beam stays a moment where it struck")
+        XCTAssertEqual(beam["fight"] as? Bool, false)
     }
 }

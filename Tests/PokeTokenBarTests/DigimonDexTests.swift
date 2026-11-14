@@ -49,7 +49,7 @@ final class DigimonDexTests: XCTestCase {
     func testEveryMoveUsesADrawnShape() throws {
         let page = DigimonSceneHTML.page
         let kinds = Set(page.matches(of: /kind: '(\w+)'\}/).map { String($0.1) })
-        XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind"])
+        XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind", "melee", "beam", "electric"])
         for kind in kinds where kind != "fire" {
             XCTAssertTrue(page.contains("  \(kind): ["), "no colors for \(kind)")
         }
@@ -65,7 +65,9 @@ final class DigimonDexTests: XCTestCase {
         }
         let expected = [
             "leomon": "fire",            // a lion-head ki shot from the fist, not claws
-            "hawkmon": "claw",           // pecks with its beak, not a fireball
+            "hawkmon": "melee",          // pecks with its beak, not a fireball
+            "vmon": "melee",             // swings both arms to punch
+            "tailmon": "melee",          // Cat Punch
             "commandramon": "missile",   // an assault rifle
             "blackwargreymon": "gaia",   // Dark Gaia Force: the sphere the shape is named after
             "algomonadult": "bind",      // tentacles from its mouth
@@ -73,8 +75,9 @@ final class DigimonDexTests: XCTestCase {
             "icedevimon": "claw",        // icy claws
             "rizegreymon": "missile",    // revolver shots
             "airdramon": "claw",         // vacuum blades from its wings
-            "metalseadramon": "fire",    // a beam from its snout
-            "wizarmon": "gaia",          // lightning from a thundercloud
+            "metalseadramon": "beam",    // a beam from its snout
+            "kabuterimon": "electric",   // a ball of electricity
+            "wizarmon": "electric",      // lightning from a thundercloud
         ]
         for (key, shape) in expected { XCTAssertEqual(kind(key), shape, key) }
     }

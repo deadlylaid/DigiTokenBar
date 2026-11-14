@@ -17,19 +17,22 @@ NODES = json.loads((HERE / "data" / "evolutions.json").read_text())["nodes"]
 
 # Checked in order: the first matching shape wins. The rules follow the 2026-11-14 review of every
 # move (research/move-shape-review.json): beams, lasers, cries and songs are a straight shot (fire);
-# punches, kicks, tackles and bites are melee (claw); a giant sphere, lightning from the sky or a
-# huge blast is gaia. Check new moves by eye: the words only point the way.
+# punches, kicks, tackles and bites are melee; lasers are beam; lightning is electric; a giant
+# sphere or a huge blast is gaia. Check new moves by eye: the words only point the way.
 SHAPES = [
     # Binding moves (tentacles, vines, threads, whips): a tendril that coils around the target.
     ("bind", r"\b(binds?|binding|entangl\w*|restrain\w*|wraps?|coils?|whips?|lash\w*|ensnar\w*|snares?|vines?|ivy|"
              r"threads?|silk|webs?|bandages?|tongues?)\b"),
     ("ice", r"\b(ice|icy|icicles?|freez\w*|frost\w*|snow\w*|blizzard|cold|hail|frozen|diamond dust)\b"),
+    ("electric", r"\b(lightning|thunder\w*|electri\w*|static|shocks?|volts?|plasma)\b"),
+    ("beam", r"\b(beams?|lasers?|rays?)\b"),
     ("missile", r"\b(missiles?|rockets?|bullets?|guns?|gunfire|rifles?|revolvers?|gatling|autocannon|bombs?|torpedo\w*|"
                 r"grenades?|arrows?|darts?|needles?|quills?|projectiles?|throws?|hurls?|thrown)\b"),
-    ("claw", r"\b(claws?|slash\w*|blades?|swords?|cuts?|scratch\w*|kicks?|punch\w*|fists?|bites?|biting|pecks?|"
-             r"tackle\w*|rams?|ramming|headbutt\w*|horns?|spears?|lances?|slams?|charges?|charging|axes?|scythes?|"
-             r"hammers?|clubs?|stabs?|skewer\w*|pierc\w*|rush\w*|chops?|drills?|fangs?|talons?|lunges?|"
-             r"smash\w*|crush\w*|lariat|uppercut|slaps?|knife|knives|katana|mace)\b"),
+    ("melee", r"\b(kicks?|punch\w*|fists?|bites?|biting|pecks?|tackle\w*|rams?|ramming|headbutt\w*|slams?|charges?|"
+              r"charging|lariat|uppercut|slaps?|gores?|thrusts?|stabs?|skewer\w*|impal\w*|rush\w*|lunges?|smash\w*|"
+              r"crush\w*|hammers?|clubs?|mace)\b"),
+    ("claw", r"\b(claws?|slash\w*|blades?|swords?|cuts?|scratch\w*|axes?|scythes?|chops?|fangs?|talons?|knife|knives|"
+             r"katana|drills?|horns?|spears?|lances?)\b"),
     ("fire", r"\b(beams?|lasers?|rays?|breath\w*|spits?|spew\w*|bubbles?|sparks?|static|shots?|howl\w*|bark\w*|"
              r"cry|cries|songs?|sings?|voice|shout\w*|fireballs?|flames?|fire|blaze|burn\w*)\b"),
     ("gaia", r"\b(spheres?|orbs?|explo\w*|lightning|thunder\w*|meteors?|darkness|cosmic|black hole|tornado\w*|"

@@ -42,7 +42,7 @@ const moodSlow = () => S.mood === 'sick' ? .45 : S.mood === 'sleepy' ? .55 : 1;
 // Move names: Korean from the official Korean Digimon reference (digimon.net/reference_ko; Agumon
 // keeps 꼬마 불꽃 from its reference text and the Korean dub), English from the Japanese originals
 // (digimon.net/reference_en, or Wikimon where reference_en uses a dub name). Checked 2026-11-10.
-// The kind picks one of the six drawn attack shapes. Species without an entry use a plain attack.
+// The kind picks one of the nine drawn attack shapes. Species without an entry use a plain attack.
 const MOVES = {
 \#(DigimonMovesData.js)
 };
@@ -61,9 +61,13 @@ const PAL = {
   claw: ['#ffffff', '#c9f1ff', '#6fb7ff'],
   ice: ['#ffffff', '#c7f3ff', '#59b4ff'],
   bind: ['#f6e9ff', '#b685e8', '#5e3a8f'],
+  melee: ['#ffffff', '#ffe28a', '#f2a03a'],
+  beam: ['#ffffff', '#a8ecff', '#3a9ee8'],
+  electric: ['#ffffff', '#fff27a', '#f0b400'],
 };
 // Timing per attack shape: [charge, release, recover] (ms)
-const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380], bind: [240, 140, 420]};
+const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380], bind: [240, 140, 420],
+                melee: [200, 170, 360], beam: [380, 260, 380], electric: [260, 160, 380]};
 // Bug enemy drawn in code (11x8, two leg frames)
 const BUG = [[
   "...k...k...",
@@ -149,7 +153,12 @@ class Pet {
     if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6; pal = PAL.claw; }
     if (kind === 'ice') { speed = 135; r = 5; pal = PAL.ice; }
     if (kind === 'bind') { my = gy - h * .55; speed = 210; r = 2.5; pal = PAL.bind; }
-    return {kind, x: mx, y: my, ox: mx, vx: f * speed, vy: 0, r, pal, t: 0};
+    // A punch or charge: a fast shock ahead of the lunge, an impact star where it lands.
+    if (kind === 'melee') { my = gy - h * .5; speed = 300; r = 5; pal = PAL.melee; }
+    // A beam and a bolt: a line from where they start to their tip, which stays a moment on a hit.
+    if (kind === 'beam') { my = gy - h * .62; speed = 460; r = 3; pal = line ? (PAL['fire_' + line] || PAL.beam) : PAL.beam; }
+    if (kind === 'electric') { my = gy - h * .6; speed = 520; r = 3; pal = PAL.electric; }
+    return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0};
   }
   fire(kind, n = 0) {
     const s = this.shotFrom(kind, this.x, this.bb(), this.facing, S.line, n, this.y, this.lean), f = this.facing;
@@ -162,15 +171,16 @@ class Pet {
       s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
     }
     this.shots.push(s);
-    if (kind !== 'bind') for (let i = 0; i < 6; i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: 1});
+    if (kind !== 'bind' && kind !== 'melee') for (let i = 0; i < 6; i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: 1});
   }
   boom(x, y, s) {
     if (s.kind === 'gaia') this.flash = Math.max(this.flash, .45);
+    if (s.kind === 'electric') this.flash = Math.max(this.flash, .22);
     // A binding move coils around the target instead of bursting, sized to the target's body.
     const body = s.body, coil = s.kind === 'bind' && body
       ? {y: this.ground() - (body.b - body.t) * .48, rx: (body.r - body.l) * .42, gap: (body.b - body.t) * .17} : {};
     this.booms.push(Object.assign({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal, kind: s.kind,
-                                   life: s.kind === 'bind' ? 650 : 320}, coil));
+                                   life: s.kind === 'bind' ? 650 : s.kind === 'melee' ? 300 : 320}, coil));
     for (let i = 0; i < 12; i++) { const a = TAU * i / 12, sp = rand(20, 55); this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? 2 : 1}); }
   }
   // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
@@ -178,6 +188,11 @@ class Pet {
     const fromLeft = Math.random() < .5, big = Math.random() < 1 / 6, sc = big ? 2 : 1;
     this.bug = {x: fromLeft ? -11 * sc - 1 : this.worldW + 1, dir: fromLeft ? 1 : -1, t: 0, dead: false, noticed: false,
                 big, sc, hp: big ? 3 : 1, hit: 0};
+  }
+  pixLine(c, x0, y0, x1, y1, w, col) {
+    const n = Math.max(1, Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)))), o = Math.floor(w / 2);
+    c.fillStyle = col;
+    for (let i = 0; i <= n; i++) c.fillRect(Math.round(x0 + (x1 - x0) * i / n) - o, Math.round(y0 + (y1 - y0) * i / n) - o, w, w);
   }
   pixBall(c, x, y, r, col) {
     c.fillStyle = col; const R = Math.ceil(r), cx = Math.round(x), cy = Math.round(y);
@@ -358,13 +373,14 @@ class Pet {
     }
     this.parts = this.parts.filter(p => { p.t += dt; p.x += p.vx * dt / 1000; p.y += p.vy * dt / 1000; p.vy += 60 * dt / 1000; return p.t < p.life; });
     this.shots = this.shots.filter(s => {
+      if (s.hold !== undefined) { s.t += dt; s.hold -= dt; return s.hold > 0; }   // a landed beam or bolt lingers
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
         if (Math.random() < .9) this.parts.push({x: s.x + back * 5, y: s.y + rand(-.5, .5), vx: back * rand(4, 12), vy: rand(-8, -2), t: 0, life: rand(300, 550), c: Math.random() < .3 ? '#ffb53b' : (Math.random() < .5 ? '#c8ccd4' : '#9aa0aa'), s: Math.random() < .5 ? 2 : 1});
       } else if (s.kind === 'ice') {
         for (let i = 0; i < 2; i++) this.parts.push({x: s.x + back * rand(0, s.r * 1.5), y: s.y + rand(-s.r, s.r), vx: s.vx * .1, vy: rand(-6, 6), t: 0, life: rand(250, 500), c: Math.random() < .5 ? '#ffffff' : '#c7f3ff', s: Math.random() < .5 ? 2 : 1});
-      } else if (s.kind !== 'claw' && s.kind !== 'bind') {
+      } else if (!['claw', 'bind', 'melee', 'beam', 'electric'].includes(s.kind)) {
         for (let i = 0; i < (s.kind === 'gaia' ? 2 : 1); i++) if (Math.random() < .75) this.parts.push({x: s.x + back * s.r * .7 + rand(-1, 1), y: s.y + rand(-s.r * .5, s.r * .5), vx: -s.vx * .05, vy: rand(-14, -4), t: 0, life: rand(200, 380), c: s.pal[Math.random() < .5 ? 1 : 2], s: 1});
       }
       if (s.duel) {
@@ -373,9 +389,10 @@ class Pet {
           if (s.hit) {
             this.boom(s.x, s.y, s);
             if (this.fight) { if (s.mine) this.fight.foeHurt = 520; else this.fight.hurt = 520; }
+            if (s.kind === 'beam' || s.kind === 'electric') { s.hold = 220; return true; }
             return false;
           }
-          if (s.kind === 'bind') return false;   // a missed tendril falls away
+          if (s.kind === 'bind' || s.kind === 'melee') return false;   // a missed tendril or punch is gone
         }
         return s.x > -12 && s.x < this.worldW + 12;
       }
@@ -386,6 +403,7 @@ class Pet {
         g.hp -= 1; g.hit = 220;
         if (g.hp <= 0) { g.dead = true; g.t = 0; post({cmd: 'bugDefeated', count: g.big ? 3 : 1}); }
         else g.x -= g.dir * 6;   // knocked back, still coming
+        if (s.kind === 'beam' || s.kind === 'electric') { s.hold = 220; return true; }
         return false;
       }
       if (s.x < 3 || s.x > this.worldW - 3 || s.y > this.ground()) { this.boom(s.x, Math.min(s.y, this.ground() - 2), s); return false; }
@@ -427,16 +445,20 @@ class Pet {
           const p = t / w;
           if (k === 'gaia') { this.sy = 1 + .08 * p; this.sx = 1 - .04 * p; this.y = 1.5 * p; }
           else if (k === 'claw') { this.sy = 1 - .1 * p; this.sx = 1 + .06 * p; this.lean = -f * 1.2 * p; }
+          else if (k === 'melee') { this.sy = 1 - .1 * p; this.sx = 1 + .05 * p; this.lean = -f * 3 * p; }
+          else if (k === 'beam') { this.sy = 1 + .05 * p; this.sx = 1 - .03 * p; this.lean = -f * .8 * p; }
           else { this.lean = -f * 1.4 * p; this.sway = 1.6 * p; this.sy = 1 - .08 * p; this.sx = 1 + .05 * p; }
         } else if (t < t2) {
           const p = (t - t1) / s1;
           if (k === 'claw') { this.lean = f * (-1.2 + 7 * p); this.sx = 1.08; this.sy = .96; }
+          else if (k === 'melee') { this.lean = f * (-3 + 17 * Math.sin(Math.PI / 2 * p)); this.sx = 1.1; this.sy = .94; }
+          else if (k === 'beam') { this.lean = f * -1.5 * p; this.sy = 1.04; }
           else if (k === 'gaia') { this.lean = f * 2.5 * p; this.sway = -3 * p; this.sy = 1.08 - .12 * p; this.y = 1.5 * (1 - p); }
           else { this.lean = f * (-1.4 + 3.6 * p); this.sway = 1.6 - 4 * p; this.sy = .92 + .12 * p; this.sx = 1.05 - .07 * p; }
           if (!d.fired) { d.fired = true; d.ft = t; this.fire(k, 0); }
         } else if (t < t2 + rc) {
           const e = 1 - easeIO((t - t2) / rc);
-          this.lean = f * (k === 'claw' ? 5.8 : 2.2) * e; this.sway = (k === 'claw' ? 0 : -2.4) * e; this.sy = 1 + .04 * e;
+          this.lean = f * (k === 'claw' ? 5.8 : k === 'melee' ? 14 : 2.2) * e; this.sway = (k === 'claw' || k === 'melee' ? 0 : -2.4) * e; this.sy = 1 + .04 * e;
         } else if (this.fight) { this.fight.pending = null; this.enter('duel', {}); }
         else this.enter('idle', {dur: rand(700, 1500)});
         if (k === 'missile' && d.fired && !d.fired2 && t - d.ft >= 130) { d.fired2 = true; this.fire('missile', 1); }
@@ -574,6 +596,13 @@ class Pet {
     }
 
     if (!desk && this.dim > 0) { c.fillStyle = `rgba(12,16,34,${.38 * this.dim})`; c.fillRect(0, 0, W, H); }
+    if (this.state === 'attack' && this.d.kind === 'beam' && !this.d.fired) {
+      // Light gathers in front of the mouth before the beam.
+      const p = Math.min(1, this.t / TIMING.beam[0]), r = 1 + 3.5 * p + Math.sin(this.t / 25) * .5 * p;
+      const pal = PAL['fire_' + S.line] || PAL.beam, bx = this.facing < 0 ? this.x + bb.l + this.lean : this.x + bb.r + this.lean;
+      const by = gy - this.y - hgt * .62;
+      this.pixBall(c, bx, by, r, pal[2]); this.pixBall(c, bx, by, r * .6, pal[1]); this.pixBall(c, bx, by, r * .3, pal[0]);
+    }
     if (this.state === 'attack' && this.d.kind === 'gaia' && !this.d.fired) {
       const p = easeIO(Math.min(1, this.t / TIMING.gaia[0])), r = 9 * p + Math.sin(this.t / 30) * .5 * p;
       const bx = cx + this.facing * 4, by = gy - this.y - hgt - 9;
@@ -594,6 +623,32 @@ class Pet {
           c.fillStyle = s.pal[2]; c.fillRect(px + back, py, 1, 1);
           c.fillStyle = s.pal[0]; c.fillRect(px, py, 1, 1);
         }
+      } else if (s.kind === 'beam') {
+        const fade = s.hold !== undefined ? Math.max(0, s.hold / 220) : 1;
+        c.globalAlpha = fade;
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, 5, s.pal[2]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, 3, s.pal[1]);
+        this.pixLine(c, s.ox, s.oy, s.x, s.y, 1, s.pal[0]);
+        this.pixBall(c, s.ox, s.oy, 3.2, s.pal[1]); this.pixBall(c, s.ox, s.oy, 1.6, s.pal[0]);
+        c.globalAlpha = 1;
+      } else if (s.kind === 'electric') {
+        // A jagged bolt, new zigzags every frame so it flickers.
+        const dx = s.x - s.ox, dy = s.y - s.oy, len = Math.hypot(dx, dy) || 1, nx = -dy / len, ny = dx / len;
+        const pts = [[s.ox, s.oy]];
+        for (let i = 6; i < len - 3; i += 6) { const j = rand(-4, 4); pts.push([s.ox + dx * i / len + nx * j, s.oy + dy * i / len + ny * j]); }
+        pts.push([s.x, s.y]);
+        c.globalAlpha = s.hold !== undefined ? Math.max(0, s.hold / 220) : 1;
+        for (let i = 1; i < pts.length; i++) {
+          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], 3, s.pal[2]);
+          this.pixLine(c, pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], 1, s.pal[0]);
+        }
+        c.globalAlpha = 1;
+      } else if (s.kind === 'melee') {
+        // The shock of a punch or charge, with speed lines behind it.
+        const back = -Math.sign(s.vx) || -1;
+        c.fillStyle = s.pal[1];
+        for (let k = -1; k <= 1; k++) c.fillRect(Math.round(s.x + back * (5 + Math.abs(k) * 3) - (back < 0 ? 7 : 0)), Math.round(s.y + k * 3), 7, 1);
+        this.pixBall(c, s.x, s.y, 2.6, s.pal[2]); this.pixBall(c, s.x, s.y, 1.4, s.pal[0]);
       } else if (s.kind === 'bind') {
         // A wavy tendril from where it was thrown to its tip.
         const dir = Math.sign(s.vx) || 1, len = Math.abs(s.x - s.ox);
@@ -618,6 +673,21 @@ class Pet {
       }
     }
     for (const b of this.booms) {
+      if (b.kind === 'melee') {
+        // An impact star: eight spikes, long and short, flung out and fading.
+        const p = b.t / b.life, R = 4 + 10 * Math.min(1, p * 2.4);
+        c.globalAlpha = 1 - p * p;
+        for (let a = 0; a < 8; a++) {
+          const ang = a * TAU / 8 + .2, len = a % 2 ? R * .55 : R;
+          for (let i = 2; i < len; i++) {
+            c.fillStyle = i < len * .5 ? b.pal[0] : b.pal[1];
+            c.fillRect(Math.round(b.x + Math.cos(ang) * i), Math.round(b.y + Math.sin(ang) * i), 1, 1);
+          }
+        }
+        c.fillStyle = b.pal[0]; c.fillRect(Math.round(b.x) - 1, Math.round(b.y) - 1, 3, 3);
+        c.globalAlpha = 1;
+        continue;
+      }
       if (b.kind === 'bind') {
         // Three loops wound around the target, tightening, then fading.
         const p = b.t / b.life, squeeze = 1 - .25 * Math.min(1, p * 3);
