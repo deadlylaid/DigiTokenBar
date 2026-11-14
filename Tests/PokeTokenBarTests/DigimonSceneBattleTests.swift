@@ -74,4 +74,16 @@ final class DigimonSceneBattleTests: XCTestCase {
         XCTAssertEqual(beam["held"] as? [String], ["beam"], "a beam stays a moment where it struck")
         XCTAssertEqual(beam["fight"] as? Bool, false)
     }
+
+    /// The shapes for gas, waves, wind, water, light, flocks, hearts and quakes fly and land.
+    func testTheOtherShapesFlyAndLand() async throws {
+        for (me, foe, mine, theirs) in [("hydramon", "etemon", "gas", "wave"), ("kyukimon", "shellmon", "wind", "water"),
+                                         ("hououmon", "vamdemon", "light", "swarm"), ("monzaemon", "breakdramon", "heart", "quake")] {
+            let result = try await battle(me: me, foe: foe)
+            XCTAssertEqual(Set(result["shots"] as? [String] ?? []), ["me:\(mine)", "foe:\(theirs)"], "\(me) vs \(foe)")
+            let booms = Set(result["booms"] as? [String] ?? [])
+            XCTAssertTrue(booms.isSuperset(of: [mine, theirs]), "\(me) vs \(foe): each lands with its own effect, got \(booms)")
+            XCTAssertEqual(result["fight"] as? Bool, false, "\(me) vs \(foe) ends")
+        }
+    }
 }

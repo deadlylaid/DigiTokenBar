@@ -26,6 +26,15 @@ SHAPES = [
     ("ice", r"\b(ice|icy|icicles?|freez\w*|frost\w*|snow\w*|blizzard|cold|hail|frozen|diamond dust)\b"),
     ("electric", r"\b(lightning|thunder\w*|electri\w*|static|shocks?|volts?|plasma)\b"),
     ("beam", r"\b(beams?|lasers?|rays?)\b"),
+    ("gas", r"\b(poison\w*|gas|smoke\w*|steam|mist|spores?|pollen|powder|fumes?|scales)\b"),
+    ("wave", r"\b(sound\w*|songs?|sings?|singing|howl\w*|roar\w*|cry|cries|voice|ultrasonic|shockwaves?|"
+             r"vibrations?|telepath\w*|hypno\w*|sleep|gaze|bark\w*)\b"),
+    ("wind", r"\b(winds?|tornado\w*|whirlwind|gusts?|twisters?|cyclone)\b"),
+    ("water", r"\b(water|jets?|whirlpools?|hydro\w*|squirts?)\b"),
+    ("heart", r"\b(hearts?)\b"),
+    ("swarm", r"\b(bats|swarm\w*|familiars|foxes|spirits|soldiers|followers|flock)\b"),
+    ("quake", r"\b(earthquakes?|tremors?|fissures?|ground)\b"),
+    ("light", r"\b(holy light|sunlight|starlight|particles of light|radiance)\b"),
     ("missile", r"\b(missiles?|rockets?|bullets?|guns?|gunfire|rifles?|revolvers?|gatling|autocannon|bombs?|torpedo\w*|"
                 r"grenades?|arrows?|darts?|needles?|quills?|projectiles?|throws?|hurls?|thrown)\b"),
     ("melee", r"\b(kicks?|punch\w*|fists?|bites?|biting|pecks?|tackle\w*|rams?|ramming|headbutt\w*|slams?|charges?|"

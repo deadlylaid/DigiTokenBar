@@ -45,15 +45,20 @@ final class DigimonDexTests: XCTestCase {
 
     /// Every Digimon must have its own named attack in the pet scene, so a catalog change cannot
     /// silently fall back to the plain "Attack".
-    /// The shape of every move is one the scene can draw (it has colors and timing for it).
+    /// The shape of every move is one the scene can draw (it has colors and timing for it), and
+    /// every tint has its colors.
     func testEveryMoveUsesADrawnShape() throws {
         let page = DigimonSceneHTML.page
-        let kinds = Set(page.matches(of: /kind: '(\w+)'\}/).map { String($0.1) })
-        XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind", "melee", "beam", "electric"])
+        let kinds = Set(page.matches(of: /kind: '(\w+)'/).map { String($0.1) })
+        XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind", "melee", "beam", "electric",
+                               "gas", "wave", "wind", "water", "light", "swarm", "heart", "quake"])
         for kind in kinds where kind != "fire" {
             XCTAssertTrue(page.contains("  \(kind): ["), "no colors for \(kind)")
         }
         for kind in kinds { XCTAssertTrue(page.contains("\(kind): ["), "no timing for \(kind)") }
+        let tints = Set(page.matches(of: /tint: '(\w+)'/).map { String($0.1) })
+        XCTAssertFalse(tints.isEmpty)
+        for tint in tints { XCTAssertTrue(page.contains("tint_\(tint): ["), "no colors for the tint \(tint)") }
     }
 
     /// Shapes fixed in the 2026-11-14 review (tools/digimon/research/move-shape-review.json): each
@@ -78,6 +83,14 @@ final class DigimonDexTests: XCTestCase {
             "metalseadramon": "beam",    // a beam from its snout
             "kabuterimon": "electric",   // a ball of electricity
             "wizarmon": "electric",      // lightning from a thundercloud
+            "hydramon": "gas",           // poison gas from the mouth on its chest
+            "etemon": "wave",            // a song
+            "terriermon": "wind",        // a tiny tornado from its ears
+            "shellmon": "water",         // a high-pressure water jet
+            "hououmon": "light",         // golden particles of light
+            "vamdemon": "swarm",         // a swarm of bats
+            "monzaemon": "heart",        // shoots hearts
+            "breakdramon": "quake",      // pounds the ground
         ]
         for (key, shape) in expected { XCTAssertEqual(kind(key), shape, key) }
     }

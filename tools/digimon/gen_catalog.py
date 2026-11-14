@@ -174,7 +174,8 @@ def write_moves(keys):
     for k in keys:
         m = MOVES.get(k)
         if m:
-            rows.append(f"  {k}: {{ko: {js_str(m['ko'])}, en: {js_str(m['en'])}, kind: {js_str(m['kind'])}}},")
+            tint = f", tint: {js_str(m['tint'])}" if m.get("tint") else ""
+            rows.append(f"  {k}: {{ko: {js_str(m['ko'])}, en: {js_str(m['en'])}, kind: {js_str(m['kind'])}{tint}}},")
     body = "\n".join(rows)
     if '"""#' in body or "\\#(" in body:
         raise SystemExit("a move name would break the Swift raw string")

@@ -265,6 +265,304 @@
     "blacktailmonuver": "melee",
     "saviorhuckmon": "melee"
    }
+  },
+  "moreShapes": {
+   "date": "2026-11-14",
+   "note": "Eight more shapes (gas, wave, wind, water, light, swarm, heart, quake) and tints for the moves left on a closest shape; three more melee.",
+   "moves": {
+    "babydmon": {
+     "kind": "gas",
+     "tint": "heat"
+    },
+    "chamblemon": {
+     "kind": "gas",
+     "tint": "pollen"
+    },
+    "devitamamon": {
+     "kind": "gas",
+     "tint": "dark"
+    },
+    "dokugumon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "hydramon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "locomon": {
+     "kind": "gas",
+     "tint": "smoke"
+    },
+    "mokumon": {
+     "kind": "gas",
+     "tint": "smoke"
+    },
+    "morphomon": {
+     "kind": "gas",
+     "tint": "pollen"
+    },
+    "orochimon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "parasaurmon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "pharaohmon": {
+     "kind": "gas",
+     "tint": "dark"
+    },
+    "pokomon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "proximamon": {
+     "kind": "gas",
+     "tint": "dark"
+    },
+    "sangomon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "scorpiomon": {
+     "kind": "gas",
+     "tint": null
+    },
+    "toropiamon": {
+     "kind": "gas",
+     "tint": "pollen"
+    },
+    "sunamon": {
+     "kind": "gas",
+     "tint": "dust"
+    },
+    "bommon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "bowmon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "dogmon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "etemon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "fusamon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "indaramon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "megidramon": {
+     "kind": "wave",
+     "tint": "dark"
+    },
+    "pajiramon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "parrotmon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "plesiomon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "upamon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "volcamon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "wendimon": {
+     "kind": "wave",
+     "tint": "dark"
+    },
+    "anomalocarimon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "anomalocarimonxantibody": {
+     "kind": "wave",
+     "tint": null
+    },
+    "jewelbeemon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "cyberdramon": {
+     "kind": "wave",
+     "tint": null
+    },
+    "digitamamon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "dracumon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "exermon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "kingetemon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "phascomon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "phelesmon": {
+     "kind": "wave",
+     "tint": "dark"
+    },
+    "ravmonburstmode": {
+     "kind": "wave",
+     "tint": "dark"
+    },
+    "bastemon": {
+     "kind": "wave",
+     "tint": "psychic"
+    },
+    "kyukimon": {
+     "kind": "wind",
+     "tint": null
+    },
+    "terriermon": {
+     "kind": "wind",
+     "tint": null
+    },
+    "sakuyamonxantibody": {
+     "kind": "wind",
+     "tint": "petal"
+    },
+    "poromon": {
+     "kind": "wind",
+     "tint": "dust"
+    },
+    "garudamon": {
+     "kind": "wind",
+     "tint": null
+    },
+    "bokomon": {
+     "kind": "wind",
+     "tint": "dust"
+    },
+    "keemon": {
+     "kind": "water",
+     "tint": null
+    },
+    "shellmon": {
+     "kind": "water",
+     "tint": null
+    },
+    "marinchimairamon": {
+     "kind": "water",
+     "tint": null
+    },
+    "holydramon": {
+     "kind": "light",
+     "tint": null
+    },
+    "hououmon": {
+     "kind": "light",
+     "tint": null
+    },
+    "relemon": {
+     "kind": "light",
+     "tint": null
+    },
+    "neovamdemon": {
+     "kind": "swarm",
+     "tint": null
+    },
+    "vamdemon": {
+     "kind": "swarm",
+     "tint": null
+    },
+    "kuzuhamon": {
+     "kind": "swarm",
+     "tint": "spirit"
+    },
+    "kuzuhamonmikomode": {
+     "kind": "swarm",
+     "tint": "spirit"
+    },
+    "sakuyamon": {
+     "kind": "swarm",
+     "tint": "spirit"
+    },
+    "arkhaiangemon": {
+     "kind": "swarm",
+     "tint": "spirit"
+    },
+    "valvemon": {
+     "kind": "swarm",
+     "tint": "metal"
+    },
+    "bigmamemon": {
+     "kind": "swarm",
+     "tint": "metal"
+    },
+    "renamon": {
+     "kind": "swarm",
+     "tint": "leaf"
+    },
+    "extyranomon": {
+     "kind": "heart",
+     "tint": null
+    },
+    "monzaemon": {
+     "kind": "heart",
+     "tint": null
+    },
+    "breakdramon": {
+     "kind": "quake",
+     "tint": null
+    },
+    "caturamon": {
+     "kind": "quake",
+     "tint": null
+    },
+    "mihiramon": {
+     "kind": "quake",
+     "tint": null
+    },
+    "vajramon": {
+     "kind": "quake",
+     "tint": null
+    },
+    "cerberumon": {
+     "kind": "quake",
+     "tint": "dark"
+    },
+    "loaderleomon": {
+     "kind": "melee",
+     "tint": null
+    },
+    "rareraremon": {
+     "kind": "melee",
+     "tint": null
+    },
+    "vikaralamon": {
+     "kind": "melee",
+     "tint": null
+    }
+   }
   }
  },
  "reviews": [
