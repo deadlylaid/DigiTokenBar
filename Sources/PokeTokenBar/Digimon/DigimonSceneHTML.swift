@@ -185,11 +185,13 @@ class Pet {
   }
   // One move's projectile from a Digimon at x (box b, facing f, lifted by lift). Bug attacks and
   // battles both use it, so a move looks the same everywhere.
-  shotFrom(kind, x, b, f, line, n = 0, lift = 0, lean = 0, tint = null) {
+  shotFrom(kind, x, b, f, line, n = 0, lift = 0, lean = 0, tint = null, stage = S.stage) {
     const gy = this.ground() - lift, h = b.b - b.t, st = Math.max(1, S.stage - 2);
     let mx = (f < 0 ? x + b.l : x + b.r) + lean, my = gy - h * .66;
     let speed = 110 + st * 12, r = 2.6 + st, pal = linePal(line) || PAL.fire_agumon;
-    if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 150; r = 3; pal = PAL.missile; }
+    // A missile grows with the stage of whoever fires it, starts slow and speeds up.
+    const mk = stage <= 3 ? 1 : stage === 4 ? 1.3 : stage === 5 ? 1.7 : 2.1;
+    if (kind === 'missile') { my = gy - h * (.5 - n * .12); speed = 110; r = 3 * mk; pal = PAL.missile; }
     if (kind === 'gaia') { mx = x + (b.l + b.r) / 2 + f * 4; my = gy - h - 9; speed = 95; r = 9; pal = PAL.gaia; }
     if (kind === 'claw') { my = gy - h * .5; speed = 170; r = 6; pal = PAL.claw; }
     if (kind === 'ice') { speed = 135; r = 5; pal = PAL.ice; }
@@ -210,7 +212,7 @@ class Pet {
     if (kind === 'heart') { my = gy - h * .6; speed = 130; r = 4; pal = PAL.heart; }
     if (kind === 'quake') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 2 + lift; speed = 170; r = 5; pal = PAL.quake; }
     if (tint && PAL['tint_' + tint]) pal = PAL['tint_' + tint];
-    return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0};
+    return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0, size: kind === 'missile' ? mk : 1};
   }
   fire(kind, n = 0) {
     const s = this.shotFrom(kind, this.x, this.bb(), this.facing, S.line, n, this.y, this.lean, moveOf(this.key).tint), f = this.facing;
@@ -223,17 +225,25 @@ class Pet {
       s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
     }
     this.shots.push(s);
+    if (kind === 'missile') this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});   // launch flash
     if (!SOFT.includes(kind)) for (let i = 0; i < 6; i++) this.parts.push({x: s.x, y: s.y, vx: f * rand(10, 40), vy: rand(-25, 10), t: 0, life: rand(250, 450), c: s.pal[1], s: 1});
   }
   boom(x, y, s) {
     if (s.kind === 'gaia') this.flash = Math.max(this.flash, .45);
     if (s.kind === 'electric' || s.kind === 'light') this.flash = Math.max(this.flash, .22);
     if (s.kind === 'quake') this.shake = 260;
+    if (s.kind === 'missile') {
+      const k = s.size || 1;
+      this.flash = Math.max(this.flash, .08 * k);
+      if (k >= 1.7) this.shake = Math.max(this.shake || 0, 200);   // a Perfect's or Ultimate's missile shakes the scene
+      for (let i = 0; i < 8 * k; i++) { const a = rand(0, TAU), sp = rand(25, 70) * k; this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 20, t: 0, life: rand(300, 650), c: Math.random() < .5 ? '#5b616c' : '#ffb53b', s: Math.random() < .5 ? 2 : 1}); }
+    }
     // A binding move coils around the target instead of bursting, sized to the target's body.
     const body = s.body, coil = s.kind === 'bind' && body
       ? {y: this.ground() - (body.b - body.t) * .48, rx: (body.r - body.l) * .42, gap: (body.b - body.t) * .17} : {};
     this.booms.push(Object.assign({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal, kind: s.kind,
-                                   life: ({bind: 650, melee: 300, gas: 760, wind: 460, quake: 480, light: 440, swarm: 460, heart: 520}[s.kind]) || 320}, coil));
+                                   life: ({bind: 650, melee: 300, gas: 760, wind: 460, quake: 480, light: 440, swarm: 460, heart: 520, missile: 600}[s.kind]) || 320,
+                                   size: s.size || 1}, coil));
     if (!['gas', 'wave', 'wind', 'heart', 'swarm'].includes(s.kind)) for (let i = 0; i < 12; i++) { const a = TAU * i / 12, sp = rand(20, 55); this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? 2 : 1}); }
   }
   // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
@@ -360,7 +370,7 @@ class Pet {
     const W = this.worldW, onLeft = this.x + 32 < W / 2;
     this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
     this.facing = onLeft ? 1 : -1;
-    this.fight = {foe: c.foe, rounds: c.rounds || [], won: !!c.won, i: 0, t: -650, fx: onLeft ? W * .75 - 32 : W * .25 - 32,
+    this.fight = {foe: c.foe, stage: c.foeStage || S.stage, rounds: c.rounds || [], won: !!c.won, i: 0, t: -650, fx: onLeft ? W * .75 - 32 : W * .25 - 32,
                   dir: onLeft ? -1 : 1, alpha: 0, hurt: 0, foeHurt: 0, lunge: 0, done: 0, pending: null};
     this.enter('duel', {});
   }
@@ -386,9 +396,15 @@ class Pet {
         this.enter('attack', {kind: atk.kind, name: atk.name});
       } else {
         const fb = assets[F.foe].bb, mb = this.bb();
-        const fm = moveOf(F.foe), s = this.shotFrom(fm.kind, F.fx, fb, F.dir, '', 0, 0, 0, fm.tint);
+        const fm = moveOf(F.foe), s = this.shotFrom(fm.kind, F.fx, fb, F.dir, '', 0, 0, 0, fm.tint, F.stage);
         Object.assign(s, {duel: true, mine: false, hit: !!r.hit, tx: this.x + (mb.l + mb.r) / 2, body: mb});
         this.shots.push(s);
+        if (fm.kind === 'missile') {
+          const s2 = this.shotFrom('missile', F.fx, fb, F.dir, '', 1, 0, 0, fm.tint, F.stage);
+          Object.assign(s2, {duel: true, mine: false, hit: !!r.hit, tx: s.tx, body: mb, x: s2.x - F.dir * 14 * s2.size});
+          this.shots.push(s2);
+          this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});
+        }
         F.lunge = 260;
       }
     } else if (!this.shots.some(s => s.duel)) {
@@ -437,7 +453,15 @@ class Pet {
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
-        if (Math.random() < .9) this.parts.push({x: s.x + back * 5, y: s.y + rand(-.5, .5), vx: back * rand(4, 12), vy: rand(-8, -2), t: 0, life: rand(300, 550), c: Math.random() < .3 ? '#ffb53b' : (Math.random() < .5 ? '#c8ccd4' : '#9aa0aa'), s: Math.random() < .5 ? 2 : 1});
+        // Speeds up; against a bug it steers to it (the speed changes, so the aim is redone).
+        const k = s.size || 1, sp = Math.min(300, Math.abs(s.vx) + 300 * dt / 1000);
+        s.vx = (Math.sign(s.vx) || 1) * sp;
+        const g = this.bug;
+        if (!s.duel && g && !g.dead) s.vy = (this.ground() - 4 * g.sc - s.y) / Math.max(.06, Math.abs(g.x + 5 * g.sc - s.x) / sp);
+        // A thick smoke trail with sparks from the exhaust.
+        const tail = s.x + back * 5 * k;
+        for (let i = 0; i < Math.ceil(k * 1.5); i++) this.parts.push({x: tail + back * rand(0, 3 * k), y: s.y + rand(-k, k), vx: back * rand(3, 10), vy: rand(-10, -2), t: 0, life: rand(380, 700), c: Math.random() < .5 ? '#d5d9df' : '#9aa0aa', s: Math.random() < .5 ? Math.round(2 * k) : Math.round(1.5 * k) || 1});
+        if (Math.random() < .5) this.parts.push({x: tail, y: s.y, vx: back * rand(10, 25), vy: rand(-6, 6), t: 0, life: rand(120, 220), c: Math.random() < .5 ? '#ffb53b' : '#fff3c4', s: 1});
       } else if (s.kind === 'ice') {
         for (let i = 0; i < 2; i++) this.parts.push({x: s.x + back * rand(0, s.r * 1.5), y: s.y + rand(-s.r, s.r), vx: s.vx * .1, vy: rand(-6, 6), t: 0, life: rand(250, 500), c: Math.random() < .5 ? '#ffffff' : '#c7f3ff', s: Math.random() < .5 ? 2 : 1});
       } else if (s.kind === 'light') {
@@ -674,11 +698,16 @@ class Pet {
     for (const s of this.shots) {
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
-        c.save(); c.translate(s.x, s.y); c.rotate(Math.atan2(s.vy, s.vx));
-        c.fillStyle = '#ffb53b'; c.fillRect(-6, -.5, 2, 1);
-        c.fillStyle = '#5b616c'; c.fillRect(-4, -1.5, 1, 3);
-        c.fillStyle = '#d5dae2'; c.fillRect(-4, -1, 6, 2);
-        c.fillStyle = '#e0452c'; c.fillRect(2, -1, 2, 2);
+        // A rocket that scales with the stage: flickering exhaust, fins, a body with a highlight, a red nose.
+        const k = s.size || 1, L = Math.round(8 * k), H = Math.max(2, Math.round(2.4 * k)), F = Math.round((3 + Math.random() * 3) * k);
+        c.save(); c.translate(Math.round(s.x), Math.round(s.y)); c.rotate(Math.atan2(s.vy, s.vx));
+        c.fillStyle = '#ffb53b'; c.fillRect(-L / 2 - F, -Math.ceil(H / 3), F, Math.ceil(H * .66));
+        c.fillStyle = '#fff3c4'; c.fillRect(-L / 2 - Math.ceil(F / 2), -Math.ceil(H / 6), Math.ceil(F / 2), Math.max(1, Math.ceil(H / 3)));
+        c.fillStyle = '#5b616c'; c.fillRect(-L / 2, -H / 2 - Math.round(k), Math.max(1, Math.round(2 * k)), H + 2 * Math.round(k));
+        c.fillStyle = '#9aa0aa'; c.fillRect(-L / 2, -H / 2, L, H);
+        c.fillStyle = '#d5dae2'; c.fillRect(-L / 2, -H / 2, L, Math.max(1, Math.round(H * .4)));
+        c.fillStyle = '#e0452c'; c.fillRect(L / 2, -H / 2, Math.max(1, Math.round(2 * k)), H);
+        c.fillRect(L / 2 + Math.max(1, Math.round(2 * k)), -Math.ceil(H / 4), Math.max(1, Math.round(k)), Math.max(1, Math.ceil(H / 2)));
         c.restore();
       } else if (s.kind === 'claw') {
         for (let i = -1; i <= 1; i++) for (let k = 0; k < 10; k++) {
@@ -806,6 +835,21 @@ class Pet {
     }
     for (const b of this.booms) {
       const bp = b.t / (b.life || 320);
+      if (b.kind === 'missile') {
+        // A fireball that swells fast, then smoke rolling up and out.
+        const k = b.size || 1, R = (3 + 7 * Math.min(1, bp * 3)) * k;
+        if (bp < .55) {
+          c.globalAlpha = 1 - bp / .55;
+          this.pixBall(c, b.x, b.y, R, '#e0452c'); this.pixBall(c, b.x, b.y, R * .72, '#ffb53b'); this.pixBall(c, b.x, b.y, R * .4, '#fff3c4');
+        }
+        c.globalAlpha = Math.max(0, .75 * (1 - bp));
+        for (let i = 0; i < 6; i++) {
+          const a = i * TAU / 6 + .4, d = R * (.55 + bp * .9);
+          this.pixBall(c, b.x + Math.cos(a) * d, b.y + Math.sin(a) * d * .6 - bp * 7 * k, (1.5 + 2.5 * bp) * k, i % 2 ? '#d5d9df' : '#9aa0aa');
+        }
+        c.globalAlpha = 1;
+        continue;
+      }
       if (b.kind === 'gas') {
         // The cloud wraps the target, spreads and thins out.
         const R = 5 + 8 * Math.min(1, bp * 2);

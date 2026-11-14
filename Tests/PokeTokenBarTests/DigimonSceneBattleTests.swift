@@ -125,4 +125,31 @@ final class DigimonSceneBattleTests: XCTestCase {
         let pastel = try await js(scene, "linePal('angoramon')[1]") as? String
         XCTAssertEqual(pastel, "#e9a9c8", "a bright pastel keeps its color")
     }
+
+    /// A missile grows with the stage of whoever fires it, and lands as an explosion.
+    func testAMissileGrowsWithTheStageAndExplodes() async throws {
+        let result = try await battle(me: "metalgreymon", foe: "greymon")
+        XCTAssertTrue((result["shots"] as? [String] ?? []).contains("me:missile"))
+        XCTAssertTrue((result["booms"] as? [String] ?? []).contains("missile"), "a missile hit explodes")
+
+        let scene = DigimonScene(mode: .popover)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "F28C3E"))
+        scene.sprite(key: "metalgreymon", dataURI: "data:image/png;base64," + png.base64EncodedString())
+        scene.apply(["key": "metalgreymon", "line": "agumon", "stage": 5, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let sizes = try await js(scene, "[3, 4, 5, 6].map(st => pet.shotFrom('missile', pet.x, pet.bb(), 1, S.line, 0, 0, 0, null, st).size)") as? [Double]
+        XCTAssertEqual(sizes, [1, 1.3, 1.7, 2.1], "Child, Adult, Perfect, Ultimate")
+    }
 }

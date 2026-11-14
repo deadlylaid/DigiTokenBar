@@ -183,7 +183,8 @@ final class DigimonSceneHub {
             guard let data = await hub.image(for: foe) else { return }
             hub.liveScenes.forEach { $0.sprite(key: foe, dataURI: Self.dataURI(data)) }
             let rounds: [[String: Any]] = result.rounds.map { ["a": $0.attacker == .me ? "me" : "foe", "hit": $0.hit] }
-            hub.broadcast(["type": "battle", "foe": foe, "won": result.won, "rounds": rounds])
+            let foeStage = hub.digimon.engine.catalog.species(foe)?.level.order ?? 4
+            hub.broadcast(["type": "battle", "foe": foe, "foeStage": foeStage, "won": result.won, "rounds": rounds])
         }
     }
 
