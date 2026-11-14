@@ -369,13 +369,18 @@ final class DigimonCardConditionTests: XCTestCase {
                        "4 of 10 battles: Algomon (3/8 = 0.375) opens, Greymon (8/8) does not")
     }
 
-    func testTheWinRatioIsTheCardsOwnPercentage() {
-        // Greymon: Metal Greymon needs 70% wins, Anomalocarimon and Metal Tyranomon 50%.
-        let full = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 6)
-        XCTAssertEqual(Set(engine.growthOptions(for: full, at: date(day: 1))), ["anomalocarimon", "metaltyranomon"],
-                       "60% wins: not enough for Metal Greymon")
-        let strong = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 7)
-        XCTAssertTrue(engine.growthOptions(for: strong, at: date(day: 1)).contains("metalgreymon"))
+    /// The card's win ratio counts up to 50% (the user's call): cards ask up to 70%, which practice
+    /// battles do not reach on average. A lower requirement stays as the card has it.
+    func testTheWinRatioIsTheCardsUpToHalf() {
+        // Greymon: Metal Greymon needs 70% wins on the card, Anomalocarimon and Metal Tyranomon 50%.
+        let weak = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 4)
+        XCTAssertFalse(engine.growthOptions(for: weak, at: date(day: 1)).contains("metalgreymon"), "40% wins")
+        let half = stage(at: "greymon", hours: 6, tools: ["claude_code", "codex"], battles: 10, wins: 5)
+        XCTAssertEqual(Set(engine.growthOptions(for: half, at: date(day: 1))), ["metalgreymon", "anomalocarimon", "metaltyranomon"],
+                       "50% wins open the card's 70% route too")
+        let card = { (win: Int) in DigimonStepCondition("a>b", vital: 0, trophies: 0, battles: 0, winRatio: win, fallback: false) }
+        XCTAssertEqual(engine.winRatioNeeded(card(70)), 50)
+        XCTAssertEqual(engine.winRatioNeeded(card(40)), 40, "a lower requirement stays")
     }
 
     func testBattleConditionsCanBeTurnedOff() {

@@ -32,6 +32,10 @@ struct GrowthRules: Sendable, Equatable {
     var practiceBattlesPerDay = 5
     /// A battle with another user's code counts as this many.
     var codeBattleWeight = 3
+    /// The card's win-ratio requirement counts up to this percent (the user's call, 2026-11-14). Cards
+    /// ask up to 70%, but practice against wild Digimon of the same level is won about 41% untrained to
+    /// 68% fully trained, so 70% was out of reach on average.
+    var maxWinRatio = 50
     /// Trophies per day of the stage that meet the hardest trophy route. A day with one tool gives at
     /// most 2 (coding, no full limit), so coding every day within limits is enough; a day with two
     /// tools gives 3 and makes up for a missed day.
@@ -375,9 +379,9 @@ struct EvolutionEngine: Sendable {
             if c.fallback { continue }
             let vitalOK = maxVital == 0 || p.vital + 1e-9 >= Double(c.vital) / maxVital
             let trophiesOK = maxTrophies == 0 || p.trophies + 1e-9 >= Double(c.trophies) / maxTrophies
-            // Battles compare like the others; the win ratio is the card's own percentage.
+            // Battles compare like the others; the win ratio is the card's percentage, up to `maxWinRatio`.
             let battlesOK = maxBattles == 0 || p.battles + 1e-9 >= Double(c.battles) / maxBattles
-            let winOK = !battles || c.winRatio == 0 || (p.battleCount > 0 && p.winPercent >= c.winRatio)
+            let winOK = !battles || c.winRatio == 0 || (p.battleCount > 0 && p.winPercent >= winRatioNeeded(c))
             // A hidden evolution already earned its own condition.
             if (vitalOK && trophiesOK && battlesOK && winOK) || rules.hidden[key] != nil { met.append(key) }
         }
@@ -388,6 +392,9 @@ struct EvolutionEngine: Sendable {
         }
         return easiest.map { [$0] } ?? ranked
     }
+
+    /// The win ratio a route needs: the card's, at most `GrowthRules.maxWinRatio`.
+    func winRatioNeeded(_ condition: DigimonStepCondition) -> Int { min(condition.winRatio, growth.maxWinRatio) }
 
     /// How strongly the stage's usage pulls toward this candidate.
     func score(_ evo: DigimonEvolution, signals: GrowthSignals, baseline: GrowthSignals) -> Double {
