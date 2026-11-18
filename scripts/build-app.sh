@@ -18,17 +18,25 @@ if [[ "${PTB_NATIVE_ARCH_ONLY:-0}" == "1" ]]; then
     ARCHS=("$(uname -m)")
 fi
 SLICES=()
+SLICE_DIR="$BUILD_DIR/slices"
+rm -rf "$SLICE_DIR"
+mkdir -p "$SLICE_DIR"
 for arch in "${ARCHS[@]}"; do
     echo "==> swift build -c release --arch $arch"
     swift build -c release --arch "$arch"
-    SLICES+=("$(swift build -c release --arch "$arch" --show-bin-path)/$PRODUCT")
+    # Xcode 27 의 SwiftPM 은 모든 아키텍처를 같은 폴더(.build/out/Products/Release)에 쓴다 → 다음 아키텍처
+    # 빌드가 이 결과를 덮어쓴다. 빌드 직후 아키텍처별 이름으로 빼 두고, 그 아키텍처가 맞는지 확인한다.
+    cp "$(swift build -c release --arch "$arch" --show-bin-path)/$PRODUCT" "$SLICE_DIR/$PRODUCT-$arch"
+    lipo "$SLICE_DIR/$PRODUCT-$arch" -verify_arch "$arch"
+    SLICES+=("$SLICE_DIR/$PRODUCT-$arch")
 done
 
 echo "==> $APP 조립"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 lipo -create "${SLICES[@]}" -output "$APP/Contents/MacOS/$APP_NAME"
-lipo "$APP/Contents/MacOS/$APP_NAME" -verify_arch "${ARCHS[@]}"
+# Xcode 27 의 lipo 는 -verify_arch 뒤에 아키텍처를 여러 개 받으면 "exactly one input file" 로 거부한다 → 하나씩 확인한다.
+for arch in "${ARCHS[@]}"; do lipo "$APP/Contents/MacOS/$APP_NAME" -verify_arch "$arch"; done
 echo "   archs: $(lipo -archs "$APP/Contents/MacOS/$APP_NAME")"
 # 심볼 strip — 릴리스 바이너리 1.84MB → 0.80MB(-57%). codesign 전에 수행(서명 무효화 방지).
 strip -rSTx "$APP/Contents/MacOS/$APP_NAME" 2>/dev/null || strip -rSx "$APP/Contents/MacOS/$APP_NAME"
