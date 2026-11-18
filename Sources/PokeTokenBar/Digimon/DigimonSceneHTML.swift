@@ -30,6 +30,13 @@ const DPR = Math.max(1, Math.round(window.devicePixelRatio || 1));
 const rand = (a, b) => a + Math.random() * (b - a);
 const easeIO = p => -(Math.cos(Math.PI * p) - 1) / 2;
 const TAU = Math.PI * 2;
+// The point of the segment (x0,y0)-(x1,y1) closest to the circle's centre, if it is inside radius r; otherwise null.
+function segmentHit(x0, y0, x1, y1, cx, cy, r) {
+  const dx = x1 - x0, dy = y1 - y0, len2 = dx * dx + dy * dy;
+  const t = len2 ? Math.max(0, Math.min(1, ((cx - x0) * dx + (cy - y0) * dy) / len2)) : 0;
+  const qx = x0 + t * dx, qy = y0 + t * dy;
+  return Math.hypot(cx - qx, cy - qy) < r ? {x: qx, y: qy} : null;
+}
 const mq = window.matchMedia('(prefers-color-scheme: dark)');
 const isDark = () => mq.matches;
 const assets = {};
@@ -516,6 +523,7 @@ class Pet {
     this.parts = this.parts.filter(p => { p.t += dt; p.x += p.vx * dt / 1000; p.y += p.vy * dt / 1000; p.vy += 60 * dt / 1000; return p.t < p.life; });
     this.shots = this.shots.filter(s => {
       if (s.hold !== undefined) { s.t += dt; s.hold -= dt; return s.hold > 0; }   // a landed beam or bolt lingers
+      const px = s.x, py = s.y;   // where it was: hits are checked along the whole step, not just where it lands
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
@@ -552,7 +560,11 @@ class Pet {
       }
       if (s.kind === 'bind' && Math.abs(s.x - s.ox) > 120) return false;   // out of reach
       const g = this.bug;
-      if (g && !g.dead && Math.hypot(s.x - (g.x + 5.5 * g.sc), s.y - (this.ground() - 4 * g.sc)) < s.r + 6 * g.sc) {
+      // A fast move (a beam crosses 23-26 points in one frame at 20 frames a second) can pass a bug that
+      // stands right in front within one step, so test the segment it travelled, not only its end point.
+      const at = g && !g.dead && segmentHit(px, py, s.x, s.y, g.x + 5.5 * g.sc, this.ground() - 4 * g.sc, s.r + 6 * g.sc);
+      if (at) {
+        s.x = at.x; s.y = at.y;
         this.boom(s.x, s.y, s);
         g.hp -= 1; g.hit = 220;
         if (g.hp <= 0) { g.dead = true; g.t = 0; post({cmd: 'bugDefeated', count: g.big ? 3 : 1}); }
