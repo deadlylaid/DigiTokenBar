@@ -101,6 +101,10 @@ final class DigimonSceneHub {
     @ObservationIgnored var sleeping = false
     /// "sleepy", "sick" or nil: how the pet behaves (see `mood(sleeping:hour:nightHours:limitFull:)`).
     @ObservationIgnored var mood: String?
+    /// UserDefaults key for the Settings switch "Stay in place".
+    static let stayInPlaceKey = "digimonStayInPlace"
+    /// The pet stays in the middle of every scene instead of walking around (Settings).
+    private(set) var stayInPlace = false
     @ObservationIgnored private var scenes: [WeakScene] = []
     @ObservationIgnored private var loading: [String: Task<Data?, Never>] = [:]
     /// Event playback runs one step at a time so an evolution never arrives before its sprite.
@@ -172,6 +176,14 @@ final class DigimonSceneHub {
         }
     }
 
+    /// Settings: stay in place (saved per Mac) or walk around. Every scene follows at once.
+    func setStayInPlace(_ still: Bool, defaults: UserDefaults = .standard) {
+        defaults.set(still, forKey: Self.stayInPlaceKey)
+        guard still != stayInPlace else { return }
+        stayInPlace = still
+        refresh()
+    }
+
     /// Re-send the current look (sleep, language, or a change with no event).
     func refresh() {
         enqueue { hub in
@@ -230,6 +242,7 @@ final class DigimonSceneHub {
         var state: [String: Any] = ["key": currentKey, "line": partner.lineID, "stage": partner.level.order,
                                     "sleeping": sleeping, "lang": language == .ko ? "ko" : "en"]
         state["mood"] = mood ?? NSNull()
+        state["still"] = stayInPlace
         // The line's egg color, for the fire of lines without their own colors.
         state["lineColor"] = digimon.engine.catalog.lines[partner.lineID]?.eggColorHex ?? NSNull()
         return state

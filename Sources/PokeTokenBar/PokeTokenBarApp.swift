@@ -114,6 +114,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimon = DigimonStore(waitForFirstEgg: true)
         digimonHub = DigimonSceneHub(digimon: digimon)
         digimonHub.language = companion.language
+        digimonHub.setStayInPlace(UserDefaults.standard.bool(forKey: DigimonSceneHub.stayInPlaceKey))
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
         digimon.onBattle = { [weak self] foe, result in self?.digimonHub.playBattle(foe: foe.species, result: result) }
         digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }

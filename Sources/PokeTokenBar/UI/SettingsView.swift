@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(UpdateChecker.self) private var updater
     /// Present in DigiTokenBar: Pokemon-only rows are hidden and Digimon wording is used.
     @Environment(DigimonStore.self) private var digimon: DigimonStore?
+    @Environment(DigimonSceneHub.self) private var digimonHub: DigimonSceneHub?
     /// 팝오버 내부 화면 전환 방식 — sheet/dismiss 를 쓰지 않는다 (PopoverView 의 NOTE 참조)
     var onClose: () -> Void
     /// 기존 컬렉션의 도감으로 돌아가 대표 포켓몬을 고르게 한다.
@@ -330,6 +331,11 @@ struct SettingsView: View {
                     UserDefaults.standard.set($0, forKey: DigimonStore.fastGrowthKey)
                     digimon.setFastGrowth($0)
                 }), hint: dt.fastGrowthHint)
+            if let digimonHub {
+                Divider()
+                toggleRow(dt.stayInPlaceLabel, Binding(get: { digimonHub.stayInPlace }, set: { digimonHub.setStayInPlace($0) }),
+                          hint: dt.stayInPlaceHint)
+            }
         }
     }
 

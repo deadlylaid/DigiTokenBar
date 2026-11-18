@@ -354,4 +354,62 @@ final class DigimonSceneBattleTests: XCTestCase {
             }
         }
     }
+
+    /// Settings "Stay in place": the pet never sets off on a walk, and after a battle moved it, it walks
+    /// back to the middle once. Off again, it walks as before.
+    func testStayingInPlaceStopsWalksAndReturnsToTheMiddle() async throws {
+        let scene = DigimonScene(mode: .desk)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 440, height: 180), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 440, height: 180)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        let png = try XCTUnwrap(DigimonEggArt.png(size: 64, hex: "F28C3E"))
+        scene.sprite(key: "agumon", dataURI: "data:image/png;base64," + png.base64EncodedString())
+        scene.apply(["key": "agumon", "line": "agumon", "stage": 3, "sleeping": false, "lang": "ko", "still": true])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let seen = try await js(scene, """
+        (() => {
+          const rnd = Math.random, out = {};
+          Math.random = () => 0;   // the roll that always sets off on a walk
+          const settle = () => { for (let i = 0; i < 200 && (pet.state === 'walk' || pet.state === 'turn'); i++) pet.update(33); };
+          // A battle left it at the side: it goes back to the middle once.
+          pet.x = 4; pet.next(); out.back = pet.state; settle();
+          out.offCenter = Math.abs(pet.x - pet.center());
+          let walks = 0;
+          for (let i = 0; i < 50; i++) { pet.enter('idle', {dur: 1}); pet.next(); if (pet.state === 'walk' || pet.state === 'turn') walks++; settle(); }
+          out.walks = walks; out.drift = Math.abs(pet.x - pet.center());
+          app.apply({still: false}); pet.enter('idle', {dur: 1}); pet.next(); out.free = pet.state;
+          Math.random = rnd;
+          return JSON.stringify(out);
+        })()
+        """) as? String
+        let result = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+        XCTAssertTrue(["walk", "turn"].contains(result["back"] as? String ?? ""), "it walks back to the middle")
+        XCTAssertLessThan(result["offCenter"] as? Double ?? 99, 1)
+        XCTAssertEqual(result["walks"] as? Int, 0, "no walks while staying in place")
+        XCTAssertLessThan(result["drift"] as? Double ?? 99, 1)
+        XCTAssertTrue(["walk", "turn"].contains(result["free"] as? String ?? ""), "off again, it walks")
+    }
+
+    func testTheStayInPlaceSwitchIsSavedAndSentToTheScenes() throws {
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "digimon-still-\(UUID().uuidString)"))
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("digimon-still-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: dir) }
+        let hub = DigimonSceneHub(digimon: DigimonStore(fileURL: dir.appendingPathComponent("digimon-state.json")))
+        XCTAssertFalse(hub.stayInPlace)
+        hub.setStayInPlace(true, defaults: defaults)
+        XCTAssertTrue(hub.stayInPlace)
+        XCTAssertTrue(defaults.bool(forKey: DigimonSceneHub.stayInPlaceKey))
+        hub.setStayInPlace(false, defaults: defaults)
+        XCTAssertFalse(defaults.bool(forKey: DigimonSceneHub.stayInPlaceKey))
+    }
 }

@@ -318,18 +318,21 @@ class Pet {
       this.enter(sleepy ? 'stretch' : 'idle', {dur: sleepy ? 1400 : 1800});
       return;
     }
-    const walk = (this.desk ? .58 : .5) * (S.mood ? .45 : 1);
+    // Staying in place (Settings): no walks; once a battle or a Jogress moved it, it walks back to the middle.
+    if (S.still && Math.abs(this.x - this.center()) > 3) { this.startWalk(this.center()); return; }
+    const walk = S.still ? 0 : (this.desk ? .58 : .5) * (S.mood ? .45 : 1);
     if (r < walk) this.startWalk();
     else if (r < walk + .17) { this.facing = -this.facing; this.enter('idle', {dur: rand(900, 1800)}); }
     else if (r < walk + .29) this.enter('stretch', {dur: 1100});
     else if (r < walk + .38) this.enter('hop', {h: this.hopH});
     else this.enter('idle');
   }
-  startWalk() {
+  startWalk(to) {
     const b = this.bb(), minX = -b.l + 2, maxX = this.worldW - b.r - 2;
     if (maxX - minX < 8) { this.enter('idle'); return; }
     let tx = this.x;
-    for (let i = 0; i < 10; i++) { tx = rand(minX, maxX); if (Math.abs(tx - this.x) >= Math.min(30, (maxX - minX) / 2)) break; }
+    if (to !== undefined) tx = Math.max(minX, Math.min(maxX, to));
+    else for (let i = 0; i < 10; i++) { tx = rand(minX, maxX); if (Math.abs(tx - this.x) >= Math.min(30, (maxX - minX) / 2)) break; }
     const dir = Math.sign(tx - this.x) || 1;
     if (dir !== this.facing) { this.facing = dir; this.enter('turn', {tx, dir}); }
     else this.enter('walk', {x0: this.x, tx, dir});

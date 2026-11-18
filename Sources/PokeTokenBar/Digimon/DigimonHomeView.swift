@@ -161,6 +161,11 @@ struct DigimonText {
     // Settings
     var digimonSectionTitle: String { ko ? "디지몬" : "Digimon" }
     var fastGrowthLabel: String { ko ? "빠른 성장 (테스트)" : "Fast growth (testing)" }
+    var stayInPlaceLabel: String { ko ? "제자리에 있기" : "Stay in place" }
+    var stayInPlaceHint: String {
+        ko ? "걸어 다니지 않고 가운데에 있어요(홈 장면과 바탕화면 펫). 숨쉬기·기지개·점프, 버그 사냥과 배틀은 그대로예요."
+           : "It stays in the middle instead of walking around (Home and the desktop pet). Breathing, stretching, hops, bug hunts and battles stay."
+    }
     var fastGrowthHint: String {
         ko ? "진화에 필요한 경험치가 1/10이 돼요. 바쁜 하루면 부화부터 졸업까지 볼 수 있어요"
            : "Each stage needs a tenth of the experience: a busy day covers a whole life"
