@@ -1,0 +1,1244 @@
+[
+ {
+  "key": "agnimon",
+  "ko": "버닝 샐러맨더",
+  "en": "Burning Salamander",
+  "what": "Unleashes a blazing dragon from its flame-clad fist.",
+  "koSpecies": "아그니몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=agnimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=agnimon",
+   "https://digimon.net/reference/detail.php?directory_name=agnimon",
+   "https://wikimon.net/agnimon"
+  ],
+  "note": "JP バーニングサラマンダー. reference_en uses the dub name \"Pyro Punch\", so Wikimon's name was used."
+ },
+ {
+  "key": "flamon",
+  "ko": "베이비 샐러맨더",
+  "en": "Baby Salamander",
+  "what": "Fires off an aura of flames.",
+  "koSpecies": "화염몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=flamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=flamon",
+   "https://digimon.net/reference/detail.php?directory_name=flamon",
+   "https://wikimon.net/flamon"
+  ],
+  "note": "JP ベビーサラマンダー. Official ko/en/ja first move."
+ },
+ {
+  "key": "kaisergreymon",
+  "ko": "염룡격",
+  "en": "Flame Dragon Strike",
+  "what": "Fires arrows from the Ryūgonken, the flames of which are so intense that they become a white light.",
+  "koSpecies": "카이젤그레이몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kaisergreymon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kaisergreymon",
+   "https://digimon.net/reference/detail.php?directory_name=kaisergreymon",
+   "https://wikimon.net/kaisergreymon"
+  ],
+  "note": "JP 炎龍撃（えんりゅうげき）. reference_en uses the dub name \"Firedrake Strike\", so Wikimon's Translation was used."
+ },
+ {
+  "key": "gottsumon",
+  "ko": "돌주먹",
+  "en": "Angry Rock",
+  "what": "Shoots super-hard ore from the top of its head.",
+  "koSpecies": "울퉁몬",
+  "kind": "missile",
+  "tint": "dust",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=gottsumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=gottsumon",
+   "https://digimon.net/reference/detail.php?directory_name=gottsumon",
+   "https://wikimon.net/gottsumon"
+  ],
+  "note": "JP アングリーロック. reference_en uses the dub name \"Rock Fist\", so Wikimon's name was used."
+ },
+ {
+  "key": "starmon",
+  "ko": "유성 폭풍",
+  "en": "Meteor Squall",
+  "what": "Causes small meteors to rain down on the enemy.",
+  "koSpecies": "스타몬",
+  "kind": "gaia",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=starmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=starmon",
+   "https://digimon.net/reference/detail.php?directory_name=starmon",
+   "https://wikimon.net/starmon"
+  ],
+  "note": "JP メテオスコール. reference_en uses the dub name \"Meteor Shower\", so Wikimon's name was used."
+ },
+ {
+  "key": "grottemon",
+  "ko": "스네이크 아이 브레이크",
+  "en": "Snake Eye Break",
+  "what": "Summons one or more of its flexible Grotte Hammers from the ground or its armor and hits the enemy with them. The attack can be used to petrify and smash enemies.",
+  "koSpecies": "그로트몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=grottemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=grottemon",
+   "https://digimon.net/reference/detail.php?directory_name=grottemon",
+   "https://wikimon.net/grottemon"
+  ],
+  "note": "JP スネークアイブレイク. Official ko/en/ja first move."
+ },
+ {
+  "key": "aldamon",
+  "ko": "브라흐마 실",
+  "en": "Brahmashira",
+  "what": "Uses holy flames to manufacture giant ball of flame like the core of the sun, then detonates it.",
+  "koSpecies": "아루다몬",
+  "kind": "gaia",
+  "tint": "heat",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=aldamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=aldamon",
+   "https://digimon.net/reference/detail.php?directory_name=aldamon",
+   "https://wikimon.net/aldamon"
+  ],
+  "note": "JP ブラフマシル. Official ko/en/ja first move."
+ },
+ {
+  "key": "vritramon",
+  "ko": "코로나 블래스터",
+  "en": "Corona Blaster",
+  "what": "Fires lasers that rival a solar heat ray from the Rudriya Darpaṇa.",
+  "koSpecies": "브리트라몬",
+  "kind": "beam",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=vritramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=vritramon",
+   "https://digimon.net/reference/detail.php?directory_name=vritramon",
+   "https://wikimon.net/vritramon"
+  ],
+  "note": "JP コロナブラスター. Official ko/en/ja first move."
+ },
+ {
+  "key": "superstarmon",
+  "ko": "헬리 스콜",
+  "en": "Halley Squall",
+  "what": "Summons countless meteors to rain down upon the enemy from overhead.",
+  "koSpecies": "슈퍼스타몬",
+  "kind": "gaia",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=superstarmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=superstarmon",
+   "https://digimon.net/reference/detail.php?directory_name=superstarmon",
+   "https://wikimon.net/superstarmon"
+  ],
+  "note": "JP ハレースコール. reference_en uses the dub name \"Haley Storm\", so Wikimon's name was used."
+ },
+ {
+  "key": "gigasmon",
+  "ko": "어스퀘이크",
+  "en": "Earthquake",
+  "what": "Strikes and raises up the ground with intense force after a huge jump.",
+  "koSpecies": "기가스몬",
+  "kind": "quake",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=gigasmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=gigasmon",
+   "https://digimon.net/reference/detail.php?directory_name=gigasmon",
+   "https://wikimon.net/gigasmon"
+  ],
+  "note": "JP アースクェイク. Official ko/en/ja first move."
+ },
+ {
+  "key": "darksuperstarmon",
+  "ko": "다크 익스플로젼",
+  "en": "Dark Explosion",
+  "what": "Attacks with the exploded fragments of a supernova.",
+  "koSpecies": "다크슈퍼스타몬",
+  "kind": "gaia",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=darksuperstarmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=darksuperstarmon",
+   "https://digimon.net/reference/detail.php?directory_name=darksuperstarmon",
+   "https://wikimon.net/darksuperstarmon"
+  ],
+  "note": "JP ダークイクスプロージョン. Official ko/en/ja first move."
+ },
+ {
+  "key": "ancientgreymon",
+  "ko": "가이아 토네이도",
+  "en": "Gaia Tornado",
+  "what": "Gathers the spirit of the land to create a tornado that swallows up the opponent and blows them away.",
+  "koSpecies": "에이션트그레이몬",
+  "kind": "wind",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientgreymon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientgreymon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientgreymon",
+   "https://wikimon.net/ancientgreymon"
+  ],
+  "note": "JP ガイアトルネード. Official ko/en/ja first move."
+ },
+ {
+  "key": "susanoomon",
+  "ko": "천우우참",
+  "en": "Ama no Habakiri",
+  "what": "Slashes through everything in the world with the blade of light extending from ZERO-ARMS: Orochi.",
+  "koSpecies": "스사노오몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=susanoomon",
+   "https://digimon.net/reference_en/detail.php?directory_name=susanoomon",
+   "https://digimon.net/reference/detail.php?directory_name=susanoomon",
+   "https://wikimon.net/susanoomon"
+  ],
+  "note": "JP 天羽々斬. reference_en \"Ama no Habakiri\" is the romanization (Wikimon \"Ama-no-Habakiri\")."
+ },
+ {
+  "key": "tinkermon",
+  "ko": "스피드 나이트메어",
+  "en": "Speed Nightmare",
+  "what": "Drags the opponent into a nightmare with a fast-acting hallucinogen from its poisoned spear.",
+  "koSpecies": "팅커몬",
+  "kind": "gas",
+  "tint": "psychic",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=tinkermon",
+   "https://digimon.net/reference_en/detail.php?directory_name=tinkermon",
+   "https://digimon.net/reference/detail.php?directory_name=tinkermon",
+   "https://wikimon.net/tinkermon"
+  ],
+  "note": "JP スピードナイトメア. Official ko/en/ja first move."
+ },
+ {
+  "key": "pomumon",
+  "ko": "래피드 시드",
+  "en": "Rapid Seed",
+  "what": "Spits out countless seed-like bullets from its mouth.",
+  "koSpecies": "폼몬",
+  "kind": "missile",
+  "tint": "leaf",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=pomumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=pomumon",
+   "https://digimon.net/reference/detail.php?directory_name=pomumon",
+   "https://wikimon.net/pomumon"
+  ],
+  "note": "JP ラピッドシード. Official ko/en/ja first move."
+ },
+ {
+  "key": "fairimon",
+  "ko": "토르나드 ･ 감바",
+  "en": "Tornado Gamba",
+  "what": "Performs a handstand and unleashes a whirlwind kick.",
+  "koSpecies": "페어리몬",
+  "kind": "wind",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=fairimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=fairimon",
+   "https://digimon.net/reference/detail.php?directory_name=fairimon",
+   "https://wikimon.net/fairimon"
+  ],
+  "note": "JP トルナード・ガンバ. Official ko/en/ja first move."
+ },
+ {
+  "key": "cockatrimon",
+  "ko": "페트라 파이어",
+  "en": "Petra Fire",
+  "what": "Unleashes a power from its eyes that petrifies whatever it looks at.",
+  "koSpecies": "꼬끼몬",
+  "kind": "wave",
+  "tint": "psychic",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=cockatrimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=cockatrimon",
+   "https://digimon.net/reference/detail.php?directory_name=cockatrimon",
+   "https://wikimon.net/cockatrimon"
+  ],
+  "note": "JP ペトラファイアー. Official ko/en/ja first move."
+ },
+ {
+  "key": "arbormon",
+  "ko": "머신건 ･ 댄스",
+  "en": "Machine Gun Dance",
+  "what": "Unleashes continuous kicks from unexpected directions with its extensible limbs.",
+  "koSpecies": "알볼몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=arbormon",
+   "https://digimon.net/reference_en/detail.php?directory_name=arbormon",
+   "https://digimon.net/reference/detail.php?directory_name=arbormon",
+   "https://wikimon.net/arbormon"
+  ],
+  "note": "JP マシンガン・ダンス（機銃の踊り）. Official ko/en/ja first move."
+ },
+ {
+  "key": "zassoumon",
+  "ko": "스퀴즈 바인",
+  "en": "Squeeze Vine",
+  "what": "Uses its vine arms to squeeze the enemy.",
+  "koSpecies": "그린베지몬",
+  "kind": "bind",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=zassoumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=zassoumon",
+   "https://digimon.net/reference/detail.php?directory_name=zassoumon",
+   "https://wikimon.net/zassoumon"
+  ],
+  "note": "JP スクイーズバイン. Official ko/en/ja first move."
+ },
+ {
+  "key": "jetsilphymon",
+  "ko": "제트 빈터",
+  "en": "Jet Binter",
+  "what": "Fires from both arms with the power of the wind.",
+  "koSpecies": "제트실피드몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=jetsilphymon",
+   "https://digimon.net/reference_en/detail.php?directory_name=jetsilphymon",
+   "https://digimon.net/reference/detail.php?directory_name=jetsilphymon",
+   "https://wikimon.net/jetsilphymon"
+  ],
+  "note": "JP ジェットビンター. Official ko/en/ja first move."
+ },
+ {
+  "key": "shutumon",
+  "ko": "길가메시 슬라이서",
+  "en": "Gilgamesh Slicer",
+  "what": "Cuts the opponent and the atmosphere around it to pieces with the claws on its hands and feet.",
+  "koSpecies": "슈츠몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=shutumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=shutumon",
+   "https://digimon.net/reference/detail.php?directory_name=shutumon",
+   "https://wikimon.net/shutumon"
+  ],
+  "note": "JP ギルガメッシュスライサー. Official ko/en/ja first move."
+ },
+ {
+  "key": "petaldramon",
+  "ko": "리프 사이클론",
+  "en": "Leaf Cyclone",
+  "what": "Rotates the leaves around its head and fires them.",
+  "koSpecies": "페탈드라몬",
+  "kind": "swarm",
+  "tint": "leaf",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=petaldramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=petaldramon",
+   "https://digimon.net/reference/detail.php?directory_name=petaldramon",
+   "https://wikimon.net/petaldramon"
+  ],
+  "note": "JP リーフサイクロン. Official ko/en/ja first move."
+ },
+ {
+  "key": "peacockmon",
+  "ko": "레인보우 샤워",
+  "en": "Rainbow Shower",
+  "what": "fires a special beam from its laser wings",
+  "koSpecies": "피콕몬",
+  "kind": "beam",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=peacockmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=peacockmon",
+   "https://digimon.net/reference/detail.php?directory_name=peacockmon"
+  ],
+  "note": "JP レインボーシャワー. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "zamielmon",
+  "ko": "스나이프 헤드샷",
+  "en": "Snipe Headshot",
+  "what": "Shoots an arrow through the opponent's head.",
+  "koSpecies": "자미엘몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=zamielmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=zamielmon",
+   "https://digimon.net/reference/detail.php?directory_name=zamielmon",
+   "https://wikimon.net/zamielmon"
+  ],
+  "note": "JP スナイプヘッドショット. Official ko/en/ja first move."
+ },
+ {
+  "key": "ancientirismon",
+  "ko": "스톰 게이저",
+  "en": "Storm Gazer",
+  "what": "Continuously generates a colossal storm.",
+  "koSpecies": "에이션트이리스몬",
+  "kind": "wind",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientirismon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientirismon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientirismon",
+   "https://wikimon.net/ancientirismon"
+  ],
+  "note": "JP ストームゲイザー. Official ko/en/ja first move."
+ },
+ {
+  "key": "lotusmon",
+  "ko": "서펜트 큐어",
+  "en": "Serpent Cure",
+  "what": "Fires a white aura from the it carries in its left hand which governs recovery.",
+  "koSpecies": "로터스몬",
+  "kind": "light",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=lotusmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=lotusmon",
+   "https://digimon.net/reference/detail.php?directory_name=lotusmon",
+   "https://wikimon.net/lotusmon"
+  ],
+  "note": "JP サーペントキュア. Official ko/en/ja first move."
+ },
+ {
+  "key": "ancienttroiamon",
+  "ko": "트로이 목마의 기습",
+  "en": "Epeius Gimmick",
+  "what": "Attacks by simultaneously operating every gimmick throughout its body.",
+  "koSpecies": "에이션트트로이몬",
+  "kind": "missile",
+  "tint": "metal",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancienttroiamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancienttroiamon",
+   "https://digimon.net/reference/detail.php?directory_name=ancienttroiamon",
+   "https://wikimon.net/ancienttroiamon"
+  ],
+  "note": "JP エペイオスギミック. Official ko/en/ja first move."
+ },
+ {
+  "key": "lordknightmon",
+  "ko": "스파이럴 마스커레이드",
+  "en": "Spiral Masquerade",
+  "what": "Chops up the opponent with the four sash-blades that extend from its armor.",
+  "koSpecies": "로드나이트몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=lordknightmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=lordknightmon",
+   "https://digimon.net/reference/detail.php?directory_name=lordknightmon",
+   "https://wikimon.net/lordknightmon"
+  ],
+  "note": "JP スパイラルマスカレード. Official ko/en/ja first move."
+ },
+ {
+  "key": "bearmon",
+  "ko": "아기곰돌격권",
+  "en": "Bear-cub Punch",
+  "what": "Punches at the foe with all its might.",
+  "koSpecies": "베어몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=bearmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=bearmon",
+   "https://digimon.net/reference/detail.php?directory_name=bearmon",
+   "https://wikimon.net/bearmon"
+  ],
+  "note": "JP 小熊正拳突き. reference_en uses the dub name \"Bear Fist\", so Wikimon's Translation was used."
+ },
+ {
+  "key": "snowgoburimon",
+  "ko": "스노 고브 볼트",
+  "en": "Snow Gob Bolt",
+  "what": "Hits snowballs embedded with stones at the enemy with a thousand oni knocks.",
+  "koSpecies": "스노우고부리몬",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=snowgoburimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=snowgoburimon",
+   "https://digimon.net/reference/detail.php?directory_name=snowgoburimon",
+   "https://wikimon.net/snowgoburimon"
+  ],
+  "note": "JP スノーゴブボルト. reference_en uses the dub name \"Snow Goblin Volt\", so Wikimon's name was used."
+ },
+ {
+  "key": "chackmon",
+  "ko": "고드르르름",
+  "en": "Tsurararara",
+  "what": "Takes the shape of an icicle and pounces at the opponent.",
+  "koSpecies": "챠크몬",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=chackmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=chackmon",
+   "https://digimon.net/reference/detail.php?directory_name=chackmon",
+   "https://wikimon.net/chackmon"
+  ],
+  "note": "JP ツララララ～. reference_en uses the dub name \"Frozen Tundra\", so Wikimon's name was used (without the wave dash)."
+ },
+ {
+  "key": "gryzmon",
+  "ko": "급소 반격",
+  "en": "Bodystrike Reversal",
+  "what": "Knocks the enemy down by countering their attack, then strikes at their vitals.",
+  "koSpecies": "그리즈몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=gryzmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=gryzmon",
+   "https://digimon.net/reference/detail.php?directory_name=gryzmon",
+   "https://wikimon.net/gryzmon"
+  ],
+  "note": "JP 当身返し. reference_en uses the dub name \"Maul Attack\", so Wikimon's Translation was used."
+ },
+ {
+  "key": "icemon",
+  "ko": "아이스 볼 봄",
+  "en": "Iceball Bomb",
+  "what": "Throws a solid frozen bomb of ice.",
+  "koSpecies": "아이스몬",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=icemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=icemon",
+   "https://digimon.net/reference/detail.php?directory_name=icemon",
+   "https://wikimon.net/icemon"
+  ],
+  "note": "JP アイスボールボム. Official ko/en/ja first move."
+ },
+ {
+  "key": "mojyamon",
+  "ko": "고드름 막대",
+  "en": "Icicle Rod",
+  "what": "Attacks with a giant icicle made by instantly freezing atmospheric moisture.",
+  "koSpecies": "모털몬",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=mojyamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=mojyamon",
+   "https://digimon.net/reference/detail.php?directory_name=mojyamon",
+   "https://wikimon.net/mojyamon"
+  ],
+  "note": "JP アイスクルロッド. Official ko/en/ja first move."
+ },
+ {
+  "key": "daipenmon",
+  "ko": "블루 하와이 데스",
+  "en": "Blue Hawaii Death",
+  "what": "Dips the Lil' Freezy in its right hand in blue syrup, then strikes the opponent.",
+  "koSpecies": "왕펭귄몬",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=daipenmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=daipenmon",
+   "https://digimon.net/reference/detail.php?directory_name=daipenmon",
+   "https://wikimon.net/daipenmon"
+  ],
+  "note": "JP ブルーハワイデス. Official ko/en/ja first move."
+ },
+ {
+  "key": "blizzarmon",
+  "ko": "아바란체 스텝",
+  "en": "Avalanche Step",
+  "what": "Wields its two tomahawks, \"Black\" and \"Black\", to chop up the opponent with dance-like motions.",
+  "koSpecies": "블리자몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=blizzarmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=blizzarmon",
+   "https://digimon.net/reference/detail.php?directory_name=blizzarmon",
+   "https://wikimon.net/blizzarmon"
+  ],
+  "note": "JP アヴァランチステップ. Official ko/en/ja first move."
+ },
+ {
+  "key": "panjyamonxantibody",
+  "ko": "빙수권",
+  "en": "Ice Beast Fist",
+  "what": "Gathers the power of cold air in its right hand and shoots a blast of cold air in the shape of a lion's head that freezes the foe.",
+  "koSpecies": "화이트레오몬(X항체)",
+  "kind": "ice",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=panjyamon_x",
+   "https://digimon.net/reference_en/detail.php?directory_name=panjyamon_x",
+   "https://digimon.net/reference/detail.php?directory_name=panjyamon_x",
+   "https://wikimon.net/panjyamonxantibody"
+  ],
+  "note": "JP 氷獣拳. reference_en uses the dub name \"Fist of Ice\", so Wikimon's Translation was used."
+ },
+ {
+  "key": "nanomon",
+  "ko": "플러그 봄",
+  "en": "Plug Bomb",
+  "what": "Fires tiny bombs from its fingertips.",
+  "koSpecies": "데이터몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=nanomon",
+   "https://digimon.net/reference_en/detail.php?directory_name=nanomon",
+   "https://digimon.net/reference/detail.php?directory_name=nanomon",
+   "https://wikimon.net/nanomon"
+  ],
+  "note": "JP プラグボム. reference_en uses the dub name \"Digital Bomb\", so Wikimon's name was used."
+ },
+ {
+  "key": "olegmon",
+  "ko": "듀얼 토마호크 부메랑",
+  "en": "Dual Tomahawk Boomerang",
+  "what": "hurls its twin tomahawks like a boomerang",
+  "koSpecies": "오레그몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=olegmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=olegmon",
+   "https://digimon.net/reference/detail.php?directory_name=olegmon"
+  ],
+  "note": "JP デュアルトマホークブーメラン. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "dynasmon",
+  "ko": "드래곤즈 로어",
+  "en": "Dragon's Roar",
+  "what": "Fires energy shots with attributes equal to those of the Warrior Ten from the palms of both its hands.",
+  "koSpecies": "듀나스몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=dynasmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=dynasmon",
+   "https://digimon.net/reference/detail.php?directory_name=dynasmon",
+   "https://wikimon.net/dynasmon"
+  ],
+  "note": "JP ドラゴンズロア. Official ko/en/ja first move."
+ },
+ {
+  "key": "strabimon",
+  "ko": "리히트 ･ 나겔",
+  "en": "Licht Nagel",
+  "what": "Slices up its enemies with claws on both arms that radiate with light.",
+  "koSpecies": "스트라비몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=storabimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=storabimon",
+   "https://digimon.net/reference/detail.php?directory_name=storabimon",
+   "https://wikimon.net/strabimon"
+  ],
+  "note": "JP リヒト・ナーゲル. Official ko/en/ja first move."
+ },
+ {
+  "key": "gizamon",
+  "ko": "스파이럴 엣지",
+  "en": "Spiral Edge",
+  "what": "Rolls into a ball and slices the opponent with its blade-like dorsal fins.",
+  "koSpecies": "기자몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=gizamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=gizamon",
+   "https://digimon.net/reference/detail.php?directory_name=gizamon",
+   "https://wikimon.net/gizamon"
+  ],
+  "note": "JP スパイラルエッジ. Official ko/en/ja first move."
+ },
+ {
+  "key": "wolfmon",
+  "ko": "리히트 ･ 지거",
+  "en": "Licht Sieger",
+  "what": "Slashes with the Licht Schwert swords.",
+  "koSpecies": "볼프몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=wolfmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=wolfmon",
+   "https://digimon.net/reference/detail.php?directory_name=wolfmon",
+   "https://wikimon.net/wolfmon"
+  ],
+  "note": "JP リヒト・ズィーガー. Official ko/en/ja first move."
+ },
+ {
+  "key": "dobermon",
+  "ko": "그라우 레름",
+  "en": "Grau Lärm",
+  "what": "A howl that seals the opponent's abilities.",
+  "koSpecies": "도베르몬",
+  "kind": "wave",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=dobermon",
+   "https://digimon.net/reference_en/detail.php?directory_name=dobermon",
+   "https://digimon.net/reference/detail.php?directory_name=dobermon",
+   "https://wikimon.net/dobermon"
+  ],
+  "note": "JP グラオ・レルム. Official ko/en/ja first move."
+ },
+ {
+  "key": "ranamon",
+  "ko": "레인 스트림",
+  "en": "Rain Stream",
+  "what": "Concentrates heavy rain over an enemy and crushes them.",
+  "koSpecies": "라나몬",
+  "kind": "water",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ranamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ranamon",
+   "https://digimon.net/reference/detail.php?directory_name=ranamon",
+   "https://wikimon.net/ranamon"
+  ],
+  "note": "JP レインストリーム. Official ko/en/ja first move."
+ },
+ {
+  "key": "ebidramon",
+  "ko": "트윈 넵튠",
+  "en": "Twin Neptune",
+  "what": "Swoops down on the opponent with its two pincers.",
+  "koSpecies": "가재드라몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ebidramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ebidramon",
+   "https://digimon.net/reference/detail.php?directory_name=ebidramon",
+   "https://wikimon.net/ebidramon"
+  ],
+  "note": "JP ツインネプチューン. Official ko/en/ja first move."
+ },
+ {
+  "key": "beowolfmon",
+  "ko": "리히트 앙그리프",
+  "en": "Licht Angriff",
+  "what": "Fires a barrage of homing missiles from Roland 2, followed by a laser beam.",
+  "koSpecies": "베오울프몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=beowolfmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=beowolfmon",
+   "https://digimon.net/reference/detail.php?directory_name=beowolfmon",
+   "https://wikimon.net/beowolfmon"
+  ],
+  "note": "JP リヒトアングリフ. Official ko/en/ja first move."
+ },
+ {
+  "key": "garummon",
+  "ko": "스피드 스타",
+  "en": "Speed Star",
+  "what": "Charges at ultra-high speed and cuts its opponent to pieces with its Wing Blades.",
+  "koSpecies": "가름몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=garummon",
+   "https://digimon.net/reference_en/detail.php?directory_name=garummon",
+   "https://digimon.net/reference/detail.php?directory_name=garummon",
+   "https://wikimon.net/garummon"
+  ],
+  "note": "JP スピードスター. Official ko/en/ja first move."
+ },
+ {
+  "key": "calamaramon",
+  "ko": "네로 코로소",
+  "en": "Nero Corso",
+  "what": "Spews out corrosive ink from its mouth.",
+  "koSpecies": "카르마라몬",
+  "kind": "water",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=calamaramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=calamaramon",
+   "https://digimon.net/reference/detail.php?directory_name=calamaramon",
+   "https://wikimon.net/calamaramon"
+  ],
+  "note": "JP ネーロコルソ. Official ko/en/ja first move."
+ },
+ {
+  "key": "sirenmon",
+  "ko": "제1곡《폴리포니》",
+  "en": "No. 1 Polyphony",
+  "what": "Sings a song in a high soprano, whose notes suffuse the listener's heart and numb their free will, leaving them at Sirenmon's mercy.",
+  "koSpecies": "세이렌몬",
+  "kind": "wave",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=sirenmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=sirenmon",
+   "https://digimon.net/reference/detail.php?directory_name=sirenmon",
+   "https://wikimon.net/sirenmon"
+  ],
+  "note": "JP 第一曲≪ポリフォニー≫. reference_en uses \"Symphony No. 1\"; Wikimon's Translation \"No.1<<Polyphony>>\" was used, written plainly."
+ },
+ {
+  "key": "splashmon",
+  "ko": "포이즈너스 포스",
+  "en": "Poisonous Force",
+  "what": "releases its army of Drippin followers to confuse the enemy",
+  "koSpecies": "스플래시몬",
+  "kind": "swarm",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=splashmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=splashmon",
+   "https://digimon.net/reference/detail.php?directory_name=splashmon"
+  ],
+  "note": "JP ポイゾナスフォース. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "magnagarurumon",
+  "ko": "머신건 디스트로이",
+  "en": "Machine Gun Destroy",
+  "what": "Simultaneously fires all its artillery weapons at all locked targets, then pulverizes its main target at high speed.",
+  "koSpecies": "매그너가루몬",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=magnagarurumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=magnagarurumon",
+   "https://digimon.net/reference/detail.php?directory_name=magnagarurumon",
+   "https://wikimon.net/magnagarurumon"
+  ],
+  "note": "JP マシンガンデストロイ. reference_en uses the dub name \"Machinegun Destroyer\", so Wikimon's name was used."
+ },
+ {
+  "key": "ancientgarurumon",
+  "ko": "샤프니스 클레이모어",
+  "en": "Sharpness Claymore",
+  "what": "Cuts the enemy into pieces with its greatswords.",
+  "koSpecies": "에이션트가루몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientgarurumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientgarurumon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientgarurumon",
+   "https://wikimon.net/ancientgarurumon"
+  ],
+  "note": "JP シャープネスクレイモア. reference_en uses the dub name \"Sharp Claymore\", so Wikimon's name was used."
+ },
+ {
+  "key": "ancientmermaimon",
+  "ko": "그레이트 ･ 메일스트롬",
+  "en": "Great Maelstrom",
+  "what": "Generates a gigantic maelstrom which swallows everything in the water.",
+  "koSpecies": "에이션트머메이몬",
+  "kind": "water",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientmermaimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientmermaimon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientmermaimon",
+   "https://wikimon.net/ancientmermaimon"
+  ],
+  "note": "JP グレイト・メイルストローム. Official ko/en/ja first move."
+ },
+ {
+  "key": "choromon",
+  "ko": "재밍 파우더",
+  "en": "Jamming Powder",
+  "what": "releases a powder of iron particles that confuses the enemy",
+  "koSpecies": "뽈뽈몬",
+  "kind": "gas",
+  "tint": "dust",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=choromon",
+   "https://digimon.net/reference_en/detail.php?directory_name=choromon",
+   "https://digimon.net/reference/detail.php?directory_name=choromon"
+  ],
+  "note": "JP ジャミングパウダー. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "caprimon",
+  "ko": "하울링 헤르츠",
+  "en": "Howling Hertz",
+  "what": "Generates a resonance between its two horns to paralyze the opponent.",
+  "koSpecies": "카프리몬",
+  "kind": "wave",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=capromon",
+   "https://digimon.net/reference_en/detail.php?directory_name=capromon",
+   "https://digimon.net/reference/detail.php?directory_name=capromon",
+   "https://wikimon.net/caprimon"
+  ],
+  "note": "JP ハウリングヘルツ. Official ko/en/ja first move."
+ },
+ {
+  "key": "kokabuterimon",
+  "ko": "스쿱 슬래시",
+  "en": "Scoop Smash",
+  "what": "Scoops up the opponent and jettisons them with its boastful horn.",
+  "koSpecies": "코캅테리몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kokabuterimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kokabuterimon",
+   "https://digimon.net/reference/detail.php?directory_name=kokabuterimon",
+   "https://wikimon.net/kokabuterimon"
+  ],
+  "note": "JP スクープスマッシュ. Official ko/en/ja first move."
+ },
+ {
+  "key": "kokuwamon",
+  "ko": "시저 암즈 미니",
+  "en": "Scissor Arms Mini",
+  "what": "Discharges electricity from the pincers on both of its arms and cuts through solid objects.",
+  "koSpecies": "코쿠와몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kokuwamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kokuwamon",
+   "https://digimon.net/reference/detail.php?directory_name=kokuwamon",
+   "https://wikimon.net/kokuwamon"
+  ],
+  "note": "JP シザーアームズミニ. reference_en uses the dub name \"Mini Scissor Claw\", so Wikimon's name was used."
+ },
+ {
+  "key": "blitzmon",
+  "ko": "토르 해머",
+  "en": "Thor's Hammer",
+  "what": "Gathers lightning by clasping its hands together, then dynamically swings them down.",
+  "koSpecies": "블리츠몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=blitzmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=blitzmon",
+   "https://digimon.net/reference/detail.php?directory_name=blitzmon",
+   "https://wikimon.net/blitzmon"
+  ],
+  "note": "JP トールハンマー. Official ko/en/ja first move."
+ },
+ {
+  "key": "mercuremon",
+  "ko": "제네러스 미러",
+  "en": "Generous Mirror",
+  "what": "It reflects an attack with its Irony no Tate, or uses the Irony no Tate to fire a blast of light.",
+  "koSpecies": "머큐레몬",
+  "kind": "light",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=mercuremon",
+   "https://digimon.net/reference_en/detail.php?directory_name=mercuremon",
+   "https://digimon.net/reference/detail.php?directory_name=mercuremon",
+   "https://wikimon.net/mercuremon"
+  ],
+  "note": "JP ジェネラスミラー. Official ko/en/ja first move."
+ },
+ {
+  "key": "rhinokabuterimon",
+  "ko": "콘덴서 스톰",
+  "en": "Condenser Storm",
+  "what": "Dynamically wields its horn and liberates all of the electricity accumulated within its body all at once, catching the opponent in a lightning storm.",
+  "koSpecies": "라이노캅테리몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=rhinokabuterimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=rhinokabuterimon",
+   "https://digimon.net/reference/detail.php?directory_name=rhinokabuterimon",
+   "https://wikimon.net/rhinokabuterimon"
+  ],
+  "note": "JP コンデンサストーム. Official ko/en/ja first move."
+ },
+ {
+  "key": "bolgmon",
+  "ko": "얼티메이트 썬더",
+  "en": "Ultimate Thunder",
+  "what": "Collects and then fires all of its electrical energy from both its arms.",
+  "koSpecies": "보르그몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=bolgmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=bolgmon",
+   "https://digimon.net/reference/detail.php?directory_name=bolgmon",
+   "https://wikimon.net/bolgmon"
+  ],
+  "note": "JP アルティメットサンダー. Official ko/en/ja first move."
+ },
+ {
+  "key": "sephirothmon",
+  "ko": "럼블 블렌드 넘버(1~10)",
+  "en": "Rumble Blend Number (1-10)",
+  "what": "Uses attacks with the same attribute as the Warrior Ten.",
+  "koSpecies": "세피로트몬",
+  "kind": "gaia",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=sephirothmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=sephirothmon",
+   "https://digimon.net/reference/detail.php?directory_name=sephirothmon",
+   "https://wikimon.net/sephirothmon"
+  ],
+  "note": "JP ランブルブレンドナンバー（１～１０）. Official ko/en/ja first move."
+ },
+ {
+  "key": "wisemon",
+  "ko": "판도라 ･ 다이얼로그",
+  "en": "Pandora Dialogue",
+  "what": "Repeatedly preserves the opponent's attacks within space and time, then plays them back at high speed.",
+  "koSpecies": "와이즈몬",
+  "kind": "gaia",
+  "tint": "psychic",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=wisemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=wisemon",
+   "https://digimon.net/reference/detail.php?directory_name=wisemon",
+   "https://wikimon.net/wisemon"
+  ],
+  "note": "JP パンドーラ・ダイアログ. Official ko/en/ja first move."
+ },
+ {
+  "key": "ancientbeatmon",
+  "ko": "캘러미티 썬더",
+  "en": "Calamity Thunder",
+  "what": "A calamitous thunder which brings about super-disasters.",
+  "koSpecies": "에이션트비트몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientbeatmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientbeatmon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientbeatmon",
+   "https://wikimon.net/ancientbeatmon"
+  ],
+  "note": "JP カラミティサンダー. Official ko/en/ja first move."
+ },
+ {
+  "key": "grandiskuwagamon",
+  "ko": "그랑 킬러",
+  "en": "Gran Killer",
+  "what": "Slices the opponent with the Gran Killer claws on its arms.",
+  "koSpecies": "그랑디스쿠가몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=grandiskuwagamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=grandiskuwagamon",
+   "https://digimon.net/reference/detail.php?directory_name=grandiskuwagamon",
+   "https://wikimon.net/grandiskuwagamon"
+  ],
+  "note": "JP グランキラー. Official ko/en/ja first move."
+ },
+ {
+  "key": "ancientwisemon",
+  "ko": "라플라스의 악마",
+  "en": "Laplace's Demon",
+  "what": "Calculates the coordinates to the spirit world and imprisons the opponent for eternity in a separate universe.",
+  "koSpecies": "에이션트와이즈몬",
+  "kind": "gaia",
+  "tint": "psychic",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=ancientwisetmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=ancientwisetmon",
+   "https://digimon.net/reference/detail.php?directory_name=ancientwisetmon",
+   "https://wikimon.net/ancientwisemon"
+  ],
+  "note": "JP ラプラスの魔. Official ko/en/ja first move."
+ },
+ {
+  "key": "murmukusmon",
+  "ko": "게헤나 ･ 플레임",
+  "en": "Gehenna Flame",
+  "what": "Spits hellfire from its mouth to inflict death and eternal suffering.",
+  "koSpecies": "무르무크스몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=murmukusmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=murmukusmon",
+   "https://digimon.net/reference/detail.php?directory_name=murmukusmon",
+   "https://wikimon.net/murmukusmon"
+  ],
+  "note": "JP ゲヘナ・フレイム. Official ko/en/ja first move."
+ },
+ {
+  "key": "popomon",
+  "ko": "헤어 미스트",
+  "en": "Hair Mist",
+  "what": "scatters its hair as a mist to blind the enemy",
+  "koSpecies": "포포몬",
+  "kind": "gas",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=popomon",
+   "https://digimon.net/reference_en/detail.php?directory_name=popomon",
+   "https://digimon.net/reference/detail.php?directory_name=popomon"
+  ],
+  "note": "JP ヘアミスト. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "frimon",
+  "ko": "꼬리 따귀",
+  "en": "Tail Slap",
+  "what": "slaps the enemy with its long tail",
+  "koSpecies": "프리몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=frimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=frimon",
+   "https://digimon.net/reference/detail.php?directory_name=frimon"
+  ],
+  "note": "JP シッポビンタ. No matching Wikimon technique; reference_en used; what is from the official profile."
+ },
+ {
+  "key": "liollmon",
+  "ko": "레오 클로",
+  "en": "Lio Claw",
+  "what": "Cuts the opponent to pieces with its sharp claws.",
+  "koSpecies": "레오르몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=liollmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=liollmon",
+   "https://digimon.net/reference/detail.php?directory_name=liollmon",
+   "https://wikimon.net/liollmon"
+  ],
+  "note": "JP レオクロー. Official ko/en/ja first move."
+ },
+ {
+  "key": "gazimon",
+  "ko": "패럴라이즈 브레스",
+  "en": "Paralyze Breath",
+  "what": "Breathes a paralyzing poison gas at the enemy, or paralyzes them with electricity.",
+  "koSpecies": "가지몬",
+  "kind": "gas",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=gazimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=gazimon",
+   "https://digimon.net/reference/detail.php?directory_name=gazimon",
+   "https://wikimon.net/gazimon"
+  ],
+  "note": "JP パラライズブレス. reference_en uses the dub name \"Electric Stun Blast\", so Wikimon's name was used."
+ },
+ {
+  "key": "lowemon",
+  "ko": "에비히 슐라프",
+  "en": "Ewig Schlaf",
+  "what": "Blasts the enemy with a powerful spear attack.",
+  "koSpecies": "레베몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=louwemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=louwemon",
+   "https://digimon.net/reference/detail.php?directory_name=louwemon",
+   "https://wikimon.net/lowemon"
+  ],
+  "note": "JP エーヴィッヒ・シュラーフ. Official ko/en/ja first move."
+ },
+ {
+  "key": "liamon",
+  "ko": "썬더 오브 킹",
+  "en": "Thunder of King",
+  "what": "Charges and then releases electricity generated in its mane.",
+  "koSpecies": "라이아몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=liamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=liamon",
+   "https://digimon.net/reference/detail.php?directory_name=liamon",
+   "https://wikimon.net/liamon"
+  ],
+  "note": "JP サンダーオブキング. reference_en uses the dub name \"Thunder of the King\", so Wikimon's name was used."
+ },
+ {
+  "key": "duskmon",
+  "ko": "가이스트 아벤트",
+  "en": "Geist Abend",
+  "what": "Makes the eyes on its body glow to hypnotize the opponent.",
+  "koSpecies": "더스크몬",
+  "kind": "wave",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=duskmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=duskmon",
+   "https://digimon.net/reference/detail.php?directory_name=duskmon",
+   "https://wikimon.net/duskmon"
+  ],
+  "note": "JP ガイストアーベント. Official ko/en/ja first move."
+ },
+ {
+  "key": "raihimon",
+  "ko": "슈발츠 ･ 레르자츠",
+  "en": "Schwarz Lehrsatz",
+  "what": "Disables the laws of physics in the area and brings down the opponent.",
+  "koSpecies": "라이히몬",
+  "kind": "gaia",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=raihimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=raihimon",
+   "https://digimon.net/reference/detail.php?directory_name=raihimon",
+   "https://wikimon.net/raihimon"
+  ],
+  "note": "JP シュバルツ・レールザッツ（黒定理）. Official ko/en/ja first move; the kanji is a gloss."
+ },
+ {
+  "key": "kaiserleomon",
+  "ko": "슈바르츠 ･ 도너",
+  "en": "Schwarz Donner",
+  "what": "Fires a black spirit shot from its mouth.",
+  "koSpecies": "카이저레오몬",
+  "kind": "fire",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kaiserleomon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kaiserleomon",
+   "https://digimon.net/reference/detail.php?directory_name=kaiserleomon",
+   "https://wikimon.net/kaiserleomon"
+  ],
+  "note": "JP シュヴァルツ・ドンナー. Official ko/en/ja first move."
+ },
+ {
+  "key": "velgrmon",
+  "ko": "존 딜리터",
+  "en": "Zone Deleter",
+  "what": "Flaps its wings to blow the opponent and all the space around them into another dimension.",
+  "koSpecies": "베르그몬",
+  "kind": "wind",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=velgrmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=velgrmon",
+   "https://digimon.net/reference/detail.php?directory_name=velgrmon",
+   "https://wikimon.net/velgrmon"
+  ],
+  "note": "JP ゾーンデリーター. Official ko/en/ja first move."
+ },
+ {
+  "key": "skullsatamon",
+  "ko": "어둠의 저주",
+  "en": "Nail Bone",
+  "what": "Fires a powerful light from the jewel at the end of its staff to disrupt and obliterate the opponent's data.",
+  "koSpecies": "스컬사탄몬",
+  "kind": "beam",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=skullsatamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=skullsatamon",
+   "https://digimon.net/reference/detail.php?directory_name=skullsatamon",
+   "https://wikimon.net/skullsatamon"
+  ],
+  "note": "JP ネイルボーン. Official ko/en/ja first move."
+ },
+ {
+  "key": "lucemonfalldownmode",
+  "ko": "파라다이스 로스트",
+  "en": "Paradise Lost",
+  "what": "Launches the opponent into the sky with a wild dance of blows, then holds their limbs fixed and drives them into the ground.",
+  "koSpecies": "루체몬: 폴다운 모드",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=rucemonfalldownmode",
+   "https://digimon.net/reference_en/detail.php?directory_name=rucemonfalldownmode",
+   "https://digimon.net/reference/detail.php?directory_name=rucemonfalldownmode",
+   "https://wikimon.net/lucemonfalldownmode"
+  ],
+  "note": "JP パラダイスロスト. Official ko/en/ja first move."
+ },
+ {
+  "key": "deathmon",
+  "ko": "데스 애로",
+  "en": "Death Arrow",
+  "what": "Fires energy arrows from the eyes on its hands.",
+  "koSpecies": "데스몬",
+  "kind": "missile",
+  "tint": "dark",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=deathmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=deathmon",
+   "https://digimon.net/reference/detail.php?directory_name=deathmon",
+   "https://wikimon.net/deathmon"
+  ],
+  "note": "JP デスアロー. Official ko/en/ja first move."
+ },
+ {
+  "key": "dinotigermon",
+  "ko": "그라운드 팡",
+  "en": "Ground Fang",
+  "what": "Pins the enemy down and stabs and tears them with its fangs.",
+  "koSpecies": "다이노타이거몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=dinotigermon",
+   "https://digimon.net/reference_en/detail.php?directory_name=dinotigermon",
+   "https://digimon.net/reference/detail.php?directory_name=dinotigermon",
+   "https://wikimon.net/dinotigermon"
+  ],
+  "note": "JP グラウンドファング. Official ko/en/ja first move."
+ }
+]

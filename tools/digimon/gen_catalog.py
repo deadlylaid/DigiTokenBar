@@ -56,6 +56,14 @@ LINES = [
     ("armadimon", "BEMemory D-3 White and Yellow Dim", "E6C84A", None),
     ("hawkmon", "BEMemory D-3 White and Red Dim", "E06A5A", None),
     ("kudamon", "BEMemory Digimon Seekers Pulsemon Dim", "F2E6A0", None),
+    # Step 11: the six Frontier DIM cards (research/vb-conditions-frontier.json). Each line is named
+    # after the Child that grows into the card's Hybrid Digimon.
+    ("flamon", "Agnimon", "E8692F", None),
+    ("tinkermon", "Fairimon", "C9A6E8", None),
+    ("bearmon", "Chackmon", "A9D8E8", None),
+    ("strabimon", "Wolfmon", "9FB4D9", None),
+    ("kokabuterimon", "Blitzmon", "4C63B6", None),
+    ("liollmon", "Louwemon", "8A6A2E", None),
 ]
 # Card roster entries that are not a species of their own.
 NOT_SPECIES = {
@@ -67,6 +75,12 @@ EXTRA_SPECIAL = [("wargreymon", "metalgarurumon", "omegamon")]
 LEVEL = {"Baby I": "babyI", "Baby II": "babyII", "Child": "child", "Adult": "adult",
          "Perfect": "perfect", "Ultimate": "ultimate"}
 ORDER = ["babyI", "babyII", "child", "adult", "perfect", "ultimate"]
+# Wikimon levels that growth does not set on its own: a card's research gives their stage
+# (`cardStages`). Hybrid Digimon on the Frontier cards grow by training like the rest of the card.
+# Armor Digimon stay out: they need Digimentals.
+CARD_STAGE_LEVELS = {"Hybrid"}
+CARD_LEVEL = {}   # species key -> stage from its card's research (one stage per species)
+CARD_ATTR = {}    # species key -> attribute from its card's research (a Hybrid is "Variable" on Wikimon)
 ATTR = {"Vaccine": "vaccine", "Data": "data", "Virus": "virus", "Free": "free"}
 # Korean names missing from data/evolutions.json, taken from the official Korean reference
 # (digimon.net/reference_ko, checked 2026-11-10).
@@ -194,6 +208,40 @@ def research_cards():
     return out
 
 
+def card_stages():
+    """{line id: {species key: stage}}: the stage each researched card puts its species in. Also
+    fills CARD_ATTR with the card's attribute of each Hybrid (the same on every card)."""
+    out = {}
+    for path in RESEARCH:
+        for line_id, card in json.loads(path.read_text())["cards"].items():
+            stages = card.get("cardStages") or {}
+            bad = {k: v for k, v in stages.items() if v not in ORDER}
+            if bad:
+                raise SystemExit(f"{line_id}: unknown card stage(s) {bad}")
+            out[line_id] = stages
+            for k, a in (card.get("cardAttributes") or {}).items():
+                if a not in ATTR.values():
+                    raise SystemExit(f"{line_id}: {k} has an unknown card attribute {a!r}")
+                if CARD_ATTR.setdefault(k, a) != a:
+                    raise SystemExit(f"{k}: attribute {CARD_ATTR[k]} on one card but {a} on {line_id}")
+    return out
+
+
+def level_on(line_id, k, nodes, stages):
+    """The stage of species k on this line: Wikimon's level, or the card's stage for a Hybrid."""
+    lv = LEVEL.get(nodes[k]["level"])
+    on_card = stages.get(line_id, {}).get(k)
+    if lv:
+        if on_card and on_card != lv:
+            print(f"{line_id}: {k} is {lv} on Wikimon but {on_card} on the card; Wikimon's level is kept")
+        return lv
+    if nodes[k]["level"] in CARD_STAGE_LEVELS and on_card:
+        if CARD_LEVEL.setdefault(k, on_card) != on_card:
+            raise SystemExit(f"{k}: stage {CARD_LEVEL[k]} on one card but {on_card} on {line_id}")
+        return on_card
+    return None
+
+
 def is_jogress_only(edge):
     """The note starts with "Jogress with ...": only a merge evolves it. A normal route with a merge
     as an alternative is written the other way round ("0-2 Care Mistakes ... OR ... Jogress")."""
@@ -240,6 +288,7 @@ def swift_str(s):
 
 def main():
     nodes, edges = DATA["nodes"], DATA["edges"]
+    stages = card_stages()
     lines, keys = [], []
     for line_id, card_name, egg, size in LINES:
         card = next(c for c in DATA["cards"] if c["name"] == card_name
@@ -250,21 +299,23 @@ def main():
         unknown = [k for k in card["roster"] if k not in nodes and k not in NOT_SPECIES]
         if unknown:
             raise SystemExit(f"{line_id}: card species missing from data/evolutions.json: {', '.join(unknown)}")
-        # Armor Digimon need Digimentals, not growth: they are left out.
-        skipped = [k for k in card["roster"] if k in nodes and nodes[k]["level"] not in LEVEL]
+        # Armor Digimon need Digimentals, not growth: they are left out. Hybrid Digimon take their
+        # card's stage when the card's research gives it (CARD_STAGE_LEVELS).
+        on = {k: level_on(line_id, k, nodes, stages) for k in card["roster"] if k in nodes}
+        skipped = [k for k, lv in on.items() if not lv]
         if skipped:
             print(f"{line_id}: leaving out {', '.join(skipped)} (level not raised by growth)")
-        roster = [k for k in card["roster"] if k in nodes and nodes[k]["level"] in LEVEL]
+        roster = [k for k in card["roster"] if on.get(k)]
         if line_id not in roster:
             raise SystemExit(f"{line_id}: the line id must be a species on its card")
-        baby1 = next(k for k in roster if nodes[k]["level"] == "Baby I")
+        baby1 = next(k for k in roster if on[k] == "babyI")
         lines.append((line_id, card_name, egg, baby1, roster))
         keys += [k for k in roster if k not in keys]
 
     species = []
     for k in keys:
         n = nodes[k]
-        level = LEVEL.get(n["level"])
+        level = LEVEL.get(n["level"]) or CARD_LEVEL.get(k)
         if not level:
             raise SystemExit(f"{k}: unsupported level {n['level']!r}")
         sp = n["sprites"]
@@ -272,7 +323,8 @@ def main():
             raise SystemExit(f"{k}: no 64x64 Vital Bracelet sprite")
         # Korean name: a checked override, then the official reference name found with the move.
         ko = KO_OVERRIDES.get(k) or MOVES.get(k, {}).get("koSpecies") or n["ko"] or n["name"]
-        species.append((k, n["name"], ko, level, ATTR.get(n.get("attribute", ""), "unknown"),
+        attribute = ATTR.get(n.get("attribute", "")) or (CARD_ATTR.get(k) if n["level"] in CARD_STAGE_LEVELS else None)
+        species.append((k, n["name"], ko, level, attribute or "unknown",
                         sp["vb"], sp.get("dmc") or sp.get("dpc") or ""))
 
     level_of = {s[0]: s[3] for s in species}

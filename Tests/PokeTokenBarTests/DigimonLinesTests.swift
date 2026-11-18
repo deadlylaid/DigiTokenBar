@@ -14,7 +14,7 @@ final class DigimonLinesTests: XCTestCase {
     }
 
     func testEveryLineIsWellFormed() {
-        XCTAssertEqual(catalog.lines.count, 34)
+        XCTAssertEqual(catalog.lines.count, 40)
         for line in catalog.lines.values {
             XCTAssertEqual(catalog.species(line.firstBaby)?.level, .babyI, line.id)
             XCTAssertEqual(catalog.species(line.id)?.level, .child, "\(line.id) names its line after a Child on the card")
@@ -145,10 +145,11 @@ final class DigimonLinesTests: XCTestCase {
         for pair in ["wargreymon+metalgarurumon=omegamon", "metalgarurumon+wargreymon=omegamon",
                      "apollomon+dianamon=gracenovamon", "dianamon+apollomon=gracenovamon",
                      "blackwargreymon+metalgarurumonblack=omegamonzwart", "alphamon+ouryumon=alphamonouryuken",
-                     "dominimon+xiangpengmon=shakamon", "grankuwagamon+heraklekabuterimon=tyrantkabuterimon"] {
+                     "dominimon+xiangpengmon=shakamon", "grankuwagamon+heraklekabuterimon=tyrantkabuterimon",
+                     "kaisergreymon+magnagarurumon=susanoomon", "magnagarurumon+kaisergreymon=susanoomon"] {
             XCTAssertTrue(pairs.contains(pair), pair)
         }
-        XCTAssertEqual(pairs.count, 20, "ten merges, both directions")
+        XCTAssertEqual(pairs.count, 22, "eleven merges, both directions")
         for merge in EvolutionRules.mvp.specialJogress {
             XCTAssertTrue(EvolutionRules.mvp.locked.contains(merge.to), "growth never takes \(merge.to)")
             XCTAssertTrue(catalog.lines.values.contains { $0.members.contains(merge.from) && $0.members.contains(merge.to) },
@@ -161,6 +162,29 @@ final class DigimonLinesTests: XCTestCase {
         XCTAssertEqual(engine.settle(&s, at: now), [.jogressOffered(options: ["gracenovamon"])])
         XCTAssertEqual(try engine.jogress(&s, code: friendCode("dianamon", at: now), at: now).events,
                        [.jogressed(from: "apollomon", partner: "dianamon", to: "gracenovamon")])
+    }
+
+    /// The Frontier cards raise Hybrid Digimon by training like the rest of the card. Wikimon gives
+    /// them no stage and the attribute "Variable": the card's chart column sets the stage and the card
+    /// the attribute (Free), so a friend's Hybrid fits a "Jogress with Free Adult" route.
+    func testHybridDigimonTakeTheirCardsStageAndAttribute() {
+        for (key, level) in [("flamon", DigimonLevel.child), ("strabimon", .child), ("agnimon", .adult), ("lowemon", .adult),
+                             ("aldamon", .perfect), ("vritramon", .perfect), ("kaisergreymon", .ultimate),
+                             ("magnagarurumon", .ultimate)] {
+            XCTAssertEqual(catalog.species(key)?.level, level, key)
+            XCTAssertEqual(catalog.species(key)?.attribute, .free, key)
+        }
+        // Each line is named after the Child that grows into its card's Hybrid.
+        for (line, hybrid) in [("flamon", "agnimon"), ("tinkermon", "fairimon"), ("bearmon", "chackmon"),
+                               ("strabimon", "wolfmon"), ("kokabuterimon", "blitzmon"), ("liollmon", "lowemon")] {
+            XCTAssertEqual(catalog.lines[line]?.card, ["flamon": "Agnimon", "tinkermon": "Fairimon", "bearmon": "Chackmon",
+                                                       "strabimon": "Wolfmon", "kokabuterimon": "Blitzmon",
+                                                       "liollmon": "Louwemon"][line], line)
+            XCTAssertTrue(catalog.nextEvolutions(from: line, in: catalog.lines[line]!).contains { $0.to == hybrid }, line)
+        }
+        let route = catalog.lines["flamon"]!.jogress.first { $0.step == "meramon>gigasmon" }
+        XCTAssertEqual(route, .init("meramon>gigasmon", level: .adult, attributes: [.free]))
+        XCTAssertTrue(route?.accepts(catalog.species("agnimon")!) ?? false, "a friend's Agnimon is a Free Adult")
     }
 
     /// Wikimon writes a Vital Bracelet merge as "(with a ... Adult ...)" without the word Jogress;

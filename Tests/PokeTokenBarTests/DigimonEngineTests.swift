@@ -40,12 +40,12 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Catalog
 
-    func testCatalogHas34LinesOf534SpeciesWithLargeSprites() {
+    func testCatalogHas40LinesOf614SpeciesWithLargeSprites() {
         let catalog = DigimonCatalog.mvp
-        XCTAssertEqual(catalog.lines.count, 34)
+        XCTAssertEqual(catalog.lines.count, 40)
         XCTAssertTrue(Set(["agumon", "gabumon", "piyomon", "tentomon", "vmon", "guilmon"]).isSubset(of: catalog.lines.keys),
                       "the first six lines stay")
-        XCTAssertEqual(catalog.species.count, 534)
+        XCTAssertEqual(catalog.species.count, 614)
         for species in catalog.species.values {
             XCTAssertTrue(species.vbSprite.hasSuffix("_vpet_vb.png"), species.key)
         }

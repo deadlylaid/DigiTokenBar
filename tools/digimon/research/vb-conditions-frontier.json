@@ -1,0 +1,4244 @@
+{
+ "system": {
+  "description": "Per-card Vital Bracelet routes for the six Frontier DIM cards (Set EX3/EX4/EX5 Legend Spirits: Agnimon, Fairimon, Chackmon, Wolfmon, Blitzmon, Louwemon). Collected 2026-11-19 by a script from the humulos.com chart (vbdm/ex) and detail pages (device 13 = VB DIM/EX cards). `cardStages` is the stage the card's chart column puts each species in (the Hybrid Digimon have no stage of their own on Wikimon); `cardAttributes` is the card's attribute of each Hybrid (Wikimon: Variable). Each edge is a route between two species of the card with its kind, the stated requirements and the source text. Third-party quotes: review before a public release (see README).",
+  "kinds": {
+   "normal": "stat requirements (Vital Values, trophies, battles, win ratio)",
+   "fallback": "taken when nothing else is met",
+   "jogress": "needs a partner Digimon",
+   "timeOnly": "baby stages: time only"
+  }
+ },
+ "cards": {
+  "flamon": {
+   "card": "Agnimon",
+   "humulosCard": "Agnimon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#agni_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Agnimon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "mokumon": "babyI",
+    "petimeramon": "babyII",
+    "flamon": "child",
+    "gottsumon": "child",
+    "agnimon": "adult",
+    "meramon": "adult",
+    "starmon": "adult",
+    "grottemon": "adult",
+    "aldamon": "perfect",
+    "vritramon": "perfect",
+    "superstarmon": "perfect",
+    "gigasmon": "perfect",
+    "darksuperstarmon": "perfect",
+    "kaisergreymon": "ultimate",
+    "ancientgreymon": "ultimate",
+    "ancientvolcamon": "ultimate",
+    "susanoomon": "ultimate"
+   },
+   "cardAttributes": {
+    "flamon": "free",
+    "agnimon": "free",
+    "grottemon": "free",
+    "aldamon": "free",
+    "vritramon": "free",
+    "gigasmon": "free",
+    "kaisergreymon": "free"
+   },
+   "edges": [
+    {
+     "from": "mokumon",
+     "to": "petimeramon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moku&device=13",
+     "note": "humulos card heading: \"VBe, Agni EX\""
+    },
+    {
+     "from": "petimeramon",
+     "to": "flamon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petimera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "petimeramon",
+     "to": "gottsumon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petimera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "flamon",
+     "to": "agnimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fla&device=13",
+     "note": null
+    },
+    {
+     "from": "flamon",
+     "to": "meramon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fla&device=13",
+     "note": null
+    },
+    {
+     "from": "gottsumon",
+     "to": "grottemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gottsu&device=13",
+     "note": null
+    },
+    {
+     "from": "gottsumon",
+     "to": "starmon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMin": 0
+       },
+       {
+        "vitalValuesMin": 0
+       },
+       {
+        "battlesMin": 0
+       }
+      ]
+     },
+     "raw": "Choose one: 0+ Trophies OR 0+ Vital Values OR 0+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gottsu&device=13",
+     "note": null
+    },
+    {
+     "from": "agnimon",
+     "to": "aldamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=agni&device=13",
+     "note": null
+    },
+    {
+     "from": "agnimon",
+     "to": "vritramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=agni&device=13",
+     "note": null
+    },
+    {
+     "from": "agnimon",
+     "to": "darksuperstarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=agni&device=13",
+     "note": null
+    },
+    {
+     "from": "agnimon",
+     "to": "gigasmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=agni&device=13",
+     "note": null
+    },
+    {
+     "from": "agnimon",
+     "to": "superstarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=agni&device=13",
+     "note": null
+    },
+    {
+     "from": "meramon",
+     "to": "vritramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "meramon",
+     "to": "darksuperstarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "meramon",
+     "to": "superstarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "meramon",
+     "to": "aldamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "meramon",
+     "to": "gigasmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mera&device=13",
+     "note": "humulos card heading: \"Agnimon EX\""
+    },
+    {
+     "from": "starmon",
+     "to": "superstarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=star&device=13",
+     "note": null
+    },
+    {
+     "from": "starmon",
+     "to": "darksuperstarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=star&device=13",
+     "note": null
+    },
+    {
+     "from": "starmon",
+     "to": "vritramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=star&device=13",
+     "note": null
+    },
+    {
+     "from": "starmon",
+     "to": "aldamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=star&device=13",
+     "note": null
+    },
+    {
+     "from": "starmon",
+     "to": "gigasmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=star&device=13",
+     "note": null
+    },
+    {
+     "from": "grottemon",
+     "to": "gigasmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grotte&device=13",
+     "note": null
+    },
+    {
+     "from": "grottemon",
+     "to": "superstarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grotte&device=13",
+     "note": null
+    },
+    {
+     "from": "grottemon",
+     "to": "darksuperstarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grotte&device=13",
+     "note": null
+    },
+    {
+     "from": "grottemon",
+     "to": "vritramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grotte&device=13",
+     "note": null
+    },
+    {
+     "from": "grottemon",
+     "to": "aldamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=grotte&device=13",
+     "note": null
+    },
+    {
+     "from": "aldamon",
+     "to": "kaisergreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=alda&device=13",
+     "note": null
+    },
+    {
+     "from": "aldamon",
+     "to": "ancientgreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=alda&device=13",
+     "note": null
+    },
+    {
+     "from": "aldamon",
+     "to": "ancientvolcamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=alda&device=13",
+     "note": null
+    },
+    {
+     "from": "vritramon",
+     "to": "kaisergreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=vritra&device=13",
+     "note": null
+    },
+    {
+     "from": "vritramon",
+     "to": "ancientgreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=vritra&device=13",
+     "note": null
+    },
+    {
+     "from": "vritramon",
+     "to": "ancientvolcamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=vritra&device=13",
+     "note": null
+    },
+    {
+     "from": "superstarmon",
+     "to": "kaisergreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=superstar&device=13",
+     "note": null
+    },
+    {
+     "from": "superstarmon",
+     "to": "ancientvolcamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=superstar&device=13",
+     "note": null
+    },
+    {
+     "from": "superstarmon",
+     "to": "ancientgreymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Virus or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Virus or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=superstar&device=13",
+     "note": null
+    },
+    {
+     "from": "gigasmon",
+     "to": "ancientvolcamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gigas&device=13",
+     "note": null
+    },
+    {
+     "from": "gigasmon",
+     "to": "ancientgreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gigas&device=13",
+     "note": null
+    },
+    {
+     "from": "gigasmon",
+     "to": "kaisergreymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gigas&device=13",
+     "note": null
+    },
+    {
+     "from": "darksuperstarmon",
+     "to": "ancientvolcamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=darksuperstar&device=13",
+     "note": null
+    },
+    {
+     "from": "darksuperstarmon",
+     "to": "ancientgreymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=darksuperstar&device=13",
+     "note": null
+    },
+    {
+     "from": "darksuperstarmon",
+     "to": "kaisergreymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=darksuperstar&device=13",
+     "note": null
+    },
+    {
+     "from": "kaisergreymon",
+     "to": "susanoomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Magna Garurumon from the Wolfmon Dim"
+     },
+     "raw": "Jogress with Magna Garurumon from the Wolfmon Dim",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kaisergrey&device=13",
+     "note": null
+    }
+   ],
+   "notes": [
+    "Peti Meramon -> Vorvomon (No requirements) is under \"Volcanic Beat\", not this card",
+    "Meramon -> Flaremon (12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio) is under \"Volcanic Beat\", not this card",
+    "Meramon -> Death Meramon (10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio) is under \"Volcanic Beat\", not this card",
+    "Meramon -> Groundramon (8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio) is under \"Volcanic Beat\", not this card",
+    "Meramon -> Lavogaritamon (Jogress with Virus Adult) is under \"Volcanic Beat\", not this card",
+    "Meramon -> Master Tyranomon (Jogress with Vaccine or Free Adult) is under \"Volcanic Beat\", not this card"
+   ],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 21,
+    "fallback": 3,
+    "jogress": 18
+   }
+  },
+  "tinkermon": {
+   "card": "Fairimon",
+   "humulosCard": "Fairimon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#fairi_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Fairimon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "yuramon": "babyI",
+    "tanemon": "babyII",
+    "tinkermon": "child",
+    "pomumon": "child",
+    "fairimon": "adult",
+    "cockatrimon": "adult",
+    "arbormon": "adult",
+    "zassoumon": "adult",
+    "jetsilphymon": "perfect",
+    "shutumon": "perfect",
+    "petaldramon": "perfect",
+    "peacockmon": "perfect",
+    "zamielmon": "perfect",
+    "ancientirismon": "ultimate",
+    "lotusmon": "ultimate",
+    "ancienttroiamon": "ultimate",
+    "lordknightmon": "ultimate"
+   },
+   "cardAttributes": {
+    "fairimon": "free",
+    "arbormon": "free",
+    "jetsilphymon": "free",
+    "shutumon": "free",
+    "petaldramon": "free"
+   },
+   "edges": [
+    {
+     "from": "yuramon",
+     "to": "tanemon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=yura&device=13",
+     "note": "humulos card heading: \"HJu, Fairi EX\""
+    },
+    {
+     "from": "tanemon",
+     "to": "tinkermon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tane&device=13",
+     "note": "humulos card heading: \"Fairimon EX\""
+    },
+    {
+     "from": "tanemon",
+     "to": "pomumon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tane&device=13",
+     "note": "humulos card heading: \"Fairimon EX\""
+    },
+    {
+     "from": "tinkermon",
+     "to": "fairimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tinker&device=13",
+     "note": null
+    },
+    {
+     "from": "tinkermon",
+     "to": "zassoumon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tinker&device=13",
+     "note": null
+    },
+    {
+     "from": "pomumon",
+     "to": "arbormon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pomu&device=13",
+     "note": null
+    },
+    {
+     "from": "pomumon",
+     "to": "cockatrimon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pomu&device=13",
+     "note": null
+    },
+    {
+     "from": "fairimon",
+     "to": "jetsilphymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "fairimon",
+     "to": "shutumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "fairimon",
+     "to": "petaldramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "fairimon",
+     "to": "peacockmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "fairimon",
+     "to": "zamielmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "shutumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "peacockmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "jetsilphymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "petaldramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "zamielmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "petaldramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "zamielmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "jetsilphymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "shutumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "peacockmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "zamielmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "peacockmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "jetsilphymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "shutumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "petaldramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "jetsilphymon",
+     "to": "ancientirismon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jetsilphy&device=13",
+     "note": null
+    },
+    {
+     "from": "jetsilphymon",
+     "to": "lotusmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jetsilphy&device=13",
+     "note": null
+    },
+    {
+     "from": "jetsilphymon",
+     "to": "ancienttroiamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Data Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jetsilphy&device=13",
+     "note": null
+    },
+    {
+     "from": "jetsilphymon",
+     "to": "lordknightmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jetsilphy&device=13",
+     "note": null
+    },
+    {
+     "from": "shutumon",
+     "to": "lordknightmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shutu&device=13",
+     "note": null
+    },
+    {
+     "from": "shutumon",
+     "to": "ancientirismon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shutu&device=13",
+     "note": null
+    },
+    {
+     "from": "shutumon",
+     "to": "lotusmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shutu&device=13",
+     "note": null
+    },
+    {
+     "from": "shutumon",
+     "to": "ancienttroiamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shutu&device=13",
+     "note": null
+    },
+    {
+     "from": "petaldramon",
+     "to": "ancienttroiamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petaldra&device=13",
+     "note": null
+    },
+    {
+     "from": "petaldramon",
+     "to": "lotusmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petaldra&device=13",
+     "note": null
+    },
+    {
+     "from": "petaldramon",
+     "to": "lordknightmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petaldra&device=13",
+     "note": null
+    },
+    {
+     "from": "petaldramon",
+     "to": "ancientirismon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=petaldra&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "ancientirismon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "lotusmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "ancienttroiamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "lordknightmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "zamielmon",
+     "to": "lordknightmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zamiel&device=13",
+     "note": null
+    },
+    {
+     "from": "zamielmon",
+     "to": "ancienttroiamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zamiel&device=13",
+     "note": null
+    },
+    {
+     "from": "zamielmon",
+     "to": "ancientirismon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zamiel&device=13",
+     "note": null
+    },
+    {
+     "from": "zamielmon",
+     "to": "lotusmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Perfect",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zamiel&device=13",
+     "note": null
+    }
+   ],
+   "notes": [
+    "Tanemon -> Palmon (No requirements) is under \"Hermit in the Jungle\", not this card"
+   ],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 19,
+    "fallback": 3,
+    "jogress": 22
+   }
+  },
+  "bearmon": {
+   "card": "Chackmon",
+   "humulosCard": "Chackmon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#chack_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Chackmon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "yukimibotamon": "babyI",
+    "hiyarimon": "babyII",
+    "bearmon": "child",
+    "snowgoburimon": "child",
+    "chackmon": "adult",
+    "gryzmon": "adult",
+    "icemon": "adult",
+    "mojyamon": "adult",
+    "daipenmon": "perfect",
+    "blizzarmon": "perfect",
+    "panjyamonxantibody": "perfect",
+    "nanomon": "perfect",
+    "astamon": "perfect",
+    "olegmon": "ultimate",
+    "frosvelgrmon": "ultimate",
+    "ancientmegatheriumon": "ultimate",
+    "dynasmon": "ultimate"
+   },
+   "cardAttributes": {
+    "chackmon": "free",
+    "daipenmon": "free",
+    "blizzarmon": "free"
+   },
+   "edges": [
+    {
+     "from": "yukimibotamon",
+     "to": "hiyarimon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=yukimibota&device=13",
+     "note": "humulos card heading: \"BFa, Chack EX\""
+    },
+    {
+     "from": "hiyarimon",
+     "to": "bearmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hiyari&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "hiyarimon",
+     "to": "snowgoburimon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hiyari&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "bearmon",
+     "to": "chackmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bear&device=13",
+     "note": null
+    },
+    {
+     "from": "bearmon",
+     "to": "gryzmon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       },
+       {
+        "trophiesMax": 9
+       }
+      ]
+     },
+     "raw": "Choose one: 0-1,299 Vital Values OR 0-7 Battles OR 0-9 Trophies",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bear&device=13",
+     "note": null
+    },
+    {
+     "from": "snowgoburimon",
+     "to": "mojyamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=snowgobli&device=13",
+     "note": null
+    },
+    {
+     "from": "snowgoburimon",
+     "to": "icemon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       },
+       {
+        "trophiesMax": 9
+       }
+      ]
+     },
+     "raw": "Choose one: 0-1,299 Vital Values OR 0-7 Battles OR 0-9 Trophies",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=snowgobli&device=13",
+     "note": null
+    },
+    {
+     "from": "chackmon",
+     "to": "daipenmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=chack&device=13",
+     "note": null
+    },
+    {
+     "from": "chackmon",
+     "to": "blizzarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=chack&device=13",
+     "note": null
+    },
+    {
+     "from": "chackmon",
+     "to": "panjyamonxantibody",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=chack&device=13",
+     "note": null
+    },
+    {
+     "from": "chackmon",
+     "to": "nanomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=chack&device=13",
+     "note": null
+    },
+    {
+     "from": "chackmon",
+     "to": "astamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=chack&device=13",
+     "note": null
+    },
+    {
+     "from": "gryzmon",
+     "to": "astamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gryz&device=13",
+     "note": null
+    },
+    {
+     "from": "gryzmon",
+     "to": "panjyamonxantibody",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gryz&device=13",
+     "note": null
+    },
+    {
+     "from": "gryzmon",
+     "to": "daipenmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gryz&device=13",
+     "note": null
+    },
+    {
+     "from": "gryzmon",
+     "to": "blizzarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gryz&device=13",
+     "note": null
+    },
+    {
+     "from": "gryzmon",
+     "to": "nanomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gryz&device=13",
+     "note": null
+    },
+    {
+     "from": "icemon",
+     "to": "panjyamonxantibody",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ice&device=13",
+     "note": null
+    },
+    {
+     "from": "icemon",
+     "to": "nanomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ice&device=13",
+     "note": null
+    },
+    {
+     "from": "icemon",
+     "to": "daipenmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ice&device=13",
+     "note": null
+    },
+    {
+     "from": "icemon",
+     "to": "blizzarmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ice&device=13",
+     "note": null
+    },
+    {
+     "from": "icemon",
+     "to": "astamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ice&device=13",
+     "note": null
+    },
+    {
+     "from": "mojyamon",
+     "to": "blizzarmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mojya&device=13",
+     "note": null
+    },
+    {
+     "from": "mojyamon",
+     "to": "nanomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mojya&device=13",
+     "note": null
+    },
+    {
+     "from": "mojyamon",
+     "to": "daipenmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mojya&device=13",
+     "note": null
+    },
+    {
+     "from": "mojyamon",
+     "to": "panjyamonxantibody",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mojya&device=13",
+     "note": null
+    },
+    {
+     "from": "mojyamon",
+     "to": "astamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mojya&device=13",
+     "note": null
+    },
+    {
+     "from": "daipenmon",
+     "to": "ancientmegatheriumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=daipen&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "daipenmon",
+     "to": "olegmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "Choose one: 10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio OR Jogress with Vaccine or Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=daipen&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "daipenmon",
+     "to": "olegmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Data Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Choose one: 10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio OR Jogress with Vaccine or Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=daipen&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "daipenmon",
+     "to": "dynasmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=daipen&device=13",
+     "note": "humulos card heading: \"Chackmon EX\""
+    },
+    {
+     "from": "blizzarmon",
+     "to": "frosvelgrmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blizzar&device=13",
+     "note": null
+    },
+    {
+     "from": "blizzarmon",
+     "to": "olegmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blizzar&device=13",
+     "note": null
+    },
+    {
+     "from": "blizzarmon",
+     "to": "ancientmegatheriumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blizzar&device=13",
+     "note": null
+    },
+    {
+     "from": "blizzarmon",
+     "to": "dynasmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blizzar&device=13",
+     "note": null
+    },
+    {
+     "from": "panjyamonxantibody",
+     "to": "ancientmegatheriumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=panjya_x&device=13",
+     "note": null
+    },
+    {
+     "from": "panjyamonxantibody",
+     "to": "olegmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=panjya_x&device=13",
+     "note": null
+    },
+    {
+     "from": "panjyamonxantibody",
+     "to": "dynasmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Data",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=panjya_x&device=13",
+     "note": null
+    },
+    {
+     "from": "panjyamonxantibody",
+     "to": "frosvelgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=panjya_x&device=13",
+     "note": null
+    },
+    {
+     "from": "nanomon",
+     "to": "dynasmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=nano&device=13",
+     "note": null
+    },
+    {
+     "from": "nanomon",
+     "to": "frosvelgrmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "Choose one: 20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio OR Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=nano&device=13",
+     "note": null
+    },
+    {
+     "from": "nanomon",
+     "to": "frosvelgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Choose one: 20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio OR Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=nano&device=13",
+     "note": null
+    },
+    {
+     "from": "nanomon",
+     "to": "olegmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=nano&device=13",
+     "note": null
+    },
+    {
+     "from": "astamon",
+     "to": "dynasmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=asta&device=13",
+     "note": null
+    },
+    {
+     "from": "astamon",
+     "to": "olegmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=asta&device=13",
+     "note": null
+    },
+    {
+     "from": "astamon",
+     "to": "frosvelgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=asta&device=13",
+     "note": null
+    },
+    {
+     "from": "astamon",
+     "to": "ancientmegatheriumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=asta&device=13",
+     "note": null
+    }
+   ],
+   "notes": [
+    "Hiyarimon -> Blucomon (No requirements) is under \"Blizzard Fang\", not this card",
+    "Daipenmon -> Fros Velgrmon (15+ Trophies, 4,500+ Vital Values, 15+ Battles, 70%+ Win Ratio) is under \"Blizzard Fang\", not this card",
+    "Daipenmon -> Skull Mammon (10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio) is under \"Blizzard Fang\", not this card",
+    "Daipenmon -> Ancient Megatheriumon (Stage 15 cleared, Jogress with Virus Perfect) is under \"Blizzard Fang\", not this card",
+    "Daipenmon -> Hexeblaumon (Jogress with Vaccine or Data Perfect) is under \"Blizzard Fang\", not this card"
+   ],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 19,
+    "fallback": 3,
+    "jogress": 22
+   }
+  },
+  "strabimon": {
+   "card": "Wolfmon",
+   "humulosCard": "Wolfmon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#wolf_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Wolfmon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "botamon": "babyI",
+    "wanyamon": "babyII",
+    "strabimon": "child",
+    "gizamon": "child",
+    "wolfmon": "adult",
+    "dobermon": "adult",
+    "ranamon": "adult",
+    "ebidramon": "adult",
+    "beowolfmon": "perfect",
+    "garummon": "perfect",
+    "calamaramon": "perfect",
+    "sirenmon": "perfect",
+    "splashmon": "perfect",
+    "magnagarurumon": "ultimate",
+    "ancientgarurumon": "ultimate",
+    "ancientmermaimon": "ultimate",
+    "susanoomon": "ultimate"
+   },
+   "cardAttributes": {
+    "strabimon": "free",
+    "wolfmon": "free",
+    "ranamon": "free",
+    "beowolfmon": "free",
+    "garummon": "free",
+    "calamaramon": "free",
+    "magnagarurumon": "free"
+   },
+   "edges": [
+    {
+     "from": "botamon",
+     "to": "wanyamon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bota&device=13",
+     "note": "humulos card heading: \"Wolf EX\""
+    },
+    {
+     "from": "wanyamon",
+     "to": "strabimon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wanya&device=13",
+     "note": null
+    },
+    {
+     "from": "wanyamon",
+     "to": "gizamon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wanya&device=13",
+     "note": null
+    },
+    {
+     "from": "strabimon",
+     "to": "wolfmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=strabi&device=13",
+     "note": null
+    },
+    {
+     "from": "strabimon",
+     "to": "dobermon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=strabi&device=13",
+     "note": null
+    },
+    {
+     "from": "gizamon",
+     "to": "ranamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=giza&device=13",
+     "note": null
+    },
+    {
+     "from": "gizamon",
+     "to": "ebidramon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=giza&device=13",
+     "note": null
+    },
+    {
+     "from": "wolfmon",
+     "to": "beowolfmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wolf&device=13",
+     "note": null
+    },
+    {
+     "from": "wolfmon",
+     "to": "garummon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wolf&device=13",
+     "note": null
+    },
+    {
+     "from": "wolfmon",
+     "to": "calamaramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wolf&device=13",
+     "note": null
+    },
+    {
+     "from": "wolfmon",
+     "to": "sirenmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wolf&device=13",
+     "note": null
+    },
+    {
+     "from": "wolfmon",
+     "to": "splashmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wolf&device=13",
+     "note": null
+    },
+    {
+     "from": "dobermon",
+     "to": "garummon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dober&device=13",
+     "note": null
+    },
+    {
+     "from": "dobermon",
+     "to": "splashmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dober&device=13",
+     "note": null
+    },
+    {
+     "from": "dobermon",
+     "to": "beowolfmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dober&device=13",
+     "note": null
+    },
+    {
+     "from": "dobermon",
+     "to": "calamaramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dober&device=13",
+     "note": null
+    },
+    {
+     "from": "dobermon",
+     "to": "sirenmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dober&device=13",
+     "note": null
+    },
+    {
+     "from": "ranamon",
+     "to": "calamaramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rana&device=13",
+     "note": null
+    },
+    {
+     "from": "ranamon",
+     "to": "sirenmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 70
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rana&device=13",
+     "note": null
+    },
+    {
+     "from": "ranamon",
+     "to": "beowolfmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rana&device=13",
+     "note": null
+    },
+    {
+     "from": "ranamon",
+     "to": "garummon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rana&device=13",
+     "note": null
+    },
+    {
+     "from": "ranamon",
+     "to": "splashmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rana&device=13",
+     "note": null
+    },
+    {
+     "from": "ebidramon",
+     "to": "sirenmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 70
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ebidra&device=13",
+     "note": null
+    },
+    {
+     "from": "ebidramon",
+     "to": "splashmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ebidra&device=13",
+     "note": null
+    },
+    {
+     "from": "ebidramon",
+     "to": "beowolfmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ebidra&device=13",
+     "note": null
+    },
+    {
+     "from": "ebidramon",
+     "to": "garummon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ebidra&device=13",
+     "note": null
+    },
+    {
+     "from": "ebidramon",
+     "to": "calamaramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=ebidra&device=13",
+     "note": null
+    },
+    {
+     "from": "beowolfmon",
+     "to": "magnagarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=beowolf&device=13",
+     "note": null
+    },
+    {
+     "from": "beowolfmon",
+     "to": "ancientgarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=beowolf&device=13",
+     "note": null
+    },
+    {
+     "from": "beowolfmon",
+     "to": "ancientmermaimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data, or Virus Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data, or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=beowolf&device=13",
+     "note": null
+    },
+    {
+     "from": "garummon",
+     "to": "magnagarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garum&device=13",
+     "note": null
+    },
+    {
+     "from": "garummon",
+     "to": "ancientgarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garum&device=13",
+     "note": null
+    },
+    {
+     "from": "garummon",
+     "to": "ancientmermaimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data, or Virus Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data, or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garum&device=13",
+     "note": null
+    },
+    {
+     "from": "calamaramon",
+     "to": "magnagarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=calamara&device=13",
+     "note": null
+    },
+    {
+     "from": "calamaramon",
+     "to": "ancientmermaimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=calamara&device=13",
+     "note": null
+    },
+    {
+     "from": "calamaramon",
+     "to": "ancientgarurumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data, or Virus Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data, or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=calamara&device=13",
+     "note": null
+    },
+    {
+     "from": "sirenmon",
+     "to": "ancientmermaimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=siren&device=13",
+     "note": null
+    },
+    {
+     "from": "sirenmon",
+     "to": "ancientgarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=siren&device=13",
+     "note": null
+    },
+    {
+     "from": "sirenmon",
+     "to": "magnagarurumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Virus or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Virus or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=siren&device=13",
+     "note": null
+    },
+    {
+     "from": "splashmon",
+     "to": "ancientmermaimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=splash&device=13",
+     "note": null
+    },
+    {
+     "from": "splashmon",
+     "to": "ancientgarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=splash&device=13",
+     "note": null
+    },
+    {
+     "from": "splashmon",
+     "to": "magnagarurumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=splash&device=13",
+     "note": null
+    },
+    {
+     "from": "magnagarurumon",
+     "to": "susanoomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Kaiser Greymon from the Agnimon Dim"
+     },
+     "raw": "Jogress with Kaiser Greymon from the Agnimon Dim",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=magnagaruru&device=13",
+     "note": null
+    }
+   ],
+   "notes": [
+    "Botamon -> Koromon (No requirements) is under \"Agu EX, MBR, DRo, BRo\", not this card"
+   ],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 21,
+    "fallback": 3,
+    "jogress": 18
+   }
+  },
+  "kokabuterimon": {
+   "card": "Blitzmon",
+   "humulosCard": "Blitzmon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#blitz_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Blitzmon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "choromon": "babyI",
+    "caprimon": "babyII",
+    "kokabuterimon": "child",
+    "kokuwamon": "child",
+    "blitzmon": "adult",
+    "thunderballmon": "adult",
+    "mercuremon": "adult",
+    "bladekuwagamon": "adult",
+    "rhinokabuterimon": "perfect",
+    "bolgmon": "perfect",
+    "sephirothmon": "perfect",
+    "metallifekuwagamon": "perfect",
+    "wisemon": "perfect",
+    "ancientbeatmon": "ultimate",
+    "grandiskuwagamon": "ultimate",
+    "ancientwisemon": "ultimate",
+    "murmukusmon": "ultimate"
+   },
+   "cardAttributes": {
+    "blitzmon": "free",
+    "mercuremon": "free",
+    "rhinokabuterimon": "free",
+    "bolgmon": "free",
+    "sephirothmon": "free"
+   },
+   "edges": [
+    {
+     "from": "choromon",
+     "to": "caprimon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=choro&device=13",
+     "note": null
+    },
+    {
+     "from": "caprimon",
+     "to": "kokabuterimon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=capri&device=13",
+     "note": null
+    },
+    {
+     "from": "caprimon",
+     "to": "kokuwamon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=capri&device=13",
+     "note": null
+    },
+    {
+     "from": "kokabuterimon",
+     "to": "blitzmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "kokabuterimon",
+     "to": "thunderballmon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMin": 0
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "kokuwamon",
+     "to": "mercuremon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kokuwa&device=13",
+     "note": null
+    },
+    {
+     "from": "kokuwamon",
+     "to": "bladekuwagamon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMin": 0
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kokuwa&device=13",
+     "note": null
+    },
+    {
+     "from": "blitzmon",
+     "to": "rhinokabuterimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blitz&device=13",
+     "note": null
+    },
+    {
+     "from": "blitzmon",
+     "to": "bolgmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blitz&device=13",
+     "note": null
+    },
+    {
+     "from": "blitzmon",
+     "to": "sephirothmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blitz&device=13",
+     "note": null
+    },
+    {
+     "from": "blitzmon",
+     "to": "metallifekuwagamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blitz&device=13",
+     "note": null
+    },
+    {
+     "from": "blitzmon",
+     "to": "wisemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=blitz&device=13",
+     "note": null
+    },
+    {
+     "from": "thunderballmon",
+     "to": "bolgmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderball&device=13",
+     "note": null
+    },
+    {
+     "from": "thunderballmon",
+     "to": "metallifekuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderball&device=13",
+     "note": null
+    },
+    {
+     "from": "thunderballmon",
+     "to": "rhinokabuterimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderball&device=13",
+     "note": null
+    },
+    {
+     "from": "thunderballmon",
+     "to": "sephirothmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderball&device=13",
+     "note": null
+    },
+    {
+     "from": "thunderballmon",
+     "to": "wisemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderball&device=13",
+     "note": null
+    },
+    {
+     "from": "mercuremon",
+     "to": "sephirothmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mercure&device=13",
+     "note": null
+    },
+    {
+     "from": "mercuremon",
+     "to": "wisemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mercure&device=13",
+     "note": null
+    },
+    {
+     "from": "mercuremon",
+     "to": "rhinokabuterimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mercure&device=13",
+     "note": null
+    },
+    {
+     "from": "mercuremon",
+     "to": "bolgmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mercure&device=13",
+     "note": null
+    },
+    {
+     "from": "mercuremon",
+     "to": "metallifekuwagamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=mercure&device=13",
+     "note": null
+    },
+    {
+     "from": "bladekuwagamon",
+     "to": "wisemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bladekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "bladekuwagamon",
+     "to": "metallifekuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bladekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "bladekuwagamon",
+     "to": "rhinokabuterimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bladekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "bladekuwagamon",
+     "to": "bolgmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bladekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "bladekuwagamon",
+     "to": "sephirothmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bladekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinokabuterimon",
+     "to": "ancientbeatmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhinokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinokabuterimon",
+     "to": "grandiskuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhinokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinokabuterimon",
+     "to": "ancientwisemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhinokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinokabuterimon",
+     "to": "murmukusmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhinokabuteri&device=13",
+     "note": null
+    },
+    {
+     "from": "bolgmon",
+     "to": "ancientbeatmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bolg&device=13",
+     "note": null
+    },
+    {
+     "from": "bolgmon",
+     "to": "grandiskuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bolg&device=13",
+     "note": null
+    },
+    {
+     "from": "bolgmon",
+     "to": "murmukusmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bolg&device=13",
+     "note": null
+    },
+    {
+     "from": "bolgmon",
+     "to": "ancientwisemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bolg&device=13",
+     "note": null
+    },
+    {
+     "from": "sephirothmon",
+     "to": "murmukusmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sephiroth&device=13",
+     "note": null
+    },
+    {
+     "from": "sephirothmon",
+     "to": "ancientwisemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sephiroth&device=13",
+     "note": null
+    },
+    {
+     "from": "sephirothmon",
+     "to": "ancientbeatmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sephiroth&device=13",
+     "note": null
+    },
+    {
+     "from": "sephirothmon",
+     "to": "grandiskuwagamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sephiroth&device=13",
+     "note": null
+    },
+    {
+     "from": "metallifekuwagamon",
+     "to": "ancientbeatmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallifekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "metallifekuwagamon",
+     "to": "grandiskuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallifekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "metallifekuwagamon",
+     "to": "ancientwisemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallifekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "metallifekuwagamon",
+     "to": "murmukusmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=metallifekuwaga&device=13",
+     "note": null
+    },
+    {
+     "from": "wisemon",
+     "to": "murmukusmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wise&device=13",
+     "note": null
+    },
+    {
+     "from": "wisemon",
+     "to": "ancientwisemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wise&device=13",
+     "note": null
+    },
+    {
+     "from": "wisemon",
+     "to": "grandiskuwagamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wise&device=13",
+     "note": null
+    },
+    {
+     "from": "wisemon",
+     "to": "ancientbeatmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=wise&device=13",
+     "note": null
+    }
+   ],
+   "notes": [],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 19,
+    "fallback": 3,
+    "jogress": 22
+   }
+  },
+  "liollmon": {
+   "card": "Louwemon",
+   "humulosCard": "Louwemon EX",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#louwe_ex_anchor",
+   "device": "13",
+   "deviceRules": "Vital Bracelet DIM card (humulos 'Louwemon EX', Premium Bandai, Legend Spirits sets; details device 13). VB Dim rules: Trophies. Baby I -> Baby II is time-only; Baby II has a 1,200+ VV route and its 0-1,199 VV fallback; each Child has one stat route and a fallback; Adults and Perfects have stat routes and attribute-Jogress routes (the device checks the backup for a partner of the same stage). Some Ultimate routes need Adventure stage 15 cleared. The Hybrid Digimon stand in the chart's stage columns like the rest of the card.",
+   "cardStages": {
+    "popomon": "babyI",
+    "frimon": "babyII",
+    "liollmon": "child",
+    "gazimon": "child",
+    "lowemon": "adult",
+    "liamon": "adult",
+    "duskmon": "adult",
+    "madleomon": "adult",
+    "raihimon": "perfect",
+    "kaiserleomon": "perfect",
+    "loaderleomon": "perfect",
+    "velgrmon": "perfect",
+    "skullsatamon": "perfect",
+    "lucemonfalldownmode": "perfect",
+    "deathmon": "ultimate",
+    "dinotigermon": "ultimate",
+    "ancientsphinxmon": "ultimate"
+   },
+   "cardAttributes": {
+    "lowemon": "free",
+    "duskmon": "free",
+    "raihimon": "free",
+    "kaiserleomon": "free",
+    "velgrmon": "free"
+   },
+   "edges": [
+    {
+     "from": "popomon",
+     "to": "frimon",
+     "kind": "timeOnly",
+     "requirements": {},
+     "raw": "No requirements",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=popo&device=13",
+     "note": null
+    },
+    {
+     "from": "frimon",
+     "to": "liollmon",
+     "kind": "normal",
+     "requirements": {
+      "vitalValues": 1200
+     },
+     "raw": "1,200+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fri&device=13",
+     "note": null
+    },
+    {
+     "from": "frimon",
+     "to": "gazimon",
+     "kind": "fallback",
+     "requirements": {
+      "vitalValuesMax": 1199
+     },
+     "raw": "0-1,199 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fri&device=13",
+     "note": null
+    },
+    {
+     "from": "liollmon",
+     "to": "lowemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lioll&device=13",
+     "note": null
+    },
+    {
+     "from": "liollmon",
+     "to": "liamon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMax": 1299
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0-1,299 Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lioll&device=13",
+     "note": null
+    },
+    {
+     "from": "gazimon",
+     "to": "duskmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 1300,
+      "battles": 8
+     },
+     "raw": "10+ Trophies, 1,300+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gazi&device=13",
+     "note": null
+    },
+    {
+     "from": "gazimon",
+     "to": "madleomon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 9
+       },
+       {
+        "vitalValuesMin": 0
+       },
+       {
+        "battlesMax": 7
+       }
+      ]
+     },
+     "raw": "Choose one: 0-9 Trophies OR 0+ Vital Values OR 0-7 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=gazi&device=13",
+     "note": null
+    },
+    {
+     "from": "lowemon",
+     "to": "raihimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=louwe&device=13",
+     "note": null
+    },
+    {
+     "from": "lowemon",
+     "to": "kaiserleomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=louwe&device=13",
+     "note": null
+    },
+    {
+     "from": "lowemon",
+     "to": "loaderleomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=louwe&device=13",
+     "note": null
+    },
+    {
+     "from": "lowemon",
+     "to": "velgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=louwe&device=13",
+     "note": null
+    },
+    {
+     "from": "lowemon",
+     "to": "skullsatamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=louwe&device=13",
+     "note": null
+    },
+    {
+     "from": "liamon",
+     "to": "kaiserleomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lia&device=13",
+     "note": null
+    },
+    {
+     "from": "liamon",
+     "to": "loaderleomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lia&device=13",
+     "note": null
+    },
+    {
+     "from": "liamon",
+     "to": "raihimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lia&device=13",
+     "note": null
+    },
+    {
+     "from": "liamon",
+     "to": "velgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lia&device=13",
+     "note": null
+    },
+    {
+     "from": "liamon",
+     "to": "skullsatamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lia&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "lucemonfalldownmode",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 4500,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 4,500+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "velgrmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "skullsatamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "raihimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "kaiserleomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "duskmon",
+     "to": "loaderleomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dusk&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "lucemonfalldownmode",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 4500,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 4,500+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "skullsatamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "loaderleomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "raihimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "kaiserleomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "madleomon",
+     "to": "velgrmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=madleo&device=13",
+     "note": null
+    },
+    {
+     "from": "raihimon",
+     "to": "ancientsphinxmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=raihi&device=13",
+     "note": null
+    },
+    {
+     "from": "raihimon",
+     "to": "dinotigermon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=raihi&device=13",
+     "note": null
+    },
+    {
+     "from": "raihimon",
+     "to": "deathmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=raihi&device=13",
+     "note": null
+    },
+    {
+     "from": "kaiserleomon",
+     "to": "ancientsphinxmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kaiserleo&device=13",
+     "note": null
+    },
+    {
+     "from": "kaiserleomon",
+     "to": "deathmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kaiserleo&device=13",
+     "note": null
+    },
+    {
+     "from": "kaiserleomon",
+     "to": "dinotigermon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kaiserleo&device=13",
+     "note": null
+    },
+    {
+     "from": "loaderleomon",
+     "to": "ancientsphinxmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=loaderlio&device=13",
+     "note": "humulos card heading: \"Louwemon EX\""
+    },
+    {
+     "from": "loaderleomon",
+     "to": "dinotigermon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=loaderlio&device=13",
+     "note": "humulos card heading: \"Louwemon EX\""
+    },
+    {
+     "from": "loaderleomon",
+     "to": "deathmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data, Virus or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Data",
+       "Virus",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data, Virus or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=loaderlio&device=13",
+     "note": "humulos card heading: \"Louwemon EX\""
+    },
+    {
+     "from": "velgrmon",
+     "to": "dinotigermon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=velgr&device=13",
+     "note": null
+    },
+    {
+     "from": "velgrmon",
+     "to": "deathmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=velgr&device=13",
+     "note": null
+    },
+    {
+     "from": "velgrmon",
+     "to": "ancientsphinxmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=velgr&device=13",
+     "note": null
+    },
+    {
+     "from": "skullsatamon",
+     "to": "dinotigermon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=skullsata&device=13",
+     "note": null
+    },
+    {
+     "from": "skullsatamon",
+     "to": "deathmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=skullsata&device=13",
+     "note": null
+    },
+    {
+     "from": "skullsatamon",
+     "to": "ancientsphinxmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine, Data or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine, Data or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=skullsata&device=13",
+     "note": null
+    }
+   ],
+   "notes": [
+    "Loader Leomon -> Grand Locomon (15+ Trophies, 4,500+ Vital Values, 15+ Battles, 70%+ Win Ratio) is under \"Nu Metal Empire\", not this card",
+    "Loader Leomon -> Heavy Leomon (10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio) is under \"Nu Metal Empire\", not this card",
+    "Loader Leomon -> Zeke Greymon (Jogress with Data or Free Perfect) is under \"Nu Metal Empire\", not this card",
+    "Loader Leomon -> Mugendramon (Stage 15 cleared, Jogress with Virus Perfect) is under \"Nu Metal Empire\", not this card"
+   ],
+   "counts": {
+    "timeOnly": 1,
+    "normal": 21,
+    "fallback": 3,
+    "jogress": 17
+   }
+  }
+ }
+}

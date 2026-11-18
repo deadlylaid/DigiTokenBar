@@ -3,7 +3,8 @@
 
 Reads tools/digimon/research/moves-*.json: [{key, ko, en, what, koSpecies, sources, note}, ...]
 and picks the drawn attack shape from `what` (a few words on what the move physically is) and the
-species level. Run gen_catalog.py afterwards.
+species level. A row's own `kind` (and `tint`), chosen by eye, wins over the guess. Run
+gen_catalog.py afterwards.
 
     python3 -I tools/digimon/add_moves.py
 """
@@ -70,9 +71,11 @@ def main():
                 skipped.append(key)
                 continue
             level = NODES.get(key, {}).get("level", "")
-            entry = {"ko": row["ko"], "en": row["en"], "kind": shape(row.get("what"), level)}
+            entry = {"ko": row["ko"], "en": row["en"], "kind": row.get("kind") or shape(row.get("what"), level)}
             if row.get("koSpecies"):
                 entry["koSpecies"] = row["koSpecies"]
+            if row.get("tint"):
+                entry["tint"] = row["tint"]
             moves[key] = entry
             added.append((key, entry["kind"], row.get("what")))
     DATA.write_text(json.dumps(data, ensure_ascii=False, indent=1))
