@@ -69,6 +69,10 @@ final class DigimonStore {
     var line: DigimonLine? { engine.catalog.lines[state.partner.lineID] }
     var species: DigimonSpecies? { state.partner.speciesKey.flatMap(engine.catalog.species) }
     var isEgg: Bool { state.partner.speciesKey == nil }
+    /// Bugs caught in this stage, as the home shows them: back to 0 when it evolves (or hatches) and
+    /// when it graduates. The hidden "20 bugs" evolutions count the same way. The lifetime total stays
+    /// in the save (`lifetimeSignals`) but is not shown.
+    var bugsThisStage: Int { state.partner.stageSignals.bugsDefeated }
     var threshold: Int { engine.growth.threshold(for: state.partner.level) }
     var progress: Double { min(1, Double(state.partner.stageExp) / Double(max(1, threshold))) }
     var candidates: [DigimonSpecies] {

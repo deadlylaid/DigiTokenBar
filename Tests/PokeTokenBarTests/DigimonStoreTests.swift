@@ -109,7 +109,7 @@ final class DigimonStoreTests: XCTestCase {
     }
 
     /// A Greymon whose full stage waits for a friend's Jogress code, saved before the store opens.
-    private func waitingGreymon() throws {
+    private func waitingGreymon(bugs: Int = 0) throws {
         var s = DigimonState.newEgg(lineID: "agumon")
         s.partner.speciesKey = "greymon"
         s.partner.level = .adult
@@ -117,6 +117,7 @@ final class DigimonStoreTests: XCTestCase {
         s.dex = Set(s.partner.path)
         s.partner.stageStartedAt = now.addingTimeInterval(-3 * 24 * 3600)
         s.partner.stageExp = 200
+        s.partner.stageSignals.bugsDefeated = bugs
         s.jogressWait = JogressWait(openedAt: now, over: false)
         try JSONEncoder().encode(DigimonStore.Saved(digimon: s)).write(to: dir.appendingPathComponent("digimon-state.json"))
     }
@@ -146,6 +147,40 @@ final class DigimonStoreTests: XCTestCase {
         guard case .evolved(from: "greymon", _)? = activity.first else { return XCTFail("\(activity)") }
         XCTAssertFalse(store.isJogressOpen)
         XCTAssertTrue(store.jogressOptions.isEmpty)
+    }
+
+    /// The home shows the bugs caught in this stage (user request 2026-11-19): the count starts again
+    /// from 0 when the Digimon evolves and when it graduates. The lifetime total stays in the save.
+    func testTheBugCountStartsAgainWhenItEvolves() throws {
+        try waitingGreymon(bugs: 5)
+        let store = makeStore()
+        XCTAssertEqual(store.bugsThisStage, 5)
+        store.recordBugDefeated(count: 3)
+        XCTAssertEqual(store.bugsThisStage, 8)
+        store.skipJogress()
+        XCTAssertNotEqual(store.state.partner.speciesKey, "greymon", "it evolved")
+        XCTAssertEqual(store.bugsThisStage, 0)
+        XCTAssertEqual(store.state.lifetimeSignals.bugsDefeated, 3, "the lifetime total is kept, not shown")
+    }
+
+    func testTheBugCountStartsAgainWhenItGraduates() throws {
+        var s = DigimonState.newEgg(lineID: "agumon")
+        s.partner.speciesKey = "wargreymon"
+        s.partner.level = .ultimate
+        s.partner.path = ["botamon", "koromon", "agumon", "greymon", "andromon", "wargreymon"]
+        s.dex = Set(s.partner.path)
+        s.partner.stageStartedAt = now.addingTimeInterval(-3 * 24 * 3600)
+        s.partner.stageExp = EvolutionEngine().growth.threshold(for: .ultimate) - 1
+        s.partner.stageSignals.bugsDefeated = 7
+        s.lifetimeSignals.bugsDefeated = 30
+        try JSONEncoder().encode(DigimonStore.Saved(digimon: s)).write(to: dir.appendingPathComponent("digimon-state.json"))
+        let store = makeStore()
+        XCTAssertEqual(store.bugsThisStage, 7)
+        store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 400_001], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(store.state.graduates.map(\.path.last), ["wargreymon"], "it graduated")
+        XCTAssertEqual(store.bugsThisStage, 0)
+        XCTAssertEqual(store.state.lifetimeSignals.bugsDefeated, 30)
     }
 
     func testNewTokensAfterInstallGrowTheEgg() {

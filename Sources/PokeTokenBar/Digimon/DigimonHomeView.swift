@@ -263,7 +263,7 @@ struct DigimonText {
         ko ? "낮에 꾸준히 쓰면 백신, 여러 도구를 여러 날 쓰면 데이터, 새벽이 늘거나 한도를 넘기면 바이러스 쪽이에요."
            : "Steady daytime use leans Vaccine, many tools over many days Data, more late nights or full limits Virus."
     }
-    func bugsCaught(_ n: Int) -> String { ko ? "잡은 버그 \(n)마리" : "\(n) bugs caught" }
+    func bugsCaught(_ n: Int) -> String { ko ? "이번 단계에 잡은 버그 \(n)마리" : "\(n) bugs caught this stage" }
     var evolutionByCare: String {
         ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피, 배틀)으로 정해져요"
            : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies, battles)"
@@ -465,10 +465,10 @@ struct DigimonStatusView: View {
             if !digimon.isEgg { badge(t.level(digimon.state.partner.level)) }
             if let attribute = digimon.species.flatMap({ t.attribute($0.attribute) }) { badge(attribute) }
             Spacer()
-            if digimon.state.lifetimeSignals.bugsDefeated > 0 {
-                Label("\(digimon.state.lifetimeSignals.bugsDefeated)", systemImage: "ant.fill")
+            if digimon.bugsThisStage > 0 {
+                Label("\(digimon.bugsThisStage)", systemImage: "ant.fill")
                     .font(.caption).foregroundStyle(.secondary).monospacedDigit()
-                    .help(t.bugsCaught(digimon.state.lifetimeSignals.bugsDefeated))
+                    .help(t.bugsCaught(digimon.bugsThisStage))
             }
             if !digimon.state.graduates.isEmpty {
                 Text(t.graduates(digimon.state.graduates.count)).font(.caption).foregroundStyle(.secondary)
