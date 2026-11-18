@@ -16489,7 +16489,7 @@
     {
      "from": "gusokumon",
      "to": "plesiomon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -16501,7 +16501,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=gusoku&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "gusokumon",
@@ -16693,7 +16693,7 @@
     {
      "from": "mermaimon",
      "to": "plesiomon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -16705,7 +16705,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=mermai&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "mermaimon",
@@ -16863,7 +16863,7 @@
     {
      "from": "piranimon",
      "to": "plesiomon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -16875,7 +16875,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Vaccine or Free Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=pirani&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "piranimon",
@@ -17378,7 +17378,7 @@
     {
      "from": "gogmamon",
      "to": "ancientsphinxmon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -17390,7 +17390,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=gogma&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "gogmamon",
@@ -17718,7 +17718,7 @@
     {
      "from": "scorpiomon",
      "to": "ancientsphinxmon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -17730,7 +17730,7 @@
      },
      "raw": "Choose one: Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio | Stage 15 cleared, Jogress with Vaccine or Free Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=scorpio&device=13",
-     "note": "humulos lists this as one of two alternatives (\"Choose one\") for the same evolution; Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect)"
+     "note": "humulos lists this as one of two alternatives (\"Choose one\") for the same evolution; Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "scorpiomon",
@@ -18058,7 +18058,7 @@
     {
      "from": "triceramon",
      "to": "ancientsphinxmon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -18070,7 +18070,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=tricera&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "triceramon",
@@ -18397,7 +18397,7 @@
     {
      "from": "crescemon",
      "to": "ancientmegatheriumon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -18409,7 +18409,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=cresce&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "crescemon",
@@ -18839,7 +18839,7 @@
     {
      "from": "panjyamon",
      "to": "ancientmegatheriumon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -18851,7 +18851,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=panjya&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "panjyamon",
@@ -19251,7 +19251,7 @@
     {
      "from": "baalmon",
      "to": "neovamdemon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -19263,7 +19263,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=baal&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "baalmon",
@@ -19744,7 +19744,7 @@
     {
      "from": "jokermon",
      "to": "neovamdemon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -19756,7 +19756,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Vaccine or Free Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=joker&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Vaccine or Free Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "jokermon",
@@ -19829,7 +19829,7 @@
     {
      "from": "pumpmon",
      "to": "neovamdemon",
-     "kind": "adventure",
+     "kind": "jogress",
      "requirements": {
       "vitalValues": null,
       "trophies": null,
@@ -19841,7 +19841,7 @@
      },
      "raw": "Stage 15 cleared, Jogress with Virus Perfect",
      "source": "https://humulos.com/digimon/php/details.php?digimon=pump&device=13",
-     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect)"
+     "note": "Adventure-locked Jogress: needs Adventure stage 15 cleared AND a backup partner (Virus Perfect) Fixed 2026-11-19: was kind \"adventure\", which the generator read as a stat route with no requirements; the Adventure stage gates a Jogress, so it is a Jogress."
     },
     {
      "from": "pumpmon",

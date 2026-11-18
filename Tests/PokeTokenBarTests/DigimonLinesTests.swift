@@ -442,4 +442,41 @@ final class DigimonCardConditionTests: XCTestCase {
             }
         }
     }
+
+    /// Above the baby stages a card route always asks for something, or is the fallback. A route with
+    /// no requirement is met by any stage: growth would take it for free.
+    func testEveryRouteAboveTheBabiesAsksForSomething() {
+        let catalog = DigimonCatalog.mvp
+        for line in catalog.lines.values {
+            for c in line.conditions {
+                let from = String(c.step.split(separator: ">")[0])
+                guard let level = catalog.species(from)?.level, level != .babyI, level != .babyII else { continue }
+                XCTAssertTrue(c.fallback || c.vital > 0 || c.trophies > 0 || c.battles > 0 || c.winRatio > 0,
+                              "\(line.id): \(c.step) requires nothing")
+            }
+        }
+    }
+
+    /// "Stage 15 cleared, Jogress with Virus Perfect" is a merge behind an Adventure gate. The research
+    /// wrote ten of them as Adventure routes, which the generator read as stat routes requiring
+    /// nothing: Plesiomon, Ancient Sphinxmon, Ancient Megatheriumon and Neo Vamdemon came for free.
+    func testAMergeBehindAnAdventureGateStaysAMerge() {
+        let catalog = DigimonCatalog.mvp
+        for (line, step) in [("sangomon", "gusokumon>plesiomon"), ("sangomon", "mermaimon>plesiomon"),
+                             ("sangomon", "piranimon>plesiomon"), ("sunarizamon", "gogmamon>ancientsphinxmon"),
+                             ("sunarizamon", "triceramon>ancientsphinxmon"), ("blucomon", "crescemon>ancientmegatheriumon"),
+                             ("blucomon", "panjyamon>ancientmegatheriumon"), ("ghostmon", "baalmon>neovamdemon"),
+                             ("ghostmon", "jokermon>neovamdemon"), ("ghostmon", "pumpmon>neovamdemon")] {
+            let card = catalog.lines[line]!
+            XCTAssertTrue(card.mergeSteps.contains(step), "\(line): \(step) is only a Jogress on its card")
+            XCTAssertTrue(card.jogress.contains { $0.step == step }, "\(line): a friend's code can take \(step)")
+        }
+        // Scorpiomon: stats or the merge. The stat route keeps its numbers, the merge its partner.
+        let sunarizamon = catalog.lines["sunarizamon"]!
+        XCTAssertEqual(catalog.condition(from: "scorpiomon", to: "ancientsphinxmon", in: sunarizamon)?.vital, 7000)
+        XCTAssertTrue(sunarizamon.jogress.contains { $0.step == "scorpiomon>ancientsphinxmon" })
+        // A stage with almost no coding takes the easiest stat route, not the merge.
+        let options = engine.growthOptions(for: stage(at: "gusokumon", line: "sangomon", hours: 1), at: date(day: 1))
+        XCTAssertEqual(options, ["neptunemon"])
+    }
 }

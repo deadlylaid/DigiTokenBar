@@ -49,7 +49,8 @@ final class DigimonJogressTests: XCTestCase {
         // "Stage 15 cleared, Jogress with Virus Perfect": the adventure part is not used.
         XCTAssertEqual(routes("agumon", "metalgreymon>donedevimon"), [.init("metalgreymon>donedevimon", level: .perfect, attributes: [.virus])])
         let all = catalog.lines.values.flatMap(\.jogress)
-        XCTAssertEqual(all.count, 352)
+        // 352, then 363 (2026-11-19): eleven "Stage 15 cleared, Jogress ..." routes were Adventure routes.
+        XCTAssertEqual(all.count, 363)
         for line in catalog.lines.values {
             for route in line.jogress {
                 XCTAssertTrue(line.steps?.contains(route.step) ?? false, "\(line.id): \(route.step) is one of its steps")

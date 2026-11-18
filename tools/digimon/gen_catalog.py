@@ -370,6 +370,14 @@ def main():
                              "fix the data or leave the line out")
         pruned.append((line_id, card_name, egg, baby1, [k for k in roster if k in reach]))
     lines = pruned
+    # A card route above the baby stages always asks for something (stats, or a fallback when nothing
+    # else is met). One with no requirement at all is a research slip: "Stage 15 cleared, Jogress with
+    # ..." was written as an Adventure route, so growth took a merge-only Ultimate for free.
+    for line_id, *_ in lines:
+        for a, b in sorted(steps_of[line_id] - merges_of[line_id]):
+            if level_of[a] not in ("babyI", "babyII") and CONDITIONS.get(line_id, {}).get((a, b)) == (0, 0, 0, 0, False):
+                raise SystemExit(f"{line_id}: {a}>{b} is a card route with no requirement; "
+                                 "check its kind in the research (a Jogress written as another kind?)")
     keep = {k for *_, roster in lines for k in roster}
     species = [sp for sp in species if sp[0] in keep]
     keys = [k for k in keys if k in keep]
