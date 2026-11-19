@@ -7,8 +7,8 @@ enum CompanionStateKind: String, Sendable {
 }
 
 /// 앱 언어. 포켓몬 이름은 PokéAPI 다국어 names 에서 가져온다.
-enum AppLanguage: String, Codable, Sendable, CaseIterable {
-    case ko, en, ja, es, fr, pt, de, ru
+/// Pokémon name lookups for an app language (PokéAPI language codes).
+extension AppLanguage {
     /// PokéAPI language.name 후보(첫 매칭 사용)
     var apiCodes: [String] {
         switch self {
@@ -24,35 +24,9 @@ enum AppLanguage: String, Codable, Sendable, CaseIterable {
         case .ru: return ["ru"]
         }
     }
-    var label: String {
-        switch self { case .ko: return "한국어"; case .en: return "English"; case .ja: return "日本語"; case .es: return "Español"; case .fr: return "Français"; case .pt: return "Português"; case .de: return "Deutsch"; case .ru: return "Русский" }
-    }
-
-    var displayLocale: Locale { Locale(identifier: rawValue) }
-
     /// byLang(langCode→name) 에서 이 언어의 이름을 고른다(apiCodes 첫 매칭 → 영어 폴백).
     func resolveName(_ byLang: [String: String]) -> String? {
         PokemonNameLocalization.resolve(byLang, preferredCodes: apiCodes)
-    }
-
-    /// 신규 설치 기본 언어 — 시스템 선호 언어에서 유추(글로벌 출시: 한국어 강제 금지).
-    /// ko/ja/es/fr/pt/de/ru 만 매칭, 그 외 전부 영어(fallback-of-fallback). 기존 사용자는 저장된 언어를 그대로 쓴다.
-    static var systemDefault: AppLanguage {
-        systemDefault(for: Locale.preferredLanguages.first)
-    }
-
-    /// 시스템 언어 매핑의 순수 판정 — 실제 환경을 바꾸지 않고 locale 분기를 검증할 수 있게 분리한다.
-    static func systemDefault(for preferredLanguage: String?) -> AppLanguage {
-        switch preferredLanguage?.prefix(2).lowercased() {
-        case "ko": return .ko
-        case "ja": return .ja
-        case "es": return .es
-        case "fr": return .fr
-        case "pt": return .pt
-        case "de": return .de
-        case "ru": return .ru
-        default:   return .en
-        }
     }
 }
 
@@ -291,27 +265,6 @@ enum ShopEntry: Hashable, Sendable {
 }
 
 /// 사탕 지급 대상 한도 창의 분류 — session=1개·weekly=weeklyGrant.
-enum WindowClass: Sendable { case session, weekly }
-
-/// 사탕 지급 판정 입력 — 프로바이더 무관 한도 창 1개. (UsageStore.candyEligibleWindows 가 생성)
-struct CandyWindow: Sendable {
-    let key: String          // 안정 식별자(tier 추적) — resets_at 등 휘발 필드는 key 에 넣지 않는다
-    let name: String         // 표시용(알림 "왜 받는지")
-    let kind: WindowClass    // session=1개 · weekly=5개
-    let utilization: Double  // 0~100+
-    /// 창 epoch (`resets_at` / reset unix). key 는 안정, epoch 가 바뀌면 새 창 → 재무장(#326).
-    /// nil 이면 100% 미만 관측으로만 재무장한다(Codex — credits 로 100% 를 넘겨 쓴다).
-    let epoch: String?
-
-    init(key: String, name: String, kind: WindowClass, utilization: Double, epoch: String? = nil) {
-        self.key = key
-        self.name = name
-        self.kind = kind
-        self.utilization = utilization
-        self.epoch = epoch
-    }
-}
-
 /// 사탕 지급 1건(순수 판정 결과) — 부수효과(인벤토리·알림)와 분리해 테스트 가능하게.
 struct CandyGrant: Equatable, Sendable {
     let windowKey: String

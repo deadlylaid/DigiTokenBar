@@ -1416,31 +1416,10 @@ final class CompanionStore {
     @discardableResult
     func buyFreshEgg() -> Bool { buyEgg(nil) }
 
-    /// Parse an epoch string into a Date, supporting Unix timestamp (seconds or ms) or ISO8601 strings.
-    static func parseEpochDate(_ string: String) -> Date? {
-        if let ts = Double(string) {
-            if ts > 1_000_000_000_000 {
-                return Date(timeIntervalSince1970: ts / 1000.0)
-            } else if ts > 100_000_000 {
-                return Date(timeIntervalSince1970: ts)
-            }
-        }
-        return ISO8601Parser.date(from: string)
-    }
+    static func parseEpochDate(_ string: String) -> Date? { LimitEpoch.date(string) }
 
-    /// Determines if a new epoch represents an actual window advancement (reset) rather than
-    /// volatile network jitter (e.g. Codex ±1s) or fractional-second differences (Claude microseconds).
-    /// For session windows (≈5h), requires advancing forward by at least 30 minutes.
-    /// For weekly windows (7d), requires advancing forward by at least 24 hours.
-    /// Non-date strings (used in synthetic unit tests) fall back to string inequality.
     static func isNewEpoch(previous: String, current: String, kind: WindowClass) -> Bool {
-        guard previous != current else { return false }
-        guard let dPrev = parseEpochDate(previous), let dCurr = parseEpochDate(current) else {
-            return true
-        }
-        let delta = dCurr.timeIntervalSince(dPrev)
-        let minAdvance: TimeInterval = kind == .weekly ? 86400 : 1800
-        return delta >= minAdvance
+        LimitEpoch.isNew(previous: previous, current: current, kind: kind)
     }
 
     /// 지급 판정(순수·엣지 트리거) — 한도 창이 100% 를 새로 넘어선 순간에만 지급.

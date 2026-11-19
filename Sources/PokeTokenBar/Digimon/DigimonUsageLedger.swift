@@ -72,7 +72,7 @@ struct DigimonLimitWatch: Codable, Sendable, Equatable {
         for w in windows {
             if let epoch = w.epoch {
                 if let previous = epochs[w.key],
-                   CompanionStore.isNewEpoch(previous: previous, current: epoch, kind: w.kind) {
+                   LimitEpoch.isNew(previous: previous, current: epoch, kind: w.kind) {
                     filled[w.key] = nil
                 }
                 epochs[w.key] = epoch
