@@ -5,6 +5,7 @@ import UniformTypeIdentifiers
 struct SettingsView: View {
     @Environment(UsageStore.self) private var store
     @Environment(CompanionStore.self) private var companion
+    @Environment(AppLanguageStore.self) private var languageStore
     @Environment(UpdateChecker.self) private var updater
     /// Present in DigiTokenBar: Pokemon-only rows are hidden and Digimon wording is used.
     @Environment(DigimonStore.self) private var digimon: DigimonStore?
@@ -43,8 +44,8 @@ struct SettingsView: View {
     @State private var additionalAccountsDraft = ""
     @FocusState private var additionalAccountsFocused: Bool
     @FocusState private var sessionKeyFocused: Bool
-    private var l: L { companion.l }
-    private var dt: DigimonText { DigimonText(companion.language) }
+    private var l: L { languageStore.l }
+    private var dt: DigimonText { DigimonText(languageStore.language) }
     private var isDigimon: Bool { digimon != nil }
 
     private var isBundledApp: Bool { AppEnv.isBundledApp }
@@ -216,8 +217,8 @@ struct SettingsView: View {
                 Text(l.language)
                 Spacer()
                 Picker(l.language, selection: Binding(
-                    get: { companion.language },
-                    set: { companion.setLanguage($0); store.localizationLanguage = $0 })) {
+                    get: { languageStore.language },
+                    set: { languageStore.setLanguage($0); store.localizationLanguage = $0 })) {
                     ForEach(AppLanguage.allCases, id: \.self) { Text($0.label).tag($0) }
                 }
                 .labelsHidden().pickerStyle(.menu).fixedSize()
@@ -609,7 +610,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 1) {
                             Text(dt.summary(entry.file.digimon, catalog: digimon.engine.catalog))
                                 .font(.callout).lineLimit(1)
-                            Text("\(Self.exportedAtText(entry.file.savedAt, language: companion.language)) · \(entry.file.device)")
+                            Text("\(Self.exportedAtText(entry.file.savedAt, language: languageStore.language)) · \(entry.file.device)")
                                 .font(.caption2).foregroundStyle(.tertiary).lineLimit(1)
                         }
                         Spacer()
@@ -689,7 +690,7 @@ struct SettingsView: View {
                         .frame(width: 28, height: 28)
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(Self.exportedAtText(snapshot.date, language: companion.language))
+                    Text(Self.exportedAtText(snapshot.date, language: languageStore.language))
                         .font(.caption)
                     Text(l.snapshotDexAndTokens(
                         dex: snapshot.dexCount,
@@ -1241,7 +1242,7 @@ struct SettingsView: View {
         confirm.informativeText = l.importConfirmBody(
             incomingDex: incoming.dexCount,
             incomingTokens: TokenFormatter.compact(incoming.lifetimeTokens),
-            exportedAt: Self.exportedAtText(envelope.exportedAt, language: companion.language),
+            exportedAt: Self.exportedAtText(envelope.exportedAt, language: languageStore.language),
             sourceDevice: envelope.sourceDevice,
             currentDex: current.dexCount,
             currentTokens: TokenFormatter.compact(current.lifetimeTokens))
@@ -1287,7 +1288,7 @@ struct SettingsView: View {
         confirm.alertStyle = .warning
         confirm.messageText = l.restoreConfirmTitle
         confirm.informativeText = l.restoreConfirmBody(
-            snapshotDate: Self.exportedAtText(snapshot.date, language: companion.language),
+            snapshotDate: Self.exportedAtText(snapshot.date, language: languageStore.language),
             snapshotDex: snapshot.dexCount,
             snapshotTokens: TokenFormatter.compact(snapshot.lifetimeTokens),
             currentDex: current.dexCount,
@@ -1388,7 +1389,7 @@ struct SettingsView: View {
         confirm.messageText = title
         confirm.informativeText = dt.replaceBody(
             incoming: dt.summary(file.digimon, catalog: catalog),
-            from: "\(file.device), \(Self.exportedAtText(file.savedAt, language: companion.language))",
+            from: "\(file.device), \(Self.exportedAtText(file.savedAt, language: languageStore.language))",
             current: dt.summary(digimon.state, catalog: catalog))
         confirm.addButton(withTitle: button)
         confirm.addButton(withTitle: l.cancel)

@@ -15,9 +15,9 @@ struct RecapContent {
     private let dayNameFormatter: DateFormatter
     private let monthNameFormatter: DateFormatter
 
-    init(store: UsageStore, companion: CompanionStore, scope: RecapScope, offset: Int,
+    init(store: UsageStore, companion: CompanionStore, language: AppLanguage, scope: RecapScope, offset: Int,
          now: Date = Date(), calendar: Calendar = RecapPeriod.calendar()) {
-        language = companion.language
+        self.language = language
         self.calendar = calendar
         let period = RecapPeriod(scope: scope, containing: now, calendar: calendar)
             .shifted(by: offset, calendar: calendar)
@@ -350,6 +350,7 @@ struct RecapCard: View {
 struct RecapScreen: View {
     let store: UsageStore
     let companion: CompanionStore
+    let language: AppLanguage
     let onBack: () -> Void
 
     @State private var scope: RecapScope = .week
@@ -357,8 +358,8 @@ struct RecapScreen: View {
     @State private var offset = 0
 
     var body: some View {
-        let l = companion.l
-        let content = RecapContent(store: store, companion: companion, scope: scope, offset: offset)
+        let l = L(language)
+        let content = RecapContent(store: store, companion: companion, language: language, scope: scope, offset: offset)
         return VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Button { onBack() } label: {

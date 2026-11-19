@@ -24,7 +24,7 @@ final class SessionKeySettingsRenderingTests: XCTestCase {
         navigation.openSessionKeySettings()
         let host = NSHostingController(rootView: SettingsView(
             onClose: {}, onChooseRepresentative: {}, startExpanded: navigation.expandAdvancedOnOpen)
-            .environment(usage).environment(companion).environment(UpdateChecker())
+            .environment(usage).environment(companion).environment(AppLanguageStore(defaults: UserDefaults(suiteName: "lang-\(UUID().uuidString)")!, legacyStateURL: URL(fileURLWithPath: "/nonexistent"), systemDefault: companion.language)).environment(UpdateChecker())
             .frame(width: PopoverMetrics.width)
             .environment(\.colorScheme, .light))
         let previousKeyWindow = NSApp.keyWindow

@@ -87,13 +87,14 @@ final class PopoverNavigation {
 struct PopoverView: View {
     @Environment(UsageStore.self) private var store
     @Environment(CompanionStore.self) private var companion
+    @Environment(AppLanguageStore.self) private var languageStore
     @Environment(UpdateChecker.self) private var updater
     @Environment(PopoverNavigation.self) private var nav
     /// Optional so screens and tests that host the popover without the Digimon still render.
     @Environment(DigimonStore.self) private var digimon: DigimonStore?
     @Environment(DigimonSceneHub.self) private var digimonHub: DigimonSceneHub?
 
-    private var l: L { companion.l }
+    private var l: L { languageStore.l }
     @State private var showingClaudeKeychainHelp = false
 
     var body: some View {
@@ -112,15 +113,16 @@ struct PopoverView: View {
                 )
                     .environment(store)
                     .environment(companion)
+                    .environment(languageStore)
                     .environment(updater)
             } else if nav.showingRecap {
-                RecapScreen(store: store, companion: companion) { nav.showingRecap = false }
+                RecapScreen(store: store, companion: companion, language: languageStore.language) { nav.showingRecap = false }
             } else {
                 mainContent
             }
         }
         .frame(width: PopoverMetrics.width)
-        .environment(\.locale, companion.language.displayLocale)
+        .environment(\.locale, languageStore.language.displayLocale)
     }
 
     @ViewBuilder
@@ -157,15 +159,15 @@ struct PopoverView: View {
             if let digimon, let digimonHub {
                 Picker("", selection: $nav.tab) {
                     Text(l.home).tag(PopoverTab.home)
-                    Text(DigimonText(companion.language).dexTab).tag(PopoverTab.collection)
+                    Text(DigimonText(languageStore.language).dexTab).tag(PopoverTab.collection)
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
                 if nav.tab == .collection {
-                    DigimonDexView(digimon: digimon, hub: digimonHub, language: companion.language)
+                    DigimonDexView(digimon: digimon, hub: digimonHub, language: languageStore.language)
                         .frame(height: 590)
                 } else {
-                    DigimonScenePanel(hub: digimonHub, language: companion.language)
+                    DigimonScenePanel(hub: digimonHub, language: languageStore.language)
                 }
             }
             if digimon != nil, nav.tab == .collection {
@@ -181,7 +183,7 @@ struct PopoverView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
                         if let digimon, let digimonHub {
-                            DigimonStatusView(digimon: digimon, hub: digimonHub, language: companion.language)
+                            DigimonStatusView(digimon: digimon, hub: digimonHub, language: languageStore.language)
                         } else {
                             CompanionHeader(store: companion) { nav.openDexEntry(collectionID: $0) }
                         }
@@ -724,10 +726,10 @@ struct PopoverView: View {
 
     /// 카운트다운 뒤에 붙는 절대 리셋 시각 " (…)". 오늘 안이거나 ≤ 6h 면 시:분만,
     /// 며칠 뒤(주간 한도 등)면 요일·일자까지 — "in 2 days, 9 hr" 만으론 언제 풀리는지 감이 안 와서다.
-    /// 요일명은 팝오버 로케일(companion.language)로 현지화하고, 시각은 항상 24시간 표기.
+    /// 요일명은 팝오버 로케일(앱 언어)로 현지화하고, 시각은 항상 24시간 표기.
     private func resetClockSuffix(_ reset: Date) -> Text {
         let f = DateFormatter()
-        f.locale = companion.language.displayLocale
+        f.locale = languageStore.language.displayLocale
         let nearby = Calendar.current.isDateInToday(reset)
             || reset.timeIntervalSinceNow <= Self.resetClockWindow
         f.setLocalizedDateFormatFromTemplate(nearby ? "HHmm" : "EEEEdHHmm")

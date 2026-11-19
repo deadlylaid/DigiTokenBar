@@ -353,7 +353,7 @@ final class UsageRecapRenderingTests: XCTestCase {
             let companion = CompanionStore(fileURL: url, defaults: defaults)
             companion.setLanguage(language)
             for scope in RecapScope.allCases {
-                let content = RecapContent(store: usageStore, companion: companion, scope: scope, offset: 0,
+                let content = RecapContent(store: usageStore, companion: companion, language: companion.language, scope: scope, offset: 0,
                                            now: now, calendar: calendar())
                 XCTAssertFalse(content.periodLabel().isEmpty, "\(language) \(scope)")
                 XCTAssertFalse(content.l.recapCompareSoFar(scope).isEmpty)
@@ -392,7 +392,7 @@ final class UsageRecapRenderingTests: XCTestCase {
         for language in AppLanguage.allCases {
             companion.setLanguage(language)
             for scope in RecapScope.allCases {
-                let content = RecapContent(store: store, companion: companion, scope: scope, offset: 0,
+                let content = RecapContent(store: store, companion: companion, language: companion.language, scope: scope, offset: 0,
                                            now: now, calendar: calendar())
                 let used = try XCTUnwrap(content.recap.buckets.first { $0.tokens == 12_345 })
                 let zero = try XCTUnwrap(content.recap.buckets.first { $0.hasData && $0.tokens == 0 })

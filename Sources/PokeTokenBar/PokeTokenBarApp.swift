@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private var outsideClickMonitor = OutsideClickMonitor()
     private var store: UsageStore!
     private var companion: CompanionStore!
+    private var languageStore: AppLanguageStore!
     private var updater: UpdateChecker!
     private var digimon: DigimonStore!
     private var digimonHub: DigimonSceneHub!
@@ -110,20 +111,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         store = UsageStore()
         // CompanionStore stays for the app language and settings; the Pokemon companion itself
         // no longer grows (no PokeAPI downloads, no hatching, no candy).
+        languageStore = AppLanguageStore()
         companion = CompanionStore()
         digimon = DigimonStore(waitForFirstEgg: true)
         digimonHub = DigimonSceneHub(digimon: digimon)
-        digimonHub.language = companion.language
+        digimonHub.language = languageStore.language
         digimonHub.setStayInPlace(UserDefaults.standard.bool(forKey: DigimonSceneHub.stayInPlaceKey))
         digimon.onActivity = { [weak self] events, fed in self?.digimonActivity(events, fed: fed) }
         digimon.onBattle = { [weak self] foe, result in self?.digimonHub.playBattle(foe: foe.species, result: result) }
         digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }
         digimon.setFastGrowth(UserDefaults.standard.bool(forKey: DigimonStore.fastGrowthKey))
         updater = UpdateChecker()
-        store.localizationLanguage = companion.language   // 알림 현지화용 미러 시드
+        store.localizationLanguage = languageStore.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
         deskPet = DigimonDeskPet(store: store, hub: digimonHub,
-                                 language: { [weak companion] in companion?.language ?? .ko })   // desktop pet (opt-in "floating pet" setting)
+                                 language: { [weak languageStore] in languageStore?.language ?? .ko })   // desktop pet (opt-in "floating pet" setting)
         Task { await updater.check() }                    // 기동 시 1회 업데이트 확인
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -292,9 +294,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             sleeping: sleeping, hour: Calendar.current.component(.hour, from: Date()),
             nightHours: digimon.engine.growth.nightHours,
             limitFull: store.candyEligibleWindows.contains { $0.utilization >= 100 })
-        if sleeping != digimonHub.sleeping || companion.language != digimonHub.language || mood != digimonHub.mood {
+        if sleeping != digimonHub.sleeping || languageStore.language != digimonHub.language || mood != digimonHub.mood {
             digimonHub.sleeping = sleeping
-            digimonHub.language = companion.language
+            digimonHub.language = languageStore.language
             digimonHub.mood = mood
             digimonHub.refresh()
         }
@@ -310,7 +312,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// Hatching, evolving and feeding play in every scene; milestones also notify.
     private func digimonActivity(_ events: [DigimonEvent], fed: Int) {
         digimonHub.play(events, fed: fed > 0)
-        let t = DigimonText(companion.language)
+        let t = DigimonText(languageStore.language)
         let catalog = digimon.engine.catalog
         let name = { (key: String) in t.name(catalog.species(key)) }
         for event in events {
@@ -671,7 +673,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private func buildPopoverContent() {
         popover.contentViewController = NSHostingController(
             rootView: PopoverView()
-                .environment(store).environment(companion).environment(updater).environment(navigation)
+                .environment(store).environment(companion).environment(languageStore).environment(updater)
+                .environment(navigation)
                 .environment(digimon).environment(digimonHub))
     }
 
@@ -688,7 +691,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         guard let button = statusItem.button else { return }
         if popover.isShown { popover.performClose(nil) }
         let entries = StatusItemMenu.entries(
-            l: companion.l, todayTokens: store.todayTotalTokens,
+            l: languageStore.l, todayTokens: store.todayTotalTokens,
             todayCost: store.showsCost ? store.todayUsageCost : nil,
             floatingPetEnabled: store.floatingPetEnabled, alwaysFacesBack: store.alwaysFacesBack)
             .filter { $0?.action != .toggleBackView }   // Pokemon-only item
