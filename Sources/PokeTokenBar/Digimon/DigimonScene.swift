@@ -143,7 +143,7 @@ final class DigimonSceneHub {
             if let data = await hub.image(for: key) { scene.sprite(key: key, dataURI: Self.dataURI(data)) }
             scene.apply(hub.sceneState())
             for visit in hub.digimon.visitorsToday where !hub.playedVisits.contains(hub.visitID(visit.species)) {
-                await hub.playVisit(visit.species, tier: visit.tier, in: [scene])
+                await hub.playVisit(visit.species, tier: visit.tier, firstSeen: visit.firstSeen, in: [scene])
             }
         }
     }
@@ -172,8 +172,8 @@ final class DigimonSceneHub {
                         try? await Task.sleep(for: .seconds(2.2))
                     }
                     target = to
-                case .visited(let species, let tier):
-                    await hub.playVisit(species, tier: tier, in: hub.liveScenes)
+                case .visited(let species, let tier, let firstSeen):
+                    await hub.playVisit(species, tier: tier, firstSeen: firstSeen, in: hub.liveScenes)
                     target = nil
                 case .stampCardFull:
                     hub.broadcast(["type": "jump"])
@@ -221,14 +221,15 @@ final class DigimonSceneHub {
     }
 
     /// A visitor walks in, greets the pet and leaves. Not marked as played while no scene shows it.
-    private func playVisit(_ species: String, tier: VisitorTier, in scenes: [DigimonScene]) async {
+    private func playVisit(_ species: String, tier: VisitorTier, firstSeen: Bool, in scenes: [DigimonScene]) async {
         guard !scenes.isEmpty, let data = await image(for: species) else { return }
         playedVisits.insert(visitID(species))
         let t = DigimonText(language)
         let name = t.name(digimon.engine.catalog.species(species))
         scenes.forEach {
             $0.sprite(key: species, dataURI: Self.dataURI(data))
-            $0.command(["type": "visit", "visitor": species, "tier": tier.rawValue, "greet": t.visitorGreeting(name)])
+            $0.command(["type": "visit", "visitor": species, "tier": tier.rawValue, "fresh": firstSeen,
+                        "greet": t.visitorGreeting(name, firstSeen: firstSeen)])
         }
     }
 

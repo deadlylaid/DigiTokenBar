@@ -73,7 +73,7 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertTrue(LuckRules.visitHours.contains(calendar.component(.hour, from: visit.at)))
         XCTAssertEqual(engine.updateLuck(&s, at: visit.at.addingTimeInterval(-1)), [])
         XCTAssertNil(s.sightings)
-        XCTAssertEqual(engine.updateLuck(&s, at: visit.at), [.visited(species: visit.species, tier: visit.tier)])
+        XCTAssertEqual(engine.updateLuck(&s, at: visit.at), [.visited(species: visit.species, tier: visit.tier, firstSeen: true)])
         XCTAssertEqual(s.sightings, [visit.species], "a visitor is met (the dex shows it)")
         XCTAssertEqual(engine.updateLuck(&s, at: visit.at.addingTimeInterval(60)), [], "it comes once")
         XCTAssertNotEqual(visit.species, s.partner.speciesKey, "never the partner itself")
@@ -81,6 +81,7 @@ final class DigimonLuckTests: XCTestCase {
 
     func testAStampPerCodingDayAndAFullCardBringsAVeryRareVisitorAtOnce() throws {
         var s = state()
+        s.dex = Set(["greymon", "garurumon", "tyranomon", "metalgreymon", "wargreymon", "andromon"])
         engine.updateLuck(&s, at: date(day: 1))
         XCTAssertEqual(s.luck?.stamps, 0, "no stamp before coding")
         for day in 1...6 {
@@ -94,8 +95,10 @@ final class DigimonLuckTests: XCTestCase {
         engine.addUsage(&s, tokens: 1_000, provider: "claude_code", at: date(day: 9, hour: 7))
         let events = engine.updateLuck(&s, at: date(day: 9, hour: 7))
         XCTAssertEqual(events.first, .stampCardFull)
-        guard case .visited(let species, let tier)? = events.last else { return XCTFail("\(events)") }
+        guard case .visited(let species, let tier, let firstSeen)? = events.last else { return XCTFail("\(events)") }
         XCTAssertGreaterThanOrEqual(tier, .veryRare)
+        XCTAssertTrue(firstSeen, "the card's visitor is always one never seen")
+        XCTAssertFalse(s.dex.contains(species))
         XCTAssertTrue(s.sightings?.contains(species) ?? false)
         XCTAssertEqual(s.luck?.stamps, 0, "the card starts again")
         XCTAssertEqual(s.luck?.cardsCompleted, 1)
@@ -125,15 +128,52 @@ final class DigimonLuckTests: XCTestCase {
                        "only that day")
     }
 
-    func testVisitorsLeanTowardDigimonNotMetYet() {
-        let pool = DigimonCatalog.mvp.species.values.filter { engine.visitorTier(of: $0) == .common }.map(\.key).sorted()
+    /// Visitors are old faces (user's decision): 99% from the dex (raised or met), 1% never seen. A new
+    /// user's dex is too small to repeat, so until it holds `minKnownVisitors` any Digimon comes.
+    func testVisitorsComeFromTheDexAndOneInAHundredIsNew() {
+        let common = DigimonCatalog.mvp.species.values.filter { engine.visitorTier(of: $0) == .common }.map(\.key).sorted()
         var s = state()
-        s.dex = Set(pool.enumerated().filter { $0.offset % 2 == 0 }.map(\.element))   // half the pool raised
+        s.dex = Set(common.prefix(20))
+        s.sightings = ["wargreymon"]
         var rng = SeededGenerator(seed: 42)
-        let draws = (0..<2_000).compactMap { _ in engine.visitor(.common, state: s, excluding: [], rng: &rng) }
-        let unmet = Double(draws.filter { !s.dex.contains($0) }.count) / Double(draws.count)
-        XCTAssertGreaterThan(unmet, 0.68, "an unmet Digimon counts three times (about 75%)")
-        XCTAssertLessThan(unmet, 0.82)
+        let draws = (0..<6_000).compactMap { _ in engine.visitor(LuckRules.tiers, state: s, excluding: [], rng: &rng) }
+        let met = s.dex.union(s.sightings!)
+        let new = Double(draws.filter { !met.contains($0.species) }.count) / Double(draws.count)
+        XCTAssertGreaterThan(new, 0.006, "about one in a hundred is never seen")
+        XCTAssertLessThan(new, 0.015)
+        XCTAssertTrue(draws.contains { $0.species == "wargreymon" }, "a Digimon met as a visitor comes again")
+
+        var newUser = state()
+        newUser.dex = ["greymon", "garurumon"]
+        let early = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: newUser, excluding: [], rng: &rng) }
+        XCTAssertGreaterThan(early.filter { !newUser.dex.contains($0.species) }.count, 400, "a small dex: anyone comes")
+
+        let fresh = (0..<200).compactMap { _ in engine.visitor(LuckRules.specialTiers, state: s, excluding: [], neverSeen: true, rng: &rng) }
+        XCTAssertTrue(fresh.allSatisfy { !met.contains($0.species) && $0.tier >= .veryRare }, "the stamp card's visitor")
+    }
+
+    /// Surprise points (user's rules): +1 for a visitor at a higher stage than the partner or two or more
+    /// lower, +10 for one never seen. They add up in the book and are kept per visit.
+    func testSurprisePointsForFarStagesAndNewFaces() throws {
+        XCTAssertEqual(engine.surprisePoints("wargreymon", partner: .child, firstSeen: false), 1, "higher")
+        XCTAssertEqual(engine.surprisePoints("greymon", partner: .child, firstSeen: false), 1, "one higher is higher")
+        XCTAssertEqual(engine.surprisePoints("gabumon", partner: .child, firstSeen: false), 0, "the same stage")
+        XCTAssertEqual(engine.surprisePoints("greymon", partner: .ultimate, firstSeen: false), 1, "two lower")
+        XCTAssertEqual(engine.surprisePoints("metalgreymon", partner: .ultimate, firstSeen: false), 0, "one lower")
+        XCTAssertEqual(engine.surprisePoints("gabumon", partner: .child, firstSeen: true), 10)
+        XCTAssertEqual(engine.surprisePoints("wargreymon", partner: .child, firstSeen: true), 11)
+        XCTAssertEqual(engine.surprisePoints("gabumon", partner: .digitama, firstSeen: false), 1, "an egg is the lowest")
+
+        var s = state()   // Agumon, a Child, with nothing raised or met: the first visitor is new
+        engine.updateLuck(&s, at: date(day: 7, hour: 8))
+        let visit = try XCTUnwrap(s.luck?.visits.first)
+        engine.updateLuck(&s, at: visit.at)
+        let arrived = try XCTUnwrap(s.luck?.visits.first)
+        let stage = DigimonCatalog.mvp.species(visit.species)!.level.order
+        let far = stage > DigimonLevel.child.order || stage <= DigimonLevel.child.order - 2
+        XCTAssertTrue(arrived.firstSeen)
+        XCTAssertEqual(arrived.points, 10 + (far ? 1 : 0))
+        XCTAssertEqual(s.luck?.surprise, arrived.points)
     }
 
     func testTiersAndHowOftenTheyCome() {
@@ -177,7 +217,8 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertEqual([partial.day, partial.stampDay], ["", ""])
         XCTAssertEqual([partial.stamps, partial.cardsCompleted, partial.visits.count], [0, 0, 0])
         let visit = try JSONDecoder().decode(DigimonVisit.self, from: Data(#"{"species":"greymon","tier":"rare","at":0}"#.utf8))
-        XCTAssertEqual([visit.arrived, visit.special], [false, false])
+        XCTAssertEqual([visit.arrived, visit.special, visit.firstSeen], [false, false, false])
+        XCTAssertEqual([visit.points, partial.surprise], [0, 0])
     }
 
     func testAnImportedSaveIsClampedAndKeepsOnlyVisitorsThisCatalogKnows() throws {
@@ -185,11 +226,13 @@ final class DigimonLuckTests: XCTestCase {
         engine.updateLuck(&s, at: date(day: 4))
         s.luck?.stamps = 99
         s.luck?.cardsCompleted = -3
+        s.luck?.surprise = -7
         s.luck?.visits.append(DigimonVisit(species: "notadigimon", tier: .legendary, at: date(day: 4, hour: 12)))
         s.sightings = ["notadigimon", "greymon"]
         let clean = try DigimonSaveIO.sanitized(s, catalog: .mvp, growth: engine.growth)
         XCTAssertEqual(clean.luck?.stamps, LuckRules.stampCard - 1)
         XCTAssertEqual(clean.luck?.cardsCompleted, 0)
+        XCTAssertEqual(clean.luck?.surprise, 0)
         XCTAssertFalse(clean.luck?.visits.contains { $0.species == "notadigimon" } ?? true)
         XCTAssertEqual(clean.sightings, ["notadigimon", "greymon"], "sightings are kept like the dex")
     }
@@ -220,7 +263,7 @@ final class DigimonLuckTests: XCTestCase {
         let visit = try XCTUnwrap(store.todayLuck?.visits.first)
         now = visit.at.addingTimeInterval(1)
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d6", hasUsageData: true)
-        XCTAssertTrue(events.contains(.visited(species: visit.species, tier: visit.tier)))
+        XCTAssertTrue(events.contains { if case .visited(visit.species, visit.tier, _) = $0 { return true } else { return false } })
         XCTAssertEqual(store.visitorsToday.map(\.species), [visit.species])
         XCTAssertEqual(store.sightingsCount, store.state.dex.contains(visit.species) ? 0 : 1)
     }

@@ -6,8 +6,11 @@ import Foundation
 // - Luck never depends on how much the user codes (the daily experience cap's reason): the day is
 //   rolled from the player's random number and the date, and a stamp is one per coding day.
 // - Nothing rerolls: restarting or restoring a backup rolls the same day again.
-// - A full stamp card guarantees a very rare visitor (the "pity" of gacha games, without buying).
-// - Visitors lean toward Digimon the user has not met yet.
+// - Visitors are old faces: 99% come from the user's dex (raised or met), 1% are Digimon never seen
+//   before (user's decision, 2026-11-19). A full stamp card guarantees one never seen (the "pity" of
+//   gacha games, without buying).
+// - Surprise points (user's rules): a little for a visitor at a higher stage than the partner or two
+//   or more stages lower, more for one never seen.
 // - Card evolution rules stay as they are: luck only adds visitors, bugs and practice battles.
 
 /// The day's fortune: one a day per player.
@@ -32,16 +35,22 @@ struct DigimonVisit: Codable, Sendable, Equatable {
     var arrived = false
     /// Brought by a full stamp card.
     var special = false
+    /// Set on arrival: never raised nor met before, and the surprise points it gave.
+    var firstSeen = false
+    var points = 0
 
-    init(species: String, tier: VisitorTier, at: Date, arrived: Bool = false, special: Bool = false) {
+    init(species: String, tier: VisitorTier, at: Date, arrived: Bool = false, special: Bool = false,
+         firstSeen: Bool = false, points: Int = 0) {
         self.species = species
         self.tier = tier
         self.at = at
         self.arrived = arrived
         self.special = special
+        self.firstSeen = firstSeen
+        self.points = points
     }
 
-    private enum CodingKeys: String, CodingKey { case species, tier, at, arrived, special }
+    private enum CodingKeys: String, CodingKey { case species, tier, at, arrived, special, firstSeen, points }
 
     /// A tier from a newer version reads as common instead of failing the whole save.
     init(from decoder: Decoder) throws {
@@ -51,6 +60,8 @@ struct DigimonVisit: Codable, Sendable, Equatable {
         at = try c.decode(Date.self, forKey: .at)
         arrived = try c.decodeIfPresent(Bool.self, forKey: .arrived) ?? false
         special = try c.decodeIfPresent(Bool.self, forKey: .special) ?? false
+        firstSeen = try c.decodeIfPresent(Bool.self, forKey: .firstSeen) ?? false
+        points = try c.decodeIfPresent(Int.self, forKey: .points) ?? 0
     }
 }
 
@@ -65,10 +76,12 @@ struct LuckBook: Codable, Sendable, Equatable {
     /// The last day that gave a stamp.
     var stampDay = ""
     var cardsCompleted = 0
+    /// Surprise points over all visits (`EvolutionEngine.surprisePoints`).
+    var surprise = 0
 
     init() {}
 
-    private enum CodingKeys: String, CodingKey { case day, fortune, visits, stamps, stampDay, cardsCompleted }
+    private enum CodingKeys: String, CodingKey { case day, fortune, visits, stamps, stampDay, cardsCompleted, surprise }
 
     /// Every field may be missing, and a fortune from a newer version reads as a clear day.
     init(from decoder: Decoder) throws {
@@ -79,6 +92,7 @@ struct LuckBook: Codable, Sendable, Equatable {
         stamps = try c.decodeIfPresent(Int.self, forKey: .stamps) ?? 0
         stampDay = try c.decodeIfPresent(String.self, forKey: .stampDay) ?? ""
         cardsCompleted = try c.decodeIfPresent(Int.self, forKey: .cardsCompleted) ?? 0
+        surprise = try c.decodeIfPresent(Int.self, forKey: .surprise) ?? 0
     }
 }
 
@@ -89,10 +103,16 @@ enum LuckRules {
     static let tiers: [(VisitorTier, Int)] = [(.common, 64), (.rare, 26), (.veryRare, 9), (.legendary, 1)]
     /// A meteor shower brings a rare visitor or better.
     static let meteorTiers: [(VisitorTier, Int)] = [(.rare, 60), (.veryRare, 32), (.legendary, 8)]
-    /// A full stamp card: very rare or better.
+    /// A full stamp card: very rare or better, and never seen before.
     static let specialTiers: [(VisitorTier, Int)] = [(.veryRare, 85), (.legendary, 15)]
-    /// A Digimon the user has neither raised nor met counts this many times in the draw.
-    static let unseenWeight = 3
+    /// Percent of visitors that are Digimon never seen; the rest come from the dex (raised or met).
+    static let unknownPercent: UInt64 = 1
+    /// With fewer Digimon in the dex that can visit, any Digimon comes (a new user's few would repeat).
+    static let minKnownVisitors = 5
+    /// Surprise points: a visitor at a higher stage than the partner, or two or more stages lower...
+    static let surpriseStage = 1
+    /// ...and one never seen before.
+    static let surpriseFirstSeen = 10
     /// Practice battles added on a day of fighting spirit.
     static let extraPractice = 2
     /// Visits come between these hours (local time).
@@ -105,9 +125,14 @@ extension EvolutionEngine {
     /// The visitor tier of a species: Child and Adult common, Perfect rare, Ultimate very rare, and
     /// the Digimon growth never reaches (merge results such as Omegamon) legendary. nil for babies.
     func visitorTier(of species: DigimonSpecies) -> VisitorTier? {
-        if rules.locked.contains(species.key) || rules.specialJogress.contains(where: { $0.to == species.key }) {
-            return .legendary
-        }
+        visitorTier(of: species, legendary: legendaryVisitors)
+    }
+
+    /// The Digimon growth never reaches: merge results such as Omegamon.
+    private var legendaryVisitors: Set<String> { rules.locked.union(rules.specialJogress.map(\.to)) }
+
+    private func visitorTier(of species: DigimonSpecies, legendary: Set<String>) -> VisitorTier? {
+        if legendary.contains(species.key) { return .legendary }
         switch species.level {
         case .child, .adult: return .common
         case .perfect: return .rare
@@ -138,13 +163,28 @@ extension EvolutionEngine {
         }
         var sightings = state.sightings ?? []
         for i in book.visits.indices where !book.visits[i].arrived && book.visits[i].at <= now {
+            let species = book.visits[i].species
+            let firstSeen = !state.dex.contains(species) && !sightings.contains(species)
+            let points = surprisePoints(species, partner: state.partner.level, firstSeen: firstSeen)
             book.visits[i].arrived = true
-            sightings.insert(book.visits[i].species)
-            events.append(.visited(species: book.visits[i].species, tier: book.visits[i].tier))
+            book.visits[i].firstSeen = firstSeen
+            book.visits[i].points = points
+            book.surprise += points
+            sightings.insert(species)
+            events.append(.visited(species: species, tier: book.visits[i].tier, firstSeen: firstSeen))
         }
         state.luck = book
         if sightings != (state.sightings ?? []) { state.sightings = sightings }
         return events
+    }
+
+    /// Surprise points for a visitor (user's rules): `surpriseStage` when it stands at a higher stage
+    /// than the partner (an egg counts as the lowest) or two or more stages lower, plus
+    /// `surpriseFirstSeen` when it was never raised nor met.
+    func surprisePoints(_ visitor: String, partner level: DigimonLevel, firstSeen: Bool) -> Int {
+        guard let stage = catalog.species(visitor)?.level.order else { return 0 }
+        let far = stage > level.order || stage <= level.order - 2
+        return (far ? LuckRules.surpriseStage : 0) + (firstSeen ? LuckRules.surpriseFirstSeen : 0)
     }
 
     /// The practice battles allowed today: one fortune adds two.
@@ -175,8 +215,8 @@ extension EvolutionEngine {
         }.sorted()
         var chosen: Set<String> = []
         book.visits = times.compactMap { at in
-            let tier = Self.pick(book.fortune == .meteor ? LuckRules.meteorTiers : LuckRules.tiers, &rng) ?? .common
-            guard let species = visitor(tier, state: state, excluding: chosen, rng: &rng) else { return nil }
+            let tiers = book.fortune == .meteor ? LuckRules.meteorTiers : LuckRules.tiers
+            guard let (species, tier) = visitor(tiers, state: state, excluding: chosen, rng: &rng) else { return nil }
             chosen.insert(species)
             return DigimonVisit(species: species, tier: tier, at: at)
         }
@@ -187,21 +227,38 @@ extension EvolutionEngine {
     private func specialVisit(_ state: DigimonState, visitsToday: [DigimonVisit], cards: Int, day: String,
                               at now: Date) -> DigimonVisit? {
         var rng = SeededGenerator(seed: DigimonBattle.fnv1a("stamp|\(state.playerID ?? "")|\(day)|\(cards)"))
-        let tier = Self.pick(LuckRules.specialTiers, &rng) ?? .veryRare
-        guard let species = visitor(tier, state: state, excluding: Set(visitsToday.map(\.species)), rng: &rng) else { return nil }
+        guard let (species, tier) = visitor(LuckRules.specialTiers, state: state, excluding: Set(visitsToday.map(\.species)),
+                                            neverSeen: true, rng: &rng) else { return nil }
         return DigimonVisit(species: species, tier: tier, at: now, special: true)
     }
 
-    /// A species of this tier, not the partner and not one already coming today. One the user has
-    /// neither raised nor met counts `unseenWeight` times.
-    func visitor(_ tier: VisitorTier, state: DigimonState, excluding: Set<String>,
-                 rng: inout some RandomNumberGenerator) -> String? {
-        let known = state.dex.union(state.sightings ?? [])
-        let pool = catalog.species.values
-            .filter { visitorTier(of: $0) == tier && $0.key != state.partner.speciesKey && !excluding.contains($0.key) }
-            .sorted { $0.key < $1.key }
-            .map { ($0.key, known.contains($0.key) ? 1 : LuckRules.unseenWeight) }
-        return Self.pick(pool, &rng)
+    /// Who visits, and its tier: a Digimon from the dex (raised or met) 99% of the time, one never seen
+    /// `unknownPercent`; only never seen ones with `neverSeen` (a full stamp card). While the dex holds
+    /// fewer than `minKnownVisitors` that can visit, any Digimon comes. Never the partner, nor one
+    /// already coming today. The tier is drawn from `tiers` among those the pool has: a pool without
+    /// the asked tiers (a meteor shower over a dex of Child Digimon) widens to every Digimon.
+    func visitor(_ tiers: [(VisitorTier, Int)], state: DigimonState, excluding: Set<String>, neverSeen: Bool = false,
+                 rng: inout some RandomNumberGenerator) -> (species: String, tier: VisitorTier)? {
+        let met = state.dex.union(state.sightings ?? []), legendary = legendaryVisitors
+        let eligible = catalog.sortedSpecies.compactMap { species -> (String, VisitorTier)? in
+            guard let tier = visitorTier(of: species, legendary: legendary), species.key != state.partner.speciesKey,
+                  !excluding.contains(species.key) else { return nil }
+            return (species.key, tier)
+        }
+        let known = eligible.filter { met.contains($0.0) }, unknown = eligible.filter { !met.contains($0.0) }
+        var pool: [(String, VisitorTier)]
+        if neverSeen, !unknown.isEmpty { pool = unknown }
+        else if known.count < LuckRules.minKnownVisitors { pool = eligible }
+        else if !unknown.isEmpty, rng.next() % 100 < LuckRules.unknownPercent { pool = unknown }
+        else { pool = known }
+        let present = { (p: [(String, VisitorTier)]) in tiers.filter { t in p.contains { $0.1 == t.0 } } }
+        if present(pool).isEmpty, !neverSeen, !present(eligible).isEmpty { pool = eligible }
+        var weights = present(pool)
+        if weights.isEmpty { weights = LuckRules.tiers.filter { t in pool.contains { $0.1 == t.0 } } }
+        guard let tier = Self.pick(weights, &rng) else { return nil }
+        let choices = pool.filter { $0.1 == tier }.map(\.0)
+        guard !choices.isEmpty else { return nil }
+        return (choices[Int(rng.next() % UInt64(choices.count))], tier)
     }
 
     static func pick<T>(_ weighted: [(T, Int)], _ rng: inout some RandomNumberGenerator) -> T? {

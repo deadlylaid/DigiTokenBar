@@ -77,6 +77,8 @@ enum DigimonSaveIO {
         if var book = state.luck {
             book.stamps = clamp(book.stamps, max: LuckRules.stampCard - 1)
             book.cardsCompleted = clamp(book.cardsCompleted)
+            book.surprise = clamp(book.surprise)
+            for i in book.visits.indices { book.visits[i].points = clamp(book.visits[i].points, max: 100) }
             // A visitor this catalog cannot draw is dropped (sightings are kept, like the dex).
             book.visits = Array(book.visits.filter { catalog.species($0.species) != nil }.prefix(LuckRules.maxVisits))
             state.luck = book

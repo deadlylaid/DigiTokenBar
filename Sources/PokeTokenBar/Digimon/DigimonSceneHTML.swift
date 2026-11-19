@@ -497,7 +497,8 @@ class Pet {
       const W = this.worldW, b = this.bb(), gb = A.bb, fromRight = this.x + (b.l + b.r) / 2 < W / 2;
       const x0 = fromRight ? W + 2 - gb.l : -gb.r - 2;
       const stop = fromRight ? Math.min(W - gb.r - 4, this.x + b.r + 12 - gb.l) : Math.max(4 - gb.l, this.x + b.l - 12 - gb.r);
-      this.guest = {key: c.visitor, greet: c.greet || '', rare: !!c.tier && c.tier !== 'common', x: x0, x0, to: stop,
+      // A rare visitor or one never seen before arrives in a sparkle.
+      this.guest = {key: c.visitor, greet: c.greet || '', rare: (!!c.tier && c.tier !== 'common') || !!c.fresh, x: x0, x0, to: stop,
                     dir: fromRight ? -1 : 1, t: 0, phase: 'in', alpha: 0, y: 0};
       return;
     }

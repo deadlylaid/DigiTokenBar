@@ -210,6 +210,8 @@ final class DigimonStore {
     /// Visitors still to come today (who they are stays a surprise).
     var visitorsToCome: Int { (todayLuck?.visits ?? []).filter { !$0.arrived }.count }
     var stamps: Int { state.luck?.stamps ?? 0 }
+    /// Surprise points over all visits.
+    var surprisePoints: Int { state.luck?.surprise ?? 0 }
     var stampCardsCompleted: Int { state.luck?.cardsCompleted ?? 0 }
     /// Species met as visitors, not counting the ones also raised.
     var sightingsCount: Int { (state.sightings ?? []).subtracting(state.dex).count }

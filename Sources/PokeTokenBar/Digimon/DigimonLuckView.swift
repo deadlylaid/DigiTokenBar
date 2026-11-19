@@ -48,7 +48,17 @@ extension DigimonText {
     }
 
     /// What the pet says when a visitor arrives (the scene's callout).
-    func visitorGreeting(_ name: String) -> String { ko ? "\(name) 왔다!" : "\(name)!" }
+    func visitorGreeting(_ name: String, firstSeen: Bool) -> String {
+        if firstSeen { return ko ? "처음 보는 디지몬이다!" : "Never seen this one!" }
+        return ko ? "\(name) 왔다!" : "\(name)!"
+    }
+    var firstSeenNotifyTitle: String { ko ? "처음 보는 디지몬이 왔어요!" : "A Digimon you've never seen came by!" }
+    var firstSeenBadge: String { ko ? "처음 봐요" : "New" }
+    func surpriseTitle(_ points: Int) -> String { ko ? "놀람 \(points)" : "Surprise \(points)" }
+    var surpriseHelp: String {
+        ko ? "손님이 오면 쌓여요. 내 디지몬보다 높은 단계이거나 2단계 이상 낮으면 +\(LuckRules.surpriseStage), 처음 보는 디지몬이면 +\(LuckRules.surpriseFirstSeen)."
+           : "Visitors add to it: +\(LuckRules.surpriseStage) for one at a higher stage than yours or two or more lower, +\(LuckRules.surpriseFirstSeen) for one never seen."
+    }
     var visitorCame: String { ko ? "다녀갔어요" : "came by" }
     /// Who is still coming stays a surprise; only how many.
     func visitorsToCome(_ n: Int, cameAlready: Bool) -> String {
@@ -117,7 +127,14 @@ struct DigimonTodayView: View {
             PixelSprite(data: hub.icons[visit.species]).frame(width: 28, height: 28)
             Text(t.name(species)).font(.caption.weight(.semibold))
             Text(t.tierName(visit.tier)).font(.caption2.weight(.semibold)).foregroundStyle(visit.tier.color)
+            if visit.firstSeen {
+                Text(t.firstSeenBadge).font(.caption2.weight(.bold)).foregroundStyle(Color.accentColor)
+            }
             Text(t.visitorCame).font(.caption2).foregroundStyle(.secondary)
+            if visit.points > 0 {
+                Text("+\(visit.points)").font(.caption2.weight(.semibold)).foregroundStyle(.secondary).monospacedDigit()
+                    .help(t.surpriseHelp)
+            }
         }
         .task(id: visit.species) { _ = await hub.image(for: visit.species) }
     }
@@ -129,8 +146,14 @@ struct DigimonTodayView: View {
                 Image(systemName: i < digimon.stamps ? "seal.fill" : "seal")
                     .font(.caption2)
                     .foregroundStyle(i < digimon.stamps ? Color.accentColor : Color.secondary.opacity(0.5))
+                    .help(t.stampsHelp(cards: digimon.stampCardsCompleted))
+            }
+            Spacer()
+            if digimon.surprisePoints > 0 {
+                Label(t.surpriseTitle(digimon.surprisePoints), systemImage: "exclamationmark.bubble.fill")
+                    .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    .help(t.surpriseHelp)
             }
         }
-        .help(t.stampsHelp(cards: digimon.stampCardsCompleted))
     }
 }

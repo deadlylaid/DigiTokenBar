@@ -147,7 +147,7 @@ enum DigimonEvent: Equatable, Sendable {
     /// Merged with a friend's Digimon.
     case jogressed(from: String, partner: String, to: String)
     /// A visitor came by (`EvolutionEngine.updateLuck`).
-    case visited(species: String, tier: VisitorTier)
+    case visited(species: String, tier: VisitorTier, firstSeen: Bool)
     /// The stamp card filled: a very rare visitor comes right away.
     case stampCardFull
 }

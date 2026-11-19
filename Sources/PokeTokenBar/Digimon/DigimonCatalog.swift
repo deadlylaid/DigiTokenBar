@@ -116,6 +116,8 @@ struct DigimonStepCondition: Sendable, Hashable {
 /// Evolution *data*: who can become whom. Conditions live in `EvolutionRules`.
 struct DigimonCatalog: Sendable {
     let species: [String: DigimonSpecies]
+    /// Every species ordered by key: a stable order for seeded draws (dictionary order changes per run).
+    let sortedSpecies: [DigimonSpecies]
     let lines: [String: DigimonLine]
     private let outgoing: [String: [DigimonEvolution]]
     /// line id -> step -> the card's requirement.
@@ -123,6 +125,7 @@ struct DigimonCatalog: Sendable {
 
     init(species: [DigimonSpecies], evolutions: [DigimonEvolution], lines: [DigimonLine]) {
         self.species = Dictionary(species.map { ($0.key, $0) }, uniquingKeysWith: { first, _ in first })
+        self.sortedSpecies = self.species.values.sorted { $0.key < $1.key }
         self.lines = Dictionary(lines.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
         self.outgoing = Dictionary(grouping: evolutions, by: \.from)
         self.conditionIndex = Dictionary(lines.map { line in
