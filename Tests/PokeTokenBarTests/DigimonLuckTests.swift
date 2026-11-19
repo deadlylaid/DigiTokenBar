@@ -148,7 +148,7 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertTrue(draws.contains { $0.species == "wargreymon" }, "a Digimon met as a visitor comes again")
 
         var one = state()
-        one.dex = ["botamon", "koromon", "agumon", "greymon"]   // only Greymon can visit (the partner is Agumon)
+        one.dex = ["agumon", "greymon"]   // only Greymon can visit (the partner is Agumon)
         let same = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: one, excluding: [], rng: &rng) }
         XCTAssertGreaterThanOrEqual(same.filter { $0.species == "greymon" }.count, 480, "a dex of one: that one keeps coming")
         XCTAssertEqual(same.count, 500)
@@ -160,10 +160,17 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertEqual(Set(pair.map(\.species)).intersection(two.dex), two.dex, "both come")
 
         var none = state()
-        none.dex = ["botamon", "koromon", "agumon"]   // babies stay home and the partner never visits itself
+        none.dex = ["agumon"]   // the partner never visits itself
         let empty = (0..<500).map { _ in engine.visitor(LuckRules.tiers, state: none, excluding: [], rng: &rng) }
         XCTAssertGreaterThan(empty.filter { $0 == nil }.count, 480, "no one from the dex: no visitor that day")
         XCTAssertTrue(empty.compactMap { $0 }.allSatisfy { !none.dex.contains($0.species) }, "only the rare new face")
+
+        // Grown into a Child, the babies it was come by.
+        var grown = state()
+        grown.dex = ["botamon", "koromon", "agumon"]
+        let babies = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: grown, excluding: [], rng: &rng) }
+        XCTAssertGreaterThanOrEqual(babies.filter { ["botamon", "koromon"].contains($0.species) }.count, 480)
+        XCTAssertEqual(Set(babies.map(\.species)).intersection(["botamon", "koromon"]), ["botamon", "koromon"])
 
         let fresh = (0..<200).compactMap { _ in engine.visitor(LuckRules.specialTiers, state: s, excluding: [], neverSeen: true, rng: &rng) }
         XCTAssertTrue(fresh.allSatisfy { !met.contains($0.species) && $0.tier >= .veryRare }, "the stamp card's visitor")
@@ -204,7 +211,7 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertEqual(engine.visitorTier(of: catalog.species("wargreymon")!), .veryRare)
         XCTAssertEqual(engine.visitorTier(of: catalog.species("metalgreymon")!), .rare)
         XCTAssertEqual(engine.visitorTier(of: catalog.species("greymon")!), .common)
-        XCTAssertNil(engine.visitorTier(of: catalog.species("koromon")!), "babies stay home")
+        XCTAssertEqual(engine.visitorTier(of: catalog.species("koromon")!), .common, "babies visit too")
         var counts: [VisitorTier: Int] = [:]
         for day in 0..<730 {
             var s = state(player: "p\(day % 7)")

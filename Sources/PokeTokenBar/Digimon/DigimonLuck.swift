@@ -121,8 +121,9 @@ enum LuckRules {
 }
 
 extension EvolutionEngine {
-    /// The visitor tier of a species: Child and Adult common, Perfect rare, Ultimate very rare, and
-    /// the Digimon growth never reaches (merge results such as Omegamon) legendary. nil for babies.
+    /// The visitor tier of a species: babies, Child and Adult common, Perfect rare, Ultimate very rare,
+    /// and the Digimon growth never reaches (merge results such as Omegamon) legendary. Babies visit too
+    /// (user's decision): once it grows past them, the ones it was come by.
     func visitorTier(of species: DigimonSpecies) -> VisitorTier? {
         visitorTier(of: species, legendary: legendaryVisitors)
     }
@@ -133,10 +134,10 @@ extension EvolutionEngine {
     private func visitorTier(of species: DigimonSpecies, legendary: Set<String>) -> VisitorTier? {
         if legendary.contains(species.key) { return .legendary }
         switch species.level {
-        case .child, .adult: return .common
+        case .babyI, .babyII, .child, .adult: return .common
         case .perfect: return .rare
         case .ultimate: return .veryRare
-        case .digitama, .babyI, .babyII: return nil
+        case .digitama: return nil
         }
     }
 
