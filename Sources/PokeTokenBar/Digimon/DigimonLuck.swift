@@ -105,10 +105,9 @@ enum LuckRules {
     static let meteorTiers: [(VisitorTier, Int)] = [(.rare, 60), (.veryRare, 32), (.legendary, 8)]
     /// A full stamp card: very rare or better, and never seen before.
     static let specialTiers: [(VisitorTier, Int)] = [(.veryRare, 85), (.legendary, 15)]
-    /// Percent of visitors that are Digimon never seen; the rest come from the dex (raised or met).
+    /// Percent of visitors that are Digimon never seen; the rest come from the dex (raised or met), even
+    /// when it holds a single one (user's decision: the same old face keeps coming).
     static let unknownPercent: UInt64 = 1
-    /// With fewer Digimon in the dex that can visit, any Digimon comes (a new user's few would repeat).
-    static let minKnownVisitors = 5
     /// Surprise points: a visitor at a higher stage than the partner, or two or more stages lower...
     static let surpriseStage = 1
     /// ...and one never seen before.
@@ -232,11 +231,11 @@ extension EvolutionEngine {
         return DigimonVisit(species: species, tier: tier, at: now, special: true)
     }
 
-    /// Who visits, and its tier: a Digimon from the dex (raised or met) 99% of the time, one never seen
-    /// `unknownPercent`; only never seen ones with `neverSeen` (a full stamp card). While the dex holds
-    /// fewer than `minKnownVisitors` that can visit, any Digimon comes. Never the partner, nor one
-    /// already coming today. The tier is drawn from `tiers` among those the pool has: a pool without
-    /// the asked tiers (a meteor shower over a dex of Child Digimon) widens to every Digimon.
+    /// Who visits, and its tier: a Digimon from the dex (raised or met) 99% of the time, however few it
+    /// holds; one never seen `unknownPercent`; only never seen ones with `neverSeen` (a full stamp card).
+    /// Never the partner, nor one already coming today. nil when the dex has none that can visit (a new
+    /// user before a Child joins it): no visitor that day. The tier is drawn from `tiers` among those the
+    /// pool has (a meteor shower prefers rare ones); with none of them, from any tier it has.
     func visitor(_ tiers: [(VisitorTier, Int)], state: DigimonState, excluding: Set<String>, neverSeen: Bool = false,
                  rng: inout some RandomNumberGenerator) -> (species: String, tier: VisitorTier)? {
         let met = state.dex.union(state.sightings ?? []), legendary = legendaryVisitors
@@ -248,12 +247,9 @@ extension EvolutionEngine {
         let known = eligible.filter { met.contains($0.0) }, unknown = eligible.filter { !met.contains($0.0) }
         var pool: [(String, VisitorTier)]
         if neverSeen, !unknown.isEmpty { pool = unknown }
-        else if known.count < LuckRules.minKnownVisitors { pool = eligible }
         else if !unknown.isEmpty, rng.next() % 100 < LuckRules.unknownPercent { pool = unknown }
         else { pool = known }
-        let present = { (p: [(String, VisitorTier)]) in tiers.filter { t in p.contains { $0.1 == t.0 } } }
-        if present(pool).isEmpty, !neverSeen, !present(eligible).isEmpty { pool = eligible }
-        var weights = present(pool)
+        var weights = tiers.filter { t in pool.contains { $0.1 == t.0 } }
         if weights.isEmpty { weights = LuckRules.tiers.filter { t in pool.contains { $0.1 == t.0 } } }
         guard let tier = Self.pick(weights, &rng) else { return nil }
         let choices = pool.filter { $0.1 == tier }.map(\.0)

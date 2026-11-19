@@ -20,7 +20,7 @@ extension DigimonText {
         case .fighting:
             return ko ? "연습 배틀을 \(LuckRules.extraPractice)번 더 할 수 있어요." : "\(LuckRules.extraPractice) more practice battles today."
         case .busy: return ko ? "손님이 두 번 와요." : "Two visitors come today."
-        case .meteor: return ko ? "드문 손님이 와요." : "A rare visitor comes."
+        case .meteor: return ko ? "드문 손님이 오기 쉬워요." : "Rare visitors are more likely."
         }
     }
 

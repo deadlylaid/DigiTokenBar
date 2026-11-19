@@ -17,11 +17,13 @@ final class DigimonLuckTests: XCTestCase {
         calendar.date(from: DateComponents(year: 2026, month: 12, day: day, hour: hour, minute: minute))!
     }
 
+    /// A partner with the Agumon line in its dex (visitors come from the dex).
     private func state(player: String = "p1", at key: String = "agumon") -> DigimonState {
         var s = DigimonState.newEgg(lineID: "agumon")
         s.partner.speciesKey = key
         s.partner.level = DigimonCatalog.mvp.species(key)!.level
         s.playerID = player
+        s.dex = Set(DigimonCatalog.mvp.lines["agumon"]!.members)
         return s
     }
 
@@ -73,7 +75,8 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertTrue(LuckRules.visitHours.contains(calendar.component(.hour, from: visit.at)))
         XCTAssertEqual(engine.updateLuck(&s, at: visit.at.addingTimeInterval(-1)), [])
         XCTAssertNil(s.sightings)
-        XCTAssertEqual(engine.updateLuck(&s, at: visit.at), [.visited(species: visit.species, tier: visit.tier, firstSeen: true)])
+        let fresh = !s.dex.contains(visit.species)
+        XCTAssertEqual(engine.updateLuck(&s, at: visit.at), [.visited(species: visit.species, tier: visit.tier, firstSeen: fresh)])
         XCTAssertEqual(s.sightings, [visit.species], "a visitor is met (the dex shows it)")
         XCTAssertEqual(engine.updateLuck(&s, at: visit.at.addingTimeInterval(60)), [], "it comes once")
         XCTAssertNotEqual(visit.species, s.partner.speciesKey, "never the partner itself")
@@ -103,6 +106,7 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertEqual(s.luck?.stamps, 0, "the card starts again")
         XCTAssertEqual(s.luck?.cardsCompleted, 1)
         XCTAssertEqual(s.luck?.visits.last?.special, true)
+        XCTAssertGreaterThanOrEqual(s.luck?.visits.last?.points ?? 0, LuckRules.surpriseFirstSeen)
     }
 
     func testEachFortuneDoesWhatItSays() {
@@ -128,8 +132,8 @@ final class DigimonLuckTests: XCTestCase {
                        "only that day")
     }
 
-    /// Visitors are old faces (user's decision): 99% from the dex (raised or met), 1% never seen. A new
-    /// user's dex is too small to repeat, so until it holds `minKnownVisitors` any Digimon comes.
+    /// Visitors are old faces (user's decision): 99% from the dex (raised or met), 1% never seen, however
+    /// small the dex is: with one Digimon that can visit, that one keeps coming.
     func testVisitorsComeFromTheDexAndOneInAHundredIsNew() {
         let common = DigimonCatalog.mvp.species.values.filter { engine.visitorTier(of: $0) == .common }.map(\.key).sorted()
         var s = state()
@@ -143,13 +147,32 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertLessThan(new, 0.015)
         XCTAssertTrue(draws.contains { $0.species == "wargreymon" }, "a Digimon met as a visitor comes again")
 
-        var newUser = state()
-        newUser.dex = ["greymon", "garurumon"]
-        let early = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: newUser, excluding: [], rng: &rng) }
-        XCTAssertGreaterThan(early.filter { !newUser.dex.contains($0.species) }.count, 400, "a small dex: anyone comes")
+        var one = state()
+        one.dex = ["botamon", "koromon", "agumon", "greymon"]   // only Greymon can visit (the partner is Agumon)
+        let same = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: one, excluding: [], rng: &rng) }
+        XCTAssertGreaterThanOrEqual(same.filter { $0.species == "greymon" }.count, 480, "a dex of one: that one keeps coming")
+        XCTAssertEqual(same.count, 500)
+
+        var two = state()
+        two.dex = ["greymon", "garurumon"]
+        let pair = (0..<500).compactMap { _ in engine.visitor(LuckRules.tiers, state: two, excluding: [], rng: &rng) }
+        XCTAssertGreaterThanOrEqual(pair.filter { two.dex.contains($0.species) }.count, 480)
+        XCTAssertEqual(Set(pair.map(\.species)).intersection(two.dex), two.dex, "both come")
+
+        var none = state()
+        none.dex = ["botamon", "koromon", "agumon"]   // babies stay home and the partner never visits itself
+        let empty = (0..<500).map { _ in engine.visitor(LuckRules.tiers, state: none, excluding: [], rng: &rng) }
+        XCTAssertGreaterThan(empty.filter { $0 == nil }.count, 480, "no one from the dex: no visitor that day")
+        XCTAssertTrue(empty.compactMap { $0 }.allSatisfy { !none.dex.contains($0.species) }, "only the rare new face")
 
         let fresh = (0..<200).compactMap { _ in engine.visitor(LuckRules.specialTiers, state: s, excluding: [], neverSeen: true, rng: &rng) }
         XCTAssertTrue(fresh.allSatisfy { !met.contains($0.species) && $0.tier >= .veryRare }, "the stamp card's visitor")
+
+        var meteor = state()
+        meteor.dex = ["greymon", "garurumon"]
+        let rare = (0..<300).compactMap { _ in engine.visitor(LuckRules.meteorTiers, state: meteor, excluding: [], rng: &rng) }
+        XCTAssertGreaterThanOrEqual(rare.filter { meteor.dex.contains($0.species) }.count, 280,
+                                    "a meteor shower over a dex without rare ones still brings old faces")
     }
 
     /// Surprise points (user's rules): +1 for a visitor at a higher stage than the partner or two or more
@@ -164,16 +187,15 @@ final class DigimonLuckTests: XCTestCase {
         XCTAssertEqual(engine.surprisePoints("wargreymon", partner: .child, firstSeen: true), 11)
         XCTAssertEqual(engine.surprisePoints("gabumon", partner: .digitama, firstSeen: false), 1, "an egg is the lowest")
 
-        var s = state()   // Agumon, a Child, with nothing raised or met: the first visitor is new
+        var s = state()   // Agumon, a Child
         engine.updateLuck(&s, at: date(day: 7, hour: 8))
         let visit = try XCTUnwrap(s.luck?.visits.first)
+        let fresh = !s.dex.contains(visit.species)
         engine.updateLuck(&s, at: visit.at)
         let arrived = try XCTUnwrap(s.luck?.visits.first)
-        let stage = DigimonCatalog.mvp.species(visit.species)!.level.order
-        let far = stage > DigimonLevel.child.order || stage <= DigimonLevel.child.order - 2
-        XCTAssertTrue(arrived.firstSeen)
-        XCTAssertEqual(arrived.points, 10 + (far ? 1 : 0))
-        XCTAssertEqual(s.luck?.surprise, arrived.points)
+        XCTAssertEqual(arrived.firstSeen, fresh)
+        XCTAssertEqual(arrived.points, engine.surprisePoints(visit.species, partner: .child, firstSeen: fresh))
+        XCTAssertEqual(s.luck?.surprise, arrived.points, "the book adds them up")
     }
 
     func testTiersAndHowOftenTheyCome() {
@@ -186,6 +208,7 @@ final class DigimonLuckTests: XCTestCase {
         var counts: [VisitorTier: Int] = [:]
         for day in 0..<730 {
             var s = state(player: "p\(day % 7)")
+            s.dex = Set(DigimonCatalog.mvp.species.keys)   // every tier in the dex
             engine.updateLuck(&s, at: date(day: 1).addingTimeInterval(TimeInterval(day) * 86_400))
             for visit in s.luck?.visits ?? [] { counts[visit.tier, default: 0] += 1 }
         }
@@ -239,6 +262,7 @@ final class DigimonLuckTests: XCTestCase {
 
     func testTheDexShowsAVisitorItMet() {
         var s = state()
+        s.dex = ["agumon"]
         s.sightings = ["metalgreymon"]
         let rows = DigimonDex.rows(for: DigimonCatalog.mvp.lines["agumon"]!, state: s, catalog: .mvp, rules: .mvp)
         let entry = rows.flatMap(\.entries).first { $0.id == "metalgreymon" }
@@ -254,6 +278,7 @@ final class DigimonLuckTests: XCTestCase {
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: dir) }
         var now = date(day: 6, hour: 8)
+        try JSONEncoder().encode(DigimonStore.Saved(digimon: state())).write(to: dir.appendingPathComponent("s.json"))
         let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), engine: engine, clock: { now })
         var events: [DigimonEvent] = []
         store.onActivity = { e, _ in events += e }
@@ -336,6 +361,9 @@ final class DigimonSceneVisitTests: XCTestCase {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
         var now = calendar.date(from: DateComponents(year: 2026, month: 12, day: 3, hour: 8))!
+        var saved = DigimonState.newEgg(lineID: "agumon")   // visitors come from the dex
+        saved.dex = Set(DigimonCatalog.mvp.lines["agumon"]!.members)
+        try JSONEncoder().encode(DigimonStore.Saved(digimon: saved)).write(to: dir.appendingPathComponent("s.json"))
         let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), engine: EvolutionEngine(calendar: calendar),
                                  clock: { now })
         let hub = DigimonSceneHub(digimon: store, sprites: sprites)
