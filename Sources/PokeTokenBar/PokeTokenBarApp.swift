@@ -330,7 +330,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                 DigimonNotifier.post(t.jogressTitle, "\(name(from)) + \(name(partner)) → \(name(to))")
             case .graduated(_, let path):
                 DigimonNotifier.post(t.graduatedTitle, t.graduatedBody(path.last.map(name) ?? name("")))
-            case .newEgg:
+            case .visited(let species, let tier):
+                // Only the very rare ones notify; the others are a surprise for the next look.
+                if tier >= .veryRare { DigimonNotifier.post(t.visitorNotifyTitle(tier), name(species)) }
+            case .newEgg, .stampCardFull:
                 break
             }
         }

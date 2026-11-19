@@ -123,6 +123,7 @@ final class DigimonStore {
             events += engine.addUsage(&next.digimon, tokens: tokens, provider: provider, at: now)
         }
         events += engine.tick(&next.digimon, now: now)
+        events += engine.updateLuck(&next.digimon, at: now)
         commit(next, events, fed: deltas.values.reduce(0, +))
     }
 
@@ -197,6 +198,21 @@ final class DigimonStore {
     private(set) var lastBattle: BattleOutcome?
 
     var practiceLeft: Int { engine.practiceLeft(state, at: clock()) }
+    /// Practice battles allowed today (more on a day of fighting spirit).
+    var practiceLimit: Int { engine.practiceLimit(state, at: clock()) }
+
+    // MARK: Luck (the day's fortune, visitors, stamps)
+
+    /// Today's book; nil before the first refresh of the day rolled it.
+    var todayLuck: LuckBook? { state.luck?.day == engine.dayKey(clock()) ? state.luck : nil }
+    /// Visitors that came today, in the order they came.
+    var visitorsToday: [DigimonVisit] { (todayLuck?.visits ?? []).filter(\.arrived) }
+    /// Visitors still to come today (who they are stays a surprise).
+    var visitorsToCome: Int { (todayLuck?.visits ?? []).filter { !$0.arrived }.count }
+    var stamps: Int { state.luck?.stamps ?? 0 }
+    var stampCardsCompleted: Int { state.luck?.cardsCompleted ?? 0 }
+    /// Species met as visitors, not counting the ones also raised.
+    var sightingsCount: Int { (state.sightings ?? []).subtracting(state.dex).count }
     var canBattle: Bool { !isEgg }
 
     /// The user's battle code for today and this stage (saved, so it stays the same when copied again).

@@ -550,8 +550,7 @@ extension EvolutionEngine {
     /// The user's side of a battle. The same code within a stage and a day; nil for an egg.
     func myFighter(_ state: inout DigimonState, at now: Date) -> BattleFighter? {
         guard let key = state.partner.speciesKey, let species = catalog.species(key) else { return nil }
-        let player = state.playerID ?? String(UUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(12))
-        state.playerID = player
+        let player = ensurePlayerID(&state)
         let day = dayKey(now)
         let stage = Int64(state.partner.stageStartedAt?.timeIntervalSince1970 ?? 0)
         var book = state.battleBook ?? BattleBook()
@@ -567,14 +566,15 @@ extension EvolutionEngine {
         return code
     }
 
-    /// Practice against a wild Digimon of the same level, up to `practiceBattlesPerDay` a day.
-    /// nil for an egg or when today's practice is used up.
+    /// Practice against a wild Digimon of the same level, up to `practiceLimit` a day
+    /// (`practiceBattlesPerDay`, more on a day of fighting spirit). nil for an egg or when today's
+    /// practice is used up.
     func practiceBattle(_ state: inout DigimonState, at now: Date,
                         rng: inout some RandomNumberGenerator) -> (foe: BattleFighter, result: BattleResult)? {
         var book = state.battleBook ?? BattleBook()
         let day = dayKey(now)
         if book.practiceDay != day { book.practiceDay = day; book.practiceToday = 0 }
-        guard book.practiceToday < growth.practiceBattlesPerDay, let me = myFighter(&state, at: now) else { return nil }
+        guard book.practiceToday < practiceLimit(state, at: now), let me = myFighter(&state, at: now) else { return nil }
         book.myCode = state.battleBook?.myCode
         book.practiceToday += 1
         state.battleBook = book
@@ -607,8 +607,9 @@ extension EvolutionEngine {
     }
 
     func practiceLeft(_ state: DigimonState, at now: Date) -> Int {
-        guard let book = state.battleBook, book.practiceDay == dayKey(now) else { return growth.practiceBattlesPerDay }
-        return max(0, growth.practiceBattlesPerDay - book.practiceToday)
+        let limit = practiceLimit(state, at: now)
+        guard let book = state.battleBook, book.practiceDay == dayKey(now) else { return limit }
+        return max(0, limit - book.practiceToday)
     }
 }
 

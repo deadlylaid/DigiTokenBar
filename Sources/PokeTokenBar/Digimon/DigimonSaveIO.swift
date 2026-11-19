@@ -74,6 +74,13 @@ enum DigimonSaveIO {
             let known = offer.filter { catalog.lines[$0] != nil }
             state.eggOffer = state.partner.speciesKey == nil && !known.isEmpty ? known : nil
         }
+        if var book = state.luck {
+            book.stamps = clamp(book.stamps, max: LuckRules.stampCard - 1)
+            book.cardsCompleted = clamp(book.cardsCompleted)
+            // A visitor this catalog cannot draw is dropped (sightings are kept, like the dex).
+            book.visits = Array(book.visits.filter { catalog.species($0.species) != nil }.prefix(LuckRules.maxVisits))
+            state.luck = book
+        }
         if let pending = state.pendingChoice {
             let known = pending.candidates.filter { catalog.species($0) != nil && line.members.contains($0) }
             state.pendingChoice = known.isEmpty ? nil : PendingChoice(candidates: known, offeredAt: pending.offeredAt)

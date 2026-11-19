@@ -106,6 +106,11 @@ struct DigimonState: Codable, Sendable, Equatable {
     var jogressWait: JogressWait?
     /// Friend codes already used for a Jogress, as "player:nonce", newest last.
     var jogressCodes: [String]?
+    /// The day's fortune and visitors and the stamp card (`EvolutionEngine.updateLuck`). Optional so
+    /// saves from before it decode unchanged.
+    var luck: LuckBook?
+    /// Species met as visitors (the dex shows them as met). Optional for the same reason.
+    var sightings: Set<String>?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
@@ -141,4 +146,8 @@ enum DigimonEvent: Equatable, Sendable {
     case jogressOffered(options: [String])
     /// Merged with a friend's Digimon.
     case jogressed(from: String, partner: String, to: String)
+    /// A visitor came by (`EvolutionEngine.updateLuck`).
+    case visited(species: String, tier: VisitorTier)
+    /// The stamp card filled: a very rare visitor comes right away.
+    case stampCardFull
 }

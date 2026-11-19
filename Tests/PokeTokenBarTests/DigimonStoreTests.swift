@@ -186,7 +186,11 @@ final class DigimonStoreTests: XCTestCase {
     func testNewTokensAfterInstallGrowTheEgg() {
         let store = makeStore()
         var activity: [([DigimonEvent], Int)] = []
-        store.onActivity = { activity.append(($0, $1)) }
+        // Growth only: a visitor of the day may arrive on the first refresh (step 12), which is not usage.
+        store.onActivity = { events, fed in
+            let growth = events.filter { if case .visited = $0 { return false }; return $0 != .stampCardFull }
+            if !growth.isEmpty || fed > 0 { activity.append((growth, fed)) }
+        }
         store.update(todayTokensByProvider: ["claude_code": 50_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.stageExp, 0, "the install baseline is not counted")
         XCTAssertTrue(activity.isEmpty, "seeding the baseline is not activity")

@@ -109,6 +109,9 @@ final class DigimonSceneHub {
     @ObservationIgnored private var loading: [String: Task<Data?, Never>] = [:]
     /// Event playback runs one step at a time so an evolution never arrives before its sprite.
     @ObservationIgnored private var chain: Task<Void, Never>?
+    /// Today's visits already walked through a live scene this run ("day|species"). A visit that
+    /// came while no scene was showing plays when the next one opens.
+    @ObservationIgnored private var playedVisits: Set<String> = []
 
     private struct WeakScene { weak var scene: DigimonScene? }
 
@@ -139,6 +142,9 @@ final class DigimonSceneHub {
             let key = hub.currentKey
             if let data = await hub.image(for: key) { scene.sprite(key: key, dataURI: Self.dataURI(data)) }
             scene.apply(hub.sceneState())
+            for visit in hub.digimon.visitorsToday where !hub.playedVisits.contains(hub.visitID(visit.species)) {
+                await hub.playVisit(visit.species, tier: visit.tier, in: [scene])
+            }
         }
     }
 
@@ -166,6 +172,12 @@ final class DigimonSceneHub {
                         try? await Task.sleep(for: .seconds(2.2))
                     }
                     target = to
+                case .visited(let species, let tier):
+                    await hub.playVisit(species, tier: tier, in: hub.liveScenes)
+                    target = nil
+                case .stampCardFull:
+                    hub.broadcast(["type": "jump"])
+                    target = nil
                 case .choiceOffered, .jogressOffered: target = nil
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
@@ -208,6 +220,20 @@ final class DigimonSceneHub {
         }
     }
 
+    /// A visitor walks in, greets the pet and leaves. Not marked as played while no scene shows it.
+    private func playVisit(_ species: String, tier: VisitorTier, in scenes: [DigimonScene]) async {
+        guard !scenes.isEmpty, let data = await image(for: species) else { return }
+        playedVisits.insert(visitID(species))
+        let t = DigimonText(language)
+        let name = t.name(digimon.engine.catalog.species(species))
+        scenes.forEach {
+            $0.sprite(key: species, dataURI: Self.dataURI(data))
+            $0.command(["type": "visit", "visitor": species, "tier": tier.rawValue, "greet": t.visitorGreeting(name)])
+        }
+    }
+
+    private func visitID(_ species: String) -> String { "\(digimon.state.luck?.day ?? "")|\(species)" }
+
     /// The sprite for a scene key, downloaded on first use. nil while offline and not cached.
     func image(for key: String) async -> Data? {
         if let data = images[key] { return data }
@@ -243,6 +269,8 @@ final class DigimonSceneHub {
                                     "sleeping": sleeping, "lang": language == .ko ? "ko" : "en"]
         state["mood"] = mood ?? NSNull()
         state["still"] = stayInPlace
+        // The day's fortune: more bugs, or shooting stars on a meteor shower.
+        state["fortune"] = digimon.todayLuck?.fortune.rawValue ?? NSNull()
         // The line's egg color, for the fire of lines without their own colors.
         state["lineColor"] = digimon.engine.catalog.lines[partner.lineID]?.eggColorHex ?? NSNull()
         return state

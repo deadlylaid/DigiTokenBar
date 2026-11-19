@@ -186,6 +186,8 @@ class Pet {
     this.parts = []; this.zs = []; this.chip = null; this.flash = 0; this.dim = 0; this.excl = 0;
     this.shots = []; this.booms = []; this.bug = null; this.bugIn = rand(8000, 20000);
     this.note = null; this.working = false;   // coding agent: lasting bubble, "busy" dots
+    this.guest = null; this.guests = [];   // visitors: the one walking through, the ones waiting
+    this.stars = []; this.starIn = rand(1500, 4000);   // shooting stars on a meteor shower
     this.resize(); this.x = this.center(); this.enter('idle', {dur: 900});
   }
   canAct() { return ['idle', 'walk', 'turn', 'stretch', 'alert'].includes(this.state); }
@@ -404,7 +406,7 @@ class Pet {
   // ---- battle (decided by the app; this only plays it) ----
   duel(c) {
     if (this.isEgg() || !assets[c.foe]) return;
-    this.bug = null; this.chip = null; this.callout = null; this.note = null;
+    this.bug = null; this.chip = null; this.callout = null; this.note = null; this.guest = null;
     const W = this.worldW, onLeft = this.x + 32 < W / 2;
     this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
     this.facing = onLeft ? 1 : -1;
@@ -456,7 +458,7 @@ class Pet {
   // ---- Jogress (merged with a friend's Digimon; the app sends the evolution right after) ----
   merge(c) {
     if (this.isEgg() || !assets[c.partner]) return;
-    this.bug = null; this.chip = null; this.note = null; this.shots = [];
+    this.bug = null; this.chip = null; this.note = null; this.shots = []; this.guest = null;
     const W = this.worldW, onLeft = this.x + 32 < W / 2;
     this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
     this.facing = onLeft ? 1 : -1;
@@ -483,6 +485,87 @@ class Pet {
       const b = this.bb(); this.sparkle(this.x + (b.l + b.r) / 2, this.ground() - 64 + (b.t + b.b) / 2, 24);
     }
     if (t > 2300) this.enter('idle', {dur: 1200});   // the evolution comes from the app
+  }
+  // ---- visitors (the app decides who comes and when; this walks them in, says hello, walks them out) ----
+  // A visitor moves on its own, so it also comes by while the pet sleeps (it just looks and leaves).
+  visit(c) { if (assets[c.visitor]) this.guests.push(c); }
+  updateGuest(dt) {
+    if (!this.guest) {
+      if (!this.guests.length || this.fight || this.state === 'evolve' || this.state === 'held') return;
+      const c = this.guests.shift(), A = assets[c.visitor];
+      if (!A) return;
+      const W = this.worldW, b = this.bb(), gb = A.bb, fromRight = this.x + (b.l + b.r) / 2 < W / 2;
+      const x0 = fromRight ? W + 2 - gb.l : -gb.r - 2;
+      const stop = fromRight ? Math.min(W - gb.r - 4, this.x + b.r + 12 - gb.l) : Math.max(4 - gb.l, this.x + b.l - 12 - gb.r);
+      this.guest = {key: c.visitor, greet: c.greet || '', rare: !!c.tier && c.tier !== 'common', x: x0, x0, to: stop,
+                    dir: fromRight ? -1 : 1, t: 0, phase: 'in', alpha: 0, y: 0};
+      return;
+    }
+    const G = this.guest, speed = 30;
+    G.t += dt; G.y = 0;
+    if (G.phase === 'greet') {
+      if (!G.greeted) { G.greeted = true; this.greet(G); }
+      if (G.t > 500 && G.t < 1000) G.y = 6 * Math.sin(Math.PI * (G.t - 500) / 500);   // a hop hello
+      if (G.t > 3200) {
+        const gb = assets[G.key].bb;
+        G.dir = -G.dir; G.x0 = G.x; G.to = G.dir === 1 ? this.worldW + 2 - gb.l : -gb.r - 2; G.phase = 'out'; G.t = 0;
+      }
+      return;
+    }
+    const dur = Math.max(1, Math.abs(G.to - G.x0) / speed * 1000), p = Math.min(1, G.t / dur);
+    G.x = G.x0 + (G.to - G.x0) * p;
+    G.y = 1.4 * Math.abs(Math.sin(G.t / 150));
+    if (G.phase === 'in') {
+      G.alpha = Math.min(1, G.t / 500);
+      if (p >= 1) { G.phase = 'greet'; G.t = 0; }
+    } else {
+      if (p > .7) G.alpha = Math.max(0, 1 - (p - .7) / .3);
+      if (p >= 1) this.guest = null;
+    }
+  }
+  greet(G) {
+    const gb = assets[G.key].bb;
+    if (G.rare) this.sparkle(G.x + (gb.l + gb.r) / 2, this.ground() - 64 + (gb.t + gb.b) / 2, 18);
+    if (this.state === 'sleep' || this.isEgg() || !(this.canAct() || this.state === 'hop')) return;
+    const b = this.bb();
+    this.facing = (G.x + (gb.l + gb.r) / 2) < (this.x + (b.l + b.r) / 2) ? -1 : 1;
+    if (G.greet) this.callout = {text: G.greet, t: 0, life: 1800};
+    this.enter('hop', {h: this.hopH});
+  }
+  drawGuest(c, gy, dark) {
+    const G = this.guest, A = G && assets[G.key];
+    if (!A) return;
+    const bb = A.bb, cx = G.x + (bb.l + bb.r) / 2;
+    c.globalAlpha = G.alpha;
+    c.fillStyle = this.desk ? 'rgba(0,0,0,.22)' : (dark ? 'rgba(0,0,0,.35)' : 'rgba(60,50,30,.13)');
+    c.beginPath(); c.ellipse(cx, gy + .5, (bb.r - bb.l) * .39, this.desk ? 2 : 2.4, 0, 0, TAU); c.fill();
+    c.save(); c.translate(cx, gy - G.y); c.scale(G.dir === 1 ? -1 : 1, 1);
+    c.drawImage(A.img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
+    c.restore();
+    c.globalAlpha = 1;
+  }
+  // Shooting stars on a meteor shower (the popover's sky only; the desk pet stays plain).
+  updateStars(dt) {
+    this.stars = this.stars.filter(st => { st.t += dt; st.x += st.vx * dt / 1000; st.y += st.vy * dt / 1000; return st.t < st.life; });
+    if (S.fortune !== 'meteor' || this.desk) return;
+    this.starIn -= dt;
+    if (this.starIn <= 0) {
+      this.starIn = rand(2500, 6500);
+      this.stars.push({x: rand(this.worldW * .3, this.worldW + 10), y: rand(2, this.worldH * .3), vx: -rand(110, 160), vy: rand(35, 55), t: 0, life: rand(500, 800)});
+    }
+  }
+  drawStars(c, dark) {
+    // White on a dark scene; gold on a light one, where white would vanish.
+    const head = dark ? '#ffffff' : '#e0a52a', tail = dark ? '#fff2b0' : '#f0c75e';
+    for (const st of this.stars) {
+      const fade = 1 - st.t / st.life;
+      for (let k = 0; k < 11; k++) {
+        c.globalAlpha = fade * (1 - k / 11);
+        c.fillStyle = k === 0 ? head : tail;
+        c.fillRect(Math.round(st.x - st.vx * k * .006), Math.round(st.y - st.vy * k * .006), 1, 1);
+      }
+    }
+    c.globalAlpha = 1;
   }
   drawFoe(c, gy, dark) {
     const F = this.fight, A = assets[F.foe];
@@ -512,6 +595,7 @@ class Pet {
     if (this.shake > 0) this.shake -= dt;
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
+    this.updateGuest(dt); this.updateStars(dt);
     if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') this.fight = null;   // interrupted (sleep, evolution, ...)
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
@@ -589,7 +673,7 @@ class Pet {
       }
     } else if (!this.isEgg() && this.canAct() && this.state !== 'alert') {
       this.bugIn -= dt;
-      if (this.bugIn <= 0) { this.spawnBug(); this.bugIn = this.desk ? rand(40000, 110000) : rand(25000, 60000); }
+      if (this.bugIn <= 0) { this.spawnBug(); this.bugIn = (this.desk ? rand(40000, 110000) : rand(25000, 60000)) * (S.fortune === 'bugSwarm' ? .5 : 1); }
     }
     const g0 = this.bug;
     if (g0 && !g0.dead && !g0.noticed && g0.x > -4 && g0.x < this.worldW - 7 && this.canAct() && this.state !== 'alert' && !this.isEgg()) {
@@ -720,6 +804,7 @@ class Pet {
     let A = assets[this.key], img = A.img;
     if (evolving) { A = assets[this.d.show ? this.d.to : this.d.from] || A; img = A.sil[(dark && !desk) ? 1 : 0]; }
     const bb = A.bb, gy = this.ground(), cx = this.x + (bb.l + bb.r) / 2 + this.lean, hgt = bb.b - bb.t;
+    if (this.stars.length) this.drawStars(c, dark);
 
     const sw = (bb.r - bb.l) * .78 * (1 - Math.min(this.y, 16) / 16 * .5);
     c.fillStyle = desk ? 'rgba(0,0,0,.22)' : (dark ? 'rgba(0,0,0,.35)' : 'rgba(60,50,30,.13)');
@@ -758,6 +843,7 @@ class Pet {
     if (S.mood === 'sick' && !evolving && A.sil[2]) { c.globalAlpha = .22; this.blit(c, A.sil[2], bb, -(bb.l + bb.r) / 2); c.globalAlpha = 1; }
     c.restore();
     if (this.fight) this.drawFoe(c, gy, dark);
+    if (this.guest) this.drawGuest(c, gy, dark);
     if (S.mood === 'sick' && !evolving && this.state !== 'sleep') {
       // A sweat drop beside the head.
       const sx = Math.round(cx + (bb.r - bb.l) / 2 * (this.facing < 0 ? -1 : 1) * .6), sy = Math.round(gy - this.y - hgt + 3 + Math.sin(performance.now() / 260));
@@ -1137,9 +1223,12 @@ const post = m => { if (native) native.postMessage(m); };
 const cv = document.getElementById('cv');
 let pet = null;
 
+// A visitor sent before the pet exists (a scene just opened, the pet's sprite still loading) waits here.
+const earlyGuests = [];
 function startPet() {
   if (pet || !S.key || !assets[S.key]) return;
   pet = new Pet(cv, {desk: VIEW === 'desk', hopH: 14, speed: VIEW === 'desk' ? 26 : 30, key: S.key});
+  earlyGuests.splice(0).forEach(c => pet.visit(c));
   if (S.sleeping) pet.sleep();
   if (S.agent) pet.setAgent(Object.assign({}, S.agent, {react: null}));
 }
@@ -1156,6 +1245,7 @@ window.app = {
     if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key); }); return; }
     if (c.type === 'battle') { whenAsset(c.foe, () => { if (pet) pet.duel(c); }); return; }
     if (c.type === 'jogress') { whenAsset(c.partner, () => { if (pet) pet.merge(c); }); return; }
+    if (c.type === 'visit') { whenAsset(c.visitor, () => { if (pet) pet.visit(c); else earlyGuests.push(c); }); return; }
     // Agent state is kept, so a pet created later (sprite still loading) shows it too.
     if (c.type === 'agent') { S.agent = c; if (pet) pet.setAgent(c); return; }
     if (!pet) return;

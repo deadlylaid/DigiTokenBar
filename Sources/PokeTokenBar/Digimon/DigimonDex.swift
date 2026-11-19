@@ -25,7 +25,10 @@ struct DigimonDex {
     struct Entry: Equatable, Identifiable {
         var id: String { species.key }
         let species: DigimonSpecies
+        /// Raised by the user.
         let seen: Bool
+        /// Not raised, but met as a visitor: shown with its picture and name.
+        var sighted = false
         let secret: Secret?
         let previous: [Link]
         let next: [Link]
@@ -61,9 +64,11 @@ struct DigimonDex {
             let link = { (from: String, to: String, other: String) in
                 Link(key: other, discovered: state.discoveredEvolutions.contains("\(from)>\(to)"))
             }
+            let seen = state.dex.contains(species.key)
             return Entry(
                 species: species,
-                seen: state.dex.contains(species.key),
+                seen: seen,
+                sighted: !seen && (state.sightings ?? []).contains(species.key),
                 secret: secret,
                 previous: evolutions.filter { $0.to == species.key }.map { link($0.from, $0.to, $0.from) },
                 next: evolutions.filter { $0.from == species.key }.map { link($0.from, $0.to, $0.to) })
@@ -156,6 +161,10 @@ struct DigimonDexView: View {
                 Text(t.dexProgress(progress.seen, progress.total, graduates: digimon.state.graduates.count))
                     .font(.callout.weight(.semibold))
                     .monospacedDigit()
+                if digimon.sightingsCount > 0 {
+                    Label(t.sightings(digimon.sightingsCount), systemImage: "eye.fill")
+                        .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                }
                 Spacer()
                 Picker("", selection: Binding(get: { shownLine?.id ?? "" }, set: { lineID = $0; selected = nil })) {
                     let graduated = Dictionary(grouping: digimon.state.graduates, by: \.lineID).mapValues(\.count)
@@ -198,15 +207,17 @@ struct DigimonDexView: View {
         } label: {
             VStack(spacing: 2) {
                 ZStack(alignment: .topTrailing) {
-                    PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen)
+                    PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen && !entry.sighted)
                         .frame(width: 44, height: 44)
-                    if entry.secret != nil, !entry.seen {
+                    if entry.sighted {
+                        Image(systemName: "eye.fill").font(.caption2).foregroundStyle(.secondary)
+                    } else if entry.secret != nil, !entry.seen {
                         Image(systemName: entry.secret == .locked || entry.secret == .mergeOnly ? "lock.fill"
                               : { if case .friendJogress = entry.secret { return "person.2.fill" } else { return "sparkles" } }())
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
-                Text(entry.seen ? t.name(entry.species) : t.unknownName)
+                Text(entry.seen || entry.sighted ? t.name(entry.species) : t.unknownName)
                     .font(.caption2.weight(isPartner ? .bold : .regular))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
@@ -225,13 +236,16 @@ struct DigimonDexView: View {
     private func detail(_ entry: DigimonDex.Entry) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
-                PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen).frame(width: 56, height: 56)
+                PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen && !entry.sighted).frame(width: 56, height: 56)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(entry.seen ? t.name(entry.species) : t.unknownName).font(.headline)
+                    Text(entry.seen || entry.sighted ? t.name(entry.species) : t.unknownName).font(.headline)
                     Text([t.level(entry.species.level), entry.seen ? t.attribute(entry.species.attribute) : nil]
                         .compactMap { $0 }.joined(separator: " · "))
                         .font(.caption).foregroundStyle(.secondary)
                 }
+            }
+            if entry.sighted {
+                Text(t.metAsVisitor).font(.caption).foregroundStyle(.secondary)
             }
             if let secret = entry.secret, !entry.seen {
                 Text(t.secretHint(secret, catalog: digimon.engine.catalog)).font(.caption).foregroundStyle(.secondary)

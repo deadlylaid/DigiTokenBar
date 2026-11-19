@@ -306,6 +306,7 @@ struct DigimonStatusView: View {
             if !digimon.candidates.isEmpty { choice }
             if digimon.canChooseEggLine { eggChoice }
             if digimon.canBattle { battle }
+            DigimonTodayView(digimon: digimon, hub: hub, t: t)
         }
     }
 
@@ -357,7 +358,7 @@ struct DigimonStatusView: View {
     private var battle: some View {
         let signals = digimon.state.partner.stageSignals
         let win = signals.battles > 0 ? signals.battleWins * 100 / signals.battles : 0
-        let total = digimon.engine.growth.practiceBattlesPerDay
+        let total = digimon.practiceLimit
         return VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Text(t.battleTitle).font(.callout.weight(.semibold))
