@@ -1,7 +1,8 @@
 import AppKit
 import SwiftUI
 
-enum PopoverTab { case home, shop, bag, collection }
+/// Home, and the Digimon dex (`collection`).
+enum PopoverTab { case home, collection }
 
 /// 팝오버 치수의 단일 소스. 자식이 쓸 수 있는 폭을 알아야 할 때 이 값을 쓴다 — 넘치는 자식이
 /// 부모 폭을 부풀리므로 GeometryReader 로 재면 순환한다.
@@ -13,9 +14,6 @@ enum PopoverMetrics {
     /// 세로 스크롤 영역 오른쪽에 비워 두는 스크롤러 레인. 얇은 오버레이 스크롤러(휴지 ~6pt, 가장자리
     /// 안쪽)가 우측 정렬 수치·버튼 위에 뜨지 않게 한다. 스크롤이 필요 없어도 항상 비워 탭 간 폭이 같다.
     static let scrollerInset: CGFloat = 12
-    /// 세로 스크롤 영역 안의 자식이 쓸 수 있는 폭. 스크롤 안에서 폭을 고정하는 자식(진화 라인 등)은
-    /// `contentWidth` 대신 이 값을 써야 한다 — 제안 폭보다 넓은 자식 하나가 열 전체를 다시 넓혀 레인이 사라진다.
-    static let scrollContentWidth: CGFloat = contentWidth - scrollerInset
 }
 
 extension View {
@@ -26,25 +24,16 @@ extension View {
     }
 }
 
-/// 팝오버 내부 내비게이션 상태(현재 탭 / 컬렉션 세그먼트 / 설정 표시 여부).
+/// 팝오버 내부 내비게이션 상태(현재 탭 / 설정 표시 여부).
 /// NSHostingController 는 팝오버를 닫아도 재사용되어 @State 가 유지되므로, 화면 상태를 이
 /// Observable 로 분리해 AppDelegate 가 팝오버를 열 때마다 reset() 한다 — 닫혔다 열리면 항상 Home.
 @MainActor
 @Observable
 final class PopoverNavigation {
-    var showSettings = false { didSet { if showSettings { dexDetailCollectionID = nil } } }
-    var tab: PopoverTab = .home { didSet { if tab != .collection { dexDetailCollectionID = nil } } }
-    /// 일반적인 컬렉션 재진입에는 마지막 세그먼트를 유지하되, 대표 포켓몬 선택 진입점은 도감으로 강제한다.
-    var showingCollectionLog = false {
-        didSet { if showingCollectionLog != oldValue { dexDetailCollectionID = nil } }
-    }
+    var showSettings = false
+    var tab: PopoverTab = .home
     /// The usage recap takes over the popover like Settings does; closing the popover drops it.
-    var showingRecap = false { didSet { if showingRecap { dexDetailCollectionID = nil } } }
-    /// The Collection tab's open Pokédex detail page (`DexSpecies.collectionID`); nil = grid or log.
-    /// It lives here so Home sprites can open it, but it only lasts while the collection content is
-    /// on screen: leaving the tab, switching segment, or covering it with Settings/Recap drops it —
-    /// the same lifetime it had as `CollectionView`'s own `@State`.
-    var dexDetailCollectionID: String?
+    var showingRecap = false
     /// 프로바이더 탭 선택 — reset() 대상이 아님(팝오버를 다시 열어도 보던 서비스 유지).
     var providerID: String?
     /// Claude account tab in the limits section. Kept across openings, like `providerID`.
@@ -66,27 +55,11 @@ final class PopoverNavigation {
         expandAdvancedOnOpen = true
     }
 
-    /// Clicking a Pokémon sprite on Home opens that species' Pokédex detail page. The segment is left
-    /// as it was, so Back lands where the Collection tab would normally reopen.
-    func openDexEntry(collectionID: String) {
-        showSettings = false
-        tab = .collection
-        dexDetailCollectionID = collectionID   // last: the didSets above clear it
-    }
-
-    /// 설정의 대표 포켓몬 행에서 기존 도감으로 이동한다. 별도 선택 화면을 만들지 않고
-    /// 컬렉션 세그먼트를 도감으로 명시해, 직전에 포획 로그를 봤어도 선택 액션이 있는 화면을 연다.
-    func openRepresentativeDex() {
-        showSettings = false
-        showingCollectionLog = false
-        tab = .collection
-    }
 }
 
 @MainActor
 struct PopoverView: View {
     @Environment(UsageStore.self) private var store
-    @Environment(CompanionStore.self) private var companion
     @Environment(AppLanguageStore.self) private var languageStore
     @Environment(UpdateChecker.self) private var updater
     @Environment(PopoverNavigation.self) private var nav
@@ -108,15 +81,15 @@ struct PopoverView: View {
                         nav.showSettings = false
                         nav.expandAdvancedOnOpen = false
                     },
-                    onChooseRepresentative: { nav.openRepresentativeDex() },
                     startExpanded: nav.expandAdvancedOnOpen
                 )
                     .environment(store)
-                    .environment(companion)
                     .environment(languageStore)
                     .environment(updater)
             } else if nav.showingRecap {
-                RecapScreen(store: store, companion: companion, language: languageStore.language) { nav.showingRecap = false }
+                RecapScreen(store: store, digimon: digimon, hub: digimonHub, language: languageStore.language) {
+                    nav.showingRecap = false
+                }
             } else {
                 mainContent
             }
@@ -155,7 +128,7 @@ struct PopoverView: View {
         @Bindable var nav = nav
         return VStack(alignment: .leading, spacing: 12) {
             updateBanner
-            // DigiTokenBar: Home and the Digimon dex. The Pokemon shop, bag and collection are hidden.
+            // Home and the Digimon dex.
             if let digimon, let digimonHub {
                 Picker("", selection: $nav.tab) {
                     Text(l.home).tag(PopoverTab.home)
@@ -170,22 +143,12 @@ struct PopoverView: View {
                     DigimonScenePanel(hub: digimonHub, language: languageStore.language)
                 }
             }
-            if digimon != nil, nav.tab == .collection {
-                EmptyView()   // the Digimon dex is shown above
-            } else if nav.tab == .collection {
-                CollectionView(store: companion, navigation: nav)
-            } else if nav.tab == .bag {
-                BagView(store: companion, nav: nav)
-            } else if nav.tab == .shop {
-                ShopView(store: companion, nav: nav)
-            } else {
+            if nav.tab != .collection {
                 // Fixed height so the popover never grows past the screen.
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
                         if let digimon, let digimonHub {
                             DigimonStatusView(digimon: digimon, hub: digimonHub, language: languageStore.language)
-                        } else {
-                            CompanionHeader(store: companion) { nav.openDexEntry(collectionID: $0) }
                         }
                         Divider()
                         header

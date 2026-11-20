@@ -11,20 +11,24 @@ private final class SessionKeyTestWindow: NSWindow {
 
 @MainActor
 final class SessionKeySettingsRenderingTests: XCTestCase {
-    func testSessionKeyEntryOpensInsideViewportAndPreservesDifficultyControls() async throws {
+    func testSessionKeyEntryOpensInsideViewportAndPreservesAlertThresholdControls() async throws {
         let suite = "SessionKeySettingsRendering-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
-        let file = FileManager.default.temporaryDirectory.appendingPathComponent("\(suite).json")
-        defer { try? FileManager.default.removeItem(at: file) }
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(suite, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
         let usage = UsageStore(providers: [], autoRefresh: false, defaults: defaults)
-        let companion = CompanionStore(fileURL: file, defaults: defaults)
-        companion.setLanguage(.en)
+        let digimon = DigimonStore(fileURL: directory.appendingPathComponent("digimon-state.json"))
+        let l = L(.en)
         let navigation = PopoverNavigation()
         navigation.openSessionKeySettings()
         let host = NSHostingController(rootView: SettingsView(
-            onClose: {}, onChooseRepresentative: {}, startExpanded: navigation.expandAdvancedOnOpen)
-            .environment(usage).environment(companion).environment(AppLanguageStore(defaults: UserDefaults(suiteName: "lang-\(UUID().uuidString)")!, legacyStateURL: URL(fileURLWithPath: "/nonexistent"), systemDefault: companion.language)).environment(UpdateChecker())
+            onClose: {}, startExpanded: navigation.expandAdvancedOnOpen)
+            .environment(usage).environment(digimon)
+            .environment(AppLanguageStore(defaults: defaults, legacyStateURL: URL(fileURLWithPath: "/nonexistent"),
+                                          systemDefault: .en))
+            .environment(UpdateChecker())
             .frame(width: PopoverMetrics.width)
             .environment(\.colorScheme, .light))
         let previousKeyWindow = NSApp.keyWindow
@@ -55,14 +59,12 @@ final class SessionKeySettingsRenderingTests: XCTestCase {
             // Newer SwiftUI runtimes draw sliders without NSSlider backing views.
             // Verify each actual track; labels alone must not satisfy this fallback.
             let scroll = try XCTUnwrap(views.compactMap { $0 as? NSScrollView }.first)
-            for label in [companion.l.difficultyGrowthLabel, companion.l.difficultyShopLabel,
-                          companion.l.warning, companion.l.critical] {
+            for label in [l.warning, l.critical] {
                 try await assertVisibleSlider(label: label, host: host.view, scroll: scroll)
             }
         } else {
-            // Growth, shop prices, warning, and critical controls on AppKit-backed runtimes.
-            XCTAssertEqual(nativeSliders.count, 4,
-                           "growth and shop difficulty controls must survive the Settings merge")
+            // The warning and critical thresholds on AppKit-backed runtimes.
+            XCTAssertEqual(nativeSliders.count, 2, "the alert threshold controls must survive the Settings layout")
         }
         XCTAssertTrue(navigation.showSettings)
         navigation.reset()

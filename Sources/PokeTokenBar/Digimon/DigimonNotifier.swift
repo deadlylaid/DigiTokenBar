@@ -1,8 +1,8 @@
 import Foundation
 import UserNotifications
 
-/// System notifications for Digimon milestones. Same switch as the Pokemon companion's
-/// ("companionNotifications", on by default) and only from the bundled app.
+/// System notifications for Digimon milestones. Behind the "companionNotifications" switch
+/// (on by default) and only from the bundled app.
 enum DigimonNotifier {
     static func post(_ title: String, _ body: String) {
         guard AppEnv.isBundledApp else { return }

@@ -4,24 +4,21 @@ import UniformTypeIdentifiers
 @MainActor
 struct SettingsView: View {
     @Environment(UsageStore.self) private var store
-    @Environment(CompanionStore.self) private var companion
     @Environment(AppLanguageStore.self) private var languageStore
     @Environment(UpdateChecker.self) private var updater
-    /// Present in DigiTokenBar: Pokemon-only rows are hidden and Digimon wording is used.
+    /// Optional so screens and tests that host Settings without the Digimon still render.
     @Environment(DigimonStore.self) private var digimon: DigimonStore?
     @Environment(DigimonSceneHub.self) private var digimonHub: DigimonSceneHub?
     /// 팝오버 내부 화면 전환 방식 — sheet/dismiss 를 쓰지 않는다 (PopoverView 의 NOTE 참조)
     var onClose: () -> Void
-    /// 기존 컬렉션의 도감으로 돌아가 대표 포켓몬을 고르게 한다.
-    var onChooseRepresentative: () -> Void
     /// 고급 섹션을 펼친 채로 열지. 세션 키 만료 안내에서 들어온 경우에만 true —
     /// 접힌 채로 열면 고칠 입력란이 안 보여 안내가 막다른 길이 된다.
     var startExpanded = false
     @State private var launchAtLoginEnabled = false
     @State private var launchAtLoginNeedsApproval = false
     @State private var launchAtLoginError: Error?
-    @State private var reportFailed = false
     @State private var advancedExpanded = false
+    /// The Digimon backups list (`digimonTransferGroup`).
     @State private var snapshotsExpanded = false
     /// startExpanded 를 @State 초기값으로 못 쓴다 — 뷰가 재사용되면 초기화가 다시 안 돌아
     /// 두 번째 진입부터 접힌 채로 열린다. onAppear 에서 1회 반영한다.
@@ -46,16 +43,8 @@ struct SettingsView: View {
     @FocusState private var sessionKeyFocused: Bool
     private var l: L { languageStore.l }
     private var dt: DigimonText { DigimonText(languageStore.language) }
-    private var isDigimon: Bool { digimon != nil }
 
     private var isBundledApp: Bool { AppEnv.isBundledApp }
-
-    private var representativeSelectionText: String {
-        guard let species = companion.representativeDexSpecies else {
-            return l.representativeFollowCurrent
-        }
-        return "#\(species.id) \(species.name)\(species.isShiny ? " ✨" : "")"
-    }
 
     /// 세이브 봉투에 남길 출처 표기 — 어느 Mac에서 내보낸 파일인지 나중에 알아보기 위한 것.
     private static var deviceName: String {
@@ -79,7 +68,6 @@ struct SettingsView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         generalGroup(store)
                         if let digimon { digimonGroup(digimon) }
-                        if !isDigimon { difficultyGroup }
                         menuBarGroup(store)
                         trackedProvidersGroup(store)
                         floatingPetGroup(store)
@@ -94,8 +82,6 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .onAppear {
-                    companion.refreshSnapshots()
-                    snapshotsExpanded = false
                     guard !didApplyStartExpanded else { return }
                     didApplyStartExpanded = true
                     if startExpanded {
@@ -170,7 +156,7 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var footer: some View {
-        if isDigimon { digimonFooter } else { pokemonFooter }
+        digimonFooter
     }
 
     /// Credits: sprites come from Wikimon at runtime, and the app is built on PokeTokenBar (MIT).
@@ -181,24 +167,6 @@ struct SettingsView: View {
             footerLink(dt.credit, "https://wikimon.net")
             Text("·")
             footerLink(dt.basedOn, "https://github.com/chattymin/PokeTokenBar")
-            Spacer()
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-    }
-
-    private var pokemonFooter: some View {
-        HStack(spacing: 5) {
-            Text("v\(Self.appVersion)")
-            Text("·")
-            footerLink("GitHub", "https://github.com/chattymin/PokeTokenBar")
-            Text("·")
-            footerLink(l.website, "https://chattymin.github.io/PokeTokenBar/")
-            Text("·")
-            // 개발자 후원 — 기능 잠금·너지 없는 푸터 링크
-            footerLink("♥ " + l.sponsor, "https://github.com/sponsors/chattymin")
             Spacer()
         }
         .font(.caption2)
@@ -222,31 +190,6 @@ struct SettingsView: View {
                     ForEach(AppLanguage.allCases, id: \.self) { Text($0.label).tag($0) }
                 }
                 .labelsHidden().pickerStyle(.menu).fixedSize()
-            }
-            if !isDigimon {
-            Divider()
-            groupRow {
-                Text(l.representativePokemonLabel)
-                    .lineLimit(1).minimumScaleFactor(0.75)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Menu {
-                    Button {
-                        _ = companion.setRepresentativeSpeciesID(nil)
-                    } label: {
-                        if companion.representativeSpeciesID == nil {
-                            Label(l.representativeFollowCurrent, systemImage: "checkmark")
-                        } else {
-                            Text(l.representativeFollowCurrent)
-                        }
-                    }
-                    Button(l.representativeChooseFromDex, action: onChooseRepresentative)
-                } label: {
-                    Text(representativeSelectionText).lineLimit(1).truncationMode(.tail)
-                }
-                .controlSize(.small)
-                .frame(width: 150, alignment: .trailing)
-                .layoutPriority(1)
-            }
             }
             Divider()
             groupRow {
@@ -340,10 +283,6 @@ struct SettingsView: View {
         }
     }
 
-    private var difficultyGroup: some View {
-        DifficultySettingsSection(companion: companion)
-    }
-
     @ViewBuilder
     private func menuBarGroup(_ store: UsageStore) -> some View {
         @Bindable var store = store
@@ -353,8 +292,7 @@ struct SettingsView: View {
                 Divider()
                 toggleRow(l.todayCost, $store.showCostInMenu)
                 Divider()
-                toggleRow(isDigimon ? dt.growthPercent : l.pokemonGrowthPercent, $store.showGrowthInMenu,
-                          hint: isDigimon ? dt.growthPercentHint : l.pokemonGrowthPercentHint)
+                toggleRow(dt.growthPercent, $store.showGrowthInMenu, hint: dt.growthPercentHint)
                 Divider()
                 toggleRow(l.limitPercent, $store.showLimitInMenu)
                 if store.showLimitInMenu {
@@ -396,7 +334,7 @@ struct SettingsView: View {
 
     @ViewBuilder
     private func floatingPetGroup(_ store: UsageStore) -> some View {
-        if isDigimon { digimonDeskPetGroup(store) } else { pokemonFloatingPetGroup(store) }
+        digimonDeskPetGroup(store)
     }
 
     /// The Digimon desktop pet has a fixed size and no back view or speech bubbles.
@@ -408,55 +346,6 @@ struct SettingsView: View {
             if store.floatingPetEnabled {
                 Divider()
                 toggleRow(l.floatingPetAgentActivityLabel, $store.floatingPetAgentActivity, hint: dt.agentActivityHint)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func pokemonFloatingPetGroup(_ store: UsageStore) -> some View {
-        @Bindable var store = store
-        settingsSection(l.floatingPetSectionTitle) {
-            groupRow {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(l.floatingPetEnableLabel)
-                    Text(l.floatingPetHint).font(.caption2).foregroundStyle(.tertiary)
-                }
-                Spacer()
-                Toggle(l.floatingPetEnableLabel, isOn: $store.floatingPetEnabled)
-                    .labelsHidden().toggleStyle(.switch).controlSize(.small)
-            }
-            Divider()
-            groupRow {
-                // Also reachable from both right-click menus. Applies to every surface, not only the pet.
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(l.backViewLabel)
-                    Text(l.backViewHint).font(.caption2).foregroundStyle(.tertiary)
-                }
-                Spacer()
-                Toggle(l.backViewLabel, isOn: $store.alwaysFacesBack)
-                    .labelsHidden().toggleStyle(.switch).controlSize(.small)
-            }
-            if store.floatingPetEnabled {
-                Divider()
-                groupRow {
-                    Text(l.floatingPetSizeLabel).font(.callout)
-                    Slider(value: $store.floatingPetSize, in: 48...384, step: 8)
-                        .accessibilityLabel(l.floatingPetSizeLabel)
-                    Text("\(Int(store.floatingPetSize))px")
-                        .font(.caption).monospacedDigit().frame(width: 44, alignment: .trailing)
-                }
-                Divider()
-                toggleRow(l.floatingPetBubbleAlertsLabel, $store.floatingPetBubbleAlerts)
-                Divider()
-                groupRow {
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(l.floatingPetAgentActivityLabel)
-                        Text(l.floatingPetAgentActivityHint).font(.caption2).foregroundStyle(.tertiary)
-                    }
-                    Spacer()
-                    Toggle(l.floatingPetAgentActivityLabel, isOn: $store.floatingPetAgentActivity)
-                        .labelsHidden().toggleStyle(.switch).controlSize(.small)
-                }
             }
         }
     }
@@ -485,7 +374,7 @@ struct SettingsView: View {
                 }
             }
             Divider()
-            toggleRow(isDigimon ? dt.notificationsLabel : l.companionNotificationsLabel, $store.companionNotifications)
+            toggleRow(dt.notificationsLabel, $store.companionNotifications)
             Divider()
             groupRow {
                 VStack(alignment: .leading, spacing: 1) {
@@ -557,11 +446,11 @@ struct SettingsView: View {
     /// 파일 선택창으로 고르게 한다.
     @ViewBuilder
     private func transferGroup(_ store: UsageStore) -> some View {
-        if let digimon { digimonTransferGroup(digimon) } else { pokemonTransferGroup(store) }
+        if let digimon { digimonTransferGroup(digimon) }
     }
 
-    /// Digimon export, import and backups. Same rules as the Pokemon section below: results are
-    /// shown in alerts or Finder because a file panel closes the popover and this view with it.
+    /// Digimon export, import and backups. Results are shown in alerts or Finder because a file
+    /// panel closes the popover and this view with it (see the note at "세이브 이전" below).
     @ViewBuilder
     private func digimonTransferGroup(_ digimon: DigimonStore) -> some View {
         settingsSection(l.transferSectionTitle) {
@@ -618,93 +507,6 @@ struct SettingsView: View {
                     }
                 }
             }
-        }
-    }
-
-    @ViewBuilder
-    private func pokemonTransferGroup(_ store: UsageStore) -> some View {
-        settingsSection(l.transferSectionTitle) {
-            groupRow {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(l.exportSaveLabel)
-                    Text(l.exportSaveHint).font(.caption2).foregroundStyle(.tertiary)
-                }
-                Spacer()
-                Button(l.exportSaveButton) { exportSave() }
-            }
-            Divider()
-            groupRow {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(l.importSaveLabel)
-                    Text(l.importSaveHint).font(.caption2).foregroundStyle(.tertiary)
-                }
-                Spacer()
-                Button(l.importSaveButton) { importSave(store) }
-            }
-            Divider()
-            snapshotsSection(store)
-        }
-    }
-
-    @ViewBuilder
-    private func snapshotsSection(_ store: UsageStore) -> some View {
-        groupRow {
-            Text(l.createSnapshotHint).font(.caption2).foregroundStyle(.tertiary)
-            Spacer()
-            Button(l.createSnapshotButton) { takeManualSnapshot() }
-        }
-        Divider()
-        SnapshotHistoryButton(isExpanded: $snapshotsExpanded, title: l.snapshotsSectionTitle,
-                              stateDescription: l.snapshotHistoryState(expanded: snapshotsExpanded))
-            .frame(maxWidth: .infinity)
-            .frame(height: 20)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-        if snapshotsExpanded {
-            VStack(spacing: 0) {
-                if companion.availableSnapshots.isEmpty {
-                    groupRow {
-                        Text(l.noSnapshotsYet).font(.caption2).foregroundStyle(.tertiary)
-                        Spacer()
-                    }
-                } else {
-                    ForEach(companion.availableSnapshots) { snapshot in
-                        Divider()
-                        snapshotRow(snapshot, store: store)
-                    }
-                }
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func snapshotRow(_ snapshot: SaveSnapshot, store: UsageStore) -> some View {
-        groupRow {
-            HStack(spacing: 8) {
-                if let speciesID = snapshot.currentSpeciesID {
-                    SpriteView(speciesID: speciesID, size: 28, shiny: snapshot.currentIsShiny,
-                               form: snapshot.currentForm)
-                        .frame(width: 28, height: 28)
-                } else {
-                    SpriteView(speciesID: nil, size: 28)
-                        .frame(width: 28, height: 28)
-                }
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(Self.exportedAtText(snapshot.date, language: languageStore.language))
-                        .font(.caption)
-                    Text(l.snapshotDexAndTokens(
-                        dex: snapshot.dexCount,
-                        tokens: TokenFormatter.compact(snapshot.lifetimeTokens)
-                    ))
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                }
-            }
-            Spacer()
-            Button(l.restoreSnapshotButton) {
-                confirmAndRestoreSnapshot(snapshot, store: store)
-            }
-            .controlSize(.small)
         }
     }
 
@@ -1068,18 +870,6 @@ struct SettingsView: View {
 
     private var aboutSupportGroup: some View {
         settingsSection(l.aboutSupportSectionTitle) {
-            // The report mail goes to the PokeTokenBar maintainer, so the fork does not offer it.
-            if !isDigimon {
-            groupRow {
-                VStack(alignment: .leading, spacing: 1) {
-                    Text(l.reportProblem)
-                    Text(l.reportAttachHint).font(.caption2).foregroundStyle(.tertiary)
-                }
-                Spacer()
-                Button(l.reportProblem) { reportProblem() }
-            }
-            Divider()
-            }
             // 로그 파일 보기 — 문제 제보 시 바로 첨부할 수 있게 같은 그룹에 둔다(고급 접기 밖).
             groupRow {
                 Text(l.showLogFile)
@@ -1087,11 +877,6 @@ struct SettingsView: View {
                 Button("Finder") {
                     NSWorkspace.shared.activateFileViewerSelecting([AppLog.logFileURL])
                 }
-            }
-            if reportFailed {
-                Text(l.reportMailFallback(SupportMail.address))
-                    .font(.caption2).foregroundStyle(.orange).textSelection(.enabled)
-                    .padding(.horizontal, 12).padding(.bottom, 6)
             }
         }
     }
@@ -1170,21 +955,6 @@ struct SettingsView: View {
 
     // MARK: 동작
 
-    /// 문제점 알리기 — 진단 정보(버전·macOS)가 채워진 리포트 메일을 기본 메일 앱으로 연다.
-    /// 메일 앱이 없거나 열기에 실패하면 수신 주소를 안내(복사 가능)한다.
-    private func reportProblem() {
-        let subject = l.reportMailSubject(Self.appVersion)
-        let body = l.reportMailBody(
-            version: Self.appVersion,
-            os: ProcessInfo.processInfo.operatingSystemVersionString)
-        guard let url = SupportMail.mailtoURL(subject: subject, body: body),
-              NSWorkspace.shared.open(url) else {
-            reportFailed = true
-            return
-        }
-        reportFailed = false
-    }
-
     // MARK: 세이브 이전
     //
     // 결과를 인라인 텍스트로 못 보여주는 이유: 팝오버가 `.transient` 라 파일 선택창이 키 윈도우가 되는
@@ -1195,133 +965,7 @@ struct SettingsView: View {
     // `NSApp.activate()`(협조적 활성화)가 무시된다. 실측: activate() 는 isActive=false 로 최전면이 안 바뀌고
     // (패널이 다른 창 뒤에 떠 사용자가 못 찾는다), ignoringOtherApps 만 전면화된다.
     // `NSRunningApplication.current.activate(.activateAllWindows)` 도 같은 이유로 실패한다.
-    // 레포의 다른 활성화 지점(PokeTokenBarApp·FloatingPetPanel)도 같은 형태다 — 통일해서 유지할 것.
-
-    private func exportSave() {
-        let panel = NSSavePanel()
-        panel.title = l.exportSaveLabel
-        panel.nameFieldStringValue = companion.suggestedExportFileName
-        panel.allowedContentTypes = [.json]
-        panel.canCreateDirectories = true
-        NSApp.activate(ignoringOtherApps: true)
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-        do {
-            let data = try companion.exportedSaveData(appVersion: Self.appVersion, deviceName: Self.deviceName)
-            try data.write(to: url, options: .atomic)
-            NSWorkspace.shared.activateFileViewerSelecting([url])
-        } catch {
-            AppLog.write("save export failed: \(error)")
-            presentAlert(title: l.exportSaveLabel, message: l.userFacingError(error), style: .warning)
-        }
-    }
-
-    private func importSave(_ store: UsageStore) {
-        let panel = NSOpenPanel()
-        panel.title = l.importSaveLabel
-        panel.allowedContentTypes = [.json]
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        NSApp.activate(ignoringOtherApps: true)
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-
-        let envelope: SaveEnvelope
-        do {
-            envelope = try SaveTransfer.decode(try Data(contentsOf: url))
-        } catch {
-            AppLog.write("save import read failed: \(error)")
-            presentAlert(title: l.importSaveLabel, message: l.importErrorMessage(error), style: .warning)
-            return
-        }
-        let incoming = SaveSummary(state: envelope.state)
-
-        // 고른 즉시 덮어쓰지 않는다 — 무엇이 대체되는지 수치로 보여주고 한 번 더 확인받는다.
-        let current = companion.transferSummary
-        let confirm = NSAlert()
-        confirm.alertStyle = .warning
-        confirm.messageText = l.importConfirmTitle
-        confirm.informativeText = l.importConfirmBody(
-            incomingDex: incoming.dexCount,
-            incomingTokens: TokenFormatter.compact(incoming.lifetimeTokens),
-            exportedAt: Self.exportedAtText(envelope.exportedAt, language: languageStore.language),
-            sourceDevice: envelope.sourceDevice,
-            currentDex: current.dexCount,
-            currentTokens: TokenFormatter.compact(current.lifetimeTokens))
-        confirm.addButton(withTitle: l.importConfirmReplace)
-        confirm.addButton(withTitle: l.cancel)
-        // 파괴적 동작을 기본 버튼으로 두지 않는다(Return 한 번에 진행이 대체되지 않게).
-        // 규칙 자체는 ImportConfirmPolicy 에 있고 여기선 적용만 한다 — NSAlert 구성은 테스트 불가라
-        // 순서가 뒤바뀌어도 잡을 자동 경로가 없기 때문이다.
-        for (index, button) in confirm.buttons.enumerated() {
-            button.keyEquivalent = ImportConfirmPolicy.keyEquivalent(forButtonAt: index)
-        }
-        guard confirm.runModal() == .alertFirstButtonReturn else { return }
-
-        do {
-            try companion.applySave(envelope,
-                                    todayTokensByProvider: store.todayTokensByProvider,
-                                    todayDate: LocalUsageReader.todayKey(),
-                                    hasUsageData: store.hasUsageData)
-        } catch {
-            AppLog.write("save import apply failed: \(error)")
-            presentAlert(title: l.importSaveLabel, message: l.importErrorMessage(error), style: .warning)
-            return
-        }
-        presentAlert(title: l.importSaveLabel,
-                     message: l.importSaveDone(dex: incoming.dexCount,
-                                               tokens: TokenFormatter.compact(incoming.lifetimeTokens)),
-                     style: .informational)
-    }
-
-    private func takeManualSnapshot() {
-        do {
-            try companion.createManualSnapshot()
-            presentAlert(title: l.createSnapshotButton, message: l.snapshotCreatedToast, style: .informational)
-        } catch {
-            AppLog.write("manual snapshot creation failed: \(error)")
-            presentAlert(title: l.createSnapshotButton, message: l.userFacingError(error), style: .warning)
-        }
-    }
-
-    private func confirmAndRestoreSnapshot(_ snapshot: SaveSnapshot, store: UsageStore) {
-        let current = companion.transferSummary
-        let confirm = NSAlert()
-        confirm.alertStyle = .warning
-        confirm.messageText = l.restoreConfirmTitle
-        confirm.informativeText = l.restoreConfirmBody(
-            snapshotDate: Self.exportedAtText(snapshot.date, language: languageStore.language),
-            snapshotDex: snapshot.dexCount,
-            snapshotTokens: TokenFormatter.compact(snapshot.lifetimeTokens),
-            currentDex: current.dexCount,
-            currentTokens: TokenFormatter.compact(current.lifetimeTokens)
-        )
-        confirm.addButton(withTitle: l.restoreSnapshotButton)
-        confirm.addButton(withTitle: l.cancel)
-        for (index, button) in confirm.buttons.enumerated() {
-            button.keyEquivalent = ImportConfirmPolicy.keyEquivalent(forButtonAt: index)
-        }
-        NSApp.activate(ignoringOtherApps: true)
-        guard confirm.runModal() == .alertFirstButtonReturn else { return }
-
-        do {
-            try companion.restoreSnapshot(
-                snapshot,
-                todayTokensByProvider: store.todayTokensByProvider,
-                todayDate: LocalUsageReader.todayKey(),
-                hasUsageData: store.hasUsageData
-            )
-            presentAlert(
-                title: l.restoreSnapshotButton,
-                message: l.restoreDoneMessage(
-                    dex: snapshot.dexCount,
-                    tokens: TokenFormatter.compact(snapshot.lifetimeTokens)
-                ),
-                style: .informational
-            )
-        } catch {
-            AppLog.write("snapshot restore failed: \(error)")
-            presentAlert(title: l.restoreSnapshotButton, message: l.importErrorMessage(error), style: .warning)
-        }
-    }
+    // 레포의 다른 활성화 지점(PokeTokenBarApp)도 같은 형태다 — 통일해서 유지할 것.
 
     /// 확인창에 보일 내보낸 시각 — 사용자 로케일 기준 짧은 표기.
     static func exportedAtText(_ date: Date, language: AppLanguage) -> String {
@@ -1425,6 +1069,17 @@ struct SettingsView: View {
         alert.addButton(withTitle: l.close)
         NSApp.activate(ignoringOtherApps: true)
         alert.runModal()
+    }
+}
+
+/// The confirmation before an import or a restore replaces the Digimon.
+enum ImportConfirmPolicy {
+    static let replaceButtonIndex = 0
+    static let cancelButtonIndex = 1
+
+    /// 기본 버튼(Return)은 **취소**여야 한다. 파괴적 동작을 기본으로 두지 않는다.
+    static func keyEquivalent(forButtonAt index: Int) -> String {
+        index == cancelButtonIndex ? "\r" : ""
     }
 }
 

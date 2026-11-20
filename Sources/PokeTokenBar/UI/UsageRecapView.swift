@@ -5,33 +5,31 @@ import SwiftUI
 struct RecapContent {
     let language: AppLanguage
     let recap: UsageRecap
-    let companionSpeciesID: Int?
-    let companionShiny: Bool
-    let companionForm: PokemonForm?
-    let graduates: [(entry: DexEntry, name: String)]
+    /// The Digimon being raised now (its scene key: a species, or the egg), and the graduates of the
+    /// period with their shown names (four fit the row).
+    let partnerKey: String?
+    let graduates: [(key: String, name: String)]
     private let calendar: Calendar
     /// Built once per read: a `DateFormatter` is expensive and the card asks for a label per meter.
     private let dayKeyFormatter: DateFormatter
     private let dayNameFormatter: DateFormatter
     private let monthNameFormatter: DateFormatter
 
-    init(store: UsageStore, companion: CompanionStore, language: AppLanguage, scope: RecapScope, offset: Int,
+    init(store: UsageStore, digimon: DigimonStore?, language: AppLanguage, scope: RecapScope, offset: Int,
          now: Date = Date(), calendar: Calendar = RecapPeriod.calendar()) {
         self.language = language
         self.calendar = calendar
         let period = RecapPeriod(scope: scope, containing: now, calendar: calendar)
             .shifted(by: offset, calendar: calendar)
-        recap = UsageRecap.make(ledger: store.dailyLedger, dex: companion.state.dex, period: period,
+        recap = UsageRecap.make(ledger: store.dailyLedger, graduates: digimon?.state.graduates ?? [], period: period,
                                 now: now, calendar: calendar)
-        // The Pokémon being raised right now, not the pinned representative: the recap is about
-        // usage that just happened, so it shows who lived it.
-        companionSpeciesID = companion.currentSpeciesID
-        companionShiny = companion.currentIsShiny
-        companionForm = companion.currentForm
-        graduates = recap.graduated.prefix(4).map { entry in
-            let name = companion.dexStoredChainNames(entry)?[entry.finalID] ?? "#\(entry.finalID)"
-            // Four chips share a row: only Unown's letter fits, the sprite already shows other forms.
-            return (entry, PokemonForm.displayName(name, speciesID: entry.finalID, form: entry.form, label: nil))
+        // The Digimon being raised right now: the recap is about usage that just happened, so it shows
+        // who lived it.
+        partnerKey = digimon.map { DigimonSceneHub.sceneKey($0.state.partner) }
+        let text = DigimonText(language)
+        graduates = recap.graduated.prefix(4).compactMap { record in
+            guard let last = record.path.last else { return nil }
+            return (last, text.name(digimon?.engine.catalog.species(last)))
         }
         dayKeyFormatter = LocalUsageReader.localDayFormatter(timeZone: calendar.timeZone)
         dayNameFormatter = Self.formatter(language, calendar, template: "EEEE d MMM")
@@ -111,12 +109,14 @@ struct RecapContent {
 
 }
 
-/// The recap panel — a Pokédex readout, not a second trainer card: red shell, dark LCD,
+/// The recap panel — a dex-style readout, not a second trainer card: red shell, dark LCD,
 /// monospaced digits and segmented meters. Colors are all explicit so the card never shifts
 /// with the system appearance.
 @MainActor
 struct RecapCard: View {
     let content: RecapContent
+    /// Sprites of the partner and the graduates; nil shows the row without pictures.
+    var hub: DigimonSceneHub?
 
     private static let size = CGSize(width: PopoverMetrics.contentWidth, height: 226)
     private static let shellTop = Color(red: 0.84, green: 0.21, blue: 0.18)
@@ -307,11 +307,17 @@ struct RecapCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
+    /// A Digimon's sprite, cropped to its pixels (loaded through the scene hub on first use).
+    private func icon(_ key: String) -> some View {
+        PixelSprite(data: hub?.icons[key])
+            .frame(width: 18, height: 18)
+            .task(id: key) { _ = await hub?.image(for: key) }
+    }
+
     @ViewBuilder
     private var graduateStrip: some View {
         HStack(spacing: 5) {
-            SpriteView(speciesID: content.companionSpeciesID, size: 18, animated: false,
-                       shiny: content.companionShiny, form: content.companionForm)
+            if let key = content.partnerKey { icon(key) }
             Rectangle().fill(.white.opacity(0.35)).frame(width: 1, height: 14)
             if content.graduates.isEmpty {
                 Text(content.l.recapNoGraduates)
@@ -319,18 +325,9 @@ struct RecapCard: View {
                     .foregroundStyle(.white.opacity(0.8))
                     .lineLimit(2).fixedSize(horizontal: false, vertical: true)
             } else {
-                ForEach(content.graduates, id: \.entry.id) { graduate in
+                ForEach(Array(content.graduates.enumerated()), id: \.offset) { _, graduate in
                     HStack(spacing: 2) {
-                        SpriteView(speciesID: graduate.entry.finalID, size: 18, animated: false,
-                                   shiny: graduate.entry.isShiny,
-                                   form: graduate.entry.form)
-                            // A badge on the sprite rather than after the name: four chips share
-                            // the row, and a trailing sparkle cut "Charizard" to "Chariza…".
-                            .overlay(alignment: .topTrailing) {
-                                if graduate.entry.isShiny {
-                                    Text("✨").font(.system(size: 7)).offset(x: 3, y: -2)
-                                }
-                            }
+                        icon(graduate.key)
                         Text(graduate.name)
                             .font(.system(size: 8, weight: .semibold, design: .monospaced))
                             .foregroundStyle(.white)
@@ -349,7 +346,8 @@ struct RecapCard: View {
 @MainActor
 struct RecapScreen: View {
     let store: UsageStore
-    let companion: CompanionStore
+    let digimon: DigimonStore?
+    var hub: DigimonSceneHub?
     let language: AppLanguage
     let onBack: () -> Void
 
@@ -359,7 +357,7 @@ struct RecapScreen: View {
 
     var body: some View {
         let l = L(language)
-        let content = RecapContent(store: store, companion: companion, language: language, scope: scope, offset: offset)
+        let content = RecapContent(store: store, digimon: digimon, language: language, scope: scope, offset: offset)
         return VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 Button { onBack() } label: {
@@ -398,7 +396,7 @@ struct RecapScreen: View {
             }
             .buttonStyle(.borderless)
             .font(.caption)
-            RecapCard(content: content)
+            RecapCard(content: content, hub: hub)
             VStack(alignment: .leading, spacing: 2) {
                 if let best = content.recap.bestDay {
                     Text(l.recapBestDayLine(content.dayLabel(best.key), TokenFormatter.grouped(best.tokens)))
@@ -411,6 +409,5 @@ struct RecapScreen: View {
             Spacer(minLength: 0)
         }
         .padding(PopoverMetrics.padding)
-        .task { await companion.backfillMissingDexNames() }
     }
 }

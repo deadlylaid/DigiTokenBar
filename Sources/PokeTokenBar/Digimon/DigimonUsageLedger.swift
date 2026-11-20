@@ -1,7 +1,7 @@
 import Foundation
 
 /// Turns repeated "tokens used today, per provider" snapshots into new tokens since the last
-/// snapshot. Ported from `CompanionStore.update` so the Digimon side keeps the same guarantees:
+/// snapshot. Ported from the upstream PokeTokenBar companion ledger, with the same guarantees:
 /// - usage before installation is never counted (install baseline);
 /// - each provider is tracked separately, and a provider first seen mid-day is seeded, not back-paid;
 /// - a provider whose total goes down is re-based on its own line only;
@@ -49,7 +49,7 @@ struct DigimonUsageLedger: Codable, Sendable, Equatable {
 }
 
 /// Counts 5-hour / weekly limits that newly reach 100% ("care mistakes"). Same edge rules as the
-/// upstream candy grant (`CompanionStore.evaluateCandyGrants`): the first observation only seeds,
+/// upstream PokeTokenBar candy grant: the first observation only seeds,
 /// a window counts once until it drops below 100% or a new window (epoch) starts.
 struct DigimonLimitWatch: Codable, Sendable, Equatable {
     var seeded = false

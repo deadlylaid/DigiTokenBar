@@ -63,80 +63,18 @@ final class LocalizationInterpolationTests: XCTestCase {
             expect(lang, "limitRefreshHTTPError(401)", l.limitRefreshHTTPError(401), "401")
             expect(lang, "limitRefreshHTTPError(404)", l.limitRefreshHTTPError(404), "404")
 
-            // Floating pet & settings / 플로팅 펫 · 설정
-            expect(lang, "floatingPetHoverTokensOnly", l.floatingPetHoverTokensOnly(a), a)
-            expect(lang, "floatingPetHoverWithLimit", l.floatingPetHoverWithLimit(a, b), a, b)
-            expect(lang, "floatingPetHoverSulkHours", l.floatingPetHoverSulkHours(4242), "4242")
-            expect(lang, "floatingPetHoverSulkDays", l.floatingPetHoverSulkDays(4242), "4242")
+            // Settings / 설정
             expect(lang, "intervalLabel", l.intervalLabel(1860), "31")  // 1860 s → 31 min / 1860초 → 31분
             expect(lang, "customScanRootsMatches", l.customScanRootsMatches(4242), "4242")
 
-            // Save transfer / 세이브 이전
-            expect(lang, "importConfirmBody",
-                   l.importConfirmBody(incomingDex: 4242, incomingTokens: a,
-                                       exportedAt: "ZQXEXPORTEDAT", sourceDevice: "ZQXDEVICE",
-                                       currentDex: 1717, currentTokens: b),
-                   "4242", a, "ZQXEXPORTEDAT", "ZQXDEVICE", "1717", b)
-            expect(lang, "importSaveDone", l.importSaveDone(dex: 4242, tokens: a), "4242", a)
-            expect(lang, "restoreConfirmBody",
-                   l.restoreConfirmBody(snapshotDate: "ZQXEXPORTEDAT", snapshotDex: 4242,
-                                        snapshotTokens: a, currentDex: 1717, currentTokens: b),
-                   "ZQXEXPORTEDAT", "4242", a, "1717", b)
-            expect(lang, "restoreDoneMessage", l.restoreDoneMessage(dex: 4242, tokens: a), "4242", a)
-            expect(lang, "snapshotDexAndTokens", l.snapshotDexAndTokens(dex: 4242, tokens: a), "4242", a)
-
-            // Mail report / 메일 리포트
-            expect(lang, "reportMailFallback", l.reportMailFallback(a), a)
-            expect(lang, "reportMailSubject", l.reportMailSubject(a), a)
-            expect(lang, "reportMailBody", l.reportMailBody(version: a, os: b), a, b)
-
-            // Companion progress & status / 컴패니언 진행 · 상태
-            expect(lang, "stage", l.stage(4242, 1717), "4242", "1717")
-            expect(lang, "eggToHatch", l.eggToHatch(a), a)
-            expect(lang, "eggFirstRunHint", l.eggFirstRunHint(a), a)
-            expect(lang, "toNextEvolution", l.toNextEvolution(a), a)
-            expect(lang, "toGraduation", l.toGraduation(a), a)
-            expect(lang, "growthBoost", l.growthBoost(4242), "4242")
-            expect(lang, "graduated", l.graduated(a), a)
-            expect(lang, "statusEvolved", l.statusEvolved(a), a)
-
-            // Pokédex / 도감
-            expect(lang, "dexTotal", l.dexTotal(4242), "4242")
-            expect(lang, "dexSpeciesTotal", l.dexSpeciesTotal(4242), "4242")
-            expect(lang, "dexPageLabel", l.dexPageLabel(4242, 1717), "4242", "1717")
-
             // System notifications / 시스템 알림
-            expect(lang, "notifHatchBody", l.notifHatchBody(a), a)
-            expect(lang, "notifShinyHatchBody", l.notifShinyHatchBody(a, odds: 4242), a, "4242")
-            expect(lang, "notifEvolveBody", l.notifEvolveBody(from: a, to: b), a, b)
-            expect(lang, "notifDittoRevealBody", l.notifDittoRevealBody(a), a)
-            expect(lang, "notifShinyDittoRevealBody", l.notifShinyDittoRevealBody(a), a)
-            expect(lang, "notifGraduateBody", l.notifGraduateBody(a), a)
             expect(lang, "notifBody", l.notifBody(a, b), a, b)
-            expect(lang, "notifCandyTitle", l.notifCandyTitle(item: a, count: 4242), a, "4242")
-            expect(lang, "notifCandyBody", l.notifCandyBody(window: a), a)
 
             // Updates / 업데이트
             expect(lang, "updateAvailable", l.updateAvailable(a, current: b), a, b)
             expect(lang, "updateFound", l.updateFound(a), a)
             expect(lang, "upToDate", l.upToDate(a), a)
             expect(lang, "skippedVersion", l.skippedVersion(a), a)
-
-            // Bag, shop, eggs / 가방 · 상점 · 알
-            expect(lang, "useOnCurrent", l.useOnCurrent(a), a)
-            expect(lang, "buyConfirm", l.buyConfirm(a), a)
-            expect(lang, "ownedCount", l.ownedCount(4242), "4242")
-            expect(lang, "eggConfirm", l.eggConfirm(a, b), a, b)
-            // Constant-derived substitution: hardcode it and the candy blurb drifts
-            // away from the real XP value.
-            // 상수 파생 치환 — 하드코딩으로 드리프트하면 사탕 설명이 실제 XP 와 어긋난다.
-            expect(lang, "itemDescription(.rareCandy)", l.itemDescription(.rareCandy),
-                   TokenFormatter.compact(RareCandy.xp))
-            // Rarity label spliced into copy: a translation that spells the tier out
-            // instead of substituting it is caught here.
-            // 등급 라벨을 끼워 넣는 문구 — 번역이 치환 대신 등급을 고정 표기하면 여기서 걸린다.
-            expect(lang, "eggDescription(.rare)", l.eggDescription(.rare), l.rarityRare)
-            expect(lang, "eggGuaranteeHint(.uncommon)", l.eggGuaranteeHint(.uncommon), l.rarityUncommon)
         }
     }
 

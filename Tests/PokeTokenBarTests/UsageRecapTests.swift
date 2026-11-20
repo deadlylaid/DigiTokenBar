@@ -38,15 +38,14 @@ private func ledger(since: String, _ days: [(String, Int)]) -> UsageLedger {
     return ledger
 }
 
-private func recap(_ ledger: UsageLedger, _ scope: RecapScope, offset: Int = 0, dex: [DexEntry] = [],
+private func recap(_ ledger: UsageLedger, _ scope: RecapScope, offset: Int = 0, graduates: [GraduateRecord] = [],
                    calendar: Calendar = calendar()) -> UsageRecap {
     let period = RecapPeriod(scope: scope, containing: now, calendar: calendar).shifted(by: offset, calendar: calendar)
-    return UsageRecap.make(ledger: ledger, dex: dex, period: period, now: now, calendar: calendar)
+    return UsageRecap.make(ledger: ledger, graduates: graduates, period: period, now: now, calendar: calendar)
 }
 
-private func graduate(_ id: String, on day: Date, shiny: Bool = false, released: Bool = false) -> DexEntry {
-    DexEntry(id: id, baseID: 10, finalID: 10, chainOrder: [10], rarity: .common, caughtAt: day,
-             isShiny: shiny, names: [10: ["en": "S10"]], releasedAt: released ? day : nil)
+private func graduate(_ species: String, on day: Date) -> GraduateRecord {
+    GraduateRecord(lineID: "agumon", path: ["botamon", "koromon", species], graduatedAt: day)
 }
 
 // MARK: Ledger
@@ -297,15 +296,14 @@ final class UsageRecapTests: XCTestCase {
     }
 
     func testGraduationsInThePeriodOnly() {
-        let dex = [graduate("this-week", on: date(2026, 9, 17)),
-                   graduate("monday", on: date(2026, 9, 14, hour: 0), shiny: true),
-                   graduate("let-go", on: date(2026, 9, 16), released: true),
-                   graduate("last-week", on: date(2026, 9, 13, hour: 23))]
+        let graduates = [graduate("monday", on: date(2026, 9, 14, hour: 0)),
+                         graduate("last-week", on: date(2026, 9, 13, hour: 23)),
+                         graduate("this-week", on: date(2026, 9, 17))]
         let l = ledger(since: key(2026, 9, 1), [])
 
-        XCTAssertEqual(recap(l, .week, dex: dex).graduated.map(\.id), ["this-week", "monday"],
-                       "newest first, released out, Sunday 13 is last week")
-        XCTAssertEqual(recap(l, .month, dex: dex).graduated.count, 3)
+        XCTAssertEqual(recap(l, .week, graduates: graduates).graduated.map(\.path.last), ["this-week", "monday"],
+                       "newest first, Sunday 13 is last week")
+        XCTAssertEqual(recap(l, .month, graduates: graduates).graduated.count, 3)
     }
 
     func testGoingBackStopsWhereTheLedgerStarts() {
@@ -333,27 +331,36 @@ final class UsageRecapTests: XCTestCase {
 
 @MainActor
 final class UsageRecapRenderingTests: XCTestCase {
-    private let url = FileManager.default.temporaryDirectory
-        .appendingPathComponent("recap-\(UUID().uuidString).json")
+    private let directory = FileManager.default.temporaryDirectory
+        .appendingPathComponent("recap-\(UUID().uuidString)", isDirectory: true)
+    private var url: URL { directory.appendingPathComponent("digimon-state.json") }
+
+    override func setUpWithError() throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    }
 
     override func tearDownWithError() throws {
-        try? FileManager.default.removeItem(at: url)
+        try? FileManager.default.removeItem(at: directory)
     }
 
     func testTheCardRendersInEveryLanguageAndScope() throws {
-        let dex = [graduate("a", on: date(2026, 9, 17)), graduate("b", on: date(2026, 9, 15), shiny: true)]
-        let dexJSON = String(decoding: try JSONEncoder().encode(dex), as: UTF8.self)
-        try Data(#"{"installBaselineSet":true,"usedSinceInstall":1000,"lastDate":"d","dex":\#(dexJSON)}"#.utf8)
-            .write(to: url)
+        var state = DigimonState.newEgg(lineID: "agumon")
+        state.graduates = [graduate("greymon", on: date(2026, 9, 15)), graduate("wargreymon", on: date(2026, 9, 17))]
+        try JSONEncoder().encode(DigimonStore.Saved(digimon: state)).write(to: url)
+        let digimon = DigimonStore(fileURL: url, clock: { now })
         let defaults = UserDefaults(suiteName: "recap-render-\(UUID().uuidString)")!
         ledger(since: key(2026, 8, 1), [(key(2026, 9, 17), 5_000), (key(2026, 8, 20), 900)]).save(to: defaults)
         let usageStore = UsageStore(providers: [], autoRefresh: false, defaults: defaults)
 
+        let week = RecapContent(store: usageStore, digimon: digimon, language: .en, scope: .week, offset: 0,
+                                now: now, calendar: calendar())
+        XCTAssertEqual(week.partnerKey, DigimonSceneHub.sceneKey(digimon.state.partner))
+        XCTAssertEqual(week.graduates.map(\.key), ["wargreymon", "greymon"], "newest first")
+        XCTAssertEqual(week.graduates.map(\.name), ["War Greymon", "Greymon"])
+
         for language in AppLanguage.allCases {
-            let companion = CompanionStore(fileURL: url, defaults: defaults)
-            companion.setLanguage(language)
             for scope in RecapScope.allCases {
-                let content = RecapContent(store: usageStore, companion: companion, language: companion.language, scope: scope, offset: 0,
+                let content = RecapContent(store: usageStore, digimon: digimon, language: language, scope: scope, offset: 0,
                                            now: now, calendar: calendar())
                 XCTAssertFalse(content.periodLabel().isEmpty, "\(language) \(scope)")
                 XCTAssertFalse(content.l.recapCompareSoFar(scope).isEmpty)
@@ -387,12 +394,10 @@ final class UsageRecapRenderingTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suite) }
         ledger(since: key(2026, 8, 1), [(key(2026, 9, 17), 12_345)]).save(to: defaults)
         let store = UsageStore(providers: [], autoRefresh: false, defaults: defaults)
-        let companion = CompanionStore(fileURL: url, defaults: defaults)
 
         for language in AppLanguage.allCases {
-            companion.setLanguage(language)
             for scope in RecapScope.allCases {
-                let content = RecapContent(store: store, companion: companion, language: companion.language, scope: scope, offset: 0,
+                let content = RecapContent(store: store, digimon: nil, language: language, scope: scope, offset: 0,
                                            now: now, calendar: calendar())
                 let used = try XCTUnwrap(content.recap.buckets.first { $0.tokens == 12_345 })
                 let zero = try XCTUnwrap(content.recap.buckets.first { $0.hasData && $0.tokens == 0 })

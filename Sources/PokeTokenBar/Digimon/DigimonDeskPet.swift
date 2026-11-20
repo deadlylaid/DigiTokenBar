@@ -15,7 +15,7 @@ final class DigimonDeskPet {
     private var petRect = CGRect.zero
     private var monitors: [Any] = []
     private var hitTimer: Timer?
-    /// Coding agents reporting through digitokenbar://agent (same rules as the Pokemon pet:
+    /// Coding agents reporting through digitokenbar://agent (`AgentActivityTracker` rules:
     /// several labels, working times out after 10 minutes, done shows for 6 seconds).
     private var agents = AgentActivityTracker()
     private var agentTimer: Timer?

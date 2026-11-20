@@ -9,15 +9,15 @@ final class MenuGrowthTests: XCTestCase {
         var changed = false
     }
 
-    private func observe(_ usage: UsageStore, _ companion: CompanionStore) -> ChangeFlag {
+    private func observe(_ usage: UsageStore, _ digimon: DigimonStore) -> ChangeFlag {
         let flag = ChangeFlag()
         withObservationTracking {
-            _ = MenuBarContent.lines(store: usage, companion: companion)
+            _ = MenuBarContent.lines(store: usage, digimon: digimon)
         } onChange: { flag.changed = true }
         return flag
     }
 
-    private func fixture(_ body: (UsageStore, CompanionStore) async throws -> Void) async throws {
+    private func fixture(_ body: (UsageStore, DigimonStore) throws -> Void) throws {
         let name = "ptb-menu-growth-\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(name)
@@ -26,143 +26,34 @@ final class MenuGrowthTests: XCTestCase {
             defaults.removePersistentDomain(forName: name)
             try? FileManager.default.removeItem(at: directory)
         }
-        var state = CompanionState()
-        state.language = .en
-        state.inventory[ItemKind.rareCandy.rawValue] = 1
-        let file = directory.appendingPathComponent("companion.json")
-        try JSONEncoder().encode(state).write(to: file)
-        let line = EvoLine(baseID: 1,
-            tree: EvoNode(speciesID: 1, children: [EvoNode(speciesID: 2,
-                children: [EvoNode(speciesID: 3, children: [])])]),
-            rarity: .common, names: [1: ["en": "Bulbasaur"], 2: ["en": "Ivysaur"], 3: ["en": "Venusaur"]])
-        let companion = CompanionStore(provider: StubProvider(value: line), fileURL: file,
-            rng: SeededRNG(seed: 7), dittoDisguiseRollingEnabled: false, defaults: defaults)
+        let digimon = DigimonStore(fileURL: directory.appendingPathComponent("digimon-state.json"))
         let usage = UsageStore(providers: [], autoRefresh: false, defaults: defaults)
         usage.showTokensInMenu = false
         usage.showCostInMenu = false
         usage.showLimitInMenu = false
         usage.showGrowthInMenu = true
-        try await body(usage, companion)
+        try body(usage, digimon)
     }
 
-    func testEggEvolutionAndGraduationUseCurrentStageProgress() async throws {
-        try await fixture { usage, companion in
-            XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion), ["Hatch 0%"])
-            companion.update(todayTokensByProvider: ["test": 0], todayDate: "d", monthTotal: 0,
-                             burnTier: .idle, limitWarning: false, hasUsageData: true)
-            companion.update(todayTokensByProvider: ["test": companion.eggHatchThreshold * 2 / 5],
-                             todayDate: "d", monthTotal: 0, burnTier: .idle,
-                             limitWarning: false, hasUsageData: true)
-            XCTAssertEqual(companion.menuGrowthText, "Hatch 40%")
-            await companion.hatch(baseID: 1)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 0%")
-            companion.applyUsage(companion.threshold / 2)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 50%")
-            companion.applyUsage(companion.tokensToNext)
-            XCTAssertEqual(companion.state.active?.stageIndex, 1)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 0%")
-            companion.applyUsage(companion.tokensToNext)
-            XCTAssertTrue(companion.isFinalStage)
-            companion.applyUsage(companion.threshold / 2)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 50%")
-            companion.applyUsage(companion.tokensToNext)
-            XCTAssertTrue(companion.isEgg)
-            XCTAssertEqual(companion.menuGrowthText, "Hatch 0%")
-        }
-    }
+    /// The menu bar shows the Digimon's growth and redraws as soon as it grows, without waiting for
+    /// the next usage poll. Hidden growth must not cause extra redraws.
+    func testGrowthRedrawsTheMenuWithoutAUsageRefreshAndHiddenGrowthDoesNot() throws {
+        try fixture { usage, digimon in
+            XCTAssertEqual(MenuBarContent.lines(store: usage, digimon: digimon), ["0%"], "a new egg")
+            digimon.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
+            let grew = observe(usage, digimon)
+            digimon.update(todayTokensByProvider: ["claude_code": 2_000_001], todayDate: "d1", hasUsageData: true)
+            XCTAssertTrue(grew.changed)
+            XCTAssertEqual(MenuBarContent.lines(store: usage, digimon: digimon), ["50%"],
+                           "2M tokens are 10 of the egg's 20 exp")
 
-    func testEggPercentageMatchesHomeAtExactTwentyNinePercentBoundary() async throws {
-        try await fixture { usage, companion in
-            companion.setLanguage(.ko)
-            XCTAssertEqual(companion.eggHatchThreshold, 5_000_000)
-            companion.update(todayTokensByProvider: ["test": 0], todayDate: "d", monthTotal: 0,
-                             burnTier: .idle, limitWarning: false, hasUsageData: true)
-            // The former Double conversion turns exactly 29% into 28.999999999999996.
-            // Also protect flooring just below a boundary and clamping while hatching is pending.
-            for (credits, percent) in [(0, 0), (1_449_999, 28), (1_450_000, 29),
-                                       (1_499_999, 29), (1_500_000, 30), (4_999_999, 99),
-                                       (5_000_000, 100), (5_000_001, 100)] {
-                companion.update(todayTokensByProvider: ["test": credits], todayDate: "d", monthTotal: 0,
-                                 burnTier: .idle, limitWarning: false, hasUsageData: true)
-                XCTAssertTrue(companion.isEgg)
-                XCTAssertEqual(companion.state.eggUsage, credits)
-                XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion),
-                               ["부화 \(percent)%"], "credits=\(credits)")
-                XCTAssertTrue(CompanionHeader.progressDetail(used: credits, total: companion.eggHatchThreshold)
-                    .hasSuffix(" · \(percent)%"), "Home and menu must agree for credits=\(credits)")
-            }
-        }
-    }
-
-    func testActivePercentageMatchesHomeAtExactTwentyNinePercentBoundary() async throws {
-        try await fixture { usage, companion in
-            await companion.hatch(baseID: 1)
-            companion.setLanguage(.ko)
-            let total = companion.threshold
-            XCTAssertEqual(total % 100, 0, "fixture must have an exact integer 29% boundary")
-            let twentyNinePercent = total * 29 / 100
-            let thirtyPercent = total * 30 / 100
-            for (credits, percent) in [(twentyNinePercent - 1, 28), (twentyNinePercent, 29),
-                                       (thirtyPercent - 1, 29), (thirtyPercent, 30)] {
-                companion.applyUsage(credits - (companion.state.active?.usedAtStage ?? 0))
-                XCTAssertEqual(companion.state.active?.usedAtStage, credits)
-                XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion),
-                               ["성장 \(percent)%"], "credits=\(credits)")
-                XCTAssertTrue(CompanionHeader.progressDetail(used: credits, total: total)
-                    .hasSuffix(" · \(percent)%"), "Home and menu must agree for credits=\(credits)")
-            }
-        }
-    }
-
-    func testCandyDifficultyLanguageAndToggleInvalidateMenuWithoutUsageRefresh() async throws {
-        try await fixture { usage, companion in
-            await companion.hatch(baseID: 1)
-            let candy = observe(usage, companion)
-            XCTAssertEqual(companion.useRareCandy(), .progressed)
-            XCTAssertTrue(candy.changed)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 80%")
-            let difficulty = observe(usage, companion)
-            companion.setGrowthDifficulty(0.5)
-            XCTAssertTrue(difficulty.changed)
-            XCTAssertEqual(companion.menuGrowthText, "Growth 80%", "difficulty preserves the earned fraction")
-            let language = observe(usage, companion)
-            companion.setLanguage(.ko)
-            XCTAssertTrue(language.changed)
-            XCTAssertEqual(companion.menuGrowthText, "성장 80%")
-            let russian = observe(usage, companion)
-            companion.setLanguage(.ru)
-            XCTAssertTrue(russian.changed)
-            XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion), ["Рост 80%"])
-            let toggle = observe(usage, companion)
+            let toggle = observe(usage, digimon)
             usage.showGrowthInMenu = false
             XCTAssertTrue(toggle.changed)
-            XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion), ["—"])
-            let disabled = observe(usage, companion)
-            companion.applyUsage(1_000_000)
-            XCTAssertFalse(disabled.changed, "hidden growth must not cause extra menu redraws")
-        }
-    }
-
-    func testPinnedRepresentativeDoesNotReplaceRaisedCompanionProgress() async throws {
-        try await fixture { usage, companion in
-            await companion.hatch(baseID: 1)
-            XCTAssertTrue(companion.setRepresentativeSpeciesID(1))
-            companion.applyUsage(companion.tokensToNext)
-            XCTAssertEqual(companion.representativeSubject.speciesID, 1)
-            XCTAssertEqual(companion.currentSpeciesID, 2)
-            companion.applyUsage(companion.threshold / 2)
-            XCTAssertEqual(MenuBarContent.lines(store: usage, companion: companion), ["Growth 50%"])
-        }
-    }
-
-    func testAllLanguagesIncludePercentageInBothStates() {
-        for language in AppLanguage.allCases {
-            let l = L(language)
-            XCTAssertFalse(l.pokemonGrowthPercent.isEmpty)
-            XCTAssertFalse(l.pokemonGrowthPercentHint.isEmpty)
-            XCTAssertTrue(l.menuGrowthProgress(42, isEgg: true).contains("42%"))
-            XCTAssertTrue(l.menuGrowthProgress(42, isEgg: false).contains("42%"))
-            XCTAssertNotEqual(l.menuGrowthProgress(42, isEgg: true), l.menuGrowthProgress(42, isEgg: false))
+            XCTAssertEqual(MenuBarContent.lines(store: usage, digimon: digimon), ["—"])
+            let hidden = observe(usage, digimon)
+            digimon.update(todayTokensByProvider: ["claude_code": 3_000_001], todayDate: "d1", hasUsageData: true)
+            XCTAssertFalse(hidden.changed, "hidden growth must not cause extra menu redraws")
         }
     }
 

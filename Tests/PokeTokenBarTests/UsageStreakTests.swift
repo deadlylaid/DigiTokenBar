@@ -92,7 +92,7 @@ final class UsageStreakTests: XCTestCase {
         let now = date(2026, 9, 18, in: utc)
         let ledger = ledger(since: "2026-09-01", active: ["2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"])
         let week = RecapPeriod(scope: .week, containing: now, calendar: calendar(utc))
-        let recap = UsageRecap.make(ledger: ledger, dex: [], period: week, now: now, calendar: calendar(utc))
+        let recap = UsageRecap.make(ledger: ledger, graduates: [], period: week, now: now, calendar: calendar(utc))
         XCTAssertEqual(streak(ledger, now, utc).days, recap.bestStreak)
     }
 

@@ -10,26 +10,30 @@ final class ScrollerLaneTests: XCTestCase {
     private static let exempt: Set<String> = ["SettingsView.swift"]
 
     func testEveryPopoverVerticalScrollViewReservesTheScrollerLane() throws {
-        let ui = URL(fileURLWithPath: #filePath)
+        let sources = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()    // PokeTokenBarTests
             .deletingLastPathComponent()    // Tests
             .deletingLastPathComponent()    // repo root
-            .appendingPathComponent("Sources/PokeTokenBar/UI")
-        let enumerator = try XCTUnwrap(FileManager.default.enumerator(at: ui, includingPropertiesForKeys: nil))
+            .appendingPathComponent("Sources/PokeTokenBar")
         var checked = 0
         var offenders: [String] = []
 
-        for case let url as URL in enumerator where url.pathExtension == "swift" {
-            guard !Self.exempt.contains(url.lastPathComponent) else { continue }
-            let source = try String(contentsOf: url, encoding: .utf8)
-            for site in Self.verticalScrollViews(in: source) {
-                checked += 1
-                if !site.reservesLane { offenders.append("\(url.lastPathComponent):\(site.line)") }
+        // The popover's views live in UI/ and Digimon/.
+        for folder in ["UI", "Digimon"] {
+            let enumerator = try XCTUnwrap(FileManager.default.enumerator(
+                at: sources.appendingPathComponent(folder), includingPropertiesForKeys: nil))
+            for case let url as URL in enumerator where url.pathExtension == "swift" {
+                guard !Self.exempt.contains(url.lastPathComponent) else { continue }
+                let source = try String(contentsOf: url, encoding: .utf8)
+                for site in Self.verticalScrollViews(in: source) {
+                    checked += 1
+                    if !site.reservesLane { offenders.append("\(url.lastPathComponent):\(site.line)") }
+                }
             }
         }
 
-        // Home, Shop, Bag, catch log, Pokémon detail — guards against a vacuous pass if the scan breaks.
-        XCTAssertGreaterThanOrEqual(checked, 5)
+        // Home and the Digimon dex — guards against a vacuous pass if the scan breaks.
+        XCTAssertGreaterThanOrEqual(checked, 2)
         XCTAssertTrue(offenders.isEmpty, """
             Vertical ScrollViews in the popover must apply .reservesScrollerLane() to their content,
             or the overlay scroller covers right-aligned content. Missing at: \(offenders.joined(separator: ", "))

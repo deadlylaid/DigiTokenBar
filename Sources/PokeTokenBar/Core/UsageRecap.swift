@@ -144,7 +144,6 @@ struct RecapPeriod: Equatable, Sendable {
 
 /// A recap of one period — read-only, computed on demand. Nothing here is a reward or a goal: it
 /// reports what already happened, so the app still asks nothing of the user.
-// Not Equatable: `DexEntry` is not, and the graduated rows carry it whole.
 struct UsageRecap: Sendable {
     /// One meter: a day in the week and month views, a month in the year view.
     struct Bucket: Equatable, Sendable {
@@ -177,8 +176,8 @@ struct UsageRecap: Sendable {
     let countedDays: Int
     /// Longest run of consecutive active days inside the period.
     let bestStreak: Int
-    /// Individuals graduated during the period, newest first.
-    let graduated: [DexEntry]
+    /// Digimon graduated during the period, newest first.
+    let graduated: [GraduateRecord]
     /// The previous period holds at least one day the ledger covers.
     let canGoBack: Bool
 
@@ -187,7 +186,7 @@ struct UsageRecap: Sendable {
         return Double(total - previousTotal) / Double(previousTotal)
     }
 
-    static func make(ledger: UsageLedger, dex: [DexEntry], period: RecapPeriod, now: Date,
+    static func make(ledger: UsageLedger, graduates: [GraduateRecord], period: RecapPeriod, now: Date,
                      calendar: Calendar) -> UsageRecap {
         let formatter = LocalUsageReader.localDayFormatter(timeZone: calendar.timeZone)
         let today = calendar.startOfDay(for: now)
@@ -247,11 +246,9 @@ struct UsageRecap: Sendable {
             ? compared.reduce(0) { $0 + ledger.tokens(on: $1) }
             : nil
 
-        let graduated = dex
-            .filter { entry in
-                !entry.isReleased && entry.caughtAt.map { $0 >= period.start && $0 < period.end } == true
-            }
-            .sorted { ($0.caughtAt ?? .distantPast) > ($1.caughtAt ?? .distantPast) }
+        let graduated = graduates
+            .filter { $0.graduatedAt >= period.start && $0.graduatedAt < period.end }
+            .sorted { $0.graduatedAt > $1.graduatedAt }
 
         return UsageRecap(
             period: period,

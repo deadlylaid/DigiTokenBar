@@ -21,7 +21,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private let popover = NSPopover()
     private var outsideClickMonitor = OutsideClickMonitor()
     private var store: UsageStore!
-    private var companion: CompanionStore!
     private var languageStore: AppLanguageStore!
     private var updater: UpdateChecker!
     private var digimon: DigimonStore!
@@ -33,7 +32,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
     // 메뉴바 캐릭터 애니메이션 — 단일 타이머로 프레임 순환.
     // 프레임 = 이미 22px 로 합성된 이미지 + delay. egg/static 은 2프레임 bob, animated 는 GIF 실제 프레임.
-    private var menuSpriteKey: String?   // menuSpriteKey(id:shiny:floor:) 결과 — 바뀌면 재로딩
+    private var menuSpriteKey: String?   // the shown Digimon and frame floor (`ensureMenuAnimation`); reloads when it changes
     private var menuFrames: [(image: NSImage, delay: TimeInterval)] = []
     /// `menuFrames` 와 인덱스 대응하는 레이어용 비트맵. 프레임 준비 시 한 번만 변환한다.
     /// 비어 있으면(변환 실패) `setStatusImage` 가 `button.image` 폴백 경로를 탄다.
@@ -109,10 +108,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             LoginItem.system.migrateFromLegacyAgentIfNeeded()
         }
         store = UsageStore()
-        // CompanionStore stays for the app language and settings; the Pokemon companion itself
-        // no longer grows (no PokeAPI downloads, no hatching, no candy).
         languageStore = AppLanguageStore()
-        companion = CompanionStore()
         digimon = DigimonStore(waitForFirstEgg: true)
         digimonHub = DigimonSceneHub(digimon: digimon)
         digimonHub.language = languageStore.language
@@ -123,7 +119,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimon.setFastGrowth(UserDefaults.standard.bool(forKey: DigimonStore.fastGrowthKey))
         updater = UpdateChecker()
         store.localizationLanguage = languageStore.language   // 알림 현지화용 미러 시드
-        store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // 한도 로드 후 companion·사탕 지급
+        store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // after limits load: Digimon care mistakes
         deskPet = DigimonDeskPet(store: store, hub: digimonHub,
                                  language: { [weak languageStore] in languageStore?.language ?? .ko })   // desktop pet (opt-in "floating pet" setting)
         Task { await updater.check() }                    // 기동 시 1회 업데이트 확인
@@ -145,19 +141,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         popover.delegate = self   // didShow: outside-click monitor; didClose: 호스팅 해제 + 모니터 제거
 
         observeStore()
-        observeCompanionSprite()
+        observeMenuSprite()
         observeDisplaySleep()
         observePowerState()
         applyState()
     }
 
-    /// Observe usage settings and the enabled growth text together, including companion-only changes.
+    /// Observe usage settings and the enabled growth text together, including Digimon-only changes.
     /// (isStale 은 더 이상 추적 안 함 — 메뉴바 dim 제거로 시각 출력에 관여하지 않음.)
     private func observeStore() {
         withObservationTracking {
             _ = MenuBarContent.lines(store: store, digimon: digimon)
             _ = store.menuToolTip
-            _ = store.alwaysFacesBack   // mirrored into the companion by `updateCompanion`
             // The mode and thresholds can change the colors while the text stays the same.
             _ = store.menuLimitColorRuns()
         } onChange: { [weak self] in
@@ -169,16 +164,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         }
     }
 
-    /// 대표 스프라이트 정체성(종/shiny/fps 하한) 관찰 — 대표 선택·해제와 애니메이션 품질 변경뿐 아니라
-    /// 사탕 진화·졸업(BagView), 세이브 가져오기, 부화·메타몽 리빌 async 완료처럼 store 갱신 틱 없이
-    /// companion 만 바뀌는 경로에서도 메뉴바를 즉시 갱신한다. 성장률 표시가 꺼져 있어도 스프라이트는
-    /// 바로 갱신되어야 한다(사탕 졸업 후 메뉴바 잔상 리포트 — UsageStore.onRefresh 주석과 같은 부류).
-    ///
-    /// **fps 설정도 여기서 관찰한다**: 프레임은 하한에 맞춰 솎아낸 결과물이라 하한이 곧 정체성의
-    /// 일부다(`menuSpriteKey`). `observeStore` 는 애니메이션 품질을 추적하지 않으므로, 이걸 빼면 설정을
-    /// 바꿔도 다음 사용량 폴링(기본 120s)까지 옛 fps 로 돈다 — 위 '메뉴바 잔상'과 같은 부류.
-    /// (플로팅 펫은 `body` 에서 직접 읽어 SwiftUI 관찰이 처리한다.)
-    private func observeCompanionSprite() {
+    /// Watch the menu bar sprite's identity (the Digimon, its line, the frame floor): an evolution, a
+    /// new egg or an animation-quality change redraws the menu bar at once, without waiting for the
+    /// next usage refresh.
+    private func observeMenuSprite() {
         withObservationTracking {
             _ = digimon.state.partner.speciesKey
             _ = digimon.state.partner.lineID
@@ -188,7 +177,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                 guard let self else { return }
                 self.ensureMenuAnimation()
                 self.syncMenuAnimation()
-                self.observeCompanionSprite()
+                self.observeMenuSprite()
             }
         }
     }
@@ -210,7 +199,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
     private func applyState() {
         guard let button = statusItem.button else { return }
-        updateCompanion()
+        updateDigimon()
         // Recomputed on every refresh, so a tier that moves with the clock redraws even when the text doesn't.
         Self.applyMenuText(MenuBarContent.lines(store: store, digimon: digimon),
                            to: button, colors: store.menuLimitColorRuns())
@@ -285,7 +274,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
     /// UsageStore → DigimonStore (new tokens become experience). Runs on every observed change;
     /// DigimonStore only writes when something changed, so this cannot loop with `observeStore`.
-    private func updateCompanion() {
+    private func updateDigimon() {
         digimon.update(todayTokensByProvider: store.todayTokensByProvider,
                        todayDate: LocalUsageReader.todayKey(),
                        hasUsageData: store.hasUsageData)
@@ -305,7 +294,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// After each refresh, when limits are fresh: newly filled limits are care mistakes.
     /// Tied here for the reason in the UsageStore.onRefresh comment.
     private func onStoreRefreshed() {
-        updateCompanion()
+        updateDigimon()
         digimon.recordLimitWindows(store.candyEligibleWindows, limitsReady: store.limitsReady)
     }
 
@@ -364,7 +353,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// 나란히 보면 메뉴바만 느려 보였다(2026-08-20). 코얼레싱은 남기고 늘어짐만 눌러 0.1 로 낮춤.
     static let menuFrameTolerance = 0.1
 
-    /// 대표 포켓몬에 맞춰 메뉴바 프레임을 준비. 종이 바뀐 경우에만 재로딩.
+    /// 지금의 디지몬에 맞춰 메뉴바 프레임을 준비. 모습이 바뀐 경우에만 재로딩.
     /// 정적 스프라이트로 먼저 보여주고, animated GIF 가 받아지면 교체한다(메뉴바도 GIF로 움직임).
     /// 에너지 통제는 ① delay 하한 `menuFrameFloor` ② 안 보이면 정지(menuShouldAnimate) ③ 저전력 모드
     /// 에선 하한을 powerSaver 로 강제 캡(`effectiveFrameFloor`)한다 — GIF 를 생략(bob)하는 대신
@@ -580,34 +569,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             && (statusItem.button?.window?.occlusionState.contains(.visible) ?? true)
     }
 
-    /// 메뉴바 프레임 캐시의 정체성 — 이 값이 바뀌면 프레임을 다시 만든다.
-    ///
-    /// **하한(fps 설정)이 반드시 들어가야 한다.** 프레임은 하한에 맞춰 솎아낸 결과물이라, 키가
-    /// 종·이로치만 담으면 설정을 바꿔도 다음 진화까지 옛 fps 로 계속 돈다(설계 시 확인된 함정).
-    /// 순수·테스트용: `testIdentityKeysIncludeTheFrameFloor`.
-    static func menuSpriteKey(id: Int, shiny: Bool, floor: TimeInterval, form: PokemonForm? = nil,
-                              back: Bool = false) -> String {
-        let form = PokemonForm.resolved(speciesID: id, form: form)
-        let key = "\(id)-\(shiny)-\(floor)-\(form?.rawValue ?? "")"
-        return back ? key + "-back" : key
-    }
-
     // MARK: 프레임 합성 (22px)
 
     /// Widest the menu bar sprite may get, so a wide species does not push the usage text too far.
     /// At 36pt, 645 of the 649 species reach the full 20pt height. The rest: Swanna, Linoone and
     /// Gorebyss at ~18pt, Tynamo (57×19) at 12pt, which would need 60pt to fill the height.
     nonisolated static let menuBarSpriteMaxWidth: CGFloat = 36
-
-    /// 스프라이트 정적 + 가벼운 상하 bob 2프레임 (animated 미지원/로딩 폴백).
-    private static func bobFrames(from sprite: NSImage) -> [(image: NSImage, delay: TimeInterval)] {
-        [(menuBarImage(from: sprite, up: false), 0.5), (menuBarImage(from: sprite, up: true), 0.5)]
-    }
-
-    /// 부화 전/로딩 중 알 글리프 2프레임 bob.
-    private static func eggFrames() -> [(image: NSImage, delay: TimeInterval)] {
-        [(eggImage(up: false), 0.5), (eggImage(up: true), 0.5)]
-    }
 
     /// 메뉴바 프레임 기하 — **비율 유지**(SpriteFit). 순수·테스트용.
     ///
@@ -636,17 +603,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         return img
     }
 
-    /// TokenMac→PokeTokenBar 리네임에 따른 1회 이전: 기존 Application Support 폴더를
-    /// 새 이름으로 옮겨 companion 진행상황·스프라이트 캐시·스냅샷을 보존한다(신규 폴더 없을 때만).
-    private static func migrateLegacyStorageIfNeeded() {
-        let fm = FileManager.default
-        let base = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        let old = base.appendingPathComponent("TokenMac")
-        let new = base.appendingPathComponent("PokeTokenBar")
-        guard fm.fileExists(atPath: old.path), !fm.fileExists(atPath: new.path) else { return }
-        try? fm.moveItem(at: old, to: new)
-    }
-
     /// 스프라이트가 아직 없을 때(부화 전/로딩 중) 메뉴바에 표시하는 알 글리프.
     private static func eggImage(up: Bool) -> NSImage {
         let h: CGFloat = 22
@@ -663,18 +619,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// 팝오버 콘텐츠(SwiftUI 호스팅) 생성. .transient 팝오버는 contentViewController 를 평생 보유해 닫혀도
     /// NSHostingView 트리가 상주하며 매 디스플레이 사이클 재레이아웃된다(측정: idle CPU 최대 비용 — 닫힌
     /// 팝오버의 relative-time Text self-invalidation × 메뉴 애니메이션 CA 커밋). 그래서 열 때 만들고 닫힐 때 해제.
-    func openPopover() {
-        // Pet click is an outside click for a .transient popover — if already shown it is
-        // already dismissing; the old "activate/makeKey" branch never applied.
-        guard !popover.isShown else { return }
-        togglePopover()
-    }
-
     private func buildPopoverContent() {
         popover.contentViewController = NSHostingController(
             rootView: PopoverView()
-                .environment(store).environment(companion).environment(languageStore).environment(updater)
-                .environment(navigation)
+                .environment(store).environment(languageStore).environment(updater).environment(navigation)
                 .environment(digimon).environment(digimonHub))
     }
 
@@ -693,8 +641,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         let entries = StatusItemMenu.entries(
             l: languageStore.l, todayTokens: store.todayTotalTokens,
             todayCost: store.showsCost ? store.todayUsageCost : nil,
-            floatingPetEnabled: store.floatingPetEnabled, alwaysFacesBack: store.alwaysFacesBack)
-            .filter { $0?.action != .toggleBackView }   // Pokemon-only item
+            floatingPetEnabled: store.floatingPetEnabled)
         // Attaching the menu only for this click keeps left click on the popover. performClick
         // tracks the menu synchronously, with the button highlighted like any other status menu.
         statusItem.menu = StatusItemMenu.build(entries, target: self, selector: #selector(handleStatusMenu(_:)))
@@ -708,7 +655,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         case .openDex: showPopover { $0.tab = .collection }   // the Digimon dex tab
         case .openSettings: showPopover { $0.showSettings = true }
         case .toggleFloatingPet: store.floatingPetEnabled.toggle()
-        case .toggleBackView: store.alwaysFacesBack.toggle()
         case .quit: NSApp.terminate(nil)
         case nil: break
         }

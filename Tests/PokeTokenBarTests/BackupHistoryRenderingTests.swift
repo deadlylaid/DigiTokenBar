@@ -4,22 +4,19 @@ import Vision
 import XCTest
 @testable import PokeTokenBar
 
-private struct SnapshotHistoryOfflineProvider: PokeProviding {
-    func line(baseSpeciesID: Int) async throws -> EvoLine { throw URLError(.notConnectedToInternet) }
-    func baseSpeciesIndex() async throws -> [BaseSpecies] { [] }
-    func baseSpecies(id: Int) async throws -> BaseSpecies? { nil }
-}
-
-private final class SnapshotHistoryTestWindow: NSWindow {
+private final class BackupHistoryTestWindow: NSWindow {
     override var canBecomeKey: Bool { true }
 }
 
-/// Drives the production Settings disclosure, including rows outside the scroll viewport.
+/// Drives the production Settings disclosure of the Digimon backups list, including rows outside
+/// the scroll viewport.
 @MainActor
-final class SnapshotHistoryRenderingTests: XCTestCase {
+final class BackupHistoryRenderingTests: XCTestCase {
     private var window: NSWindow?
     private var previousKeyWindow: NSWindow?
     private var renderNumber = 0
+    private let dt = DigimonText(.en)
+    private let l = L(.en)
 
     override func tearDown() async throws {
         window?.close()
@@ -28,55 +25,61 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
         previousKeyWindow = nil
     }
 
-    func testTenSnapshotsStartCollapsedAndExpandAllRowsThenCollapseAndReopen() async throws {
-        let (companion, usage) = try makeStores(snapshotCount: 10)
-        let root = host(companion, usage)
+    func testTenBackupsStartCollapsedAndExpandAllRowsThenCollapseAndReopen() async throws {
+        let stores = try makeStores(backupCount: 10)
+        let root = host(stores)
         let document = try await settingsDocument(in: root)
-        try await capture(document, name: "snapshots-collapsed")
+        try await capture(document, name: "backups-collapsed")
         try await waitForRows(0, in: document)
-        try await assertCreationAvailable(in: document, label: companion.l.createSnapshotButton)
+        try await assertCreationAvailable(in: document)
         let collapsedHeight = document.bounds.height
 
-        try await toggleHistory(in: document, l: companion.l, expanded: false)
+        try await toggleHistory(in: document, expanded: false)
         try await waitForRows(10, in: document)
         XCTAssertGreaterThan(document.bounds.height, collapsedHeight + 200)
-        XCTAssertEqual(companion.availableSnapshots.count, 10)
-        try await capture(document, name: "snapshots-expanded")
-        try await assertCreationAvailable(in: document, label: companion.l.createSnapshotButton)
+        XCTAssertEqual(stores.digimon.backups.list().count, 10)
+        try await capture(document, name: "backups-expanded")
+        try await assertCreationAvailable(in: document)
 
-        try await toggleHistory(in: document, l: companion.l, expanded: true)
+        try await toggleHistory(in: document, expanded: true)
         try await waitForRows(0, in: document)
         XCTAssertEqual(document.bounds.height, collapsedHeight, accuracy: 2)
-        try await capture(document, name: "snapshots-collapsed-again")
+        try await capture(document, name: "backups-collapsed-again")
 
         // Reopening Settings starts a new visit, even after leaving its history expanded.
-        try await toggleHistory(in: document, l: companion.l, expanded: false)
+        try await toggleHistory(in: document, expanded: false)
         try await waitForRows(10, in: document)
         window?.close()
-        let reopened = host(companion, usage)
+        let reopened = host(stores)
         let reopenedDocument = try await settingsDocument(in: reopened)
         try await waitForRows(0, in: reopenedDocument)
-        try await assertCreationAvailable(in: reopenedDocument, label: companion.l.createSnapshotButton)
-        XCTAssertEqual(companion.availableSnapshots.count, 10)
-        try await capture(reopenedDocument, name: "snapshots-reopened")
+        try await assertCreationAvailable(in: reopenedDocument)
+        XCTAssertEqual(stores.digimon.backups.list().count, 10)
+        try await capture(reopenedDocument, name: "backups-reopened")
     }
 
-    func testEmptyHistoryIsDisclosedAndManualCreationRemainsAvailable() async throws {
-        let (companion, usage) = try makeStores(snapshotCount: 0)
-        let document = try await settingsDocument(in: host(companion, usage))
-        try await assertCreationAvailable(in: document, label: companion.l.createSnapshotButton)
+    func testEmptyHistoryIsDisclosedAndManualBackupRemainsAvailable() async throws {
+        let stores = try makeStores(backupCount: 0)
+        let document = try await settingsDocument(in: host(stores))
+        try await assertCreationAvailable(in: document)
         let collapsedWords = try await words(in: document)
-        XCTAssertFalse(collapsedWords.contains { $0.reads(companion.l.noSnapshotsYet) })
+        XCTAssertFalse(collapsedWords.contains { $0.reads(dt.noBackups) })
 
-        try await toggleHistory(in: document, l: companion.l, expanded: false)
-        try await waitForText(companion.l.noSnapshotsYet, in: document)
+        try await toggleHistory(in: document, expanded: false)
+        try await waitForText(dt.noBackups, in: document)
         try await waitForRows(0, in: document)
-        try await assertCreationAvailable(in: document, label: companion.l.createSnapshotButton)
-        try await capture(document, name: "snapshots-empty-expanded")
+        try await assertCreationAvailable(in: document)
+        try await capture(document, name: "backups-empty-expanded")
     }
 
-    private func makeStores(snapshotCount: Int) throws -> (CompanionStore, UsageStore) {
-        let suite = "SnapshotHistoryRendering-\(UUID())"
+    private struct Stores {
+        let digimon: DigimonStore
+        let usage: UsageStore
+        let language: AppLanguageStore
+    }
+
+    private func makeStores(backupCount: Int) throws -> Stores {
+        let suite = "BackupHistoryRendering-\(UUID())"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(suite, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -84,49 +87,36 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
             defaults.removePersistentDomain(forName: suite)
             try? FileManager.default.removeItem(at: directory)
         }
-        let file = directory.appendingPathComponent("companion-state.json")
+        let file = directory.appendingPathComponent("digimon-state.json")
         let now = Date(timeIntervalSince1970: 1_700_100_000)
-        var state = CompanionState()
-        state.language = .en
-        state.installBaselineSet = true
-        state.active = MonState(baseID: 1, pathIDs: [1], plannedPathIDs: [1], stageIndex: 0,
-                                usedAtStage: 0, rarity: .common, totalForms: 1)
-        for index in 0..<snapshotCount {
-            state.usedSinceInstall = 10_000 + index * 1_000
-            try SaveSnapshotManager.createSnapshot(state: state, for: file,
-                date: now.addingTimeInterval(Double(index - snapshotCount) * 3600),
-                appVersion: "sample", deviceName: "Sample data")
+        let backups = DigimonBackups(directory: directory.appendingPathComponent("digimon-backups"))
+        for index in 0..<backupCount {
+            try backups.write(DigimonSaveFile(
+                savedAt: now.addingTimeInterval(Double(index - backupCount) * 3600),
+                device: "Sample data", digimon: .newEgg(lineID: "agumon")))
         }
-        state.usedSinceInstall = 99_000
-        try JSONEncoder().encode(state).write(to: file)
-
-        // Sample screenshots use a generated geometric icon, never downloaded Pokémon artwork.
-        let image = NSImage(size: NSSize(width: 28, height: 28), flipped: false) { rect in
-            NSColor.systemBlue.setFill()
-            NSBezierPath(roundedRect: rect.insetBy(dx: 5, dy: 5), xRadius: 4, yRadius: 4).fill()
-            return true
+        // The newest backup is an hour old, so opening the store does not add one.
+        let digimon = DigimonStore(fileURL: file, clock: { now })
+        if backupCount == 0 {
+            // A store always backs up at launch; an empty list is what is left after the files go.
+            try FileManager.default.removeItem(at: digimon.backups.directory)
         }
-        let key = SpriteLoader.cacheDir.appendingPathComponent("1-s.png").path as NSString
-        let previous = SpriteLoader.imageCache.object(forKey: key)
-        SpriteLoader.imageCache.setObject(image, forKey: key)
-        addTeardownBlock { @MainActor in
-            if let previous { SpriteLoader.imageCache.setObject(previous, forKey: key) }
-            else { SpriteLoader.imageCache.removeObject(forKey: key) }
-        }
-        return (CompanionStore(provider: SnapshotHistoryOfflineProvider(), clock: { now },
-                               fileURL: file, defaults: defaults),
-                UsageStore(providers: [], autoRefresh: false, defaults: defaults))
+        return Stores(digimon: digimon,
+                      usage: UsageStore(providers: [], autoRefresh: false, defaults: defaults),
+                      language: AppLanguageStore(defaults: defaults, legacyStateURL: URL(fileURLWithPath: "/nonexistent"),
+                                                 systemDefault: .en))
     }
 
-    private func host(_ companion: CompanionStore, _ usage: UsageStore) -> NSView {
+    private func host(_ stores: Stores) -> NSView {
         _ = NSApplication.shared
         if previousKeyWindow == nil { previousKeyWindow = NSApp.keyWindow }
-        let host = NSHostingView(rootView: SettingsView(onClose: {}, onChooseRepresentative: {})
-            .environment(companion).environment(AppLanguageStore(defaults: UserDefaults(suiteName: "lang-\(UUID().uuidString)")!, legacyStateURL: URL(fileURLWithPath: "/nonexistent"), systemDefault: companion.language)).environment(usage).environment(UpdateChecker())
+        let host = NSHostingView(rootView: SettingsView(onClose: {})
+            .environment(stores.usage).environment(stores.language).environment(UpdateChecker())
+            .environment(stores.digimon)
             .environment(\.colorScheme, .light)
             .frame(width: PopoverMetrics.width))
         host.frame = NSRect(x: 0, y: 0, width: PopoverMetrics.width, height: 460)
-        let window = SnapshotHistoryTestWindow(
+        let window = BackupHistoryTestWindow(
             contentRect: NSRect(x: -10000, y: -10000, width: PopoverMetrics.width, height: 460),
             styleMask: .borderless, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
@@ -221,7 +211,7 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
             let rect = view.visibleRect.intersection(bounds)
             guard rect.width >= bounds.width - 0.5, rect.minY <= coveredY + 0.5,
                   rect.maxY > coveredY + 0.5 else {
-                XCTFail("Snapshot tile did not cover document: tile=\(rect), coveredY=\(coveredY), bounds=\(bounds)")
+                XCTFail("Backup tile did not cover document: tile=\(rect), coveredY=\(coveredY), bounds=\(bounds)")
                 throw URLError(.cannotParseResponse)
             }
             let tile = try XCTUnwrap(NSBitmapImageRep(
@@ -311,11 +301,11 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
                                          "strips": strips, "merged": result.map(\.diagnostic)]
             try JSONSerialization.data(withJSONObject: metadata, options: [.prettyPrinted, .sortedKeys])
                 .write(to: directory.appendingPathComponent("ocr-\(renderNumber).json"))
-            let wholeCount = whole.filter { $0.reads("Restore", exactly: true) }.count
-            let stripCount = result.filter { $0.reads("Restore", exactly: true) }.count
-            let wholeCreate = whole.contains { $0.reads("Create snapshot") }
-            let stripCreate = result.contains { $0.reads("Create snapshot") }
-            print("Snapshot OCR render=\(renderNumber) pixels=\(image.width)x\(image.height) wholeRestore=\(wholeCount) stripRestore=\(stripCount) wholeCreate=\(wholeCreate) stripCreate=\(stripCreate)")
+            let wholeCount = whole.filter { $0.reads(dt.restoreButton, exactly: true) }.count
+            let stripCount = result.filter { $0.reads(dt.restoreButton, exactly: true) }.count
+            let wholeCreate = whole.contains { $0.reads(dt.backupNowButton) }
+            let stripCreate = result.contains { $0.reads(dt.backupNowButton) }
+            print("Backup OCR render=\(renderNumber) pixels=\(image.width)x\(image.height) wholeRestore=\(wholeCount) stripRestore=\(stripCount) wholeCreate=\(wholeCreate) stripCreate=\(stripCreate)")
         }
         return result
     }
@@ -336,7 +326,7 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
         var actual = -1
         repeat {
             document.window?.contentView?.layoutSubtreeIfNeeded()
-            actual = try await words(in: document).filter { $0.reads("Restore", exactly: true) }.count
+            actual = try await words(in: document).filter { $0.reads(dt.restoreButton, exactly: true) }.count
             if actual == count {
                 try await Task.sleep(for: .milliseconds(300))
                 document.window?.contentView?.layoutSubtreeIfNeeded()
@@ -347,11 +337,11 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
         XCTFail("Expected \(count) restore rows, rendered \(actual)")
     }
 
-    private func assertCreationAvailable(in document: NSView, label: String) async throws {
-        _ = try await waitForText(label, in: document)
+    private func assertCreationAvailable(in document: NSView) async throws {
+        _ = try await waitForText(dt.backupNowButton, in: document)
     }
 
-    private func toggleHistory(in document: NSView, l: L, expanded: Bool) async throws {
+    private func toggleHistory(in document: NSView, expanded: Bool) async throws {
         let root = try XCTUnwrap(document.window?.contentView)
         let deadline = ContinuousClock.now + .seconds(5)
         var buttons = [NSButton]()
@@ -359,10 +349,10 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
             root.layoutSubtreeIfNeeded()
             buttons = descendants(root).compactMap { $0 as? NSButton }
             if let button = buttons.first(where: { $0.accessibilityIdentifier() == "snapshotHistory" }) {
-                XCTAssertEqual(button.title, l.snapshotsSectionTitle)
-                XCTAssertEqual(button.accessibilityLabel(), l.snapshotsSectionTitle)
+                XCTAssertEqual(button.title, dt.backupsTitle)
+                XCTAssertEqual(button.accessibilityLabel(), dt.backupsTitle)
                 XCTAssertEqual(button.accessibilityValue() as? String, l.snapshotHistoryState(expanded: expanded))
-                XCTAssertTrue(button.isEnabled, "Snapshot history must remain actionable")
+                XCTAssertTrue(button.isEnabled, "Backup history must remain actionable")
                 button.scrollToVisible(button.bounds)
                 button.performClick(nil)
                 try await Task.sleep(for: .milliseconds(200))
@@ -373,7 +363,7 @@ final class SnapshotHistoryRenderingTests: XCTestCase {
         let diagnostic = buttons.map {
             "title=\($0.title), label=\(String(describing: $0.accessibilityLabel())), identifier=\(String(describing: $0.accessibilityIdentifier()))"
         }.joined(separator: "\n")
-        XCTFail("Missing native snapshot history button: \(l.snapshotsSectionTitle)\n\(diagnostic)")
+        XCTFail("Missing native backup history button: \(dt.backupsTitle)\n\(diagnostic)")
         throw URLError(.cannotParseResponse)
     }
 

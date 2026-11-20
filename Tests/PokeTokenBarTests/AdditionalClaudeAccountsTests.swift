@@ -835,9 +835,9 @@ final class AdditionalClaudeAccountsStoreTests: XCTestCase {
         XCTAssertEqual(byKey["claude.\(workKey).sevenDay"]?.kind, .weekly)
     }
 
-    /// Candy is decided per window key: each account's full gauge pays once, and a folder removed
-    /// then added back at 100% does not pay again, because its key is the folder's path hash.
-    func testCandyIsGrantedPerAccountAndNotAgainAfterReAddingAFolder() async {
+    /// Care mistakes are counted per window key: each account's full gauge counts once, and a folder
+    /// removed then added back at 100% does not count again, because its key is the folder's path hash.
+    func testCareMistakesCountPerAccountAndNotAgainAfterReAddingAFolder() async {
         let primary = ScriptedLimits([.success(fullStatus(fiveHour: 100, sevenDay: 10, email: "me@corp.example"))])
         let store = makeStore(primary: primary, folders: [
             work: ScriptedLimits([.success(fullStatus(fiveHour: 99, sevenDay: 99, email: "me@example.com")),
@@ -845,24 +845,14 @@ final class AdditionalClaudeAccountsStoreTests: XCTestCase {
         ])
         await store.refresh(scheduleEmptyRetry: false)
         await store.refresh(scheduleEmptyRetry: false)
-        var tiers: [String: Int] = [:]
-        var epochs: [String: String] = [:]
+        var watch = DigimonLimitWatch()
+        XCTAssertEqual(watch.observe([], limitsReady: true), 0, "the first look only seeds")
 
-        let grants = CompanionStore.evaluateCandyGrants(
-            windows: store.candyEligibleWindows,
-            grantTier: &tiers,
-            windowEpoch: &epochs)
-        XCTAssertEqual(grants.map(\.count).reduce(0, +), 1 + 1 + RareCandy.weeklyGrant)
-
+        XCTAssertEqual(watch.observe(store.candyEligibleWindows, limitsReady: true), 3,
+                       "the default 5-hour window and both windows of the other account")
         let defaultOnly = store.candyEligibleWindows.filter { !$0.key.contains(workKey) }
-        XCTAssertTrue(CompanionStore.evaluateCandyGrants(
-            windows: defaultOnly,
-            grantTier: &tiers,
-            windowEpoch: &epochs).isEmpty)
-        XCTAssertTrue(CompanionStore.evaluateCandyGrants(
-            windows: store.candyEligibleWindows,
-            grantTier: &tiers,
-            windowEpoch: &epochs).isEmpty)
+        XCTAssertEqual(watch.observe(defaultOnly, limitsReady: true), 0)
+        XCTAssertEqual(watch.observe(store.candyEligibleWindows, limitsReady: true), 0)
     }
 
     /// The first-run seed only covers the windows known at first launch: an account found later
@@ -928,29 +918,6 @@ final class AdditionalClaudeAccountsStoreTests: XCTestCase {
         XCTAssertEqual(alerts.map(\.account), ["Corp", nil])
         XCTAssertEqual(alerts.map { $0.body(L(.en)) }, ["Claude 5-hour session at 96% · Corp", "Codex 5h at 85%"])
         XCTAssertEqual(alerts[0].body(L(.en), withAccount: false), "Claude 5-hour session at 96%")
-    }
-
-    /// The floating pet bubble cuts its text at two lines: a long account name must never cost the percentage.
-    @MainActor
-    func testTheBubbleDropsAnAccountThatDoesNotFit() {
-        for lang in AppLanguage.allCases {
-            let l = L(lang)
-            for window in [l.claudeFiveHour, l.claudeWeekly, "Claude \(l.claudeLimitEntry(kind: "weekly_scoped", model: "Opus"))"] {
-                for account in ["Corp", "firstname.lastname@corp.example"] {
-                    let alert = UsageStore.LimitAlert(key: "k", window: window, isCritical: true, utilization: 96, account: account)
-                    let body = FloatingPetController.bubbleBody(for: alert, title: l.notifCritical, l: l)
-                    XCTAssertFalse(FloatingPetController.measureSpeechBubbleLayout(title: l.notifCritical, body: body).wouldTruncate,
-                                   "\(lang.rawValue): \(body)")
-                    XCTAssertTrue(body.contains(TokenFormatter.percent(96)))
-                }
-            }
-        }
-        let l = L(.en)
-        let short = UsageStore.LimitAlert(key: "k", window: l.claudeWeekly, isCritical: false, utilization: 85, account: "Corp")
-        XCTAssertEqual(FloatingPetController.bubbleBody(for: short, title: l.notifWarning, l: l), "Claude weekly at 85% · Corp")
-        let long = UsageStore.LimitAlert(key: "k", window: l.claudeFiveHour, isCritical: true, utilization: 96,
-                                         account: "firstname.lastname@corp.example")
-        XCTAssertEqual(FloatingPetController.bubbleBody(for: long, title: l.notifCritical, l: l), "Claude 5-hour session at 96%")
     }
 
     func testLimitsAreReadyWithOnlyAnAdditionalAccount() async {
@@ -1324,13 +1291,10 @@ final class ClaudeTrackedAccountStoreTests: XCTestCase {
         XCTAssertEqual(store.trackedClaudeAccount?.id, personalKey)
         XCTAssertEqual(store.menuLines, ["Claude 61%"])
         XCTAssertEqual(store.menuToolTip, "Tracked Claude account: me@example.com")
-        XCTAssertFalse(store.isLimitWarning, "the exhausted default account is not the one in use")
-        XCTAssertEqual(try XCTUnwrap(store.highestLimitUtilization), 61, accuracy: 0.01)
 
         store.claudeTrackedAccountMode = .defaultAccount
         XCTAssertEqual(store.menuLines, ["Claude 100%"])
         XCTAssertEqual(store.menuToolTip, "Tracked Claude account: Corp")
-        XCTAssertTrue(store.isLimitWarning)
         XCTAssertEqual(store.fiveHourForecast?.beforeReset, nil, "no reset date, no forecast")
         XCTAssertEqual(testDefaults.string(forKey: ClaudeTrackedAccountMode.defaultsKey), "default")
     }

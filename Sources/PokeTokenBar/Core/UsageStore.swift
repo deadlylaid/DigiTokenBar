@@ -3,11 +3,6 @@ import Foundation
 import Observation
 import UserNotifications
 
-/// burn rate 단계 — companion 표시 상태(작업/집중) 판정에 사용.
-enum BurnTier: Sendable {
-    case idle, normal, fast, blazing
-}
-
 @MainActor
 @Observable
 final class UsageStore {
@@ -69,11 +64,6 @@ final class UsageStore {
     func lastErrorMessage(_ l: L) -> String? {
         lastErrorDescription.map { l.usageRefreshError + "\n" + $0 }
     }
-
-    // MARK: Bubble Alert State
-    /// Transient speech-bubble payload for the floating pet. Cleared after the TTL.
-    private(set) var currentBubbleAlert: LimitAlert?
-    private var currentBubbleDate: Date = .distantPast
 
     // MARK: 설정 (UserDefaults)
 
@@ -179,18 +169,6 @@ final class UsageStore {
     var floatingPetEnabled: Bool {
         didSet { defaults.set(floatingPetEnabled, forKey: "floatingPetEnabled") }
     }
-    /// Always show the companion's back sprite, regardless of usage. A display preference only. Default off.
-    var alwaysFacesBack: Bool {
-        didSet { defaults.set(alwaysFacesBack, forKey: "alwaysFacesBack") }
-    }
-    /// 플로팅 펫 스프라이트 한 변 크기(pt).
-    var floatingPetSize: Double {
-        didSet { defaults.set(floatingPetSize, forKey: "floatingPetSize") }
-    }
-    /// Show limit alerts as speech bubbles on the floating pet. Default on; independent of Notification Center.
-    var floatingPetBubbleAlerts: Bool {
-        didSet { defaults.set(floatingPetBubbleAlerts, forKey: "floatingPetBubbleAlerts") }
-    }
     /// Let coding agents drive the floating pet through `poketokenbar://agent` URLs. Default on —
     /// nothing happens until the user wires an agent hook.
     var floatingPetAgentActivity: Bool {
@@ -222,9 +200,9 @@ final class UsageStore {
         ("수동", 0), ("1분", 60), ("2분", 120), ("5분", 300), ("15분", 900),
     ]
 
-    /// 앱 언어 미러(알림 현지화용). 단일 소스는 CompanionStore.language —
+    /// 앱 언어 미러(알림 현지화용). 단일 소스는 AppLanguageStore.language —
     /// 설정 변경/기동 시 동기화한다.
-    var localizationLanguage: AppLanguage = .systemDefault   // companion.language 로 재시드 전까지의 기본(실행순서 무관 안전)
+    var localizationLanguage: AppLanguage = .systemDefault   // AppLanguageStore 로 재시드 전까지의 기본(실행순서 무관 안전)
 
     private let providers: [any UsageProvider]
 
@@ -313,9 +291,9 @@ final class UsageStore {
     /// 갱신마다 재알림되던 회귀 원인 제거).
     private var notifiedTier: [String: Int] = [:]
 
-    /// 매 refresh 완료(한도 로드 후) 시 호출 — companion 갱신·사탕 지급을 한도가 신선한 시점에 묶는다.
-    /// observeStore(menuTitle)만으론 showLimitInMenu=false 일 때 한도 변경이 companion 에 전달 안 됨
-    /// (menuTitle 미변경) → 지급은 이 훅으로 확실히 트리거한다. AppDelegate 가 설정.
+    /// 매 refresh 완료(한도 로드 후) 시 호출 — 디지몬 갱신·돌봄 실수 판정을 한도가 신선한 시점에 묶는다.
+    /// observeStore(menuTitle)만으론 showLimitInMenu=false 일 때 한도 변경이 디지몬에 전달 안 됨
+    /// (menuTitle 미변경) → 판정은 이 훅으로 확실히 트리거한다. AppDelegate 가 설정.
     var onRefresh: (@MainActor () -> Void)?
 
     // MARK: 파생값
@@ -678,11 +656,6 @@ final class UsageStore {
         snapshots.first { $0.providerID == "claude_code" }?.activeBlock
     }
 
-    /// 전 프로바이더 활성 블록의 합산 burn (tokens/min) — companion 리듬 판정용.
-    private var combinedBurnPerMinute: Double {
-        snapshots.compactMap { $0.activeBlock?.tokensPerMinute }.reduce(0, +)
-    }
-
     // MARK: 한도 소진 예측
 
     struct FiveHourForecast {
@@ -721,58 +694,10 @@ final class UsageStore {
         return now.addingTimeInterval(minutesLeft * 60)
     }
 
-    /// 메뉴바 경고 상태 — 임계 초과 또는 리셋 전 한도 도달 예측.
-    /// Claude 는 5h 만이 아니라 팝오버가 표시하는 모든 한도 창(주간·모델별 주간 포함)의 위험선을
-    /// 검사한다 — 5h 는 여유롭지만 주간이 100% 인 경우에도 경고/‘지침’ 상태가 뜨도록(누락 수정).
-    var isLimitWarning: Bool {
-        for u in trackedClaudeAccount?.status.allUtilizations ?? [] where u >= critThreshold { return true }
-        for bucket in codexLimits?.visibleSnapshots ?? [] {
-            if let utilization = bucket.primary?.usedPercent,
-               Double(utilization) >= critThreshold { return true }
-            if let utilization = bucket.secondary?.usedPercent,
-               Double(utilization) >= critThreshold { return true }
-            if let utilization = bucket.individualLimit?.usedPercent,
-               Double(utilization) >= critThreshold { return true }
-        }
-        for group in antigravityLimits?.groups ?? [] {
-            for bucket in group.buckets {
-                if bucket.usedPercent >= critThreshold { return true }
-            }
-        }
-        if let forecast = fiveHourForecast, forecast.beforeReset { return true }
-        return false
-    }
-
-    /// Highest official-limit utilization across providers **used today** (compact surfaces only).
-    /// Excludes Codex personal/spend limits (dollars). Renamed from `highestBurnPercent` —
-    /// `burn` means token rate elsewhere in this codebase.
-    var highestLimitUtilization: Double? {
-        let usedToday = Set(snapshots.filter { $0.todayTotalTokens > 0 }.map(\.providerID))
-        var utils: [Double] = []
-        if usedToday.contains("claude_code") {
-            utils.append(contentsOf: trackedClaudeAccount?.status.allUtilizations ?? [])
-        }
-        if usedToday.contains("codex") {
-            for bucket in codexLimits?.visibleSnapshots ?? [] {
-                if let u = bucket.primary?.usedPercent { utils.append(Double(u)) }
-                if let u = bucket.secondary?.usedPercent { utils.append(Double(u)) }
-                // individualLimit is a $ spend cap — intentionally omitted (candyEligibleWindows parity).
-            }
-        }
-        if usedToday.contains("antigravity") {
-            for group in antigravityLimits?.groups ?? [] {
-                for bucket in group.buckets {
-                    utils.append(bucket.usedPercent)
-                }
-            }
-        }
-        return utils.max()
-    }
-
-    /// 사탕 지급 대상 한도 창 — 세션급(≈5h)=1개, 주간급=5개, 전 프로바이더. 공식 한도 신호가 없는
-    /// 프로바이더(Gemini·OpenCode·Hermes·Cursor·Grok)는 자연히 빠진다(창 목록에 없음).
-    /// 지급 제외: Opus/Sonnet 주간·scoped·Codex 개인 spend
-    /// limit(헤드라인 창의 하위/중복 → 이중지급 방지). 알림(checkLimitAlerts)보다 좁은 지급 전용.
+    /// 돌봄 실수·디지몬 기분 판정 대상 한도 창(이름은 업스트림 사탕 지급에서 왔다) — 세션급(≈5h)·주간급,
+    /// 전 프로바이더. 공식 한도 신호가 없는 프로바이더(Gemini·OpenCode·Hermes·Cursor·Grok)는 자연히
+    /// 빠진다(창 목록에 없음). 제외: Opus/Sonnet 주간·scoped·Codex 개인 spend limit(헤드라인 창의
+    /// 하위/중복 → 이중 계산 방지). 알림(checkLimitAlerts)보다 좁다.
     var candyEligibleWindows: [CandyWindow] {
         let l = L(localizationLanguage)
         var windows: [CandyWindow] = []
@@ -867,20 +792,10 @@ final class UsageStore {
         return .session
     }
 
-    /// 한도 데이터가 최소 1개 프로바이더 로드됐는가 — 사탕 첫 실행 시드 게이트(미로딩 중 시드 방지).
+    /// 한도 데이터가 최소 1개 프로바이더 로드됐는가 — 돌봄 실수 첫 관찰 시드 게이트(미로딩 중 시드 방지).
     var limitsReady: Bool {
         limits != nil || !additionalLimits.isEmpty || codexLimits != nil || antigravityLimits != nil || cursorLimits != nil
             || openCodeGoLimits != nil || grokLimits != nil
-    }
-
-    /// burn rate 티어 — companion 표시 상태(idle/working/focus) 판정에 사용.
-    /// 전 프로바이더 합산 — Codex/Gemini 전용 사용자도 코딩 리듬이 반영된다.
-    var burnTier: BurnTier {
-        let burn = combinedBurnPerMinute
-        guard burn > 1_000 else { return .idle }
-        if burn < 100_000 { return .normal }
-        if burn < 400_000 { return .fast }
-        return .blazing
     }
 
     var isStale: Bool {
@@ -966,9 +881,6 @@ final class UsageStore {
         updateNotificationsEnabled = d.object(forKey: "updateNotificationsEnabled") as? Bool ?? true
         statusChecksEnabled = d.object(forKey: "statusChecksEnabled") as? Bool ?? true
         floatingPetEnabled = d.object(forKey: "floatingPetEnabled") as? Bool ?? false
-        alwaysFacesBack = d.object(forKey: "alwaysFacesBack") as? Bool ?? false
-        floatingPetSize = d.object(forKey: "floatingPetSize") as? Double ?? 96
-        floatingPetBubbleAlerts = d.object(forKey: "floatingPetBubbleAlerts") as? Bool ?? true
         floatingPetAgentActivity = d.object(forKey: "floatingPetAgentActivity") as? Bool ?? true
         // 기본 powerSaver — 이 설정이 생기기 전의 고정 캡(0.4s)과 같은 프레임 레이트라, 기존
         // 사용자의 배터리 프로파일은 그대로다. 더 부드러운 쪽은 opt-in(실측 idle CPU 1.8%/5.1%).
@@ -1305,7 +1217,7 @@ final class UsageStore {
         let summary = snapshots.map { "\($0.providerID):\($0.today?.date ?? "nil")=\($0.todayTotalTokens)" }
             .joined(separator: ", ")
         AppLog.write("refresh done [\(summary)]")
-        onRefresh?()   // 한도 로드 후 companion 갱신·사탕 지급(신선한 한도 시점)
+        onRefresh?()   // 한도 로드 후 디지몬 갱신·돌봄 실수 판정(신선한 한도 시점)
     }
 
     private func handleEmptyUsageRetry(schedule: Bool, hasErrors: Bool) {
@@ -1376,7 +1288,7 @@ final class UsageStore {
     var claudeTrackedAccountMode: ClaudeTrackedAccountMode {
         didSet {
             defaults.set(claudeTrackedAccountMode.storedValue, forKey: ClaudeTrackedAccountMode.defaultsKey)
-            onRefresh?()   // the companion mood follows the tracked account's warning state
+            onRefresh?()   // the menu bar limit follows the tracked account
         }
     }
 
@@ -1391,8 +1303,7 @@ final class UsageStore {
     /// Each account's own active 5h block, for its tab and forecast.
     private var claudeAccountBlocks: [String: BlockUsage] = [:]
 
-    /// The account behind the menu bar percentage, warning state, companion mood, floating pet hover
-    /// and 5h forecast. With a single account this is that account, whatever the mode.
+    /// The account behind the menu bar percentage and 5h forecast. With a single account this is that account, whatever the mode.
     var trackedClaudeAccount: ClaudeAccountLimits? {
         Self.trackedAccount(among: claudeAccounts, mode: claudeTrackedAccountMode, activity: claudeAccountActivity)
     }
@@ -2148,22 +2059,7 @@ final class UsageStore {
         return alerts
     }
 
-    /// Pick the single bubble to show for a refresh: critical > warn, then highest utilization.
-    /// Pure — separate from AppKit presentation (issue #109 testing requirement).
-    static func bubbleAlert(from alerts: [LimitAlert]) -> LimitAlert? {
-        alerts.max { a, b in
-            if a.isCritical != b.isCritical { return !a.isCritical && b.isCritical }
-            return a.utilization < b.utilization
-        }
-    }
-
-    /// Whether a bubble shown at `shownAt` should clear by `now` (default TTL 6s). Pure time check.
-    static func shouldDismissBubble(shownAt: Date, now: Date, ttl: TimeInterval = 6) -> Bool {
-        now.timeIntervalSince(shownAt) >= ttl
-    }
-
-    /// Shared limit-alert pipeline: evaluate once, advance tiers once, then fan out to
-    /// Notification Center and/or the floating-pet bubble under independent gates.
+    /// Shared limit-alert pipeline: evaluate once, advance tiers once, then post to Notification Center.
     private func checkLimitAlerts() {
         let (windows, accounts) = buildLimitWindows()
         let alerts = Self.evaluateLimitAlerts(
@@ -2172,9 +2068,6 @@ final class UsageStore {
 
         if limitNotifications, AppEnv.isBundledApp {
             postLimitNotifications(alerts)
-        }
-        if floatingPetEnabled, floatingPetBubbleAlerts {
-            showBubble(Self.bubbleAlert(from: alerts))
         }
     }
 
@@ -2257,19 +2150,6 @@ final class UsageStore {
                 UNNotificationRequest(
                     identifier: "\(alert.key)-\(alert.isCritical ? "critical" : "warning")",
                     content: content, trigger: nil))
-        }
-    }
-
-    private func showBubble(_ alert: LimitAlert?) {
-        guard let alert else { return }
-        let now = Date()
-        currentBubbleAlert = alert
-        currentBubbleDate = now
-        Task {
-            try? await Task.sleep(nanoseconds: UInt64(6 * 1_000_000_000))
-            if Self.shouldDismissBubble(shownAt: now, now: Date()), self.currentBubbleDate == now {
-                self.currentBubbleAlert = nil
-            }
         }
     }
 

@@ -551,7 +551,7 @@ enum AntigravityProto {
     ///   sentinel.
     /// - **What happens above it.** That one clamps to the ceiling; this one discards the
     ///   counter. Both avoid the trap. Clamping keeps a number that then dominates every
-    ///   aggregate it reaches — today's total, the burn tier, the companion — while discarding
+    ///   aggregate it reaches — today's total, the Digimon's growth — while discarding
     ///   loses that one counter and leaves the rest of the record intact.
     static let tokenCeiling: UInt64 = 1_000_000_000
 

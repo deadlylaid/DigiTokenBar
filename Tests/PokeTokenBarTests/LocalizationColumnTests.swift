@@ -29,7 +29,7 @@ final class LocalizationColumnTests: XCTestCase {
                 }
             }
         }
-        XCTAssertGreaterThan(calls, 300, "the scanner must actually find the t(...) calls")
+        XCTAssertGreaterThan(calls, 200, "the scanner must actually find the t(...) calls")
         XCTAssertEqual(offenders, [])
     }
 

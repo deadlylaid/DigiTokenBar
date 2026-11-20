@@ -209,7 +209,7 @@ enum ClaudeAccountRoots {
 }
 
 /// Which Claude account drives the single-account surfaces when several are shown:
-/// menu bar percentage, warning state (and the companion's tired mood), floating pet hover, 5h forecast.
+/// menu bar percentage and 5h forecast.
 enum ClaudeTrackedAccountMode: Equatable, Sendable, Hashable {
     /// The account that received the latest prompt.
     case automatic

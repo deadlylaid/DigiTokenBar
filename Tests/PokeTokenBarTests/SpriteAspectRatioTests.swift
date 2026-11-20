@@ -4,41 +4,35 @@ import AppKit
 
 // Sprites must keep their source aspect ratio in every frame that draws them.
 //
-// Root cause of the regression this guards: both render paths forced the sprite into a *square*
-// box — `SpriteView` used `.resizable().frame(width: size, height: size)` with no aspect mode, and
-// `menuBarImage` drew into `NSRect(width: h - 2, height: h - 2)`. Stretching to fill a square is
-// only invisible when the source is already square, and every *static* asset is: PokeAPI species
-// PNGs are 96×96, item PNGs are 30×30. The Gen-V animated GIFs are not — their canvases are cropped
-// per species (Spoink #325 is 36×66, Pikachu #25 is 50×46, Gengar #143 is 74×75) — so the defect
-// only ever surfaced on the animated path, which is exactly the path no test measured.
-//
-// These cases pin the geometry rather than the pixels: `fittedSize` is the single source of truth
-// both call sites now go through, so one guard covers the popover and the menu bar together.
+// The regression this guards: the sprite was forced into a *square* box. Stretching to fill a square
+// is only invisible when the source is already square, so the defect only showed on non-square
+// canvases, which no test measured. These cases pin the geometry rather than the pixels:
+// `SpriteFit` is the single formula the menu bar goes through.
 final class SpriteAspectRatioTests: XCTestCase {
 
-    /// Real canvas sizes, straight off the PokeAPI sprite sheets these views load.
-    private static let spoinkGIF = CGSize(width: 36, height: 66)    // tall — worst distortion
-    private static let pikachuGIF = CGSize(width: 50, height: 46)   // wide
-    private static let gengarGIF = CGSize(width: 74, height: 75)    // near-square
+    /// Real canvas sizes of non-square animated sprites, plus the square static case.
+    private static let tallGIF = CGSize(width: 36, height: 66)    // tall — worst distortion
+    private static let wideGIF = CGSize(width: 50, height: 46)   // wide
+    private static let nearSquareGIF = CGSize(width: 74, height: 75)    // near-square
     private static let staticPNG = CGSize(width: 96, height: 96)    // square — the silent case
-    private static let swannaGIF = CGSize(width: 137, height: 69)   // wings spread — very wide
-    private static let tynamoGIF = CGSize(width: 57, height: 19)    // widest ratio
+    private static let veryWideGIF = CGSize(width: 137, height: 69)   // wings spread — very wide
+    private static let widestGIF = CGSize(width: 57, height: 19)    // widest ratio
 
     // MARK: Aspect fit
 
     /// The trigger, stated as the property that used to fail: a non-square source must not come out
     /// square. Without this, the assertions below could all pass on a source that was square anyway.
     func testNonSquareSpriteDoesNotRenderSquare() {
-        let fit = SpriteFit.size(for: Self.spoinkGIF, box: 84)
+        let fit = SpriteFit.size(for: Self.tallGIF, width: 84, height: 84)
         XCTAssertNotEqual(fit.width, fit.height, accuracy: 0.01,
                           "a 36×66 sprite rendered square is the defect — it is 1.83× too wide")
     }
 
     /// Source ratio is preserved exactly, for tall, wide and near-square canvases alike.
     func testFittedSizePreservesSourceAspectRatio() {
-        for source in [Self.spoinkGIF, Self.pikachuGIF, Self.gengarGIF, Self.staticPNG] {
+        for source in [Self.tallGIF, Self.wideGIF, Self.nearSquareGIF, Self.staticPNG] {
             for box in [22.0, 40.0, 76.0, 84.0, 96.0] as [CGFloat] {
-                let fit = SpriteFit.size(for: source, box: box)
+                let fit = SpriteFit.size(for: source, width: box, height: box)
                 XCTAssertEqual(fit.width / fit.height, source.width / source.height, accuracy: 0.001,
                                "source=\(source) box=\(box)")
             }
@@ -47,8 +41,8 @@ final class SpriteAspectRatioTests: XCTestCase {
 
     /// Fit, not fill — the sprite stays inside the box on both axes and touches the longer one.
     func testFittedSizeFillsTheBoxOnItsLongerAxisAndNeverOverflows() {
-        for source in [Self.spoinkGIF, Self.pikachuGIF, Self.gengarGIF, Self.staticPNG] {
-            let fit = SpriteFit.size(for: source, box: 84)
+        for source in [Self.tallGIF, Self.wideGIF, Self.nearSquareGIF, Self.staticPNG] {
+            let fit = SpriteFit.size(for: source, width: 84, height: 84)
             XCTAssertLessThanOrEqual(fit.width, 84.001, "source=\(source)")
             XCTAssertLessThanOrEqual(fit.height, 84.001, "source=\(source)")
             XCTAssertEqual(max(fit.width, fit.height), 84, accuracy: 0.001,
@@ -56,9 +50,9 @@ final class SpriteAspectRatioTests: XCTestCase {
         }
     }
 
-    /// Square sources must be untouched, so the static popover/dex/item art does not shift.
+    /// Square sources must be untouched, so square art does not shift.
     func testSquareSourceStillFillsTheSquareBox() {
-        let fit = SpriteFit.size(for: Self.staticPNG, box: 84)
+        let fit = SpriteFit.size(for: Self.staticPNG, width: 84, height: 84)
         XCTAssertEqual(fit.width, 84, accuracy: 0.001)
         XCTAssertEqual(fit.height, 84, accuracy: 0.001)
     }
@@ -66,7 +60,7 @@ final class SpriteAspectRatioTests: XCTestCase {
     /// A zero/empty source (undecodable image) falls back to the box instead of dividing by zero.
     func testDegenerateSourceFallsBackToBoxWithoutDividingByZero() {
         for bad in [CGSize.zero, CGSize(width: 0, height: 66), CGSize(width: 36, height: 0)] {
-            let fit = SpriteFit.size(for: bad, box: 22)
+            let fit = SpriteFit.size(for: bad, width: 22, height: 22)
             XCTAssertEqual(fit.width, 22, accuracy: 0.001, "source=\(bad)")
             XCTAssertEqual(fit.height, 22, accuracy: 0.001, "source=\(bad)")
         }
@@ -78,31 +72,31 @@ final class SpriteAspectRatioTests: XCTestCase {
     /// per side). A fixed 22×22 canvas would pad a tall sprite with dead space that pushes the usage
     /// number away from it.
     func testMenuBarCanvasTracksFittedWidthAndKeepsFixedHeight() {
-        let tall = AppDelegate.menuBarLayout(for: Self.spoinkGIF, up: false)
+        let tall = AppDelegate.menuBarLayout(for: Self.tallGIF, up: false)
         XCTAssertEqual(tall.canvas.height, 22, accuracy: 0.001)
         XCTAssertEqual(tall.rect.height, 20, accuracy: 0.001, "tall sprite fills the 20pt content box")
         XCTAssertEqual(tall.rect.width, 20 * (36.0 / 66.0), accuracy: 0.001)
         XCTAssertEqual(tall.canvas.width, tall.rect.width + 2, accuracy: 0.001)
         XCTAssertLessThan(tall.canvas.width, 22, "a 36×66 sprite must not claim the full square width")
 
-        let wide = AppDelegate.menuBarLayout(for: Self.pikachuGIF, up: false)
+        let wide = AppDelegate.menuBarLayout(for: Self.wideGIF, up: false)
         XCTAssertEqual(wide.rect.height, 20, accuracy: 0.001, "wide sprite fills the 20pt height too")
         XCTAssertEqual(wide.rect.width, 20 * (50.0 / 46.0), accuracy: 0.001)
         XCTAssertEqual(wide.canvas.width, wide.rect.width + 2, accuracy: 0.001)
         XCTAssertEqual(wide.canvas.height, 22, accuracy: 0.001, "height is fixed so the baseline cannot jitter")
     }
 
-    /// The trigger: a wide canvas sized by a 20pt square comes out half height (Swanna 10pt tall).
+    /// The trigger: a wide canvas sized by a 20pt square comes out half height (the very wide one is 10pt tall).
     /// It must fill the height and only give way once it reaches the width cap.
     func testWideSpriteFillsMenuBarHeightUntilTheWidthCap() {
         let cap = AppDelegate.menuBarSpriteMaxWidth
-        let swanna = AppDelegate.menuBarLayout(for: Self.swannaGIF, up: false)
+        let swanna = AppDelegate.menuBarLayout(for: Self.veryWideGIF, up: false)
         XCTAssertGreaterThan(swanna.rect.height, 15,
                              "137×69 fitted to a 20pt square is 10pt tall — the defect")
         XCTAssertEqual(swanna.rect.width, min(cap, 20 * (137.0 / 69.0)), accuracy: 0.001)
         XCTAssertEqual(swanna.rect.width / swanna.rect.height, 137.0 / 69.0, accuracy: 0.001)
 
-        let tynamo = AppDelegate.menuBarLayout(for: Self.tynamoGIF, up: false)
+        let tynamo = AppDelegate.menuBarLayout(for: Self.widestGIF, up: false)
         XCTAssertEqual(tynamo.rect.width, cap, accuracy: 0.001, "the widest ratio stops at the cap")
         XCTAssertEqual(tynamo.rect.height, cap * (19.0 / 57.0), accuracy: 0.001)
         XCTAssertEqual(tynamo.canvas.width, cap + 2, accuracy: 0.001)
@@ -118,7 +112,7 @@ final class SpriteAspectRatioTests: XCTestCase {
 
     /// The bob offset still lifts the sprite by 1pt, and the sprite stays inside the canvas.
     func testBobOffsetLiftsSpriteAndStaysInsideCanvas() {
-        for source in [Self.spoinkGIF, Self.pikachuGIF, Self.staticPNG, Self.swannaGIF, Self.tynamoGIF] {
+        for source in [Self.tallGIF, Self.wideGIF, Self.staticPNG, Self.veryWideGIF, Self.widestGIF] {
             let down = AppDelegate.menuBarLayout(for: source, up: false)
             let up = AppDelegate.menuBarLayout(for: source, up: true)
             XCTAssertEqual(up.rect.minY - down.rect.minY, 1, accuracy: 0.001, "source=\(source)")
@@ -134,9 +128,9 @@ final class SpriteAspectRatioTests: XCTestCase {
     /// canvas. Guards against the layout being computed correctly but ignored by the draw call.
     @MainActor
     func testComposedMenuBarImageUsesFittedCanvas() {
-        let sprite = Self.solidImage(size: Self.spoinkGIF)
+        let sprite = Self.solidImage(size: Self.tallGIF)
         let composed = AppDelegate.menuBarImage(from: sprite, up: false)
-        let expected = AppDelegate.menuBarLayout(for: Self.spoinkGIF, up: false).canvas
+        let expected = AppDelegate.menuBarLayout(for: Self.tallGIF, up: false).canvas
         XCTAssertEqual(composed.size.width, expected.width, accuracy: 0.001)
         XCTAssertEqual(composed.size.height, expected.height, accuracy: 0.001)
     }
@@ -147,7 +141,7 @@ final class SpriteAspectRatioTests: XCTestCase {
     /// animation still looks correct, so nothing but this test would catch it.
     @MainActor
     func testMenuBarFramesConvertToLayerBitmaps() {
-        for source in [Self.spoinkGIF, Self.pikachuGIF, Self.staticPNG] {
+        for source in [Self.tallGIF, Self.wideGIF, Self.staticPNG] {
             for up in [false, true] {
                 let composed = AppDelegate.menuBarImage(from: Self.solidImage(size: source), up: up)
                 guard let bitmap = AppDelegate.cgFrame(from: composed) else {
@@ -172,16 +166,6 @@ final class SpriteAspectRatioTests: XCTestCase {
         XCTAssertEqual(AppDelegate.spriteContentsScale(pixelWidth: 22, pointWidth: 22), 1, accuracy: 0.001)
         // A zero-width canvas must not yield 0 (a 0 scale makes the layer vanish) or divide by zero.
         XCTAssertEqual(AppDelegate.spriteContentsScale(pixelWidth: 0, pointWidth: 0), 1, accuracy: 0.001)
-    }
-
-    /// `SpriteView` sizes its image through the same helper, so the popover header, evolution line
-    /// and dex thumbnails cannot drift from the menu bar.
-    @MainActor
-    func testSpriteViewImageSizeMatchesFittedSize() {
-        let rendered = SpriteView.imageSize(for: Self.solidImage(size: Self.spoinkGIF), box: 76)
-        XCTAssertEqual(rendered.width, SpriteFit.size(for: Self.spoinkGIF, box: 76).width, accuracy: 0.001)
-        XCTAssertEqual(rendered.height, 76, accuracy: 0.001)
-        XCTAssertLessThan(rendered.width, 76, "a tall sprite must be narrower than its square slot")
     }
 
     private static func solidImage(size: CGSize) -> NSImage {

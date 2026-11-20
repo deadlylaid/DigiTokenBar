@@ -3,11 +3,12 @@ import Foundation
 /// A usage limit window: the 5-hour session or the weekly one.
 enum WindowClass: Sendable { case session, weekly }
 
-/// 사탕 지급 판정 입력 — 프로바이더 무관 한도 창 1개. (UsageStore.candyEligibleWindows 가 생성)
+/// 돌봄 실수·디지몬 기분 판정 입력 — 프로바이더 무관 한도 창 1개. (UsageStore.candyEligibleWindows 가 생성;
+/// 이름은 업스트림 사탕 지급에서 왔다)
 struct CandyWindow: Sendable {
     let key: String          // 안정 식별자(tier 추적) — resets_at 등 휘발 필드는 key 에 넣지 않는다
-    let name: String         // 표시용(알림 "왜 받는지")
-    let kind: WindowClass    // session=1개 · weekly=5개
+    let name: String         // 표시용 창 이름
+    let kind: WindowClass    // 세션(5시간) / 주간 — 새 창(epoch) 판정 기준이 다르다
     let utilization: Double  // 0~100+
     /// 창 epoch (`resets_at` / reset unix). key 는 안정, epoch 가 바뀌면 새 창 → 재무장(#326).
     /// nil 이면 100% 미만 관측으로만 재무장한다(Codex — credits 로 100% 를 넘겨 쓴다).

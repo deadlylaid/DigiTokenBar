@@ -78,7 +78,7 @@ struct BlockUsage: Decodable, Sendable {
     var costUSD: Double
     var costCoverage: CostCoverage = .source
     var usageCost: UsageCost { UsageCost(amount: costUSD, coverage: costCoverage) }
-    /// ccusage blocks 의 burnRate.tokensPerMinute — 한도 소진 예측과 companion 표시 상태에 사용
+    /// ccusage blocks 의 burnRate.tokensPerMinute — 한도 소진 예측에 사용
     var tokensPerMinute: Double?
 
     var endDate: Date? { ISO8601Parser.date(from: endTime) }

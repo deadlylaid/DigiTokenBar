@@ -286,7 +286,7 @@ struct DigimonScenePanel: View {
     }
 }
 
-/// Name, growth and evolution choice under the scene. Replaces the Pokemon companion header.
+/// Name, growth and evolution choice under the scene.
 @MainActor
 struct DigimonStatusView: View {
     let digimon: DigimonStore

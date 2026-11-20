@@ -53,7 +53,7 @@ extension ProviderEnrichment {
         let monthStart = LocalUsageReader.startOfMonth(now)
 
         var result = ProviderEnrichment()
-        // Block (burn rate) computation is provider-generic — the companion rhythm follows all providers.
+        // Block (burn rate) computation is provider-generic.
         result.activeBlock = LocalUsageReader.activeBlock(entries: entries, now: now)
         result.blocksOK = true
 

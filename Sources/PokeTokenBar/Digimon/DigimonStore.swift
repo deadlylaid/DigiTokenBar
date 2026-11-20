@@ -3,8 +3,8 @@ import Observation
 import SystemConfiguration
 
 /// Owns the Digimon companion for the app: feeds usage into `EvolutionEngine`, keeps the save file,
-/// and hands new events to the UI. It plugs into the same two hooks the Pokemon companion used
-/// (`AppDelegate.updateCompanion` / `onStoreRefreshed`).
+/// and hands new events to the UI. The app feeds it from two hooks
+/// (`AppDelegate.updateDigimon` / `onStoreRefreshed`).
 @MainActor
 @Observable
 final class DigimonStore {
