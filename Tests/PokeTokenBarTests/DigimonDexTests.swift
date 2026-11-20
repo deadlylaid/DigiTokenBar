@@ -113,4 +113,88 @@ final class DigimonDexTests: XCTestCase {
             XCTAssertTrue(page.contains("\n  \(key): {ko: '"), "no move for \(key)")
         }
     }
+
+    // MARK: Search, filter, sort
+
+    private func groups(_ query: DigimonDex.Query, _ state: DigimonState, language: AppLanguage = .ko,
+                        lines: [DigimonLine]? = nil) -> [DigimonDex.Group] {
+        let text = DigimonText(language)
+        return DigimonDex.search(query, lines: lines ?? text.sortedLines(Array(catalog.lines.values), catalog: catalog),
+                                 state: state, catalog: catalog, rules: engine.rules, text: text)
+    }
+
+    private func ids(_ query: DigimonDex.Query, _ state: DigimonState, language: AppLanguage = .ko) -> [String] {
+        groups(query, state, language: language).flatMap(\.hits).map(\.id)
+    }
+
+    private var raisedAndMet: DigimonState {
+        var state = DigimonState.newEgg(lineID: "agumon")
+        state.dex = ["agumon", "gabumon", "greymon"]
+        state.sightings = ["wargreymon"]
+        return state
+    }
+
+    /// The silhouettes stay secret: a name only finds Digimon the dex already names.
+    func testANameOnlyFindsDigimonWhoseNameIsShown() {
+        XCTAssertEqual(Set(ids(.init(text: "그레이"), raisedAndMet)), ["greymon", "wargreymon"],
+                       "raised Greymon and visitor War Greymon; Metal Greymon is still a silhouette")
+        XCTAssertEqual(ids(.init(text: "메탈"), raisedAndMet), [])
+    }
+
+    func testNamesMatchInEitherLanguageIgnoringCaseAndSpaces() {
+        for text in ["war grey", "WARGREY", "워그레이", "워 그레이 몬"] {
+            XCTAssertEqual(ids(.init(text: text), raisedAndMet), ["wargreymon"], text)
+        }
+    }
+
+    func testFiltersLookThroughEveryLine() {
+        let state = raisedAndMet
+        XCTAssertEqual(Set(ids(.init(status: .raised), state)), ["agumon", "gabumon", "greymon"], "Gabumon is another line")
+        XCTAssertEqual(ids(.init(status: .metOnly), state), ["wargreymon"])
+        XCTAssertEqual(Set(ids(.init(status: .raised, level: .child), state)), ["agumon", "gabumon"])
+        let unknown = groups(.init(status: .unknown), state).flatMap(\.hits)
+        XCTAssertEqual(unknown.count, catalog.species.count - 4)
+        XCTAssertTrue(unknown.allSatisfy { !$0.entry.seen && !$0.entry.sighted })
+        XCTAssertEqual(ids(.init(level: .ultimate), state).count, catalog.species.values.filter { $0.level == .ultimate }.count)
+        XCTAssertEqual(Set(ids(.init(sort: .name), state)).count, catalog.species.count, "every Digimon once")
+    }
+
+    /// Digitamamon is a friend Jogress in the V-mon line but a plain evolution in the Espimon and
+    /// Angoramon lines. Read first from V-mon, it must still come from a line where it can be reached.
+    func testASharedDigimonComesFromALineWhereItCanBeReached() throws {
+        let vmonFirst = [catalog.lines["vmon"]!] + catalog.lines.values.filter { $0.id != "vmon" }.sorted { $0.id < $1.id }
+        let hits = groups(.init(sort: .name), .newEgg(lineID: "agumon"), lines: vmonFirst).flatMap(\.hits)
+            .filter { $0.id == "digitamamon" }
+        XCTAssertEqual(hits.count, 1)
+        let hit = try XCTUnwrap(hits.first)
+        XCTAssertNil(hit.entry.secret)
+        XCTAssertNotEqual(hit.lineID, "vmon")
+    }
+
+    func testSortByNamePutsNamedDigimonInOrderThenSilhouettesByLevel() throws {
+        var state = DigimonState.newEgg(lineID: "agumon")
+        state.dex = ["koromon", "greymon", "agumon"]
+        let ko = try XCTUnwrap(groups(.init(sort: .name), state).first)
+        XCTAssertNil(ko.level)
+        XCTAssertEqual(ko.hits.prefix(3).map(\.id), ["greymon", "agumon", "koromon"], "그레이몬, 아구몬, 코로몬")
+        XCTAssertEqual(groups(.init(sort: .name), state, language: .en).first?.hits.prefix(3).map(\.id),
+                       ["agumon", "greymon", "koromon"])
+        let levels = ko.hits.dropFirst(3).map(\.entry.species.level)
+        XCTAssertEqual(levels, levels.sorted(), "silhouettes follow the levels")
+    }
+
+    func testSortByLevelGroupsUnderLevelHeadings() {
+        let levels = groups(.init(status: .raised), raisedAndMet).map(\.level)
+        XCTAssertEqual(levels, [.child, .adult])
+    }
+
+    func testTheQueryIsActiveOnlyWhenSomethingIsSet() {
+        XCTAssertFalse(DigimonDex.Query().isActive)
+        XCTAssertFalse(DigimonDex.Query(text: "  ").isActive)
+        XCTAssertTrue(DigimonDex.Query(text: "아구").isActive)
+        XCTAssertTrue(DigimonDex.Query(status: .raised).isActive)
+        XCTAssertTrue(DigimonDex.Query(level: .child).isActive)
+        XCTAssertTrue(DigimonDex.Query(sort: .name).isActive)
+        XCTAssertFalse(DigimonDex.Query(sort: .name).isFiltered, "the filter icon fills only for a filter")
+    }
 }

@@ -86,6 +86,110 @@ struct DigimonDex {
     }
 }
 
+// MARK: Search, filter, sort
+
+extension DigimonDex {
+    enum Status: CaseIterable, Hashable {
+        case all, raised, metOnly, unknown
+    }
+
+    enum Sort: CaseIterable, Hashable {
+        case level, name
+    }
+
+    /// What the search bar asks for. Any part of it set means "look through every line".
+    struct Query: Equatable {
+        var text = ""
+        var status: Status = .all
+        var level: DigimonLevel?
+        var sort: Sort = .level
+
+        var isActive: Bool { !Self.normalized(text).isEmpty || status != .all || level != nil || sort != .level }
+        var isFiltered: Bool { status != .all || level != nil }
+
+        /// Case, accents, width, spaces and punctuation do not matter: "war grey" finds "War Greymon".
+        static func normalized(_ text: String) -> String {
+            text.folding(options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive], locale: nil)
+                .filter { $0.isLetter || $0.isNumber }
+        }
+    }
+
+    /// One Digimon found, with the line its entry was read from (the one "show this line" opens).
+    struct Hit: Equatable, Identifiable {
+        var id: String { entry.id }
+        let entry: Entry
+        let lineID: String
+    }
+
+    /// Results under one level heading, or one list with no heading when sorted by name.
+    struct Group: Equatable, Identifiable {
+        var id: String { level?.rawValue ?? "all" }
+        let level: DigimonLevel?
+        let hits: [Hit]
+    }
+
+    /// Searches every line. `lines` is in the order to read them; a Digimon in several lines is shown
+    /// once, from the first line where it is reachable without a secret (else the first line).
+    ///
+    /// A name only matches a Digimon whose name the dex shows (raised, or met as a visitor), so the
+    /// search never gives away a silhouette.
+    static func search(_ query: Query, lines: [DigimonLine], state: DigimonState, catalog: DigimonCatalog,
+                       rules: EvolutionRules, text: DigimonText) -> [Group] {
+        var best: [String: Hit] = [:]
+        var order: [String] = []
+        for line in lines {
+            for entry in rows(for: line, state: state, catalog: catalog, rules: rules).flatMap(\.entries) {
+                if let found = best[entry.id] {
+                    if found.entry.secret != nil, entry.secret == nil { best[entry.id] = Hit(entry: entry, lineID: line.id) }
+                } else {
+                    best[entry.id] = Hit(entry: entry, lineID: line.id)
+                    order.append(entry.id)
+                }
+            }
+        }
+        let needle = Query.normalized(query.text)
+        let hits = order.compactMap { best[$0] }.filter { hit in
+            let entry = hit.entry
+            let named = entry.seen || entry.sighted
+            switch query.status {
+            case .all: break
+            case .raised: if !entry.seen { return false }
+            case .metOnly: if !entry.sighted { return false }
+            case .unknown: if named { return false }
+            }
+            if let level = query.level, entry.species.level != level { return false }
+            guard !needle.isEmpty else { return true }
+            guard named else { return false }
+            return [entry.species.koreanName, entry.species.name].contains { Query.normalized($0).contains(needle) }
+        }
+        // Named Digimon by their shown name, then the silhouettes (by level, then key).
+        let locale = Locale(identifier: text.ko ? "ko_KR" : "en_US")
+        let sorted = hits.sorted { a, b in
+            let nameA = a.entry.seen || a.entry.sighted ? text.name(a.entry.species) : nil
+            let nameB = b.entry.seen || b.entry.sighted ? text.name(b.entry.species) : nil
+            switch (nameA, nameB) {
+            case let (x?, y?):
+                let order = x.compare(y, options: [.caseInsensitive], range: nil, locale: locale)
+                return order == .orderedSame ? a.id < b.id : order == .orderedAscending
+            case (_?, nil): return true
+            case (nil, _?): return false
+            case (nil, nil):
+                return a.entry.species.level == b.entry.species.level ? a.id < b.id
+                    : a.entry.species.level < b.entry.species.level
+            }
+        }
+        switch query.sort {
+        case .name:
+            return sorted.isEmpty ? [] : [Group(level: nil, hits: sorted)]
+        case .level:
+            return DigimonLevel.allCases.compactMap { level in
+                let inLevel = sorted.filter { $0.entry.species.level == level }
+                return inLevel.isEmpty ? nil : Group(level: level, hits: inLevel)
+            }
+        }
+    }
+}
+
 extension DigimonText {
     var dexTab: String { ko ? "도감" : "Dex" }
     func dexProgress(_ seen: Int, _ total: Int, graduates: Int) -> String {
@@ -139,6 +243,37 @@ extension DigimonText {
         ko ? "졸업시켜 본 줄기는 언제든 다시 키울 수 있어요." : "Lines you've raised to graduation can always be raised again."
     }
     func eggOf(_ name: String) -> String { ko ? "\(name) 알" : "\(name) egg" }
+
+    // Search bar
+    var dexSearchPlaceholder: String { ko ? "이름으로 찾기" : "Search by name" }
+    var dexFilterTitle: String { ko ? "거르기" : "Filter" }
+    var dexStatusTitle: String { ko ? "보기" : "Show" }
+    func dexStatus(_ status: DigimonDex.Status) -> String {
+        switch status {
+        case .all: return ko ? "모든 디지몬" : "All Digimon"
+        case .raised: return ko ? "키워 본 디지몬" : "Raised"
+        case .metOnly: return ko ? "손님으로만 만난 디지몬" : "Met only as visitors"
+        case .unknown: return ko ? "아직 못 만난 디지몬" : "Not met yet"
+        }
+    }
+    var dexLevelTitle: String { ko ? "단계" : "Level" }
+    var dexAllLevels: String { ko ? "모든 단계" : "All levels" }
+    var dexSortTitle: String { ko ? "정렬" : "Sort" }
+    func dexSort(_ sort: DigimonDex.Sort) -> String {
+        switch sort {
+        case .level: return ko ? "단계순" : "By level"
+        case .name: return ko ? "이름순" : "By name"
+        }
+    }
+    func dexResults(_ count: Int) -> String { ko ? "모든 줄기에서 \(count)마리" : "\(count) across all lines" }
+    var dexClearSearch: String { ko ? "지우기" : "Clear" }
+    var dexNoResults: String { ko ? "조건에 맞는 디지몬이 없어요." : "No Digimon match." }
+    var dexNoResultsByName: String {
+        ko ? "찾는 디지몬이 없어요. 아직 못 만난 디지몬은 이름으로 찾을 수 없어요."
+           : "No match. Digimon you haven't met can't be found by name."
+    }
+    func dexLineOf(_ name: String) -> String { ko ? "\(name) 줄기" : "\(name) line" }
+    var dexShowLine: String { ko ? "이 줄기 보기" : "Show this line" }
 }
 
 /// The Dex tab: one line at a time, by level. Raised Digimon in color, the rest as silhouettes.
@@ -149,52 +284,175 @@ struct DigimonDexView: View {
     let language: AppLanguage
     @State private var lineID: String?
     @State private var selected: String?
+    @State private var query = DigimonDex.Query()
 
     private var t: DigimonText { DigimonText(language) }
     private var catalog: DigimonCatalog { digimon.engine.catalog }
     private var shownLine: DigimonLine? { catalog.lines[lineID ?? digimon.state.partner.lineID] ?? digimon.line }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            let progress = DigimonDex.progress(state: digimon.state, catalog: catalog)
-            HStack {
-                Text(t.dexProgress(progress.seen, progress.total, graduates: digimon.state.graduates.count))
-                    .font(.callout.weight(.semibold))
-                    .monospacedDigit()
-                if digimon.sightingsCount > 0 {
-                    Label(t.sightings(digimon.sightingsCount), systemImage: "eye.fill")
-                        .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+        VStack(alignment: .leading, spacing: 8) {
+            // One row when it fits; otherwise (longer English text) the line menu goes under the counts.
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    counts
+                    Spacer()
+                    linePicker
                 }
-                Spacer()
-                Picker("", selection: Binding(get: { shownLine?.id ?? "" }, set: { lineID = $0; selected = nil })) {
-                    let graduated = Dictionary(grouping: digimon.state.graduates, by: \.lineID).mapValues(\.count)
-                    ForEach(t.sortedLines(digimon.lines, catalog: catalog), id: \.id) { line in
-                        Text(t.lineMenuName(line, catalog: catalog, graduated: graduated[line.id] ?? 0)).tag(line.id)
-                    }
+                VStack(alignment: .leading, spacing: 6) {
+                    counts
+                    linePicker
                 }
-                .pickerStyle(.menu)
-                .labelsHidden()
-                .fixedSize()
             }
+            searchBar
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    if let line = shownLine {
+                    if query.isActive {
+                        results
+                    } else if let line = shownLine {
                         let rows = DigimonDex.rows(for: line, state: digimon.state, catalog: catalog, rules: digimon.engine.rules)
                         if let entry = rows.flatMap(\.entries).first(where: { $0.id == selected }) {
                             detail(entry)
                         }
                         ForEach(rows) { row in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(t.level(row.level)).font(.caption).foregroundStyle(.secondary)
-                                LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 6)], spacing: 6) {
-                                    ForEach(row.entries) { cell($0) }
-                                }
-                            }
+                            grid(title: t.level(row.level), entries: row.entries)
                         }
                     }
-                    if !digimon.state.graduates.isEmpty { graduates }
+                    if !query.isActive, !digimon.state.graduates.isEmpty { graduates }
                 }
                 .reservesScrollerLane()
+            }
+        }
+    }
+
+    private var counts: some View {
+        let progress = DigimonDex.progress(state: digimon.state, catalog: catalog)
+        return HStack {
+            Text(t.dexProgress(progress.seen, progress.total, graduates: digimon.state.graduates.count))
+                .font(.callout.weight(.semibold))
+                .monospacedDigit()
+            if digimon.sightingsCount > 0 {
+                Label(t.sightings(digimon.sightingsCount), systemImage: "eye.fill")
+                    .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+            }
+        }
+        .lineLimit(1)
+        .fixedSize()
+    }
+
+    /// Picking a line goes back to browsing it.
+    private var linePicker: some View {
+        Picker("", selection: Binding(get: { shownLine?.id ?? "" },
+                                      set: { lineID = $0; selected = nil; query = DigimonDex.Query() })) {
+            let graduated = Dictionary(grouping: digimon.state.graduates, by: \.lineID).mapValues(\.count)
+            ForEach(t.sortedLines(digimon.lines, catalog: catalog), id: \.id) { line in
+                Text(t.lineMenuName(line, catalog: catalog, graduated: graduated[line.id] ?? 0)).tag(line.id)
+            }
+        }
+        .pickerStyle(.menu)
+        .labelsHidden()
+        .fixedSize()
+    }
+
+    // MARK: Search
+
+    private var searchBar: some View {
+        HStack(spacing: 6) {
+            HStack(spacing: 4) {
+                Image(systemName: "magnifyingglass").foregroundStyle(.secondary)
+                TextField(t.dexSearchPlaceholder, text: $query.text)
+                    .textFieldStyle(.plain)
+                if !query.text.isEmpty {
+                    Button { query.text = "" } label: { Image(systemName: "xmark.circle.fill") }
+                        .buttonStyle(.plain)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(t.dexClearSearch)
+                }
+            }
+            .font(.callout)
+            .padding(.horizontal, 7)
+            .padding(.vertical, 4)
+            .background(RoundedRectangle(cornerRadius: 6).fill(Color(nsColor: .controlBackgroundColor)))
+            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.secondary.opacity(0.25)))
+            Menu {
+                Picker(t.dexStatusTitle, selection: $query.status) {
+                    ForEach(DigimonDex.Status.allCases, id: \.self) { Text(t.dexStatus($0)).tag($0) }
+                }
+                .pickerStyle(.inline)
+                Picker(t.dexLevelTitle, selection: $query.level) {
+                    Text(t.dexAllLevels).tag(DigimonLevel?.none)
+                    ForEach(DigimonLevel.allCases.filter { $0 != .digitama }, id: \.self) {
+                        Text(t.level($0)).tag(DigimonLevel?.some($0))
+                    }
+                }
+                .pickerStyle(.inline)
+            } label: {
+                Image(systemName: query.isFiltered ? "line.3.horizontal.decrease.circle.fill"
+                                                   : "line.3.horizontal.decrease.circle")
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize()
+            .help(t.dexFilterTitle)
+            .accessibilityLabel(t.dexFilterTitle)
+            Menu {
+                Picker(t.dexSortTitle, selection: $query.sort) {
+                    ForEach(DigimonDex.Sort.allCases, id: \.self) { Text(t.dexSort($0)).tag($0) }
+                }
+                .pickerStyle(.inline)
+            } label: {
+                Image(systemName: "arrow.up.arrow.down")
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize()
+            .help(t.dexSortTitle)
+            .accessibilityLabel(t.dexSortTitle)
+        }
+    }
+
+    @ViewBuilder
+    private var results: some View {
+        let lines = searchOrder
+        let groups = DigimonDex.search(query, lines: lines, state: digimon.state, catalog: catalog,
+                                       rules: digimon.engine.rules, text: t)
+        let count = groups.reduce(0) { $0 + $1.hits.count }
+        HStack {
+            Text(t.dexResults(count)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+            Spacer()
+            Button(t.dexClearSearch) {
+                query = DigimonDex.Query()
+                selected = nil
+            }
+            .buttonStyle(.link)
+            .font(.caption)
+        }
+        if count == 0 {
+            Text(DigimonDex.Query.normalized(query.text).isEmpty ? t.dexNoResults : t.dexNoResultsByName)
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        if let hit = groups.flatMap(\.hits).first(where: { $0.id == selected }) {
+            detail(hit.entry, lineID: hit.lineID)
+        }
+        ForEach(groups) { group in
+            grid(title: group.level.map(t.level), entries: group.hits.map(\.entry))
+        }
+    }
+
+    /// The shown line first, then the rest in menu order: a Digimon shared by several lines is
+    /// read from the one being browsed when it can be reached there.
+    private var searchOrder: [DigimonLine] {
+        let sorted = t.sortedLines(digimon.lines, catalog: catalog)
+        guard let shown = shownLine else { return sorted }
+        return [shown] + sorted.filter { $0.id != shown.id }
+    }
+
+    private func grid(title: String?, entries: [DigimonDex.Entry]) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if let title { Text(title).font(.caption).foregroundStyle(.secondary) }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 6)], spacing: 6) {
+                ForEach(entries) { cell($0) }
             }
         }
     }
@@ -233,8 +491,21 @@ struct DigimonDexView: View {
         .task(id: entry.id) { _ = await hub.image(for: entry.id) }
     }
 
-    private func detail(_ entry: DigimonDex.Entry) -> some View {
+    /// `lineID` is set for a search result: the detail then names its line and can open it.
+    private func detail(_ entry: DigimonDex.Entry, lineID resultLine: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 6) {
+            if let resultLine, let line = catalog.lines[resultLine] {
+                HStack {
+                    Text(t.dexLineOf(t.lineName(line, catalog: catalog))).font(.caption).foregroundStyle(.secondary)
+                    Spacer()
+                    Button(t.dexShowLine) {
+                        lineID = resultLine
+                        query = DigimonDex.Query()   // keeps `selected`: the line opens on this Digimon
+                    }
+                    .buttonStyle(.link)
+                    .font(.caption)
+                }
+            }
             HStack(spacing: 8) {
                 PixelSprite(data: hub.icons[entry.id], silhouette: !entry.seen && !entry.sighted).frame(width: 56, height: 56)
                 VStack(alignment: .leading, spacing: 2) {
