@@ -111,10 +111,11 @@ struct EvolutionRules: Sendable {
         }
     }
 
-    /// A step growth never takes on this line: a Jogress on its card, or locked everywhere.
+    /// A step growth never takes on this line: a Jogress on its card, a step into an Armor Digimon
+    /// (it needs a Digimental), or locked everywhere.
     func isLocked(_ from: String, _ to: String, in line: DigimonLine) -> Bool {
         let step = "\(from)>\(to)"
-        return lockedEdges.contains(step) || line.mergeSteps.contains(step)
+        return lockedEdges.contains(step) || line.mergeSteps.contains(step) || line.digimentalSteps[step] != nil
     }
 
     func isMet(_ condition: HiddenCondition, by signals: GrowthSignals) -> Bool {
@@ -306,6 +307,18 @@ struct EvolutionEngine: Sendable {
             .sorted { lhs, rhs in lhs.1 != rhs.1 ? lhs.1 > rhs.1 : lhs.0.to < rhs.0.to }
             .map(\.0.to)
         return ranked
+    }
+
+    /// The Armor evolutions the current partner could take with a Digimental, in the line's order
+    /// (step 13). Growth never takes them (`rankedOptions` leaves them out); using the Digimental is
+    /// the only way. Card conditions are not checked here: the Digimental opens the step.
+    func armorOptions(for state: DigimonState) -> [(to: String, digimental: Digimental)] {
+        guard let current = state.partner.speciesKey, let line = catalog.lines[state.partner.lineID] else { return [] }
+        return catalog.nextEvolutions(from: current, in: line).compactMap { evo in
+            guard let d = line.digimental(from: current, to: evo.to), !rules.locked.contains(evo.to),
+                  !rules.lockedEdges.contains("\(current)>\(evo.to)") else { return nil }
+            return (evo.to, d)
+        }
     }
 
     // MARK: Card conditions

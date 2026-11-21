@@ -117,10 +117,10 @@ final class DigimonDexTests: XCTestCase {
     // MARK: Search, filter, sort
 
     private func groups(_ query: DigimonDex.Query, _ state: DigimonState, language: AppLanguage = .ko,
-                        lines: [DigimonLine]? = nil) -> [DigimonDex.Group] {
+                        lines: [DigimonLine]? = nil, rules: EvolutionRules? = nil) -> [DigimonDex.Group] {
         let text = DigimonText(language)
         return DigimonDex.search(query, lines: lines ?? text.sortedLines(Array(catalog.lines.values), catalog: catalog),
-                                 state: state, catalog: catalog, rules: engine.rules, text: text)
+                                 state: state, catalog: catalog, rules: rules ?? engine.rules, text: text)
     }
 
     private func ids(_ query: DigimonDex.Query, _ state: DigimonState, language: AppLanguage = .ko) -> [String] {
@@ -159,11 +159,19 @@ final class DigimonDexTests: XCTestCase {
         XCTAssertEqual(Set(ids(.init(sort: .name), state)).count, catalog.species.count, "every Digimon once")
     }
 
-    /// Digitamamon is a friend Jogress in the V-mon line but a plain evolution in the Espimon and
-    /// Angoramon lines. Read first from V-mon, it must still come from a line where it can be reached.
+    /// A Digimon in several lines can have a secret on one and none on another. Digitamamon was a
+    /// friend Jogress on the V-mon line and a plain evolution on the Espimon and Angoramon lines; since
+    /// the Armor Digimon came back (step 13) Fladramon and Lighdramon also grow into it there, so the
+    /// test locks those two steps to keep the V-mon line's entry a friend Jogress. Read first from
+    /// V-mon, it must still come from a line where it can be reached.
     func testASharedDigimonComesFromALineWhereItCanBeReached() throws {
+        var rules = engine.rules
+        rules.lockedEdges = ["fladramon>digitamamon", "lighdramon>digitamamon"]
         let vmonFirst = [catalog.lines["vmon"]!] + catalog.lines.values.filter { $0.id != "vmon" }.sorted { $0.id < $1.id }
-        let hits = groups(.init(sort: .name), .newEgg(lineID: "agumon"), lines: vmonFirst).flatMap(\.hits)
+        let vmonEntry = DigimonDex.rows(for: vmonFirst[0], state: .newEgg(lineID: "agumon"), catalog: catalog, rules: rules)
+            .flatMap(\.entries).first { $0.id == "digitamamon" }
+        XCTAssertNotNil(vmonEntry?.secret, "the V-mon line's Digitamamon has a secret in this test")
+        let hits = groups(.init(sort: .name), .newEgg(lineID: "agumon"), lines: vmonFirst, rules: rules).flatMap(\.hits)
             .filter { $0.id == "digitamamon" }
         XCTAssertEqual(hits.count, 1)
         let hit = try XCTUnwrap(hits.first)
