@@ -80,4 +80,47 @@ final class DigimonSceneBugTests: XCTestCase {
         }
         XCTAssertEqual(misses, [], misses.joined(separator: "\n"))
     }
+
+    /// Poop Throw is thrown, not fired: it rose over the middle and then slid on in a straight line
+    /// once the drawn arc ended (user report, 2026-11-21). Now gravity pulls it all the way: every frame
+    /// it falls a little faster, and with nothing to hit it lands on the ground and splats.
+    func testPoopFallsAllTheWayAndLandsOnTheGround() async throws {
+        let scene = DigimonScene(mode: .popover)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        scene.sprite(key: "agumon", dataURI: try blockSprite(height: 30))
+        scene.apply(["key": "agumon", "line": "agumon", "stage": 4, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet && !!assets['agumon']")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let result = try await js(scene, """
+        (() => {
+          pet.bug = null; pet.bugIn = 1e9; pet.shots = []; pet.booms = []; pet.x = 40; pet.facing = 1;
+          pet.enter('idle', {dur: 99999});
+          pet.fire('poop');
+          const s = pet.shots[0], ys = [], vys = [];
+          for (let i = 0; i < 200 && pet.shots.includes(s); i++) { ys.push(s.y); vys.push(s.vy); pet.update(16); }
+          const splat = pet.booms.find(b => b.kind === 'poop');
+          return JSON.stringify({ys, vys, gone: !pet.shots.includes(s), splatY: splat ? splat.y : null, ground: pet.ground(),
+                                 ox: s.ox, x: s.x});
+        })()
+        """) as? String
+        let r = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(result).utf8)) as? [String: Any])
+        let ys = try XCTUnwrap(r["ys"] as? [Double]), vys = try XCTUnwrap(r["vys"] as? [Double])
+        XCTAssertGreaterThan(ys.count, 10, "it flew for a while")
+        XCTAssertLessThan(ys.min() ?? 0, ys[0] - 5, "it rises first")
+        XCTAssertTrue(zip(vys, vys.dropFirst()).allSatisfy { $1 > $0 }, "it falls faster every frame, never straight: \(vys)")
+        XCTAssertEqual(r["gone"] as? Bool, true)
+        let ground = try XCTUnwrap(r["ground"] as? Double), splatY = try XCTUnwrap(r["splatY"] as? Double)
+        XCTAssertEqual(splatY, ground - 2, accuracy: 1, "it lands on the ground and splats there")
+        XCTAssertEqual((r["x"] as? Double ?? 0) - (r["ox"] as? Double ?? 0), 70, accuracy: 12, "about 70 px ahead")
+    }
 }
