@@ -15,6 +15,8 @@ final class DigimonScene: NSObject {
     var onBugDefeated: (Int) -> Void = { _ in }
     /// A golden bug was defeated: it drops a Digimental fragment (step 13).
     var onGoldenBug: () -> Void = {}
+    /// Desktop pet: where the Digimon was dropped, in scene units from the middle of the window.
+    var onPetHome: (Double) -> Void = { _ in }
     /// Desk only: where the pet is drawn, in the web view's top-left based points.
     var onPetRect: (CGRect) -> Void = { _ in }
 
@@ -68,6 +70,8 @@ final class DigimonScene: NSObject {
         case "bugDefeated":
             onBugDefeated((body["count"] as? NSNumber)?.intValue ?? 1)
             if (body["golden"] as? NSNumber)?.boolValue == true { onGoldenBug() }
+        case "petHome":
+            onPetHome((body["offset"] as? NSNumber)?.doubleValue ?? 0)
         case "petRect":
             let v = { (k: String) in (body[k] as? NSNumber)?.doubleValue ?? 0 }
             onPetRect(CGRect(x: v("x"), y: v("y"), width: v("w"), height: v("h")))

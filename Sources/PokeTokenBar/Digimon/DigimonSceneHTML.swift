@@ -356,8 +356,10 @@ class Pet {
       this.enter(sleepy ? 'stretch' : 'idle', {dur: sleepy ? 1400 : 1800});
       return;
     }
-    // Staying in place (Settings): no walks; once a battle or a Jogress moved it, it walks back to the middle.
-    if (S.still && Math.abs(this.x - this.center()) > 3) { this.startWalk(this.center()); return; }
+    // Staying in place (Settings): no walks; once a battle or a Jogress moved it, it walks back home (where it
+    // was last dropped, the middle at first).
+    const home = this.home === undefined ? this.center() : this.home;
+    if (S.still && Math.abs(this.x - home) > 3) { this.startWalk(home); return; }
     const walk = S.still ? 0 : (this.desk ? .58 : .5) * (S.mood ? .45 : 1);
     if (r < walk) this.startWalk();
     else if (r < walk + .17) { this.facing = -this.facing; this.enter('idle', {dur: rand(900, 1800)}); }
@@ -423,7 +425,16 @@ class Pet {
   }
   grab() { if (this.state === 'evolve') return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
   dragMove(dx) { if (this.state === 'held') this.d.v += dx * .004; }
-  drop() { if (this.state === 'held') this.enter('hop', {h: 3, dur: 420}); }
+  // `shift` (scene units): how far the app pulled the window back inside the screen. The Digimon keeps
+  // its spot on the screen, so it can be dropped at the very edge though the window cannot go past it.
+  // Where it lands is its home for "stay in place", and the app keeps it for the next launch.
+  drop(shift = 0) {
+    if (this.state === 'held') this.enter('hop', {h: 3, dur: 420});
+    if (shift) { this.x += shift; this.clampX(); }
+    this.home = this.x;
+    post({cmd: 'petHome', offset: this.x - this.center()});
+  }
+  place(offset) { this.x = this.center() + offset; this.clampX(); this.home = this.x; }
   evolve(to) {
     if (this.state === 'evolve') { this.d.to = to; return; }
     if (this.key === to) return;
@@ -1316,7 +1327,8 @@ window.app = {
     else if (c.type === 'attack') pet.attack();
     else if (c.type === 'grab') pet.grab();
     else if (c.type === 'drag') pet.dragMove(c.dx || 0);
-    else if (c.type === 'drop') pet.drop();
+    else if (c.type === 'drop') pet.drop((c.shift || 0) / pet.scale);
+    else if (c.type === 'place') pet.place(c.offset || 0);
   },
 };
 

@@ -24,6 +24,8 @@ final class DigimonDeskPet {
     private var dragStartMouse = NSPoint.zero, dragStartOrigin = NSPoint.zero, lastMouse = NSPoint.zero
 
     static let size = NSSize(width: 440, height: 180)
+    /// Where the Digimon was last dropped inside the window (scene units from its middle).
+    static let petOffsetKey = "digimonDeskPetOffset"
 
     init(store: UsageStore, hub: DigimonSceneHub, defaults: UserDefaults = .standard,
          language: @escaping () -> AppLanguage = { .ko }) {
@@ -122,6 +124,11 @@ final class DigimonDeskPet {
             self?.petRect = rect
             self?.updateHitTest()
         }
+        scene.onPetHome = { [weak self] offset in self?.defaults.set(offset, forKey: Self.petOffsetKey) }
+        // Back where it was dropped last time inside the window (the window itself is placed by its origin).
+        if let offset = defaults.object(forKey: Self.petOffsetKey) as? Double {
+            scene.command(["type": "place", "offset": offset])
+        }
         panel.contentView = scene.webView
         panel.orderFrontRegardless()
         self.panel = panel
@@ -214,8 +221,8 @@ final class DigimonDeskPet {
             tracking = false
             if dragging {
                 dragging = false
-                clampToScreen()
-                scene?.command(["type": "drop"])
+                let shift = clampToScreen()
+                scene?.command(["type": "drop", "shift": Double(shift)])
             } else {
                 // A click answers the agents' questions and acknowledges results (work goes on).
                 if agents.dismissBubble() { pushAgents(react: nil) }
@@ -227,15 +234,27 @@ final class DigimonDeskPet {
         return true
     }
 
-    private func clampToScreen() {
-        guard let panel else { return }
+    /// Puts the window back inside the screen after a drag and returns how far it moved it sideways
+    /// (points; the scene moves the Digimon the other way, so it stays where it was dropped).
+    @discardableResult
+    private func clampToScreen() -> CGFloat {
+        guard let panel else { return 0 }
         let m = NSEvent.mouseLocation
-        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(m) }) ?? NSScreen.main else { return }
-        let vf = screen.visibleFrame, f = panel.frame
+        guard let screen = NSScreen.screens.first(where: { $0.frame.contains(m) }) ?? NSScreen.main else { return 0 }
+        let placed = Self.dropPlacement(window: panel.frame, visible: screen.visibleFrame)
+        panel.setFrameOrigin(placed.origin)
+        defaults.set(Double(placed.origin.x), forKey: "digimonDeskX")
+        defaults.set(Double(placed.origin.y), forKey: "digimonDeskY")
+        return placed.shift
+    }
+
+    /// The window is wider than the Digimon (it walks inside it), so the window stays inside the visible
+    /// screen and the Digimon makes up the difference: dragged past the right edge by 120 points, the
+    /// window comes back 120 points and the Digimon moves 120 points right inside it, reaching the edge.
+    /// Before, only the window was pulled back, so the Digimon stopped short of the edge (user report).
+    nonisolated static func dropPlacement(window f: NSRect, visible vf: NSRect) -> (origin: NSPoint, shift: CGFloat) {
         let x = min(max(f.minX, vf.minX), vf.maxX - f.width)
         let y = min(max(f.minY, vf.minY), vf.maxY - f.height)
-        panel.setFrameOrigin(NSPoint(x: x, y: y))
-        defaults.set(Double(x), forKey: "digimonDeskX")
-        defaults.set(Double(y), forKey: "digimonDeskY")
+        return (NSPoint(x: x, y: y), f.minX - x)
     }
 }
