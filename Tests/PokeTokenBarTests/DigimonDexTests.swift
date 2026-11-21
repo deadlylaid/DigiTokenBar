@@ -51,7 +51,7 @@ final class DigimonDexTests: XCTestCase {
         let page = DigimonSceneHTML.page
         let kinds = Set(page.matches(of: /kind: '(\w+)'/).map { String($0.1) })
         XCTAssertEqual(kinds, ["fire", "missile", "gaia", "claw", "ice", "bind", "melee", "beam", "electric",
-                               "gas", "wave", "wind", "water", "light", "swarm", "heart", "quake"])
+                               "gas", "wave", "wind", "water", "light", "swarm", "heart", "quake", "poop"])
         for kind in kinds where kind != "fire" {
             XCTAssertTrue(page.contains("  \(kind): ["), "no colors for \(kind)")
         }
@@ -91,6 +91,10 @@ final class DigimonDexTests: XCTestCase {
             "vamdemon": "swarm",         // a swarm of bats
             "monzaemon": "heart",        // shoots hearts
             "breakdramon": "quake",      // pounds the ground
+            // Poop Throw was drawn as a missile (user report, 2026-11-21).
+            "namakemon": "poop",
+            "vegimon": "poop",
+            "numemon": "poop",
         ]
         for (key, shape) in expected { XCTAssertEqual(kind(key), shape, key) }
     }
