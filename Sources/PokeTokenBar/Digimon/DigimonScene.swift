@@ -13,6 +13,8 @@ final class DigimonScene: NSObject {
     let webView: WKWebView
     /// How many bugs one kill was worth (a big bug counts as several).
     var onBugDefeated: (Int) -> Void = { _ in }
+    /// Desktop pet: where the Digimon was dropped, in scene units from the middle of the window.
+    var onPetHome: (Double) -> Void = { _ in }
     /// Desk only: where the pet is drawn, in the web view's top-left based points.
     var onPetRect: (CGRect) -> Void = { _ in }
 
@@ -65,6 +67,8 @@ final class DigimonScene: NSObject {
             for js in pending { webView.evaluateJavaScript(js, completionHandler: nil) }
         case "bugDefeated":
             onBugDefeated((body["count"] as? NSNumber)?.intValue ?? 1)
+        case "petHome":
+            onPetHome((body["offset"] as? NSNumber)?.doubleValue ?? 0)
         case "petRect":
             let v = { (k: String) in (body[k] as? NSNumber)?.doubleValue ?? 0 }
             onPetRect(CGRect(x: v("x"), y: v("y"), width: v("w"), height: v("h")))
