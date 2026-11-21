@@ -217,6 +217,43 @@ final class DigimonStore {
     var sightingsCount: Int { (state.sightings ?? []).subtracting(state.dex).count }
     var canBattle: Bool { !isEgg }
 
+    // MARK: Digimental fragments (step 13)
+
+    var digimentalBag: DigimentalBag { state.digimentals ?? DigimentalBag() }
+    /// Full stamp cards whose fragment is waiting to be picked.
+    var stampRewardsPending: Int { digimentalBag.stampRewards }
+    var canExchangeSurprise: Bool { surprisePoints >= DigimentalRules.exchangeCost }
+    /// The kinds the pickers offer: the partner's usable ones first.
+    var fragmentChoices: [Digimental] {
+        let preferred = engine.preferredDigimentals(for: state)
+        let kinds = engine.fragmentKinds()
+        return kinds.filter { preferred.contains($0) } + kinds.filter { !preferred.contains($0) }
+    }
+    var preferredDigimentals: Set<Digimental> { engine.preferredDigimentals(for: state) }
+
+    /// The scene's golden bug was defeated.
+    func recordGoldenBug() {
+        var next = saved
+        let events = engine.recordGoldenBug(&next.digimon, at: clock())
+        commit(next, events)
+    }
+
+    /// A full stamp card's fragment, as the user picked.
+    func claimStampReward(_ kind: Digimental) {
+        var next = saved
+        let events = engine.claimStampReward(&next.digimon, kind)
+        commit(next, events)
+    }
+
+    /// Five surprise points for a fragment of the user's choice. False when there are not enough.
+    @discardableResult
+    func exchangeSurprise(for kind: Digimental) -> Bool {
+        var next = saved
+        let events = engine.exchangeSurprise(&next.digimon, for: kind)
+        commit(next, events)
+        return !events.isEmpty
+    }
+
     /// The user's battle code for today and this stage (saved, so it stays the same when copied again).
     func myBattleCode() -> String? {
         var next = saved

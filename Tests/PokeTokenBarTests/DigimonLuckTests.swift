@@ -98,7 +98,11 @@ final class DigimonLuckTests: XCTestCase {
         engine.addUsage(&s, tokens: 1_000, provider: "claude_code", at: date(day: 9, hour: 7))
         let events = engine.updateLuck(&s, at: date(day: 9, hour: 7))
         XCTAssertEqual(events.first, .stampCardFull)
-        guard case .visited(let species, let tier, let firstSeen)? = events.last else { return XCTFail("\(events)") }
+        let visited = events.last { if case .visited = $0 { return true } else { return false } }
+        guard case .visited(let species, let tier, let firstSeen)? = visited else { return XCTFail("\(events)") }
+        // Step 13: a Digimon never seen leaves a fragment, and the card waits for its fragment to be picked.
+        XCTAssertTrue(events.contains { if case .fragmentFound(_, .visitor) = $0 { return true } else { return false } })
+        XCTAssertEqual(s.digimentals?.stampRewards, 1)
         XCTAssertGreaterThanOrEqual(tier, .veryRare)
         XCTAssertTrue(firstSeen, "the card's visitor is always one never seen")
         XCTAssertFalse(s.dex.contains(species))
