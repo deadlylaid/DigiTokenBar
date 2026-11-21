@@ -232,8 +232,7 @@ class Pet {
     if (kind === 'light') { my = gy - h * .7; speed = 160; r = 4 * z; pal = PAL.light; }
     if (kind === 'swarm') { my = gy - h * .6; speed = 140; r = 6 * z; pal = PAL.swarm; }
     if (kind === 'heart') { my = gy - h * .6; speed = 130; r = 4 * z; pal = PAL.heart; }
-    // Thrown, not fired: it flies in an arc (drawn higher in the middle; hits are checked on the
-    // straight path like every other shot, so it lands where any shot would).
+    // Thrown, not fired: it falls under gravity in an arc onto its target (see lob).
     if (kind === 'poop') { my = gy - h * .6; speed = 120; r = 4 * z; pal = PAL.poop; }
     if (kind === 'quake') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 2 + lift; speed = 170; r = 5 * z; pal = PAL.quake; }
     if (tint && PAL['tint_' + tint]) pal = PAL['tint_' + tint];
@@ -249,7 +248,11 @@ class Pet {
       this.aimAtBody(s);
     } else if (g && !g.dead && Math.sign(g.x + 5 - s.x) === f && kind !== 'wind' && kind !== 'quake') {
       s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
-      s.arc = Math.abs(g.x + 5 - s.x);
+    }
+    if (kind === 'poop' && !s.duel) {
+      // At a bug in front it comes down on the bug; with nothing to hit it lands 70 px ahead.
+      const aim = g && !g.dead && Math.sign(g.x + 5 - s.x) === f;
+      this.lob(s, aim ? g.x + 5 - s.x : f * 70, (aim ? this.ground() - 4 : this.ground() - 1) - s.y);
     }
     this.shots.push(s);
     if (kind === 'missile') this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});   // launch flash
@@ -261,8 +264,16 @@ class Pet {
   aimAtBody(s) {
     if (!s.body || s.kind === 'wind' || s.kind === 'quake') return;
     s.ty = this.ground() - (s.body.b - s.body.t) * .5;
-    s.arc = Math.abs(s.tx - s.x);
     s.vy = (s.ty - s.y) / Math.max(.05, Math.abs(s.tx - s.x) / Math.abs(s.vx));
+    if (s.kind === 'poop') this.lob(s, s.tx - s.x, s.ty - s.y);
+  }
+  // A thrown shot: gravity `g` and a start speed that take it `dx` ahead and `dy` lower, rising up to
+  // 14 px (times its size) over the straight line on the way, less on a short throw so it never sails
+  // over a bug right in front. It keeps falling past the point, so a miss lands on the ground.
+  lob(s, dx, dy) {
+    const T = Math.max(.05, Math.abs(dx) / Math.abs(s.vx)), H = Math.min(14 * (s.size || 1), Math.abs(dx) * .35);
+    s.g = 8 * H / (T * T);
+    s.vy = dy / T - 4 * H / T;
   }
   boom(x, y, s) {
     if (s.kind === 'gaia') this.flash = Math.max(this.flash, .45);
@@ -624,6 +635,7 @@ class Pet {
     this.shots = this.shots.filter(s => {
       if (s.hold !== undefined) { s.t += dt; s.hold -= dt; return s.hold > 0; }   // a landed beam or bolt lingers
       const px = s.x, py = s.y;   // where it was: hits are checked along the whole step, not just where it lands
+      if (s.g) s.vy += s.g * dt / 1000;   // a thrown shot falls
       s.t += dt; s.x += s.vx * dt / 1000; s.y += s.vy * dt / 1000;
       const back = -Math.sign(s.vx);
       if (s.kind === 'missile') {
@@ -960,9 +972,7 @@ class Pet {
       } else if (s.kind === 'heart') {
         this.drawHeart(c, s.x, s.y + Math.sin(s.t / 90) * 1.5 * z, s.pal, wpx(2, z));
       } else if (s.kind === 'poop') {
-        // Up and down over the way to the target (a shot without one arcs over 70 px).
-        const d = Math.min(1, Math.abs(s.x - s.ox) / Math.max(1, s.arc || 70));
-        this.drawPoop(c, s.x, s.y - 4 * d * (1 - d) * 14 * z, s.pal, wpx(1.5, z));
+        this.drawPoop(c, s.x, s.y, s.pal, wpx(1.5, z));
       } else if (s.kind === 'quake') {
         // A crack running along the ground with rocks hopping at its tip.
         const dir = Math.sign(s.x - s.ox) || 1, len = Math.abs(s.x - s.ox);
