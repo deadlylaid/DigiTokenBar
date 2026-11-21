@@ -218,20 +218,21 @@ final class DigimonLinesTests: XCTestCase {
     }
 
     /// A merge-only Digimon shows the friend Jogress that leads there (and the step as an evolution);
-    /// with friends' codes off it is marked as out of reach.
+    /// with friends' codes off it is marked as out of reach. (Digitamamon on the V-mon line was the
+    /// example until step 13: the restored Fladramon and Lighdramon grow into it.)
     func testTheDexMarksMergeOnlyDigimon() {
-        let line = catalog.lines["vmon"]!
-        let rows = DigimonDex.rows(for: line, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: engine.rules)
-        let digitamamon = rows.flatMap(\.entries).first { $0.id == "digitamamon" }
-        XCTAssertEqual(digitamamon?.secret, .friendJogress(routes: line.jogress.filter { $0.to == "digitamamon" }))
-        XCTAssertEqual(Set(digitamamon?.previous.map(\.key) ?? []), Set(line.jogress.filter { $0.to == "digitamamon" }.map(\.from)))
-        XCTAssertFalse(digitamamon?.previous.isEmpty ?? true)
-        XCTAssertNil(rows.flatMap(\.entries).first { $0.id == "vdramon" }?.secret)
+        let line = catalog.lines["armadimon"]!
+        let rows = DigimonDex.rows(for: line, state: .newEgg(lineID: "armadimon"), catalog: catalog, rules: engine.rules)
+        let shakkoumon = rows.flatMap(\.entries).first { $0.id == "shakkoumon" }
+        XCTAssertEqual(shakkoumon?.secret, .friendJogress(routes: line.jogress.filter { $0.to == "shakkoumon" }))
+        XCTAssertEqual(Set(shakkoumon?.previous.map(\.key) ?? []), Set(line.jogress.filter { $0.to == "shakkoumon" }.map(\.from)))
+        XCTAssertFalse(shakkoumon?.previous.isEmpty ?? true)
+        XCTAssertNil(rows.flatMap(\.entries).first { $0.id == "ankylomon" }?.secret)
         var rules = engine.rules
         rules.friendJogress = false
-        let solo = DigimonDex.rows(for: line, state: .newEgg(lineID: "vmon"), catalog: catalog, rules: rules)
-        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "digitamamon" }?.secret, .mergeOnly)
-        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "digitamamon" }?.previous, [])
+        let solo = DigimonDex.rows(for: line, state: .newEgg(lineID: "armadimon"), catalog: catalog, rules: rules)
+        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "shakkoumon" }?.secret, .mergeOnly)
+        XCTAssertEqual(solo.flatMap(\.entries).first { $0.id == "shakkoumon" }?.previous, [])
     }
 
     /// Growth never offers a named merge's result; only a Jogress reaches it (`DigimonJogressTests`).

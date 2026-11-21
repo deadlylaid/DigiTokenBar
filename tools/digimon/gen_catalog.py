@@ -77,8 +77,14 @@ LEVEL = {"Baby I": "babyI", "Baby II": "babyII", "Child": "child", "Adult": "adu
 ORDER = ["babyI", "babyII", "child", "adult", "perfect", "ultimate"]
 # Wikimon levels that growth does not set on its own: a card's research gives their stage
 # (`cardStages`). Hybrid Digimon on the Frontier cards grow by training like the rest of the card.
-# Armor Digimon stay out: they need Digimentals.
-CARD_STAGE_LEVELS = {"Hybrid"}
+# Armor Digimon take their card's stage from research/armor-routes.json (step 13); a step into one
+# from another level opens only with a Digimental (`digimentalSteps`), so growth never takes it alone.
+# Cards without that research keep their Armor Digimon out.
+CARD_STAGE_LEVELS = {"Hybrid", "Armor"}
+ARMOR = json.loads((HERE / "research" / "armor-routes.json").read_text())["cards"]
+DIGIMENTALS = ("courage", "friendship", "love", "knowledge", "purity", "reliability", "hope", "light",
+               "kindness", "miracles", "fate")
+DIGIMENTAL_STEPS = {}   # line id -> {(from, to): digimental}
 CARD_LEVEL = {}   # species key -> stage from its card's research (one stage per species)
 CARD_ATTR = {}    # species key -> attribute from its card's research (a Hybrid is "Variable" on Wikimon)
 ATTR = {"Vaccine": "vaccine", "Data": "data", "Virus": "virus", "Free": "free"}
@@ -194,11 +200,19 @@ def research_cards():
             if line_id in out:
                 raise SystemExit(f"{line_id}: researched twice ({path.name})")
             # `extraEdges`: routes on the card the first research found missing from the app data.
-            out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in card["edges"] + card.get("extraEdges", [])
-                            if e.get("onCard", True) is not False]
-            CONDITIONS[line_id] = step_conditions(card["edges"] + card.get("extraEdges", []))
+            # The card's Armor routes come from research/armor-routes.json (the first research left them out).
+            known = {(e["from"], e["to"], e.get("raw")) for e in card["edges"] + card.get("extraEdges", [])}
+            armor_edges = [e for e in ARMOR.get(line_id, {}).get("edges", []) if (e["from"], e["to"], e.get("raw")) not in known]
+            edges = card["edges"] + card.get("extraEdges", []) + armor_edges
+            out[line_id] = [(e["from"], e["to"], edge_kind(e)) for e in edges if e.get("onCard", True) is not False]
+            CONDITIONS[line_id] = step_conditions(edges)
+            for step, d in ARMOR.get(line_id, {}).get("digimentals", {}).items():
+                if d["digimental"] not in DIGIMENTALS:
+                    raise SystemExit(f"{line_id}: {step}: unknown Digimental {d['digimental']!r}")
+                a, b = step.split(">")
+                DIGIMENTAL_STEPS.setdefault(line_id, {})[(a, b)] = d["digimental"]
             partners = PARTNERS.setdefault(line_id, {})
-            for e in card["edges"] + card.get("extraEdges", []):
+            for e in edges:
                 if e.get("onCard", True) is not False and edge_kind(e) == "jogress":
                     p = jogress_partner(e, NAME_KEYS)
                     if p is None:
@@ -218,7 +232,7 @@ def card_stages():
             bad = {k: v for k, v in stages.items() if v not in ORDER}
             if bad:
                 raise SystemExit(f"{line_id}: unknown card stage(s) {bad}")
-            out[line_id] = stages
+            out[line_id] = {**stages, **ARMOR.get(line_id, {}).get("cardStages", {})}
             for k, a in (card.get("cardAttributes") or {}).items():
                 if a not in ATTR.values():
                     raise SystemExit(f"{line_id}: {k} has an unknown card attribute {a!r}")
@@ -235,6 +249,10 @@ def level_on(line_id, k, nodes, stages):
         if on_card and on_card != lv:
             print(f"{line_id}: {k} is {lv} on Wikimon but {on_card} on the card; Wikimon's level is kept")
         return lv
+    # Only the Armor Digimon of research/armor-routes.json join a line (with their Digimentals); another
+    # card's chart may list one (Peacockmon on the Fairimon card), which stays out.
+    if nodes[k]["level"] == "Armor" and k not in ARMOR.get(line_id, {}).get("cardStages", {}):
+        return None
     if nodes[k]["level"] in CARD_STAGE_LEVELS and on_card:
         if CARD_LEVEL.setdefault(k, on_card) != on_card:
             raise SystemExit(f"{k}: stage {CARD_LEVEL[k]} on one card but {on_card} on {line_id}")
@@ -299,8 +317,8 @@ def main():
         unknown = [k for k in card["roster"] if k not in nodes and k not in NOT_SPECIES]
         if unknown:
             raise SystemExit(f"{line_id}: card species missing from data/evolutions.json: {', '.join(unknown)}")
-        # Armor Digimon need Digimentals, not growth: they are left out. Hybrid Digimon take their
-        # card's stage when the card's research gives it (CARD_STAGE_LEVELS).
+        # Hybrid Digimon take their card's stage when the card's research gives it, Armor Digimon when
+        # research/armor-routes.json does (CARD_STAGE_LEVELS); other Armor Digimon are left out.
         on = {k: level_on(line_id, k, nodes, stages) for k in card["roster"] if k in nodes}
         skipped = [k for k, lv in on.items() if not lv]
         if skipped:
@@ -410,6 +428,11 @@ def main():
                     and not any(a == k and b in alive and (a, b) not in merges_of[line_id] for a, b in steps_of[line_id])]
             if not dead:
                 break
+            # An Armor Digimon a Digimental leads into must grow on as its card says; leaving it out
+            # quietly would lose the card's routes (step 13).
+            stuck = [f"{a}>{b}" for (a, b) in DIGIMENTAL_STEPS.get(line_id, {}) if b in dead]
+            if stuck:
+                raise SystemExit(f"{line_id}: {', '.join(stuck)}: the Armor Digimon has no way on")
             print(f"{line_id}: {', '.join(dead)} cannot grow on (next forms missing), left out of the line")
             gone += dead
         if gone:
@@ -422,6 +445,34 @@ def main():
                              "fix the data or leave the line out")
         pruned.append((line_id, card_name, egg, baby1, [k for k in roster if k in reach]))
     lines = pruned
+    # Digimental steps (step 13). Only those still on the line count (a Child left out of the line,
+    # e.g. Tailmon (Child) on the D-3 White and Red card, takes its Armor's step with it).
+    is_armor = lambda k: nodes[k]["level"] == "Armor"
+    for line_id, *_ in lines:
+        own = {ab: d for ab, d in DIGIMENTAL_STEPS.get(line_id, {}).items()
+               if ab in steps_of[line_id] and ab not in merges_of[line_id]}
+        dropped = sorted(f"{a}>{b}" for a, b in DIGIMENTAL_STEPS.get(line_id, {}) if (a, b) not in own)
+        if dropped:
+            print(f"{line_id}: Digimental step(s) not on the line, left out: {', '.join(dropped)}")
+        DIGIMENTAL_STEPS[line_id] = own
+        # A normal route into an Armor Digimon from another level needs its Digimental: growth alone
+        # must never take it.
+        for a, b in sorted(steps_of[line_id] - merges_of[line_id]):
+            if is_armor(b) and not is_armor(a) and (a, b) not in own:
+                raise SystemExit(f"{line_id}: {a}>{b} goes into an Armor Digimon without a Digimental")
+        for (a, b), d in own.items():
+            if d not in DIGIMENTALS:
+                raise SystemExit(f"{line_id}: {a}>{b}: unknown Digimental {d!r}")
+            # The Armor Digimon grows on like the rest of the card (an Ultimate graduates).
+            if level_of[b] != "ultimate" and not any(x == b and (x, y) not in merges_of[line_id]
+                                                     for x, y in steps_of[line_id]):
+                raise SystemExit(f"{line_id}: {a}>{b}: the Armor Digimon {b} has no way on")
+        # Growth must always have a way on without a Digimental: one whose only ways on are Digimental
+        # steps would stop there for a user without one.
+        for k in {x for x, _ in steps_of[line_id]}:
+            ways = [(x, y) for x, y in steps_of[line_id] if x == k and (x, y) not in merges_of[line_id]]
+            if ways and all(w in own for w in ways):
+                raise SystemExit(f"{line_id}: {k} grows on only with a Digimental ({', '.join(f'{x}>{y}' for x, y in ways)})")
     # A card route above the baby stages always asks for something (stats, or a fallback when nothing
     # else is met). One with no requirement at all is a research slip: "Stage 15 cleared, Jogress with
     # ..." was written as an Adventure route, so growth took a merge-only Ultimate for free.
@@ -482,6 +533,9 @@ def main():
                     attrs = ", ".join("." + a for a in p[2])
                     rows.append(f".init({step(ab)}, level: .{p[1]}, attributes: [{attrs}])")
         out.append(f"                    jogress: [{', '.join(rows)}],")
+        digimentals = DIGIMENTAL_STEPS.get(line_id, {})
+        rows = [f"{step(ab)}: .{digimentals[ab]}" for ab in sorted(digimentals, key=order)]
+        out.append(f"                    digimentalSteps: [{', '.join(rows) if rows else ':'}],")
         conds = CONDITIONS.get(line_id, {})
         rows = []
         for ab in sorted(steps_of[line_id], key=order):

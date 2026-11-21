@@ -3643,6 +3643,131 @@
    "en": "Ground Fang",
    "kind": "claw",
    "koSpecies": "다이노타이거몬"
+  },
+  "digmon": {
+   "ko": "빅 크랙",
+   "en": "Big Crack",
+   "kind": "quake",
+   "koSpecies": "디그몬"
+  },
+  "fladramon": {
+   "ko": "너클 파이어",
+   "en": "Knuckle Fire",
+   "kind": "melee",
+   "koSpecies": "화염드라몬",
+   "tint": "heat"
+  },
+  "goldvdramon": {
+   "ko": "브이 브레스 애로",
+   "en": "V-Breath Arrow",
+   "kind": "beam",
+   "koSpecies": "골드브이드라몬",
+   "tint": "heat"
+  },
+  "harpymon": {
+   "ko": "윈드 시커",
+   "en": "Wind Seeker",
+   "kind": "claw",
+   "koSpecies": "하피몬"
+  },
+  "holsmon": {
+   "ko": "마하 임펄스",
+   "en": "Mach Impulse",
+   "kind": "wave",
+   "koSpecies": "호루스몬"
+  },
+  "kongoumon": {
+   "ko": "총",
+   "en": "Teppou",
+   "kind": "melee",
+   "koSpecies": "콩고몬"
+  },
+  "lighdramon": {
+   "ko": "라이트닝 블레이드",
+   "en": "Lightning Blade",
+   "kind": "electric",
+   "koSpecies": "번개드라몬"
+  },
+  "lynxmon": {
+   "ko": "서멀 메인",
+   "en": "Thermal Mane",
+   "kind": "fire",
+   "koSpecies": "링스몬"
+  },
+  "magnamon": {
+   "ko": "플라즈마 슛",
+   "en": "Plasma Shoot",
+   "kind": "electric",
+   "koSpecies": "매그너몬"
+  },
+  "moosemon": {
+   "ko": "호른 블레이드",
+   "en": "Horn Blade",
+   "kind": "claw",
+   "koSpecies": "무스몬"
+  },
+  "nefertimon": {
+   "ko": "여왕의 저주",
+   "en": "Curse of the Queen",
+   "kind": "beam",
+   "koSpecies": "네페르티몬",
+   "tint": "heat"
+  },
+  "pegasmon": {
+   "ko": "로데오 갤럽",
+   "en": "Rodeo Gallop",
+   "kind": "melee",
+   "koSpecies": "페가수스몬"
+  },
+  "pucchiemon": {
+   "ko": "하트너 빔",
+   "en": "Heartner Beam",
+   "kind": "heart",
+   "koSpecies": "푸치몬"
+  },
+  "pucchiemongreen": {
+   "ko": "하트너 빔",
+   "en": "Heartner Beam",
+   "kind": "heart",
+   "koSpecies": "푸치몬(녹)"
+  },
+  "rapidmonarmor": {
+   "ko": "래비드 파이어",
+   "en": "Rapid Fire",
+   "kind": "missile",
+   "koSpecies": "래피드몬(아머체)"
+  },
+  "sagittarimon": {
+   "ko": "저지먼트 애로",
+   "en": "Judgment Arrow",
+   "kind": "missile",
+   "koSpecies": "사수몬",
+   "tint": "metal"
+  },
+  "shadramon": {
+   "ko": "플레어 버스터",
+   "en": "Flare Buster",
+   "kind": "fire",
+   "koSpecies": "샤드라몬"
+  },
+  "shurimon": {
+   "ko": "모미지오로시",
+   "en": "Momiji Oroshi",
+   "kind": "claw",
+   "koSpecies": "수리몬",
+   "tint": "leaf"
+  },
+  "submarimon": {
+   "ko": "옥시젠 호밍",
+   "en": "Oxygen Homing",
+   "kind": "missile",
+   "koSpecies": "잠수몬"
+  },
+  "thunderbirmon": {
+   "ko": "스파크 윙",
+   "en": "Spark Wing",
+   "kind": "electric",
+   "koSpecies": "썬더버드몬"
   }
  }
 }

@@ -1,0 +1,304 @@
+[
+ {
+  "key": "digmon",
+  "ko": "빅 크랙",
+  "en": "Big Crack",
+  "what": "Strikes the earth with rotating drills so a fissure opens.",
+  "koSpecies": "디그몬",
+  "kind": "quake",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=digmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=digmon",
+   "https://digimon.net/reference/detail.php?directory_name=digmon",
+   "https://wikimon.net/digmon"
+  ],
+  "note": null
+ },
+ {
+  "key": "fladramon",
+  "ko": "너클 파이어",
+  "en": "Knuckle Fire",
+  "what": "Pummels the opponent with fists of flame.",
+  "koSpecies": "화염드라몬",
+  "kind": "melee",
+  "tint": "heat",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=fladramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=fladramon",
+   "https://digimon.net/reference/detail.php?directory_name=fladramon",
+   "https://wikimon.net/fladramon"
+  ],
+  "note": "JP ナックルファイア. reference_en uses the dub name \"Flaming Fist\"."
+ },
+ {
+  "key": "goldvdramon",
+  "ko": "브이 브레스 애로",
+  "en": "V-Breath Arrow",
+  "what": "Shoots a golden heat ray.",
+  "koSpecies": "골드브이드라몬",
+  "kind": "beam",
+  "tint": "heat",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=goldv-dramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=goldv-dramon",
+   "https://digimon.net/reference/detail.php?directory_name=goldv-dramon",
+   "https://wikimon.net/goldvdramon"
+  ],
+  "note": "JP ブイブレスアロー. reference_en uses the dub name \"V-Nova Blast\". Directory goldv-dramon (linked from no page; found by trying)."
+ },
+ {
+  "key": "harpymon",
+  "ko": "윈드 시커",
+  "en": "Wind Seeker",
+  "what": "Turns the wind into vacuum blades.",
+  "koSpecies": "하피몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=harpymon",
+   "https://digimon.net/reference_en/detail.php?directory_name=harpymon",
+   "https://digimon.net/reference/detail.php?directory_name=harpymon",
+   "https://wikimon.net/harpymon"
+  ],
+  "note": "Vacuum blades: claw, like Airdramon (move-shape-review.json)."
+ },
+ {
+  "key": "holsmon",
+  "ko": "마하 임펄스",
+  "en": "Mach Impulse",
+  "what": "Fires shockwaves from the wings on its head.",
+  "koSpecies": "호루스몬",
+  "kind": "wave",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=holsmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=holsmon",
+   "https://digimon.net/reference/detail.php?directory_name=holsmon",
+   "https://wikimon.net/holsmon"
+  ],
+  "note": null
+ },
+ {
+  "key": "kongoumon",
+  "ko": "총",
+  "en": "Teppou",
+  "what": "A string of fierce sumo slaps with its six arms.",
+  "koSpecies": "콩고몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=kongoumon",
+   "https://digimon.net/reference_en/detail.php?directory_name=kongoumon",
+   "https://digimon.net/reference/detail.php?directory_name=kongoumon",
+   "https://wikimon.net/kongoumon"
+  ],
+  "note": "JP 鉄砲（テッポウ）, the sumo thrust; reference_en \"Popper\". The official Korean name is 총."
+ },
+ {
+  "key": "lighdramon",
+  "ko": "라이트닝 블레이드",
+  "en": "Lightning Blade",
+  "what": "Unleashes electricity shaped like a sword from the blade on its head.",
+  "koSpecies": "번개드라몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=lighdramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=lighdramon",
+   "https://digimon.net/reference/detail.php?directory_name=lighdramon",
+   "https://wikimon.net/lighdramon"
+  ],
+  "note": null
+ },
+ {
+  "key": "lynxmon",
+  "ko": "서멀 메인",
+  "en": "Thermal Mane",
+  "what": "Turns its body heat into explosive flames.",
+  "koSpecies": "링스몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=lynxmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=lynxmon",
+   "https://digimon.net/reference/detail.php?directory_name=lynxmon",
+   "https://wikimon.net/lynxmon"
+  ],
+  "note": null
+ },
+ {
+  "key": "magnamon",
+  "ko": "플라즈마 슛",
+  "en": "Plasma Shoot",
+  "what": "Fires a ball of plasma.",
+  "koSpecies": "매그너몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=magnamon",
+   "https://digimon.net/reference_en/detail.php?directory_name=magnamon",
+   "https://digimon.net/reference/detail.php?directory_name=magnamon",
+   "https://wikimon.net/magnamon"
+  ],
+  "note": "JP プラズマシュート. reference_en \"Plasma Shot\". A ball of plasma: electric, like Kabuterimon's ball of electricity."
+ },
+ {
+  "key": "moosemon",
+  "ko": "호른 블레이드",
+  "en": "Horn Blade",
+  "what": "Its antlers slice through the air itself, even at a distance.",
+  "koSpecies": "무스몬",
+  "kind": "claw",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=moosemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=moosemon",
+   "https://digimon.net/reference/detail.php?directory_name=moosemon",
+   "https://wikimon.net/moosemon"
+  ],
+  "note": null
+ },
+ {
+  "key": "nefertimon",
+  "ko": "여왕의 저주",
+  "en": "Curse of the Queen",
+  "what": "Fires a red laser beam from the ornament on its forehead.",
+  "koSpecies": "네페르티몬",
+  "kind": "beam",
+  "tint": "heat",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=nefertimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=nefertimon",
+   "https://digimon.net/reference/detail.php?directory_name=nefertimon",
+   "https://wikimon.net/nefertimon"
+  ],
+  "note": "A red laser: beam with the heat colors."
+ },
+ {
+  "key": "pegasmon",
+  "ko": "로데오 갤럽",
+  "en": "Rodeo Gallop",
+  "what": "Ferocious kicks with its hind legs.",
+  "koSpecies": "페가수스몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=pegasmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=pegasmon",
+   "https://digimon.net/reference/detail.php?directory_name=pegasmon",
+   "https://wikimon.net/pegasmon"
+  ],
+  "note": null
+ },
+ {
+  "key": "pucchiemon",
+  "ko": "하트너 빔",
+  "en": "Heartner Beam",
+  "what": "A soft light that calms the foe's heart.",
+  "koSpecies": "푸치몬",
+  "kind": "heart",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=pucchiemon",
+   "https://digimon.net/reference_en/detail.php?directory_name=pucchiemon",
+   "https://digimon.net/reference/detail.php?directory_name=pucchiemon",
+   "https://wikimon.net/pucchiemon"
+  ],
+  "note": null
+ },
+ {
+  "key": "pucchiemongreen",
+  "ko": "하트너 빔",
+  "en": "Heartner Beam",
+  "what": "A soft light that calms the foe's heart.",
+  "koSpecies": "푸치몬(녹)",
+  "kind": "heart",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=pucchiemon-green",
+   "https://digimon.net/reference_en/detail.php?directory_name=pucchiemon-green",
+   "https://digimon.net/reference/detail.php?directory_name=pucchiemon-green",
+   "https://wikimon.net/pucchiemongreen"
+  ],
+  "note": null
+ },
+ {
+  "key": "rapidmonarmor",
+  "ko": "래비드 파이어",
+  "en": "Rapid Fire",
+  "what": "Homing missiles from its arms and the revolver on its back.",
+  "koSpecies": "래피드몬(아머체)",
+  "kind": "missile",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=rapidmon_gold",
+   "https://digimon.net/reference_en/detail.php?directory_name=rapidmon_gold",
+   "https://digimon.net/reference/detail.php?directory_name=rapidmon_gold",
+   "https://wikimon.net/rapidmonarmor"
+  ],
+  "note": "Official directory rapidmon_gold, named 래피드몬 like the Perfect Rapidmon on the same line: the Korean name gets (아머체) so the two can be told apart."
+ },
+ {
+  "key": "sagittarimon",
+  "ko": "저지먼트 애로",
+  "en": "Judgment Arrow",
+  "what": "Fires an arrow of the super-metal Chrondigizoid.",
+  "koSpecies": "사수몬",
+  "kind": "missile",
+  "tint": "metal",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=sagittarimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=sagittarimon",
+   "https://digimon.net/reference/detail.php?directory_name=sagittarimon",
+   "https://wikimon.net/sagittarimon"
+  ],
+  "note": "An arrow: missile, like Angewomon's Holy Arrow."
+ },
+ {
+  "key": "shadramon",
+  "ko": "플레어 버스터",
+  "en": "Flare Buster",
+  "what": "Unleashes incandescent flames from both arms.",
+  "koSpecies": "샤드라몬",
+  "kind": "fire",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=shadramon",
+   "https://digimon.net/reference_en/detail.php?directory_name=shadramon",
+   "https://digimon.net/reference/detail.php?directory_name=shadramon",
+   "https://wikimon.net/shadramon"
+  ],
+  "note": null
+ },
+ {
+  "key": "shurimon",
+  "ko": "모미지오로시",
+  "en": "Momiji Oroshi",
+  "what": "Spins the shuriken on its stretching limbs to cut the enemy.",
+  "koSpecies": "수리몬",
+  "kind": "claw",
+  "tint": "leaf",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=shurimon",
+   "https://digimon.net/reference_en/detail.php?directory_name=shurimon",
+   "https://digimon.net/reference/detail.php?directory_name=shurimon",
+   "https://wikimon.net/shurimon"
+  ],
+  "note": "JP 紅葉おろし. reference_en uses the dub name \"Double Star Strike\". Shuriken blades of the Plant Digimental: claw with the leaf colors."
+ },
+ {
+  "key": "submarimon",
+  "ko": "옥시젠 호밍",
+  "en": "Oxygen Homing",
+  "what": "Discharges super-compressed oxygen (a homing torpedo).",
+  "koSpecies": "잠수몬",
+  "kind": "missile",
+  "sources": [
+   "https://wikimon.net/submarimon"
+  ],
+  "note": "Not in the official reference (no directory found). Korean name from the Korean broadcast of Adventure 02; move from Wikimon (JP オキシジェンホーミング), Korean written as it sounds. Check before a public release."
+ },
+ {
+  "key": "thunderbirmon",
+  "ko": "스파크 윙",
+  "en": "Spark Wing",
+  "what": "Countless feathers wreathed in electricity.",
+  "koSpecies": "썬더버드몬",
+  "kind": "electric",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=thunderbirmon",
+   "https://digimon.net/reference_en/detail.php?directory_name=thunderbirmon",
+   "https://digimon.net/reference/detail.php?directory_name=thunderbirmon",
+   "https://wikimon.net/thunderbirmon"
+  ],
+  "note": null
+ }
+]

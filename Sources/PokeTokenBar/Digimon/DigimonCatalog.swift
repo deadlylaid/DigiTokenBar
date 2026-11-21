@@ -54,8 +54,16 @@ struct DigimonLine: Sendable, Hashable {
     /// Who each Jogress route on the card merges with (a step can also have a normal route). A friend's
     /// code that fits takes it (`EvolutionEngine.jogressOptions`).
     var jogress: [DigimonJogress] = []
+    /// Steps into an Armor Digimon ("from>to") and the Digimental each needs (step 13). Growth never
+    /// takes one by itself (`EvolutionRules.isLocked`); only using the Digimental does.
+    var digimentalSteps: [String: Digimental] = [:]
     /// What the card requires for each step (not for merges). Empty = no card data (test catalogs).
     var conditions: [DigimonStepCondition] = []
+
+    /// The Digimental this step needs, nil for a step growth can take (or a merge).
+    func digimental(from: String, to: String) -> Digimental? {
+        digimentalSteps["\(from)>\(to)"]
+    }
 }
 
 /// A Jogress route: the step and the partner it needs, either a named Digimon or any Digimon of one

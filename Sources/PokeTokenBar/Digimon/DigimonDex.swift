@@ -13,6 +13,8 @@ struct DigimonDex {
         case friendJogress(routes: [DigimonJogress])
         /// A named Jogress the app does: raise both partners (e.g. War Greymon and Metal Garurumon).
         case specialJogress(partners: [String])
+        /// An Armor Digimon: this Digimental opens the step into it (step 13).
+        case digimental(Digimental)
     }
 
     struct Link: Equatable, Identifiable {
@@ -48,19 +50,23 @@ struct DigimonDex {
         let special = rules.specialJogress.filter { line.members.contains($0.from) && line.members.contains($0.to) }
             .map { DigimonEvolution(from: $0.from, to: $0.to, sources: [.vitalBracelet], canon: false) }
         let friendSteps = rules.friendJogress ? Set(line.jogress.map(\.step)) : []
+        // A Digimental step is locked for growth but is still an evolution of the line (step 13).
         let evolutions = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
-            .filter { !rules.isLocked($0.from, $0.to, in: line) || friendSteps.contains("\($0.from)>\($0.to)") } + special
+            .filter { !rules.isLocked($0.from, $0.to, in: line) || friendSteps.contains("\($0.from)>\($0.to)")
+                || line.digimental(from: $0.from, to: $0.to) != nil } + special
         let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
             let incoming = allSteps.filter { $0.to == species.key }
+            let digimental = incoming.lazy.compactMap { line.digimental(from: $0.from, to: $0.to) }.first
             let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
                 && incoming.allSatisfy { rules.isLocked($0.from, $0.to, in: line) }
             let jogressFrom = rules.specialJogress.filter { $0.to == species.key }.map(\.from)
             let friendRoutes = rules.friendJogress ? line.jogress.filter { $0.to == species.key } : []
             let secret: Secret? = !jogressFrom.isEmpty ? .specialJogress(partners: Array(Set(jogressFrom)).sorted())
                 : rules.locked.contains(species.key) ? .locked
-                : mergeOnly ? (friendRoutes.isEmpty ? .mergeOnly : .friendJogress(routes: friendRoutes))
-                : rules.hidden[species.key].map { .hidden($0) }
+                : digimental.map { .digimental($0) }
+                ?? (mergeOnly ? (friendRoutes.isEmpty ? .mergeOnly : .friendJogress(routes: friendRoutes))
+                    : rules.hidden[species.key].map { .hidden($0) })
             let link = { (from: String, to: String, other: String) in
                 Link(key: other, discovered: state.discoveredEvolutions.contains("\(from)>\(to)"))
             }
@@ -214,6 +220,9 @@ extension DigimonText {
             let names = partners.map { name(catalog.species($0)) }.joined(separator: ", ")
             return ko ? "\(names)를 모두 키워 본 적이 있으면, 궁극체를 다 채운 뒤 친구의 짝 디지몬 코드로 합체 진화해요."
                       : "Once you have raised \(names), a full Ultimate merges into this with a friend's code for its partner."
+        case .digimental(let d):
+            // "디지멘탈" ends in ㄹ, so the subject particle is 이.
+            return ko ? "\(digimental(d))이 있으면 진화할 수 있어요." : "Evolves with the \(digimental(d))."
         case .hidden(.bugsDefeated): return ko ? "버그를 많이 잡은 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says bug hunters turn into this."
         case .hidden(.limitHits): return ko ? "한도를 자주 넘긴 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says hitting your limits often leads here."
         }
@@ -470,9 +479,8 @@ struct DigimonDexView: View {
                         .frame(width: 44, height: 44)
                     if entry.sighted {
                         Image(systemName: "eye.fill").font(.caption2).foregroundStyle(.secondary)
-                    } else if entry.secret != nil, !entry.seen {
-                        Image(systemName: entry.secret == .locked || entry.secret == .mergeOnly ? "lock.fill"
-                              : { if case .friendJogress = entry.secret { return "person.2.fill" } else { return "sparkles" } }())
+                    } else if let secret = entry.secret, !entry.seen {
+                        Image(systemName: Self.secretIcon(secret))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
@@ -490,6 +498,16 @@ struct DigimonDexView: View {
         }
         .buttonStyle(.plain)
         .task(id: entry.id) { _ = await hub.image(for: entry.id) }
+    }
+
+    /// The badge on a silhouette with a secret.
+    nonisolated static func secretIcon(_ secret: DigimonDex.Secret) -> String {
+        switch secret {
+        case .locked, .mergeOnly: return "lock.fill"
+        case .friendJogress: return "person.2.fill"
+        case .digimental: return "shield.lefthalf.filled"
+        case .hidden, .specialJogress: return "sparkles"
+        }
     }
 
     /// `lineID` is set for a search result: the detail then names its line and can open it.

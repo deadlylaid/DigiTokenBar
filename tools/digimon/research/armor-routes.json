@@ -1,0 +1,2863 @@
+{
+ "system": {
+  "description": "Armor Digimon routes on ten Vital Bracelet cards (step 13). Collected 2026-11-21 by tools/digimon/research/scripts/armor_routes.py from the humulos.com charts and detail pages (device 13 = VB DIM, 14 = VB BE; BE cards count PP where DIM cards count Trophies). For each card: `cardStages` is the chart column each Armor Digimon stands in; `edges` are the card's routes with an Armor Digimon at either end that stay on the card, in the format of the vb-conditions-*.json files; `digimentals` gives each Child (non-Armor) -> Armor step the Digimental that opens it in the app. Third-party quotes: review before a public release (see README).",
+  "kinds": {
+   "normal": "stat requirements",
+   "fallback": "taken when nothing else is met",
+   "jogress": "needs a partner Digimon",
+   "adventure": "stat requirements after an Adventure stage"
+  },
+  "digimentalRule": "pair: Wikimon's Digimental Evolution Chart lists that Digimon with that Armor under this Digimental. representative: the chart has no such pair, so the Armor's first chart column (courage, friendship, love, knowledge, purity, reliability, hope, light, kindness, miracles, fate) is used.",
+  "digimentalChart": {
+   "source": "https://wikimon.net/Template:DigimentalEvoList1 (shown on https://wikimon.net/Digimental_Evolution_Chart), fetched 2026-11-21. Text licensed CC BY-SA 3.0.",
+   "columns": [
+    "courage",
+    "friendship",
+    "love",
+    "knowledge",
+    "purity",
+    "reliability",
+    "hope",
+    "light",
+    "kindness",
+    "miracles",
+    "fate"
+   ],
+   "pairs": [
+    {
+     "base": "Agnimon",
+     "digimental": "courage",
+     "armor": "Fladramon"
+    },
+    {
+     "base": "Aquilamon",
+     "digimental": "purity",
+     "armor": "Shurimon"
+    },
+    {
+     "base": "Ankylomon",
+     "digimental": "light",
+     "armor": "Seahomon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "courage",
+     "armor": "Boarmon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "friendship",
+     "armor": "Sepikmon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "love",
+     "armor": "Pteranomon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "knowledge",
+     "armor": "Digmon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "purity",
+     "armor": "Frogmon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "reliability",
+     "armor": "Submarimon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "hope",
+     "armor": "Sheepmon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "light",
+     "armor": "Seahomon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "kindness",
+     "armor": "Chamelemon"
+    },
+    {
+     "base": "Armadimon",
+     "digimental": "miracles",
+     "armor": "Elephamon"
+    },
+    {
+     "base": "Chackmon",
+     "digimental": "friendship",
+     "armor": "Togemogumon"
+    },
+    {
+     "base": "Clear Agumon",
+     "digimental": "miracles",
+     "armor": "Elephamon"
+    },
+    {
+     "base": "Clear Agumon",
+     "digimental": "miracles",
+     "armor": "Peacockmon"
+    },
+    {
+     "base": "Clear Agumon",
+     "digimental": "fate",
+     "armor": "Maildramon"
+    },
+    {
+     "base": "Fairimon",
+     "digimental": "purity",
+     "armor": "Shurimon"
+    },
+    {
+     "base": "Gabumon",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Gabumon",
+     "digimental": "friendship",
+     "armor": "Kita Kitsunemon"
+    },
+    {
+     "base": "Gabumon",
+     "digimental": "hope",
+     "armor": "Moosemon"
+    },
+    {
+     "base": "Gabumon (X-Antibody)",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Gabumon (Black)",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Galgomon",
+     "digimental": "kindness",
+     "armor": "Prairiemon"
+    },
+    {
+     "base": "Gomamon",
+     "digimental": "reliability",
+     "armor": "Urashimamon"
+    },
+    {
+     "base": "Gottsumon",
+     "digimental": "friendship",
+     "armor": "Stegomon"
+    },
+    {
+     "base": "Gottsumon",
+     "digimental": "friendship",
+     "armor": "Thunderbirmon"
+    },
+    {
+     "base": "Gottsumon (X-Antibody)",
+     "digimental": "friendship",
+     "armor": "Stegomon"
+    },
+    {
+     "base": "Gottsumon (X-Antibody)",
+     "digimental": "friendship",
+     "armor": "Thunderbirmon"
+    },
+    {
+     "base": "Guardromon",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Guardromon (Gold)",
+     "digimental": "miracles",
+     "armor": "Magnamon"
+    },
+    {
+     "base": "Guardromon (Gold)",
+     "digimental": "fate",
+     "armor": "Rapidmon Armor"
+    },
+    {
+     "base": "Guilmon",
+     "digimental": "courage",
+     "armor": "Fladramon"
+    },
+    {
+     "base": "Guilmon",
+     "digimental": "reliability",
+     "armor": "Tylomon"
+    },
+    {
+     "base": "Guilmon (X-Antibody)",
+     "digimental": "courage",
+     "armor": "Fladramon"
+    },
+    {
+     "base": "Guilmon (X-Antibody)",
+     "digimental": "reliability",
+     "armor": "Tylomon"
+    },
+    {
+     "base": "Hagurumon",
+     "digimental": "fate",
+     "armor": "Kongoumon"
+    },
+    {
+     "base": "Hagurumon (X-Antibody)",
+     "digimental": "fate",
+     "armor": "Kongoumon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "courage",
+     "armor": "Allomon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "friendship",
+     "armor": "Rinkmon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "love",
+     "armor": "Holsmon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "knowledge",
+     "armor": "Flybeemon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "purity",
+     "armor": "Shurimon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "reliability",
+     "armor": "Orcamon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "hope",
+     "armor": "Moosemon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "light",
+     "armor": "Harpymon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "kindness",
+     "armor": "Toucanmon"
+    },
+    {
+     "base": "Hawkmon",
+     "digimental": "miracles",
+     "armor": "Peacockmon"
+    },
+    {
+     "base": "Impmon",
+     "digimental": "friendship",
+     "armor": "Thunderbirmon"
+    },
+    {
+     "base": "Impmon",
+     "digimental": "purity",
+     "armor": "Nohemon"
+    },
+    {
+     "base": "Impmon",
+     "digimental": "light",
+     "armor": "Coatlmon"
+    },
+    {
+     "base": "Kabukimon",
+     "digimental": "light",
+     "armor": "Nefertimon"
+    },
+    {
+     "base": "Kokuwamon",
+     "digimental": "fate",
+     "armor": "Rhinomon"
+    },
+    {
+     "base": "Kokuwamon (X-Antibody)",
+     "digimental": "fate",
+     "armor": "Rhinomon"
+    },
+    {
+     "base": "Lopmon",
+     "digimental": "friendship",
+     "armor": "Bitmon"
+    },
+    {
+     "base": "Lopmon",
+     "digimental": "fate",
+     "armor": "Rapidmon Armor"
+    },
+    {
+     "base": "Manbomon",
+     "digimental": "reliability",
+     "armor": "Mantaraymon"
+    },
+    {
+     "base": "Monodramon",
+     "digimental": "purity",
+     "armor": "Kabukimon"
+    },
+    {
+     "base": "Monodramon",
+     "digimental": "reliability",
+     "armor": "Depthmon"
+    },
+    {
+     "base": "Otamamon",
+     "digimental": "reliability",
+     "armor": "Tylomon"
+    },
+    {
+     "base": "Otamamon",
+     "digimental": "light",
+     "armor": "Manbomon"
+    },
+    {
+     "base": "Palmon",
+     "digimental": "purity",
+     "armor": "Cheer Galmon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "courage",
+     "armor": "Baromon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "friendship",
+     "armor": "Stegomon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "love",
+     "armor": "Pipismon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "knowledge",
+     "armor": "Mothmon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "purity",
+     "armor": "Ponchomon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "reliability",
+     "armor": "Mantaraymon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "hope",
+     "armor": "Pegasmon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "light",
+     "armor": "Manbomon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "kindness",
+     "armor": "Prairiemon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "miracles",
+     "armor": "Rhinomon"
+    },
+    {
+     "base": "Patamon",
+     "digimental": "fate",
+     "armor": "Rhinomon"
+    },
+    {
+     "base": "Peckmon",
+     "digimental": "love",
+     "armor": "Pteranomon"
+    },
+    {
+     "base": "Piyomon",
+     "digimental": "love",
+     "armor": "Kyukanmon"
+    },
+    {
+     "base": "Plotmon",
+     "digimental": "friendship",
+     "armor": "Bitmon"
+    },
+    {
+     "base": "Plotmon",
+     "digimental": "hope",
+     "armor": "Goatmon"
+    },
+    {
+     "base": "Plotmon",
+     "digimental": "light",
+     "armor": "Nefertimon"
+    },
+    {
+     "base": "Plotmon",
+     "digimental": "kindness",
+     "armor": "Opossummon"
+    },
+    {
+     "base": "Plotmon",
+     "digimental": "fate",
+     "armor": "Maildramon"
+    },
+    {
+     "base": "Renamon",
+     "digimental": "friendship",
+     "armor": "Lighdramon"
+    },
+    {
+     "base": "Searchmon",
+     "digimental": "courage",
+     "armor": "Shadramon"
+    },
+    {
+     "base": "Seahomon",
+     "digimental": "reliability",
+     "armor": "Submarimon"
+    },
+    {
+     "base": "Sethmon",
+     "digimental": "friendship",
+     "armor": "Lighdramon"
+    },
+    {
+     "base": "Solarmon",
+     "digimental": "friendship",
+     "armor": "Kenkimon"
+    },
+    {
+     "base": "Stingmon",
+     "digimental": "miracles",
+     "armor": "Kongoumon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "courage",
+     "armor": "Lynxmon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "friendship",
+     "armor": "Bitmon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "love",
+     "armor": "Swanmon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "knowledge",
+     "armor": "Butterflymon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "purity",
+     "armor": "Kabukimon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "reliability",
+     "armor": "Tylomon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "hope",
+     "armor": "Goatmon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "light",
+     "armor": "Nefertimon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "kindness",
+     "armor": "Opossummon"
+    },
+    {
+     "base": "Tailmon",
+     "digimental": "miracles",
+     "armor": "Maildramon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "courage",
+     "armor": "Lynxmon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "friendship",
+     "armor": "Bitmon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "love",
+     "armor": "Swanmon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "knowledge",
+     "armor": "Butterflymon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "purity",
+     "armor": "Kabukimon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "reliability",
+     "armor": "Tylomon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "hope",
+     "armor": "Goatmon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "light",
+     "armor": "Nefertimon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "kindness",
+     "armor": "Opossummon"
+    },
+    {
+     "base": "Tailmon (X-Antibody)",
+     "digimental": "miracles",
+     "armor": "Maildramon"
+    },
+    {
+     "base": "Tentomon",
+     "digimental": "courage",
+     "armor": "Fla Wizarmon"
+    },
+    {
+     "base": "Tentomon",
+     "digimental": "courage",
+     "armor": "Salamandamon"
+    },
+    {
+     "base": "Tentomon",
+     "digimental": "knowledge",
+     "armor": "Jiko Chuumon"
+    },
+    {
+     "base": "Terriermon",
+     "digimental": "miracles",
+     "armor": "Magnamon"
+    },
+    {
+     "base": "Terriermon",
+     "digimental": "fate",
+     "armor": "Rapidmon Armor"
+    },
+    {
+     "base": "Tocanmon",
+     "digimental": "love",
+     "armor": "Holsmon"
+    },
+    {
+     "base": "Tyumon",
+     "digimental": "courage",
+     "armor": "Salamandamon"
+    },
+    {
+     "base": "Tyumon",
+     "digimental": "light",
+     "armor": "Seahomon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "courage",
+     "armor": "Fladramon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "friendship",
+     "armor": "Lighdramon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "love",
+     "armor": "Sethmon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "knowledge",
+     "armor": "Honeybeemon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "purity",
+     "armor": "Yaksamon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "reliability",
+     "armor": "Depthmon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "hope",
+     "armor": "Sagittarimon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "light",
+     "armor": "Gargomon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "kindness",
+     "armor": "Kangarumon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "miracles",
+     "armor": "Magnamon"
+    },
+    {
+     "base": "V-mon",
+     "digimental": "fate",
+     "armor": "Gold V-dramon"
+    },
+    {
+     "base": "Volcamon",
+     "digimental": "friendship",
+     "armor": "Pile Volcamon"
+    },
+    {
+     "base": "Wizarmon",
+     "digimental": "courage",
+     "armor": "Fla Wizarmon"
+    },
+    {
+     "base": "Wizarmon",
+     "digimental": "purity",
+     "armor": "Ponchomon"
+    },
+    {
+     "base": "Wolfmon",
+     "digimental": "light",
+     "armor": "Gargomon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "courage",
+     "armor": "Shadramon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "courage",
+     "armor": "Fla Wizarmon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "friendship",
+     "armor": "Togemogumon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "love",
+     "armor": "Owlmon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "knowledge",
+     "armor": "Searchmon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "purity",
+     "armor": "Nohemon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "reliability",
+     "armor": "Archelomon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "hope",
+     "armor": "Bullmon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "light",
+     "armor": "Coatlmon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "kindness",
+     "armor": "Pucchiemon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "kindness",
+     "armor": "Pucchiemon (Green)"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "miracles",
+     "armor": "Kongoumon"
+    },
+    {
+     "base": "Wormmon",
+     "digimental": "fate",
+     "armor": "Kongoumon"
+    },
+    {
+     "base": "XV-mon",
+     "digimental": "courage",
+     "armor": "Fladramon"
+    },
+    {
+     "base": "XV-mon",
+     "digimental": "miracles",
+     "armor": "Magnamon"
+    }
+   ]
+  }
+ },
+ "cards": {
+  "vmon": {
+   "card": "Ancient Warriors",
+   "chart": "https://humulos.com/digimon/vbdm/#awa_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "fladramon",
+    "lighdramon",
+    "sagittarimon",
+    "goldvdramon",
+    "magnamon"
+   ],
+   "cardStages": {
+    "fladramon": "adult",
+    "lighdramon": "adult",
+    "sagittarimon": "perfect",
+    "goldvdramon": "perfect",
+    "magnamon": "ultimate"
+   },
+   "edges": [
+    {
+     "from": "vmon",
+     "to": "fladramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 3,
+      "vitalValues": 500
+     },
+     "raw": "3+ Trophies, 500+ Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=v&device=13",
+     "note": null
+    },
+    {
+     "from": "vmon",
+     "to": "lighdramon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 2
+       },
+       {
+        "vitalValuesMax": 499
+       }
+      ]
+     },
+     "raw": "Choose one: 0-2 Trophies OR 0-499 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=v&device=13",
+     "note": null
+    },
+    {
+     "from": "vdramon",
+     "to": "sagittarimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=vdra&device=13",
+     "note": null
+    },
+    {
+     "from": "vdramon",
+     "to": "goldvdramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 6,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "6+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=vdra&device=13",
+     "note": null
+    },
+    {
+     "from": "xvmon",
+     "to": "goldvdramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 6,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "6+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=xv&device=13",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "aerovdramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=13",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "sagittarimon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=13",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "digitamamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 6,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "6+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=13",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "paildramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Data Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine or Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=13",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "goldvdramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=13",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "paildramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=13",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "dinobeemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=13",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "digitamamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 6,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "6+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=13",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "aerovdramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Data Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine or Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=13",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "sagittarimon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=13",
+     "note": null
+    },
+    {
+     "from": "aerovdramon",
+     "to": "magnamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Data",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=aerovdra&device=13",
+     "note": null
+    },
+    {
+     "from": "paildramon",
+     "to": "magnamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=paildra&device=13",
+     "note": "humulos card heading: \"Ancient Warriors\""
+    },
+    {
+     "from": "sagittarimon",
+     "to": "ulforcevdramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sagittari&device=13",
+     "note": null
+    },
+    {
+     "from": "sagittarimon",
+     "to": "magnamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sagittari&device=13",
+     "note": null
+    },
+    {
+     "from": "sagittarimon",
+     "to": "imperialdramondragonmode",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Data Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sagittari&device=13",
+     "note": null
+    },
+    {
+     "from": "sagittarimon",
+     "to": "imperialdramonfightermode",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sagittari&device=13",
+     "note": null
+    },
+    {
+     "from": "dinobeemon",
+     "to": "magnamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dinobee&device=13",
+     "note": "humulos card heading: \"Ancient Warriors\""
+    },
+    {
+     "from": "goldvdramon",
+     "to": "imperialdramonfightermode",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goldvdra&device=13",
+     "note": null
+    },
+    {
+     "from": "goldvdramon",
+     "to": "magnamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goldvdra&device=13",
+     "note": null
+    },
+    {
+     "from": "goldvdramon",
+     "to": "imperialdramondragonmode",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goldvdra&device=13",
+     "note": null
+    },
+    {
+     "from": "goldvdramon",
+     "to": "ulforcevdramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Virus",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Virus or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goldvdra&device=13",
+     "note": null
+    },
+    {
+     "from": "digitamamon",
+     "to": "magnamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=digitama&device=13",
+     "note": "humulos card heading: \"Ancient Warriors\""
+    }
+   ],
+   "digimentals": {
+    "vmon>fladramon": {
+     "digimental": "courage",
+     "rule": "pair",
+     "official": "Digi-Egg of Courage (fladramon, digimon.net/reference_en)"
+    },
+    "vmon>lighdramon": {
+     "digimental": "friendship",
+     "rule": "pair",
+     "official": "Digi-Egg of Friendship (lighdramon, digimon.net/reference_en)"
+    },
+    "vdramon>sagittarimon": {
+     "digimental": "hope",
+     "rule": "representative",
+     "official": "Digi-Egg of Hope (sagittarimon, digimon.net/reference_en)"
+    },
+    "vdramon>goldvdramon": {
+     "digimental": "fate",
+     "rule": "representative",
+     "official": "Digi-Egg of Destiny (goldv-dramon, digimon.net/reference_en)"
+    },
+    "xvmon>goldvdramon": {
+     "digimental": "fate",
+     "rule": "representative",
+     "official": "Digi-Egg of Destiny (goldv-dramon, digimon.net/reference_en)"
+    },
+    "digitamamon>magnamon": {
+     "digimental": "miracles",
+     "rule": "representative",
+     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "wormmon": {
+   "card": "Primeval Warriors",
+   "chart": "https://humulos.com/digimon/vbdm/#pwa_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "shadramon",
+    "kongoumon",
+    "pucchiemon",
+    "pucchiemongreen"
+   ],
+   "cardStages": {
+    "shadramon": "adult",
+    "kongoumon": "perfect",
+    "pucchiemon": "perfect",
+    "pucchiemongreen": "perfect"
+   },
+   "edges": [
+    {
+     "from": "wormmon",
+     "to": "shadramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 900,
+      "battles": 5
+     },
+     "raw": "8+ Trophies, 900+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=worm&device=13",
+     "note": null
+    },
+    {
+     "from": "stingmon",
+     "to": "pucchiemongreen",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sting&device=13",
+     "note": null
+    },
+    {
+     "from": "stingmon",
+     "to": "kongoumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sting&device=13",
+     "note": null
+    },
+    {
+     "from": "stingmon",
+     "to": "pucchiemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sting&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "kongoumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "dinobeemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "pucchiemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "jewelbeemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "paildramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "shadramon",
+     "to": "pucchiemongreen",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shadra&device=13",
+     "note": null
+    },
+    {
+     "from": "hudiemon",
+     "to": "pucchiemongreen",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hudie&device=13",
+     "note": null
+    },
+    {
+     "from": "hudiemon",
+     "to": "kongoumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hudie&device=13",
+     "note": null
+    },
+    {
+     "from": "hudiemon",
+     "to": "pucchiemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hudie&device=13",
+     "note": null
+    },
+    {
+     "from": "gokimon",
+     "to": "kongoumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goki&device=13",
+     "note": null
+    },
+    {
+     "from": "gokimon",
+     "to": "pucchiemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goki&device=13",
+     "note": null
+    },
+    {
+     "from": "gokimon",
+     "to": "pucchiemongreen",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=goki&device=13",
+     "note": null
+    },
+    {
+     "from": "kongoumon",
+     "to": "grankuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 15,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "15+ Trophies, 4,500+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kongou&device=13",
+     "note": null
+    },
+    {
+     "from": "kongoumon",
+     "to": "banchostingmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kongou&device=13",
+     "note": null
+    },
+    {
+     "from": "kongoumon",
+     "to": "imperialdramondragonmode",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kongou&device=13",
+     "note": null
+    },
+    {
+     "from": "kongoumon",
+     "to": "imperialdramonpaladinmode",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=kongou&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemon",
+     "to": "imperialdramonpaladinmode",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemon",
+     "to": "imperialdramondragonmode",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5000,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,000+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemon",
+     "to": "banchostingmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemon",
+     "to": "grankuwagamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemongreen",
+     "to": "grankuwagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 15,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "15+ Trophies, 4,500+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie_g&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemongreen",
+     "to": "banchostingmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie_g&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemongreen",
+     "to": "imperialdramondragonmode",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie_g&device=13",
+     "note": null
+    },
+    {
+     "from": "pucchiemongreen",
+     "to": "imperialdramonpaladinmode",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pucchie_g&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "wormmon>shadramon": {
+     "digimental": "courage",
+     "rule": "pair",
+     "official": "Digi-Egg of Courage (shadramon, digimon.net/reference_en)"
+    },
+    "stingmon>pucchiemongreen": {
+     "digimental": "kindness",
+     "rule": "representative",
+     "official": "Digi-Egg of Kindness (pucchiemon-green, digimon.net/reference_en)"
+    },
+    "hudiemon>pucchiemongreen": {
+     "digimental": "kindness",
+     "rule": "representative",
+     "official": "Digi-Egg of Kindness (pucchiemon-green, digimon.net/reference_en)"
+    },
+    "gokimon>kongoumon": {
+     "digimental": "miracles",
+     "rule": "representative",
+     "official": "Digi-Egg of Miracles (kongoumon, digimon.net/reference_en)"
+    },
+    "gokimon>pucchiemon": {
+     "digimental": "kindness",
+     "rule": "representative",
+     "official": "Digi-Egg of Kindness (pucchiemon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "hawkmon": {
+   "card": "BEMemory D-3 White and Red Dim",
+   "chart": "https://humulos.com/digimon/vbbe/anime/#dwr_anchor",
+   "device": "14",
+   "armorOnCard": [
+    "holsmon",
+    "nefertimon",
+    "shurimon"
+   ],
+   "cardStages": {
+    "holsmon": "adult",
+    "nefertimon": "adult",
+    "shurimon": "adult"
+   },
+   "edges": [
+    {
+     "from": "hawkmon",
+     "to": "holsmon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 1000,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hawk&device=14",
+     "note": null
+    },
+    {
+     "from": "hawkmon",
+     "to": "shurimon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hawk&device=14",
+     "note": null
+    },
+    {
+     "from": "tailmonchild",
+     "to": "nefertimon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=tail_c&device=14",
+     "note": null
+    },
+    {
+     "from": "wormmon",
+     "to": "holsmon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=worm&device=14",
+     "note": "humulos card heading: \"D-3 White and Red\""
+    },
+    {
+     "from": "wormmon",
+     "to": "shurimon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "ppMax": 7
+       },
+       {
+        "battlesMax": 4
+       },
+       {
+        "vitalValuesMax": 999
+       }
+      ]
+     },
+     "raw": "Choose one: 0-7 PP OR 0-4 Battles OR 0-999 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=worm&device=14",
+     "note": "humulos card heading: \"D-3 White and Red\""
+    },
+    {
+     "from": "holsmon",
+     "to": "dinobeemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hols&device=14",
+     "note": null
+    },
+    {
+     "from": "holsmon",
+     "to": "angewomon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=hols&device=14",
+     "note": null
+    },
+    {
+     "from": "nefertimon",
+     "to": "chimairamon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 8,
+      "pp": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=neferti&device=14",
+     "note": null
+    },
+    {
+     "from": "nefertimon",
+     "to": "angewomon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=neferti&device=14",
+     "note": null
+    },
+    {
+     "from": "shurimon",
+     "to": "mummymon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 9,
+      "pp": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "Stage 9 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shuri&device=14",
+     "note": null
+    },
+    {
+     "from": "shurimon",
+     "to": "dinobeemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=shuri&device=14",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "hawkmon>holsmon": {
+     "digimental": "love",
+     "rule": "pair",
+     "official": "Digi-Egg of Love (holsmon, digimon.net/reference_en)"
+    },
+    "hawkmon>shurimon": {
+     "digimental": "purity",
+     "rule": "pair",
+     "official": "Digi-Egg of Sincerity (shurimon, digimon.net/reference_en)"
+    },
+    "tailmonchild>nefertimon": {
+     "digimental": "light",
+     "rule": "representative",
+     "official": "Digi-Egg of Light (nefertimon, digimon.net/reference_en)"
+    },
+    "wormmon>holsmon": {
+     "digimental": "love",
+     "rule": "representative",
+     "official": "Digi-Egg of Love (holsmon, digimon.net/reference_en)"
+    },
+    "wormmon>shurimon": {
+     "digimental": "purity",
+     "rule": "representative",
+     "official": "Digi-Egg of Sincerity (shurimon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "armadimon": {
+   "card": "BEMemory D-3 White and Yellow Dim",
+   "chart": "https://humulos.com/digimon/vbbe/anime/#dwy_anchor",
+   "device": "14",
+   "armorOnCard": [
+    "digmon",
+    "submarimon",
+    "pegasmon",
+    "fladramon",
+    "lighdramon",
+    "magnamon"
+   ],
+   "cardStages": {
+    "digmon": "adult",
+    "submarimon": "adult",
+    "pegasmon": "adult",
+    "fladramon": "adult",
+    "lighdramon": "adult",
+    "magnamon": "ultimate"
+   },
+   "edges": [
+    {
+     "from": "armadimon",
+     "to": "digmon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 1000,
+      "battles": 8
+     },
+     "raw": "10+ PP, 1,000+ Vital Values, 8+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=armadi&device=14",
+     "note": null
+    },
+    {
+     "from": "armadimon",
+     "to": "submarimon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=armadi&device=14",
+     "note": null
+    },
+    {
+     "from": "patamon",
+     "to": "pegasmon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pata&device=14",
+     "note": null
+    },
+    {
+     "from": "vmon",
+     "to": "fladramon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 1000,
+      "battles": 5
+     },
+     "raw": "8+ PP, 1,000+ Vital Values, 5+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=v&device=14",
+     "note": "humulos card heading: \"D-3 White and Yellow\""
+    },
+    {
+     "from": "vmon",
+     "to": "lighdramon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "ppMax": 7
+       },
+       {
+        "battlesMax": 4
+       },
+       {
+        "vitalValuesMax": 999
+       }
+      ]
+     },
+     "raw": "Choose one: 0-7 PP OR 0-4 Battles OR 0-999 Vital Values",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=v&device=14",
+     "note": "humulos card heading: \"D-3 White and Yellow\""
+    },
+    {
+     "from": "digmon",
+     "to": "paildramon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=14",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "holyangemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=14",
+     "note": null
+    },
+    {
+     "from": "submarimon",
+     "to": "archnemon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 9,
+      "pp": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "Stage 9 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=submari&device=14",
+     "note": null
+    },
+    {
+     "from": "submarimon",
+     "to": "paildramon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=submari&device=14",
+     "note": null
+    },
+    {
+     "from": "pegasmon",
+     "to": "archnemon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 9,
+      "pp": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "Stage 9 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pegas&device=14",
+     "note": null
+    },
+    {
+     "from": "pegasmon",
+     "to": "holyangemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pegas&device=14",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "paildramon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=14",
+     "note": null
+    },
+    {
+     "from": "fladramon",
+     "to": "holyangemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fladra&device=14",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "holyangemon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=14",
+     "note": null
+    },
+    {
+     "from": "lighdramon",
+     "to": "paildramon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 40
+     },
+     "raw": "8+ PP, 2,000+ Vital Values, 10+ Battles, 40%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lighdra&device=14",
+     "note": null
+    },
+    {
+     "from": "holyangemon",
+     "to": "magnamon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=holyange&device=14",
+     "note": null
+    },
+    {
+     "from": "paildramon",
+     "to": "magnamon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=paildra&device=14",
+     "note": "humulos card heading: \"D-3 White and Yellow\""
+    }
+   ],
+   "digimentals": {
+    "armadimon>digmon": {
+     "digimental": "knowledge",
+     "rule": "pair",
+     "official": "Digi-Egg of Knowledge (digmon, digimon.net/reference_en)"
+    },
+    "armadimon>submarimon": {
+     "digimental": "reliability",
+     "rule": "pair",
+     "official": null
+    },
+    "patamon>pegasmon": {
+     "digimental": "hope",
+     "rule": "pair",
+     "official": "Digi-Egg of Hope (pegasmon, digimon.net/reference_en)"
+    },
+    "vmon>fladramon": {
+     "digimental": "courage",
+     "rule": "pair",
+     "official": "Digi-Egg of Courage (fladramon, digimon.net/reference_en)"
+    },
+    "vmon>lighdramon": {
+     "digimental": "friendship",
+     "rule": "pair",
+     "official": "Digi-Egg of Friendship (lighdramon, digimon.net/reference_en)"
+    },
+    "holyangemon>magnamon": {
+     "digimental": "miracles",
+     "rule": "representative",
+     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
+    },
+    "paildramon>magnamon": {
+     "digimental": "miracles",
+     "rule": "representative",
+     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "renamon": {
+   "card": "Renamon",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#rena_ex_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "lynxmon"
+   ],
+   "cardStages": {
+    "lynxmon": "adult"
+   },
+   "edges": [
+    {
+     "from": "renamon",
+     "to": "lynxmon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 4
+       },
+       {
+        "vitalValuesMax": 599
+       },
+       {
+        "battlesMax": 2
+       }
+      ]
+     },
+     "raw": "Choose one: 0-4 Trophies OR 0-599 Vital Values OR 0-2 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rena&device=13",
+     "note": "humulos card heading: \"Renamon EX\""
+    },
+    {
+     "from": "lynxmon",
+     "to": "kumbhiramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    },
+    {
+     "from": "lynxmon",
+     "to": "taomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    },
+    {
+     "from": "lynxmon",
+     "to": "caturamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    },
+    {
+     "from": "lynxmon",
+     "to": "vikaralamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    },
+    {
+     "from": "lynxmon",
+     "to": "indaramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    },
+    {
+     "from": "lynxmon",
+     "to": "doumon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=lynx&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "renamon>lynxmon": {
+     "digimental": "courage",
+     "rule": "representative",
+     "official": "Digi-Egg of Courage (lynxmon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "terriermon": {
+   "card": "Terriermon",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#terrier_ex_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "harpymon",
+    "rapidmonarmor"
+   ],
+   "cardStages": {
+    "harpymon": "adult",
+    "rapidmonarmor": "ultimate"
+   },
+   "edges": [
+    {
+     "from": "terriermon",
+     "to": "harpymon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 4
+       },
+       {
+        "vitalValuesMax": 599
+       },
+       {
+        "battlesMax": 2
+       }
+      ]
+     },
+     "raw": "Choose one: 0-4 Trophies OR 0-599 Vital Values OR 0-2 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=terrier&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "sinduramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "makuramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "pajiramon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "rapidmonperfect",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "andiramondeva",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "harpymon",
+     "to": "andiramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=harpy&device=13",
+     "note": null
+    },
+    {
+     "from": "rapidmonperfect",
+     "to": "rapidmonarmor",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rapid&device=13",
+     "note": null
+    },
+    {
+     "from": "sinduramon",
+     "to": "rapidmonarmor",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sindura&device=13",
+     "note": null
+    },
+    {
+     "from": "makuramon",
+     "to": "rapidmonarmor",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=makura&device=13",
+     "note": null
+    },
+    {
+     "from": "andiramondeva",
+     "to": "rapidmonarmor",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Vaccine or Free Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Free"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Vaccine or Free Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=andira_d&device=13",
+     "note": null
+    },
+    {
+     "from": "pajiramon",
+     "to": "rapidmonarmor",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 15,
+      "trophies": 20,
+      "vitalValues": 7000,
+      "battles": 25,
+      "winRatio": 70
+     },
+     "raw": "Stage 15 cleared, 20+ Trophies, 7,000+ Vital Values, 25+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=pajira&device=13",
+     "note": null
+    },
+    {
+     "from": "andiramon",
+     "to": "rapidmonarmor",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=andira&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "terriermon>harpymon": {
+     "digimental": "light",
+     "rule": "representative",
+     "official": "Digi-Egg of Light (harpymon, digimon.net/reference_en)"
+    },
+    "rapidmonperfect>rapidmonarmor": {
+     "digimental": "fate",
+     "rule": "representative",
+     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
+    },
+    "makuramon>rapidmonarmor": {
+     "digimental": "fate",
+     "rule": "representative",
+     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
+    },
+    "pajiramon>rapidmonarmor": {
+     "digimental": "fate",
+     "rule": "representative",
+     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "blucomon": {
+   "card": "Blizzard Fang",
+   "chart": "https://humulos.com/digimon/vbdm/vol/#bfa_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "moosemon"
+   ],
+   "cardStages": {
+    "moosemon": "adult"
+   },
+   "edges": [
+    {
+     "from": "blucomon",
+     "to": "moosemon",
+     "kind": "fallback",
+     "requirements": {
+      "anyOf": [
+       {
+        "trophiesMax": 4
+       },
+       {
+        "vitalValuesMax": 599
+       },
+       {
+        "battlesMax": 2
+       }
+      ]
+     },
+     "raw": "Choose one: 0-4 Trophies OR 0-599 Vital Values OR 0-2 Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=bluco&device=13",
+     "note": null
+    },
+    {
+     "from": "moosemon",
+     "to": "mammon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moose&device=13",
+     "note": null
+    },
+    {
+     "from": "moosemon",
+     "to": "crescemon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moose&device=13",
+     "note": null
+    },
+    {
+     "from": "moosemon",
+     "to": "daipenmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moose&device=13",
+     "note": null
+    },
+    {
+     "from": "moosemon",
+     "to": "cryspaledramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moose&device=13",
+     "note": null
+    },
+    {
+     "from": "moosemon",
+     "to": "panjyamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine or Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=moose&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "blucomon>moosemon": {
+     "digimental": "hope",
+     "rule": "representative",
+     "official": "Digi-Egg of Hope (moosemon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "sunarizamon": {
+   "card": "Titan of Dust",
+   "chart": "https://humulos.com/digimon/vbdm/vol/#tdu_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "digmon"
+   ],
+   "cardStages": {
+    "digmon": "adult"
+   },
+   "edges": [
+    {
+     "from": "sunarizamon",
+     "to": "digmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 5,
+      "vitalValues": 600,
+      "battles": 3
+     },
+     "raw": "5+ Trophies, 600+ Vital Values, 3+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=sunariza&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "jyagamon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "12+ Trophies, 3,000+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "scorpiomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "mummymon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "gogmamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine Adult",
+      "jogressPartnerAttributes": [
+       "Vaccine"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Vaccine Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "triceramon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    },
+    {
+     "from": "digmon",
+     "to": "vulturemon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dig&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "sunarizamon>digmon": {
+     "digimental": "knowledge",
+     "rule": "representative",
+     "official": "Digi-Egg of Knowledge (digmon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  },
+  "piyomon": {
+   "card": "BEMemory Holy Wings Dim",
+   "chart": "https://humulos.com/digimon/vbbe/special/#hwi_anchor",
+   "device": "14",
+   "armorOnCard": [
+    "thunderbirmon"
+   ],
+   "cardStages": {
+    "thunderbirmon": "adult"
+   },
+   "edges": [
+    {
+     "from": "falcomon2006animeversion",
+     "to": "thunderbirmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 5,
+      "pp": 12,
+      "vitalValues": 1500,
+      "battles": 10
+     },
+     "raw": "Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=falco_2006&device=14",
+     "note": null
+    },
+    {
+     "from": "jazamon",
+     "to": "thunderbirmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 5,
+      "pp": 12,
+      "vitalValues": 1500,
+      "battles": 10
+     },
+     "raw": "Stage 5 cleared, 12+ PP, 1,500+ Vital Values, 10+ Battles",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=jaza&device=14",
+     "note": null
+    },
+    {
+     "from": "thunderbirmon",
+     "to": "jazarichmon",
+     "kind": "adventure",
+     "requirements": {
+      "adventureStage": 8,
+      "pp": 12,
+      "vitalValues": 3000,
+      "battles": 15,
+      "winRatio": 60
+     },
+     "raw": "Stage 8 cleared, 12+ PP, 3,000+ Vital Values, 15+ Battles, 60%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderbir&device=14",
+     "note": null
+    },
+    {
+     "from": "thunderbirmon",
+     "to": "garudamon",
+     "kind": "normal",
+     "requirements": {
+      "pp": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ PP, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=thunderbir&device=14",
+     "note": null
+    }
+   ],
+   "digimentals": {
+    "falcomon2006animeversion>thunderbirmon": {
+     "digimental": "friendship",
+     "rule": "representative",
+     "official": "Digi-Egg of Friendship (thunderbirmon, digimon.net/reference_en)"
+    },
+    "jazamon>thunderbirmon": {
+     "digimental": "friendship",
+     "rule": "representative",
+     "official": "Digi-Egg of Friendship (thunderbirmon, digimon.net/reference_en)"
+    }
+   },
+   "notes": []
+  }
+ }
+}
