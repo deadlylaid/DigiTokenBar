@@ -113,6 +113,9 @@ struct DigimonState: Codable, Sendable, Equatable {
     var sightings: Set<String>?
     /// Digimental fragments and finished Digimentals (`DigimentalBag`, step 13). Optional for the same reason.
     var digimentals: DigimentalBag?
+    /// A full stage that could armor-evolve with a Digimental the user owns, waiting for the user
+    /// (`EvolutionEngine.useDigimental`). nil when none. Optional for the same reason.
+    var armorWait: JogressWait?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
@@ -130,7 +133,8 @@ struct BattleBook: Codable, Sendable, Equatable {
     static let limit = 200
 }
 
-/// A full stage that can merge, waiting for a friend's code (`GrowthRules.jogressWait`).
+/// A full stage waiting for the user: for a friend's code (`GrowthRules.jogressWait`, `jogressWait`)
+/// or to use a Digimental (`GrowthRules.armorWait`, `armorWait`).
 struct JogressWait: Codable, Sendable, Equatable {
     var openedAt: Date
     /// Skipped or timed out: the stage grows as usual.
@@ -156,4 +160,9 @@ enum DigimonEvent: Equatable, Sendable {
     case fragmentFound(Digimental, from: FragmentSource)
     /// Three fragments made a Digimental.
     case digimentalMade(Digimental)
+    /// A full stage can armor-evolve with a Digimental the user owns: it waits for the user (the
+    /// possible results, with the Digimental each needs).
+    case armorOffered(options: [String])
+    /// Armor-evolved, using up one Digimental.
+    case armorEvolved(from: String, to: String, digimental: Digimental)
 }

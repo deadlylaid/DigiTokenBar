@@ -42,6 +42,8 @@ struct GrowthRules: Sendable, Equatable {
     var trophiesPerDay = 2.0
     /// How long a full stage that can merge waits for a friend's code before it grows as usual.
     var jogressWait: TimeInterval = 24 * 60 * 60
+    /// How long a full stage that can armor-evolve with an owned Digimental waits for the user.
+    var armorWait: TimeInterval = 24 * 60 * 60
 
     static let standard = GrowthRules()
 
@@ -174,9 +176,9 @@ struct EvolutionEngine: Sendable {
             // Waiting for the user's pick: keep the bar full, don't overflow.
             state.partner.stageExp = min(state.partner.stageExp, growth.threshold(for: state.partner.level))
         }
-        if state.jogressWait?.over == false {
-            // Waiting for a friend: experience keeps counting and carries into the next stage, less
-            // than a stage's worth so the next stage never fills at once (thresholds only grow).
+        if state.jogressWait?.over == false || state.armorWait?.over == false {
+            // Waiting for a friend or a Digimental: experience keeps counting and carries into the next
+            // stage, less than a stage's worth so the next stage never fills at once (thresholds only grow).
             state.partner.stageExp = min(state.partner.stageExp, 2 * growth.threshold(for: state.partner.level) - 1)
         }
         return advance(&state, at: date)
@@ -218,6 +220,9 @@ struct EvolutionEngine: Sendable {
         }
         if let wait = state.jogressWait, !wait.over, now.timeIntervalSince(wait.openedAt) >= growth.jogressWait {
             return advance(&state, at: now)   // no friend's code came: grow as usual
+        }
+        if let wait = state.armorWait, !wait.over, now.timeIntervalSince(wait.openedAt) >= growth.armorWait {
+            return advance(&state, at: now)   // no Digimental used: grow as usual (it is kept)
         }
         guard let pending = state.pendingChoice, let first = pending.candidates.first else { return [] }
         // A choice saved before choosing was turned off resolves at once.
@@ -477,7 +482,11 @@ struct EvolutionEngine: Sendable {
         var events: [DigimonEvent] = []
         while state.pendingChoice == nil, state.eggChoiceOfferedAt == nil,
               state.partner.stageExp >= growth.threshold(for: state.partner.level) {
-            // A stage that can merge waits for a friend's code first (`jogress`), then grows as usual.
+            // A stage that can merge waits for a friend's code (`jogress`), and one that can armor-evolve
+            // with a Digimental the user owns waits for the user (`useDigimental`). Both waits open
+            // together and run side by side, each up to its own time; it grows as usual once neither
+            // is open, so one never holds the other back.
+            var waiting = false
             if state.jogressWait?.over != true {
                 let merges = jogressOptions(for: state)
                 if !merges.isEmpty {
@@ -485,10 +494,28 @@ struct EvolutionEngine: Sendable {
                         state.jogressWait = JogressWait(openedAt: date, over: false)
                         events.append(.jogressOffered(options: merges.map(\.to).orderedUnique()))
                     }
-                    if let wait = state.jogressWait, date.timeIntervalSince(wait.openedAt) < growth.jogressWait { break }
-                    state.jogressWait?.over = true
+                    if let wait = state.jogressWait, date.timeIntervalSince(wait.openedAt) < growth.jogressWait {
+                        waiting = true
+                    } else {
+                        state.jogressWait?.over = true
+                    }
                 }
             }
+            if state.armorWait?.over != true {
+                let armors = usableArmorOptions(for: state)
+                if !armors.isEmpty {
+                    if state.armorWait == nil {
+                        state.armorWait = JogressWait(openedAt: date, over: false)
+                        events.append(.armorOffered(options: armors.map(\.to).orderedUnique()))
+                    }
+                    if let wait = state.armorWait, date.timeIntervalSince(wait.openedAt) < growth.armorWait {
+                        waiting = true
+                    } else {
+                        state.armorWait?.over = true
+                    }
+                }
+            }
+            if waiting { break }
             let options = Array(growthOptions(for: state, at: date).prefix(growth.maxChoices))
             if !rules.friendJogress, let jogress = rules.specialJogress(for: state, in: catalog) {
                 events += evolve(&state, to: jogress.to, at: date)   // instead of graduating
@@ -515,6 +542,7 @@ struct EvolutionEngine: Sendable {
         state.partner.stageSignals = GrowthSignals()
         state.partner.stageStartedAt = date
         state.jogressWait = nil
+        state.armorWait = nil
         state.partner.path.append(key)
         state.dex.insert(key)
         state.eggOffer = nil   // hatched: the draw is used up
@@ -532,6 +560,7 @@ struct EvolutionEngine: Sendable {
         state.partner = DigimonPartner(lineID: line, speciesKey: nil, level: .digitama)
         state.pendingChoice = nil
         state.jogressWait = nil
+        state.armorWait = nil
         offerEggLines(&state, at: date)   // the new egg waits for the user to pick its line
         return [.graduated(lineID: line, path: path), .newEgg(lineID: state.partner.lineID)]
     }
@@ -689,6 +718,54 @@ extension EvolutionEngine {
     func skipJogress(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
         guard isJogressOpen(state) else { return [] }
         state.jogressWait?.over = true
+        return settle(&state, at: date)
+    }
+}
+
+enum ArmorError: Error, Equatable {
+    /// No armor evolution is waiting: the stage is not full, or the wait is over.
+    case notOpen
+    /// This Armor is not one the current Digimon can take with a Digimental the user owns.
+    case notOffered
+}
+
+// MARK: Armor evolution with a Digimental (step 13)
+//
+// A full stage whose Digimon has a Digimental route (`DigimonLine.digimentalSteps`) waits up to
+// `GrowthRules.armorWait` when the user owns that Digimental. Using it spends one and evolves into the
+// Armor; skipping it, or the time running out, grows as usual and keeps the Digimental.
+
+extension EvolutionEngine {
+    /// The armor evolutions the current Digimon could take now with a Digimental the user owns.
+    func usableArmorOptions(for state: DigimonState) -> [(to: String, digimental: Digimental)] {
+        let bag = state.digimentals ?? DigimentalBag()
+        return armorOptions(for: state).filter { bag.owned($0.digimental) > 0 }
+    }
+
+    func isArmorOpen(_ state: DigimonState) -> Bool { state.armorWait?.over == false }
+
+    /// When an open armor wait ends and the stage grows as usual.
+    func armorDeadline(_ state: DigimonState) -> Date? {
+        guard let wait = state.armorWait, !wait.over else { return nil }
+        return wait.openedAt.addingTimeInterval(growth.armorWait)
+    }
+
+    /// Spends one Digimental and armor-evolves into `key`.
+    func useDigimental(_ state: inout DigimonState, to key: String, at now: Date) throws -> [DigimonEvent] {
+        guard isArmorOpen(state), let current = state.partner.speciesKey else { throw ArmorError.notOpen }
+        guard let option = usableArmorOptions(for: state).first(where: { $0.to == key }) else { throw ArmorError.notOffered }
+        var bag = state.digimentals ?? DigimentalBag()
+        bag.owned[option.digimental.rawValue] = bag.owned(option.digimental) - 1
+        state.digimentals = bag
+        _ = evolve(&state, to: key, at: now)   // its .evolved is told as the armor evolution
+        return [.armorEvolved(from: current, to: key, digimental: option.digimental)] + settle(&state, at: now)
+    }
+
+    /// Grows as usual now instead of using a Digimental (it is kept).
+    @discardableResult
+    func skipArmor(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
+        guard isArmorOpen(state) else { return [] }
+        state.armorWait?.over = true
         return settle(&state, at: date)
     }
 }

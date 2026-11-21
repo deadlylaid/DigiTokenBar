@@ -179,6 +179,29 @@ final class DigimonStore {
         commit(next, events)
     }
 
+    // MARK: Armor evolution with a Digimental
+
+    /// A full stage is waiting for the user to use a Digimental (or to grow as usual).
+    var isArmorOpen: Bool { engine.isArmorOpen(state) }
+    /// What the open wait can armor-evolve into, with the Digimental each spends.
+    var armorChoices: [(to: String, digimental: Digimental)] { isArmorOpen ? engine.usableArmorOptions(for: state) : [] }
+    /// When the wait ends and it grows as usual (the Digimental is kept).
+    var armorDeadline: Date? { engine.armorDeadline(state) }
+
+    /// Spends one Digimental and armor-evolves into `key`.
+    func useDigimental(to key: String) throws {
+        var next = saved
+        let events = try engine.useDigimental(&next.digimon, to: key, at: clock())
+        commit(next, events)
+    }
+
+    /// Grows as usual now instead of using a Digimental (it is kept).
+    func skipArmor() {
+        var next = saved
+        let events = engine.skipArmor(&next.digimon, at: clock())
+        commit(next, events)
+    }
+
     func choose(_ key: String) {
         var next = saved
         let events = engine.choose(&next.digimon, key, at: clock())
@@ -230,6 +253,8 @@ final class DigimonStore {
         return kinds.filter { preferred.contains($0) } + kinds.filter { !preferred.contains($0) }
     }
     var preferredDigimentals: Set<Digimental> { engine.preferredDigimentals(for: state) }
+    /// The Digimentals the partner can use when its current stage fills.
+    var digimentalsUsableNow: Set<Digimental> { engine.digimentalsUsableNow(for: state) }
 
     /// The scene's golden bug was defeated.
     func recordGoldenBug() {

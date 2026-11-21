@@ -80,13 +80,35 @@ enum DigimentalRules {
 // MARK: Integration seam (armor data fills these from the catalog's Digimental routes)
 
 extension EvolutionEngine {
-    /// The Digimentals a random fragment can be. Every one until the catalog carries the Digimental
-    /// routes; then only the ones some route uses.
-    func fragmentKinds() -> [Digimental] { Digimental.allCases }
+    /// The Digimentals a random fragment can be: the ones some line's Digimental route uses (every one
+    /// if the catalog had none).
+    func fragmentKinds() -> [Digimental] {
+        let used = Set(catalog.lines.values.flatMap(\.digimentalSteps.values))
+        let kinds = Digimental.allCases.filter(used.contains)
+        return kinds.isEmpty ? Digimental.allCases : kinds
+    }
 
-    /// The Digimentals the partner could use now (its line's Digimental routes out of its species),
-    /// drawn `DigimentalRules.preferredWeight` times as often. None until the armor data exists.
-    func preferredDigimentals(for state: DigimonState) -> Set<Digimental> { [] }
+    /// The Digimentals the partner can use now or later in this life: the Digimental routes out of its
+    /// species and out of every species it can still grow into on its line (an egg: the whole line).
+    /// Drawn `DigimentalRules.preferredWeight` times as often.
+    func preferredDigimentals(for state: DigimonState) -> Set<Digimental> {
+        guard let line = catalog.lines[state.partner.lineID] else { return [] }
+        var reach: Set<String> = [state.partner.speciesKey ?? line.firstBaby]
+        var frontier = Array(reach)
+        while let key = frontier.popLast() {
+            for evo in catalog.nextEvolutions(from: key, in: line) where reach.insert(evo.to).inserted {
+                frontier.append(evo.to)
+            }
+        }
+        return Set(line.digimentalSteps.compactMap { step, d in
+            reach.contains(String(step.split(separator: ">").first ?? "")) ? d : nil
+        })
+    }
+
+    /// The Digimentals the partner can use at the end of its current stage.
+    func digimentalsUsableNow(for state: DigimonState) -> Set<Digimental> {
+        Set(armorOptions(for: state).map(\.digimental))
+    }
 }
 
 // MARK: Fragments

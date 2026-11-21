@@ -327,6 +327,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                 else if tier >= .veryRare { DigimonNotifier.post(t.visitorNotifyTitle(tier), name(species)) }
             case .digimentalMade(let kind):
                 DigimonNotifier.post(t.digimentalMadeTitle(kind), t.digimentalMadeBody)
+            case .armorOffered:
+                let hours = Int(digimon.engine.growth.armorWait / 3600)
+                DigimonNotifier.post(t.armorWaitTitle, t.armorOfferBody(hours: hours))
+            case .armorEvolved(let from, let to, let kind):
+                DigimonNotifier.post(t.armorEvolvedTitle, t.armorEvolvedBody(kind, from: name(from), to: name(to)))
             case .newEgg, .stampCardFull, .fragmentFound:
                 break
             }

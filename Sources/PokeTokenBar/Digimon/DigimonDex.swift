@@ -240,8 +240,9 @@ extension DigimonText {
         }
     }
     /// A line in the dex menu, with how often it graduated.
-    func lineMenuName(_ line: DigimonLine, catalog: DigimonCatalog, graduated: Int) -> String {
-        let name = lineName(line, catalog: catalog)
+    /// A line in the dex menu, with how often it graduated and ◆ when a Digimental opens a route on it.
+    func lineMenuName(_ line: DigimonLine, catalog: DigimonCatalog, graduated: Int, armor: Bool = false) -> String {
+        let name = lineName(line, catalog: catalog) + (armor ? " \(DigimonText.armorMark)" : "")
         guard graduated > 0 else { return name }
         return ko ? "\(name) · 졸업 \(graduated)번" : "\(name) · \(graduated) graduated"
     }
@@ -356,12 +357,13 @@ struct DigimonDexView: View {
                                       set: { lineID = $0; selected = nil; query = DigimonDex.Query() })) {
             let graduated = Dictionary(grouping: digimon.state.graduates, by: \.lineID).mapValues(\.count)
             ForEach(t.sortedLines(digimon.lines, catalog: catalog), id: \.id) { line in
-                Text(t.lineMenuName(line, catalog: catalog, graduated: graduated[line.id] ?? 0)).tag(line.id)
+                Text(t.lineMenuName(line, catalog: catalog, graduated: graduated[line.id] ?? 0, armor: line.hasArmor)).tag(line.id)
             }
         }
         .pickerStyle(.menu)
         .labelsHidden()
         .fixedSize()
+        .help(t.armorLineMenuHelp)
     }
 
     // MARK: Search

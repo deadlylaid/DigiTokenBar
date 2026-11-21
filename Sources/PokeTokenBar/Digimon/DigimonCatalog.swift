@@ -61,6 +61,9 @@ struct DigimonLine: Sendable, Hashable {
     var conditions: [DigimonStepCondition] = []
 
     /// The Digimental this step needs, nil for a step growth can take (or a merge).
+    /// The line has a route that a Digimental opens (armor evolution, step 13).
+    var hasArmor: Bool { !digimentalSteps.isEmpty }
+
     func digimental(from: String, to: String) -> Digimental? {
         digimentalSteps["\(from)>\(to)"]
     }

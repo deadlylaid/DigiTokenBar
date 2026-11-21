@@ -184,7 +184,8 @@ final class DigimonSceneHub {
                     hub.broadcast(["type": "jump"])
                     target = nil
                 case .fragmentFound: target = nil   // the scene already showed the golden bug or the gift
-                case .choiceOffered, .jogressOffered: target = nil
+                case .choiceOffered, .jogressOffered, .armorOffered: target = nil
+                case .armorEvolved(_, let to, _): target = to   // the usual evolution, into the Armor
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
                 hub.liveScenes.forEach { $0.sprite(key: target, dataURI: Self.dataURI(data)) }

@@ -302,6 +302,7 @@ struct DigimonStatusView: View {
             nameRow
             progress
             if digimon.isJogressOpen { jogressWait }
+            if digimon.isArmorOpen { armorWait }
             if !digimon.tendencies.isEmpty { tendency }
             if !digimon.candidates.isEmpty { choice }
             if digimon.canChooseEggLine { eggChoice }
@@ -352,6 +353,47 @@ struct DigimonStatusView: View {
         }
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor.opacity(0.08)))
+    }
+
+    /// A full stage that can armor-evolve with a Digimental the user owns: one button per route (an
+    /// Armor not met yet stays a silhouette without its name), or growing as usual (it is kept).
+    private var armorWait: some View {
+        let catalog = digimon.engine.catalog
+        let held = digimon.digimentalBag
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: "diamond.fill").font(.caption).foregroundStyle(.orange)
+                Text(t.armorWaitTitle).font(.callout.weight(.semibold))
+                Spacer()
+                if let deadline = digimon.armorDeadline {
+                    Text(t.jogressTimeLeft(deadline.timeIntervalSinceNow)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                }
+            }
+            ForEach(digimon.armorChoices, id: \.to) { option in
+                let met = digimon.state.dex.contains(option.to)
+                Button {
+                    do { try digimon.useDigimental(to: option.to) } catch { battleMessage = t.armorError }
+                } label: {
+                    HStack(spacing: 6) {
+                        PixelSprite(data: hub.icons[option.to], silhouette: !met).frame(width: 24, height: 24)
+                        Text(met ? t.armorUseInto(option.digimental, name: t.name(catalog.species(option.to)))
+                                 : t.armorUse(option.digimental))
+                            .font(.caption.weight(.semibold))
+                        Spacer(minLength: 0)
+                        Text(t.ownedCount(held.owned(option.digimental))).font(.caption2).foregroundStyle(.orange).monospacedDigit()
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .task(id: option.to) { _ = await hub.image(for: option.to) }
+            }
+            Button(digimon.isJogressOpen ? t.armorSkipKeepWaiting : t.armorSkip) { digimon.skipArmor() }
+                .controlSize(.small)
+            Text(t.armorExplain).font(.caption2).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(8)
+        .background(RoundedRectangle(cornerRadius: 8).fill(Color.orange.opacity(0.08)))
     }
 
     /// Practice and code battles. The scene above plays each battle.
@@ -417,7 +459,7 @@ struct DigimonStatusView: View {
                         Button {
                             digimon.chooseEggLine(line.id)
                         } label: {
-                            Text(t.eggOf(t.lineName(line, catalog: catalog)))
+                            Text(t.eggOf(t.lineName(line, catalog: catalog)) + (line.hasArmor ? " \(DigimonText.armorMark)" : ""))
                             if line.id == current { Image(systemName: "checkmark") }
                         }
                     }
@@ -451,6 +493,13 @@ struct DigimonStatusView: View {
                 Text(t.eggOf(t.lineName(line, catalog: catalog))).font(.caption2.weight(.semibold)).lineLimit(1)
             }
             .frame(maxWidth: .infinity)
+            .overlay(alignment: .topTrailing) {
+                if line.hasArmor {
+                    Image(systemName: "diamond.fill").font(.system(size: 8)).foregroundStyle(.orange).padding(.trailing, 4)
+                        .help(t.armorLineHelp)
+                        .accessibilityLabel(t.armorLineHelp)
+                }
+            }
             .padding(.vertical, 6)
             .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .controlBackgroundColor)))
             .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(
@@ -480,7 +529,7 @@ struct DigimonStatusView: View {
     private var progress: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(digimon.isJogressOpen ? t.jogressWaiting
+                Text(digimon.isJogressOpen ? t.jogressWaiting : digimon.isArmorOpen ? t.armorWaiting
                      : digimon.canSpecialJogress ? t.jogressLabel : t.progressLabel(digimon.state.partner.level))
                 Spacer()
                 // While waiting for a friend, EXP past the bar carries into the next stage.
