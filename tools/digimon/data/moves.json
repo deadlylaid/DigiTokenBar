@@ -1091,7 +1091,7 @@
   "vegimon": {
    "ko": "응가 투척",
    "en": "Poop Throw",
-   "kind": "missile",
+   "kind": "poop",
    "koSpecies": "베지몬"
   },
   "ajatarmon": {
@@ -2120,7 +2120,7 @@
   "namakemon": {
    "ko": "응가 투척",
    "en": "Poop Throw",
-   "kind": "missile",
+   "kind": "poop",
    "koSpecies": "나마케몬"
   },
   "boutmon": {
@@ -2545,7 +2545,7 @@
   "numemon": {
    "ko": "응가 투척",
    "en": "Poop Throw",
-   "kind": "missile",
+   "kind": "poop",
    "koSpecies": "워매몬"
   },
   "cargodramon": {

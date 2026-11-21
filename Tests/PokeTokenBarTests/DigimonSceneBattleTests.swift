@@ -75,10 +75,11 @@ final class DigimonSceneBattleTests: XCTestCase {
         XCTAssertEqual(beam["fight"] as? Bool, false)
     }
 
-    /// The shapes for gas, waves, wind, water, light, flocks, hearts and quakes fly and land.
+    /// The shapes for gas, waves, wind, water, light, flocks, hearts, quakes and poop fly and land.
     func testTheOtherShapesFlyAndLand() async throws {
         for (me, foe, mine, theirs) in [("hydramon", "etemon", "gas", "wave"), ("kyukimon", "shellmon", "wind", "water"),
-                                         ("hououmon", "vamdemon", "light", "swarm"), ("monzaemon", "breakdramon", "heart", "quake")] {
+                                         ("hououmon", "vamdemon", "light", "swarm"), ("monzaemon", "breakdramon", "heart", "quake"),
+                                         ("namakemon", "monzaemon", "poop", "heart")] {
             let result = try await battle(me: me, foe: foe)
             XCTAssertEqual(Set(result["shots"] as? [String] ?? []), ["me:\(mine)", "foe:\(theirs)"], "\(me) vs \(foe)")
             let booms = Set(result["booms"] as? [String] ?? [])
@@ -226,8 +227,8 @@ final class DigimonSceneBattleTests: XCTestCase {
         XCTAssertTrue(ready, "the scene did not start")
         let seen = try await js(scene, """
         (() => {
-          const kinds = ['fire', 'missile', 'gaia', 'claw', 'ice', 'bind', 'melee', 'beam', 'electric', 'gas', 'wave', 'wind',
-                         'water', 'light', 'swarm', 'heart', 'quake'];
+          // Every shape the scene has (each has a timing): a new shape is measured without a list here.
+          const kinds = Object.keys(TIMING);
           const W = pet.worldW, rnd = Math.random;
           const cw = pet.cv.width;
           let base = null;
@@ -273,7 +274,7 @@ final class DigimonSceneBattleTests: XCTestCase {
             let child = m[0], ultimate = m[1]
             return ultimate[0] > child[0] * 1.5 && max(ultimate[1] / child[1], ultimate[2] / child[2]) > 1.3
         }
-        XCTAssertEqual(sizes.count, 17)
+        XCTAssertEqual(sizes.count, 18, "every move shape is measured (a new one needs no list here)")
         for (kind, size) in sizes {
             XCTAssertEqual(size, [1, 1.3, 1.7, 2.1], kind)
             let s = try XCTUnwrap(shot[kind]), b = try XCTUnwrap(boom[kind])

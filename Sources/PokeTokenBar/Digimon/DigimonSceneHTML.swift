@@ -78,6 +78,7 @@ const PAL = {
   light: ['#ffffff', '#fff3b0', '#f2c94c'],
   swarm: ['#9a8fb0', '#4d4560', '#1f1a2b'],
   heart: ['#ffffff', '#ff9fc8', '#e0457a'],
+  poop: ['#d8a86a', '#8a5a2b', '#5a3a1a'],
   quake: ['#f4e2c0', '#b08a5a', '#6b4f30'],
   // Tints: a move's own colors for a shape (smoke is gray, pollen yellow, fox spirits gold ...).
   tint_smoke: ['#ffffff', '#d6d9de', '#8a8f98'],
@@ -109,8 +110,10 @@ function linePal(line) {
   return (firePals[S.lineColor] = [hex(mix(mid, 255, .78)), hex(mid), hex(mix(mid, 0, .38))]);
 }
 const HEART = ['.##.##.', '#######', '#######', '.#####.', '..###..', '...#...'];
+// A three-tier pile with its tip curled over (Poop Throw).
+const POOP = ['....#..', '..###..', '.#####.', '..###..', '.#####.', '#######'];
 // Shapes without muzzle sparks or a generic trail (they draw their own).
-const SOFT = ['bind', 'melee', 'gas', 'wave', 'wind', 'water', 'light', 'swarm', 'heart', 'quake'];
+const SOFT = ['bind', 'melee', 'gas', 'wave', 'wind', 'water', 'light', 'swarm', 'heart', 'quake', 'poop'];
 // Attacks grow with the stage of whoever makes them: Child (and babies) 1x, Adult 1.3x, Perfect 1.7x,
 // Ultimate 2.1x. Gaia Force, already the biggest, grows half as much. Each shape scales its own
 // lengths and thicknesses (whole pixels), so it stays crisp instead of a blurred zoom.
@@ -123,7 +126,8 @@ const HEAVY = ['fire', 'gaia', 'claw', 'ice', 'melee', 'beam', 'electric'];
 const TIMING = {fire: [240, 100, 360], missile: [260, 100, 380], gaia: [560, 120, 420], claw: [200, 120, 380], ice: [260, 160, 380], bind: [240, 140, 420],
                 melee: [200, 170, 360], beam: [380, 260, 380], electric: [260, 160, 380],
                 gas: [260, 140, 380], wave: [240, 140, 380], wind: [260, 160, 380], water: [260, 180, 380],
-                light: [300, 140, 380], swarm: [280, 140, 380], heart: [220, 140, 380], quake: [300, 160, 420]};
+                light: [300, 140, 380], swarm: [280, 140, 380], heart: [220, 140, 380], quake: [300, 160, 420],
+                poop: [260, 120, 380]};
 // Bug enemy drawn in code (11x8, two leg frames)
 const BUG = [[
   "...k...k...",
@@ -228,6 +232,9 @@ class Pet {
     if (kind === 'light') { my = gy - h * .7; speed = 160; r = 4 * z; pal = PAL.light; }
     if (kind === 'swarm') { my = gy - h * .6; speed = 140; r = 6 * z; pal = PAL.swarm; }
     if (kind === 'heart') { my = gy - h * .6; speed = 130; r = 4 * z; pal = PAL.heart; }
+    // Thrown, not fired: it flies in an arc (drawn higher in the middle; hits are checked on the
+    // straight path like every other shot, so it lands where any shot would).
+    if (kind === 'poop') { my = gy - h * .6; speed = 120; r = 4 * z; pal = PAL.poop; }
     if (kind === 'quake') { mx = x + (b.l + b.r) / 2 + f * (b.r - b.l) * .45; my = gy - 2 + lift; speed = 170; r = 5 * z; pal = PAL.quake; }
     if (tint && PAL['tint_' + tint]) pal = PAL['tint_' + tint];
     return {kind, x: mx, y: my, ox: mx, oy: my, vx: f * speed, vy: 0, r, pal, t: 0, size: z};
@@ -242,6 +249,7 @@ class Pet {
       this.aimAtBody(s);
     } else if (g && !g.dead && Math.sign(g.x + 5 - s.x) === f && kind !== 'wind' && kind !== 'quake') {
       s.vy = (this.ground() - 4 - s.y) / (Math.abs(g.x + 5 - s.x) / Math.abs(s.vx));
+      s.arc = Math.abs(g.x + 5 - s.x);
     }
     this.shots.push(s);
     if (kind === 'missile') this.booms.push({x: s.x, y: s.y, t: 0, r: 2.6 * s.size, pal: PAL.missile, life: 170});   // launch flash
@@ -253,6 +261,7 @@ class Pet {
   aimAtBody(s) {
     if (!s.body || s.kind === 'wind' || s.kind === 'quake') return;
     s.ty = this.ground() - (s.body.b - s.body.t) * .5;
+    s.arc = Math.abs(s.tx - s.x);
     s.vy = (s.ty - s.y) / Math.max(.05, Math.abs(s.tx - s.x) / Math.abs(s.vx));
   }
   boom(x, y, s) {
@@ -270,7 +279,7 @@ class Pet {
     const body = s.body, coil = s.kind === 'bind' && body
       ? {y: this.ground() - (body.b - body.t) * .48, rx: (body.r - body.l) * .42, gap: (body.b - body.t) * .17} : {};
     this.booms.push(Object.assign({x, y, t: 0, r: s.r * (s.kind === 'gaia' ? 1.3 : 1), pal: s.pal, kind: s.kind,
-                                   life: ({bind: 650, melee: 300, gas: 760, wind: 460, quake: 480, light: 440, swarm: 460, heart: 520, missile: 600}[s.kind]) || 320,
+                                   life: ({bind: 650, melee: 300, gas: 760, wind: 460, quake: 480, light: 440, swarm: 460, heart: 520, missile: 600, poop: 900}[s.kind]) || 320,
                                    size: s.size || 1}, coil));
     const z = s.size || 1, n = Math.round(12 * z);
     if (!['gas', 'wave', 'wind', 'heart', 'swarm'].includes(s.kind)) for (let i = 0; i < n; i++) { const a = TAU * i / n, sp = rand(20, 55) * z; this.parts.push({x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 8, t: 0, life: rand(300, 600), c: s.pal[i % 3], s: Math.random() < .4 ? wpx(2, z) : wpx(1, z)}); }
@@ -293,6 +302,12 @@ class Pet {
     const hx = Math.round(x - 3.5 * k), hy = Math.round(y - 3 * k);
     HEART.forEach((row, r) => [...row].forEach((v, col) => {
       if (v === '#') { c.fillStyle = r === 1 && col === 1 ? pal[0] : (r > 2 ? pal[2] : pal[1]); c.fillRect(hx + col * k, hy + r * k, k, k); }
+    }));
+  }
+  drawPoop(c, x, y, pal, k = 1) {
+    const px = Math.round(x - 3.5 * k), py = Math.round(y - 3 * k);
+    POOP.forEach((row, r) => [...row].forEach((v, col) => {
+      if (v === '#') { c.fillStyle = col === row.indexOf('#') ? pal[0] : (r === POOP.length - 1 ? pal[2] : pal[1]); c.fillRect(px + col * k, py + r * k, k, k); }
     }));
   }
   pixLine(c, x0, y0, x1, y1, w, col) {
@@ -944,6 +959,10 @@ class Pet {
         }
       } else if (s.kind === 'heart') {
         this.drawHeart(c, s.x, s.y + Math.sin(s.t / 90) * 1.5 * z, s.pal, wpx(2, z));
+      } else if (s.kind === 'poop') {
+        // Up and down over the way to the target (a shot without one arcs over 70 px).
+        const d = Math.min(1, Math.abs(s.x - s.ox) / Math.max(1, s.arc || 70));
+        this.drawPoop(c, s.x, s.y - 4 * d * (1 - d) * 14 * z, s.pal, wpx(1.5, z));
       } else if (s.kind === 'quake') {
         // A crack running along the ground with rocks hopping at its tip.
         const dir = Math.sign(s.x - s.ox) || 1, len = Math.abs(s.x - s.ox);
@@ -1081,6 +1100,20 @@ class Pet {
         for (let i = 0; i < 6 + Math.round((z - 1) * 5); i++) {
           const a = i * TAU / (6 + Math.round((z - 1) * 5)) + .3, R = (3 + 16 * bp) * z;
           this.drawFlier(c, Math.round(b.x + Math.cos(a) * R), Math.round(b.y + Math.sin(a) * R * .7 - 6 * bp * z), 0, b.pal, z);
+        }
+        c.globalAlpha = 1;
+        continue;
+      }
+      if (b.kind === 'poop') {
+        // A splat on the ground under the hit and two flies buzzing over it, then it fades.
+        const gy0 = this.ground(), w = Math.round((7 + 6 * Math.min(1, bp * 3)) * z), hh = wpx(2, z);
+        c.globalAlpha = 1 - Math.max(0, bp - .6) / .4;
+        c.fillStyle = b.pal[2]; c.fillRect(Math.round(b.x - w / 2), gy0 - hh, w, hh);
+        c.fillStyle = b.pal[1]; c.fillRect(Math.round(b.x - w / 3), gy0 - hh * 2, Math.round(w * 2 / 3), hh);
+        c.fillStyle = '#2a2233';
+        for (let i = 0; i < 2; i++) {
+          const a = b.t / 110 + i * Math.PI;
+          c.fillRect(Math.round(b.x + Math.cos(a) * 6 * z), Math.round(gy0 - 10 * z + Math.sin(a * 1.7) * 3 * z), wpx(1, z), wpx(1, z));
         }
         c.globalAlpha = 1;
         continue;

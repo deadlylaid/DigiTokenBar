@@ -9,8 +9,6 @@ import XCTest
 /// The burst on the ground at its feet looked like a hit.
 @MainActor
 final class DigimonSceneBugTests: XCTestCase {
-    private let kinds = ["fire", "missile", "gaia", "claw", "ice", "bind", "melee", "beam", "electric", "gas", "wave", "wind",
-                         "water", "light", "swarm", "heart", "quake"]
 
     private func js(_ scene: DigimonScene, _ code: String) async throws -> Any? {
         try await scene.webView.evaluateJavaScript(code)
@@ -52,7 +50,8 @@ final class DigimonSceneBugTests: XCTestCase {
                 ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet && !!assets['agumon']")) as? Bool ?? false
             }
             XCTAssertTrue(ready, "the scene did not start")
-            let kinds = "[" + self.kinds.map { "'\($0)'" }.joined(separator: ",") + "]"
+            // Every shape the scene has (each has a timing), so a new shape is checked without a list here.
+            let kinds = "Object.keys(TIMING)"
             let seen = try await js(scene, """
             (() => {
               const out = [], keep = MOVES.agumon.kind;
@@ -72,11 +71,12 @@ final class DigimonSceneBugTests: XCTestCase {
                 if (!g.dead || shots > (kind === 'missile' ? 2 : 1)) out.push(`${kind} at ${1000 / dt | 0} fps from ${side > 0 ? 'the right' : 'the left'}: ${g.dead ? 'dead' : 'alive'} after ${shots} shots`);
               }
               MOVES.agumon.kind = keep;
-              return JSON.stringify(out);
+              return JSON.stringify({misses: out, shapes: \(kinds).length});
             })()
             """) as? String
-            let found = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String])
-            misses += found.map { "stage \(stage): \($0)" }
+            let found = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(seen).utf8)) as? [String: Any])
+            XCTAssertEqual(found["shapes"] as? Int, 18, "every move shape is tried (a new one needs no list here)")
+            misses += (found["misses"] as? [String] ?? []).map { "stage \(stage): \($0)" }
         }
         XCTAssertEqual(misses, [], misses.joined(separator: "\n"))
     }

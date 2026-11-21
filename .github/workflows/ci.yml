@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Run the macOS build-test by hand: Actions > CI > Run workflow.
+  workflow_dispatch:
 
 # Cancel superseded runs on the same ref (e.g. rapid pushes to a PR).
 concurrency:
@@ -14,6 +16,10 @@ concurrency:
 jobs:
   build-test:
     name: build-test
+    # Not on every push to main: the full suite already runs locally before each push, and macOS
+    # minutes count 10x against the private repository's monthly Actions quota (it ran out on
+    # 2026-11-20 after 34 pushes). Pull requests and manual runs still build and test here.
+    if: github.event_name != 'push'
     # macos-15 ships Xcode 16 / Swift 6, which Package.swift requires
     # (swift-tools-version: 6.0, platform macOS 14).
     runs-on: macos-15
