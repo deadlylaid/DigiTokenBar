@@ -83,6 +83,15 @@ enum DigimonSaveIO {
             book.visits = Array(book.visits.filter { catalog.species($0.species) != nil }.prefix(LuckRules.maxVisits))
             state.luck = book
         }
+        if var bag = state.digimentals {
+            // Counts are clamped, then every three fragments become a Digimental, as if just found.
+            bag.fragments = bag.fragments.mapValues { clamp($0) }
+            bag.owned = bag.owned.mapValues { clamp($0, max: DigimentalRules.maxOwned) }
+            _ = bag.combine()
+            bag.stampRewards = clamp(bag.stampRewards, max: DigimentalRules.maxStampRewards)
+            bag.goldenToday = clamp(bag.goldenToday, max: DigimentalRules.goldenPerDay)
+            state.digimentals = bag
+        }
         if let pending = state.pendingChoice {
             let known = pending.candidates.filter { catalog.species($0) != nil && line.members.contains($0) }
             state.pendingChoice = known.isEmpty ? nil : PendingChoice(candidates: known, offeredAt: pending.offeredAt)

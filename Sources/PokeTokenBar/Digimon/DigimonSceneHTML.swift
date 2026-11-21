@@ -4,7 +4,7 @@
 /// particles are simple shapes drawn in code.
 ///
 /// Messages to the app (`window.webkit.messageHandlers.app`):
-///   {cmd: 'ready'} · {cmd: 'bugDefeated'} · {cmd: 'petRect', x, y, w, h} (desk only)
+///   {cmd: 'ready'} · {cmd: 'bugDefeated', count, golden} · {cmd: 'petRect', x, y, w, h} (desk only)
 /// Calls from the app: app.sprite(key, uri) · app.apply({key, line, stage, sleeping, lang}) · app.cmd({type, ...})
 enum DigimonSceneHTML {
     static let page = #"""
@@ -147,6 +147,8 @@ const BUG = [[
   "..kpppppk..",
   "k..k...k..k"]];
 const BUG_C = {k: '#2a2233', w: '#ffffff', p: '#8e5bd6', r: '#ff5a6a'};
+// A golden bug (it drops a Digimental fragment; how often comes from the app as S.golden).
+const BUG_GOLD = {k: '#6b4a00', w: '#fffbe6', p: '#ffc93a', r: '#ff9a2a'};
 
 function makeCoin() {
   const c = document.createElement('canvas'); c.width = c.height = 12;
@@ -287,8 +289,9 @@ class Pet {
   // Now and then a big bug: twice the size, slower, takes three hits and counts as three.
   spawnBug() {
     const fromLeft = Math.random() < .5, big = Math.random() < 1 / 6, sc = big ? 2 : 1;
+    const golden = !big && Math.random() < (S.golden || 0);
     this.bug = {x: fromLeft ? -11 * sc - 1 : this.worldW + 1, dir: fromLeft ? 1 : -1, t: 0, dead: false, noticed: false,
-                big, sc, hp: big ? 3 : 1, hit: 0};
+                big, sc, hp: big ? 3 : 1, hit: 0, golden};
   }
   // One flier of a flock: two flapping wings and a body, `z` times as big.
   drawFlier(c, x, y, up, pal, z = 1) {
@@ -514,7 +517,7 @@ class Pet {
       const stop = fromRight ? Math.min(W - gb.r - 4, this.x + b.r + 12 - gb.l) : Math.max(4 - gb.l, this.x + b.l - 12 - gb.r);
       // A rare visitor or one never seen before arrives in a sparkle.
       this.guest = {key: c.visitor, greet: c.greet || '', rare: (!!c.tier && c.tier !== 'common') || !!c.fresh, x: x0, x0, to: stop,
-                    dir: fromRight ? -1 : 1, t: 0, phase: 'in', alpha: 0, y: 0};
+                    dir: fromRight ? -1 : 1, t: 0, phase: 'in', alpha: 0, y: 0, gift: !!c.gift, giftText: c.giftText || ''};
       return;
     }
     const G = this.guest, speed = 30;
@@ -522,6 +525,7 @@ class Pet {
     if (G.phase === 'greet') {
       if (!G.greeted) { G.greeted = true; this.greet(G); }
       if (G.t > 500 && G.t < 1000) G.y = 6 * Math.sin(Math.PI * (G.t - 500) / 500);   // a hop hello
+      if (G.gift && !G.gave && G.t > 1900) { G.gave = true; this.leaveGift(G); }
       if (G.t > 3200) {
         const gb = assets[G.key].bb;
         G.dir = -G.dir; G.x0 = G.x; G.to = G.dir === 1 ? this.worldW + 2 - gb.l : -gb.r - 2; G.phase = 'out'; G.t = 0;
@@ -538,6 +542,13 @@ class Pet {
       if (p > .7) G.alpha = Math.max(0, 1 - (p - .7) / .3);
       if (p >= 1) this.guest = null;
     }
+  }
+  // A visitor leaves a Digimental fragment: a golden twinkle at its feet, and the pet notices.
+  leaveGift(G) {
+    const gb = assets[G.key].bb, x = G.x + (gb.l + gb.r) / 2, y = this.ground() - 3;
+    this.sparkle(x, y, 14);
+    for (let i = 0; i < 6; i++) this.parts.push({x, y, vx: rand(-14, 14), vy: rand(-36, -18), t: 0, life: rand(500, 800), c: Math.random() < .5 ? '#ffc93a' : '#fff3b0', s: 2});
+    if (G.giftText && this.state !== 'sleep' && !this.isEgg()) this.callout = {text: G.giftText, t: 0, life: 1500};
   }
   greet(G) {
     const gb = assets[G.key].bb;
@@ -667,7 +678,10 @@ class Pet {
         s.x = at.x; s.y = at.y;
         this.boom(s.x, s.y, s);
         g.hp -= 1; g.hit = 220;
-        if (g.hp <= 0) { g.dead = true; g.t = 0; post({cmd: 'bugDefeated', count: g.big ? 3 : 1}); }
+        if (g.hp <= 0) {
+          g.dead = true; g.t = 0; post({cmd: 'bugDefeated', count: g.big ? 3 : 1, golden: !!g.golden});
+          if (g.golden) { this.sparkle(g.x + 5.5, this.ground() - 4, 16); if (S.goldenText) this.callout = {text: S.goldenText, t: 0, life: 1500}; }
+        }
         else g.x -= g.dir * 6;   // knocked back, still coming
         if (s.kind === 'beam' || s.kind === 'electric' || s.kind === 'water') { s.hold = 220; return true; }
         return false;
@@ -836,10 +850,11 @@ class Pet {
       const g = this.bug, k = g.sc, bx = Math.round(g.x), by = Math.round(gy - 7 * k);
       c.fillStyle = desk ? 'rgba(0,0,0,.2)' : 'rgba(60,50,30,.12)';
       c.beginPath(); c.ellipse(bx + 5.5 * k, gy + .5, 5 * k, 1.4 * k, 0, 0, TAU); c.fill();
-      const flash = g.hit > 0 && Math.floor(g.hit / 55) % 2 === 0;
+      const flash = g.hit > 0 && Math.floor(g.hit / 55) % 2 === 0, colors = g.golden ? BUG_GOLD : BUG_C;
       BUG[Math.floor(g.t / (g.big ? 200 : 140)) % 2].forEach((row, r) => [...row].forEach((v, col) => {
-        if (v !== '.') { c.fillStyle = flash ? '#ffffff' : BUG_C[v]; c.fillRect(bx + col * k, by + r * k, k, k); }
+        if (v !== '.') { c.fillStyle = flash ? '#ffffff' : colors[v]; c.fillRect(bx + col * k, by + r * k, k, k); }
       }));
+      if (g.golden && Math.floor(g.t / 260) % 3 === 0) { c.fillStyle = '#ffffff'; c.fillRect(bx + 8, by - 2, 1, 1); }
     }
     if (this.chip) {
       const ch = this.chip, rem = Math.min(12, ch.bites * 4);

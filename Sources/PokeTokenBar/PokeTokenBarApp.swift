@@ -325,7 +325,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
                 // A Digimon never seen and the very rare ones notify; the others are a surprise for the next look.
                 if firstSeen { DigimonNotifier.post(t.firstSeenNotifyTitle, name(species)) }
                 else if tier >= .veryRare { DigimonNotifier.post(t.visitorNotifyTitle(tier), name(species)) }
-            case .newEgg, .stampCardFull:
+            case .digimentalMade(let kind):
+                DigimonNotifier.post(t.digimentalMadeTitle(kind), t.digimentalMadeBody)
+            case .newEgg, .stampCardFull, .fragmentFound:
                 break
             }
         }

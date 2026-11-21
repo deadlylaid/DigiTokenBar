@@ -38,9 +38,11 @@ struct DigimonVisit: Codable, Sendable, Equatable {
     /// Set on arrival: never raised nor met before, and the surprise points it gave.
     var firstSeen = false
     var points = 0
+    /// Set on arrival: the Digimental fragment it left (`EvolutionEngine.visitGift`), if any.
+    var gift: Digimental?
 
     init(species: String, tier: VisitorTier, at: Date, arrived: Bool = false, special: Bool = false,
-         firstSeen: Bool = false, points: Int = 0) {
+         firstSeen: Bool = false, points: Int = 0, gift: Digimental? = nil) {
         self.species = species
         self.tier = tier
         self.at = at
@@ -48,9 +50,10 @@ struct DigimonVisit: Codable, Sendable, Equatable {
         self.special = special
         self.firstSeen = firstSeen
         self.points = points
+        self.gift = gift
     }
 
-    private enum CodingKeys: String, CodingKey { case species, tier, at, arrived, special, firstSeen, points }
+    private enum CodingKeys: String, CodingKey { case species, tier, at, arrived, special, firstSeen, points, gift }
 
     /// A tier from a newer version reads as common instead of failing the whole save.
     init(from decoder: Decoder) throws {
@@ -62,6 +65,8 @@ struct DigimonVisit: Codable, Sendable, Equatable {
         special = try c.decodeIfPresent(Bool.self, forKey: .special) ?? false
         firstSeen = try c.decodeIfPresent(Bool.self, forKey: .firstSeen) ?? false
         points = try c.decodeIfPresent(Int.self, forKey: .points) ?? 0
+        // A kind from a newer version reads as no gift (the fragment itself is in the bag).
+        gift = (try? c.decodeIfPresent(Digimental.self, forKey: .gift)) ?? nil
     }
 }
 
@@ -156,12 +161,17 @@ extension EvolutionEngine {
                 book.stamps = 0
                 book.cardsCompleted += 1
                 events.append(.stampCardFull)
+                // A fragment of the user's choice, claimed in the dex (step 13).
+                var bag = state.digimentals ?? DigimentalBag()
+                bag.stampRewards = min(DigimentalRules.maxStampRewards, bag.stampRewards + 1)
+                state.digimentals = bag
                 if let visit = specialVisit(state, visitsToday: book.visits, cards: book.cardsCompleted, day: day, at: now) {
                     book.visits.append(visit)
                 }
             }
         }
         var sightings = state.sightings ?? []
+        var gifts: [Digimental] = []
         for i in book.visits.indices where !book.visits[i].arrived && book.visits[i].at <= now {
             let species = book.visits[i].species
             let firstSeen = !state.dex.contains(species) && !sightings.contains(species)
@@ -169,10 +179,13 @@ extension EvolutionEngine {
             book.visits[i].arrived = true
             book.visits[i].firstSeen = firstSeen
             book.visits[i].points = points
+            book.visits[i].gift = visitGift(state, species: species, day: day, firstSeen: firstSeen)
             book.surprise += points
             sightings.insert(species)
             events.append(.visited(species: species, tier: book.visits[i].tier, firstSeen: firstSeen))
+            if let gift = book.visits[i].gift { gifts.append(gift) }
         }
+        for gift in gifts { events += giveFragment(&state, gift, from: .visitor) }
         state.luck = book
         if sightings != (state.sightings ?? []) { state.sightings = sightings }
         return events

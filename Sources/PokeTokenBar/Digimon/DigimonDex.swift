@@ -304,6 +304,7 @@ struct DigimonDexView: View {
                     linePicker
                 }
             }
+            DigimentalPanel(digimon: digimon, t: t)
             searchBar
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {

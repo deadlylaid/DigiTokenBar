@@ -13,6 +13,8 @@ final class DigimonScene: NSObject {
     let webView: WKWebView
     /// How many bugs one kill was worth (a big bug counts as several).
     var onBugDefeated: (Int) -> Void = { _ in }
+    /// A golden bug was defeated: it drops a Digimental fragment (step 13).
+    var onGoldenBug: () -> Void = {}
     /// Desk only: where the pet is drawn, in the web view's top-left based points.
     var onPetRect: (CGRect) -> Void = { _ in }
 
@@ -65,6 +67,7 @@ final class DigimonScene: NSObject {
             for js in pending { webView.evaluateJavaScript(js, completionHandler: nil) }
         case "bugDefeated":
             onBugDefeated((body["count"] as? NSNumber)?.intValue ?? 1)
+            if (body["golden"] as? NSNumber)?.boolValue == true { onGoldenBug() }
         case "petRect":
             let v = { (k: String) in (body[k] as? NSNumber)?.doubleValue ?? 0 }
             onPetRect(CGRect(x: v("x"), y: v("y"), width: v("w"), height: v("h")))
@@ -138,12 +141,13 @@ final class DigimonSceneHub {
         scenes.removeAll { $0.scene == nil }
         scenes.append(WeakScene(scene: scene))
         scene.onBugDefeated = { [weak self] count in self?.digimon.recordBugDefeated(count: count) }
+        scene.onGoldenBug = { [weak self] in self?.digimon.recordGoldenBug() }
         enqueue { hub in
             let key = hub.currentKey
             if let data = await hub.image(for: key) { scene.sprite(key: key, dataURI: Self.dataURI(data)) }
             scene.apply(hub.sceneState())
             for visit in hub.digimon.visitorsToday where !hub.playedVisits.contains(hub.visitID(visit.species)) {
-                await hub.playVisit(visit.species, tier: visit.tier, firstSeen: visit.firstSeen, in: [scene])
+                await hub.playVisit(visit.species, tier: visit.tier, firstSeen: visit.firstSeen, gift: visit.gift != nil, in: [scene])
             }
         }
     }
@@ -173,11 +177,13 @@ final class DigimonSceneHub {
                     }
                     target = to
                 case .visited(let species, let tier, let firstSeen):
-                    await hub.playVisit(species, tier: tier, firstSeen: firstSeen, in: hub.liveScenes)
+                    let gift = hub.digimon.visitorsToday.last { $0.species == species }?.gift != nil
+                    await hub.playVisit(species, tier: tier, firstSeen: firstSeen, gift: gift, in: hub.liveScenes)
                     target = nil
-                case .stampCardFull:
+                case .stampCardFull, .digimentalMade:
                     hub.broadcast(["type": "jump"])
                     target = nil
+                case .fragmentFound: target = nil   // the scene already showed the golden bug or the gift
                 case .choiceOffered, .jogressOffered: target = nil
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
@@ -221,7 +227,8 @@ final class DigimonSceneHub {
     }
 
     /// A visitor walks in, greets the pet and leaves. Not marked as played while no scene shows it.
-    private func playVisit(_ species: String, tier: VisitorTier, firstSeen: Bool, in scenes: [DigimonScene]) async {
+    private func playVisit(_ species: String, tier: VisitorTier, firstSeen: Bool, gift: Bool,
+                           in scenes: [DigimonScene]) async {
         guard !scenes.isEmpty, let data = await image(for: species) else { return }
         playedVisits.insert(visitID(species))
         let t = DigimonText(language)
@@ -229,7 +236,8 @@ final class DigimonSceneHub {
         scenes.forEach {
             $0.sprite(key: species, dataURI: Self.dataURI(data))
             $0.command(["type": "visit", "visitor": species, "tier": tier.rawValue, "fresh": firstSeen,
-                        "greet": t.visitorGreeting(name, firstSeen: firstSeen)])
+                        "greet": t.visitorGreeting(name, firstSeen: firstSeen), "gift": gift,
+                        "giftText": t.giftCallout])
         }
     }
 
@@ -272,6 +280,9 @@ final class DigimonSceneHub {
         state["still"] = stayInPlace
         // The day's fortune: more bugs, or shooting stars on a meteor shower.
         state["fortune"] = digimon.todayLuck?.fortune.rawValue ?? NSNull()
+        // How often a bug is golden (it drops a Digimental fragment), and what the pet says then.
+        state["golden"] = DigimentalRules.goldenBugChance(digimon.todayLuck?.fortune)
+        state["goldenText"] = DigimonText(language).goldenCallout
         // The line's egg color, for the fire of lines without their own colors.
         state["lineColor"] = digimon.engine.catalog.lines[partner.lineID]?.eggColorHex ?? NSNull()
         return state

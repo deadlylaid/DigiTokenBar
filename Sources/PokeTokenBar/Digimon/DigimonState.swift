@@ -111,6 +111,8 @@ struct DigimonState: Codable, Sendable, Equatable {
     var luck: LuckBook?
     /// Species met as visitors (the dex shows them as met). Optional for the same reason.
     var sightings: Set<String>?
+    /// Digimental fragments and finished Digimentals (`DigimentalBag`, step 13). Optional for the same reason.
+    var digimentals: DigimentalBag?
 
     static func newEgg(lineID: String) -> DigimonState {
         DigimonState(partner: DigimonPartner(lineID: lineID, speciesKey: nil, level: .digitama))
@@ -150,4 +152,8 @@ enum DigimonEvent: Equatable, Sendable {
     case visited(species: String, tier: VisitorTier, firstSeen: Bool)
     /// The stamp card filled: a very rare visitor comes right away.
     case stampCardFull
+    /// A Digimental fragment was found (`DigimentalLoop.swift`).
+    case fragmentFound(Digimental, from: FragmentSource)
+    /// Three fragments made a Digimental.
+    case digimentalMade(Digimental)
 }

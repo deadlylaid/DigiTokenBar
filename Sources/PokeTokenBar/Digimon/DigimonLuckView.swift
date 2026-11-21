@@ -149,6 +149,23 @@ struct DigimonTodayView: View {
                     .help(t.stampsHelp(cards: digimon.stampCardsCompleted))
             }
             Spacer()
+            // Digimental fragments and finished Digimentals as numbers; the words are in the help.
+            let bag = digimon.digimentalBag
+            if digimon.stampRewardsPending > 0 {
+                Image(systemName: "gift.fill").font(.caption).foregroundStyle(.orange)
+                    .help(t.stampRewardHelp)
+                    .accessibilityLabel(t.claimStampReward)
+            }
+            if bag.fragmentTotal > 0 {
+                Label("\(bag.fragmentTotal)", systemImage: "diamond").font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    .help(t.fragmentsHelp(bag.fragmentTotal))
+                    .accessibilityLabel(t.fragmentsHelp(bag.fragmentTotal))
+            }
+            if bag.ownedTotal > 0 {
+                Label("\(bag.ownedTotal)", systemImage: "diamond.fill").font(.caption).foregroundStyle(.orange).monospacedDigit()
+                    .help(t.ownedHelp(bag.ownedTotal))
+                    .accessibilityLabel(t.ownedHelp(bag.ownedTotal))
+            }
             if digimon.surprisePoints > 0 {
                 Label(t.surpriseTitle(digimon.surprisePoints), systemImage: "exclamationmark.bubble.fill")
                     .font(.caption).foregroundStyle(.secondary).monospacedDigit()
