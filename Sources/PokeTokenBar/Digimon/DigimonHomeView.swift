@@ -62,6 +62,30 @@ struct DigimonText {
         return attributes.joined(separator: ko ? "·" : "/") + " " + (jogress.level.map(level) ?? "")
     }
     var jogressCodeButton: String { ko ? "받은 코드로 합체" : "Jogress with a code" }
+    /// The text "Copy my code" puts on the clipboard: who the code is ("그레이몬 · 성숙기 · 백신") before
+    /// the code, so a friend can tell whether it fits a Jogress before trying. Reading a code skips the
+    /// words around it (`BattleCode.decode`).
+    func labeledCode(_ code: String, species: DigimonSpecies?) -> String {
+        guard let species else { return code }
+        let label = [name(species), level(species.level), attribute(species.attribute)].compactMap { $0 }
+            .joined(separator: " · ")
+        return "\(label) | \(code)"
+    }
+    /// A Jogress partner as the home lists it, with up to three examples the user has met (raised or seen
+    /// as a visitor) so they can ask friends for one: "백신·프리 성숙기 (예: 그레이몬, 레오몬)". With none
+    /// met yet: "아무 백신·프리 성숙기". A named partner is just its name.
+    func jogressPartnerWithExamples(_ jogress: DigimonJogress, catalog: DigimonCatalog, met: Set<String>) -> String {
+        let partner = jogressPartner(jogress, catalog: catalog)
+        guard jogress.species == nil, let level = jogress.level else { return partner }
+        let locale = Locale(identifier: ko ? "ko_KR" : "en_US")
+        let examples = met.compactMap(catalog.species)
+            .filter { $0.level == level && jogress.attributes.contains($0.attribute) }
+            .map(name)
+            .sorted { $0.compare($1, options: [.caseInsensitive], range: nil, locale: locale) == .orderedAscending }
+            .prefix(3)
+        guard !examples.isEmpty else { return ko ? "아무 \(partner)" : "Any \(partner)" }
+        return ko ? "\(partner) (예: \(examples.joined(separator: ", ")))" : "\(partner) (e.g. \(examples.joined(separator: ", ")))"
+    }
     func skipJogressButton(_ level: DigimonLevel) -> String {
         level == .ultimate ? (ko ? "합체 없이 졸업" : "Graduate without it") : (ko ? "합체 없이 진화" : "Evolve without it")
     }
@@ -317,8 +341,9 @@ struct DigimonStatusView: View {
         let catalog = digimon.engine.catalog
         // One row per partner, with every result that partner leads to (unseen ones as ???).
         var rows: [(partner: String, results: [String])] = []
+        let met = digimon.state.dex.union(digimon.state.sightings ?? [])
         for option in digimon.jogressOptions {
-            let partner = t.jogressPartner(option, catalog: catalog)
+            let partner = t.jogressPartnerWithExamples(option, catalog: catalog, met: met)
             let result = digimon.state.dex.contains(option.to) ? t.name(catalog.species(option.to)) : t.unknownName
             if let i = rows.firstIndex(where: { $0.partner == partner }) {
                 if !rows[i].results.contains(result) { rows[i].results.append(result) }
@@ -416,7 +441,7 @@ struct DigimonStatusView: View {
                 Button(t.copyCodeButton) {
                     guard let code = digimon.myBattleCode() else { return }
                     NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(code, forType: .string)
+                    NSPasteboard.general.setString(t.labeledCode(code, species: digimon.species), forType: .string)
                     battleMessage = t.codeCopied
                 }
                 Button(t.codeBattleButton) {
