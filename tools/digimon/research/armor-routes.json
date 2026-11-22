@@ -1,6 +1,6 @@
 {
  "system": {
-  "description": "Armor Digimon routes on ten Vital Bracelet cards (step 13). Collected 2026-11-21 by tools/digimon/research/scripts/armor_routes.py from the humulos.com charts and detail pages (device 13 = VB DIM, 14 = VB BE; BE cards count PP where DIM cards count Trophies). For each card: `cardStages` is the chart column each Armor Digimon stands in; `edges` are the card's routes with an Armor Digimon at either end that stay on the card, in the format of the vb-conditions-*.json files; `digimentals` gives each Child (non-Armor) -> Armor step the Digimental that opens it in the app. Third-party quotes: review before a public release (see README).",
+  "description": "Armor Digimon routes on eleven Vital Bracelet cards (step 13). Collected 2026-11-21 by tools/digimon/research/scripts/armor_routes.py from the humulos.com charts and detail pages (device 13 = VB DIM, 14 = VB BE; BE cards count PP where DIM cards count Trophies). For each card: `cardStages` is the chart column each Armor Digimon stands in; `edges` are the card's routes with an Armor Digimon at either end that stay on the card, in the format of the vb-conditions-*.json files; `digimentals` gives each Child -> Armor step the Digimental that opens it in the app. A route into an Armor Digimon from an Adult or a Perfect is an ordinary card route without a Digimental (user decision 2026-11-21: the anime and the D-3 toy armor-evolve a Child only). Third-party quotes: review before a public release (see README).",
   "kinds": {
    "normal": "stat requirements",
    "fallback": "taken when nothing else is met",
@@ -1181,26 +1181,6 @@
      "digimental": "friendship",
      "rule": "pair",
      "official": "Digi-Egg of Friendship (lighdramon, digimon.net/reference_en)"
-    },
-    "vdramon>sagittarimon": {
-     "digimental": "hope",
-     "rule": "representative",
-     "official": "Digi-Egg of Hope (sagittarimon, digimon.net/reference_en)"
-    },
-    "vdramon>goldvdramon": {
-     "digimental": "fate",
-     "rule": "representative",
-     "official": "Digi-Egg of Destiny (goldv-dramon, digimon.net/reference_en)"
-    },
-    "xvmon>goldvdramon": {
-     "digimental": "fate",
-     "rule": "representative",
-     "official": "Digi-Egg of Destiny (goldv-dramon, digimon.net/reference_en)"
-    },
-    "digitamamon>magnamon": {
-     "digimental": "miracles",
-     "rule": "representative",
-     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
     }
    },
    "notes": []
@@ -1639,26 +1619,6 @@
      "digimental": "courage",
      "rule": "pair",
      "official": "Digi-Egg of Courage (shadramon, digimon.net/reference_en)"
-    },
-    "stingmon>pucchiemongreen": {
-     "digimental": "kindness",
-     "rule": "representative",
-     "official": "Digi-Egg of Kindness (pucchiemon-green, digimon.net/reference_en)"
-    },
-    "hudiemon>pucchiemongreen": {
-     "digimental": "kindness",
-     "rule": "representative",
-     "official": "Digi-Egg of Kindness (pucchiemon-green, digimon.net/reference_en)"
-    },
-    "gokimon>kongoumon": {
-     "digimental": "miracles",
-     "rule": "representative",
-     "official": "Digi-Egg of Miracles (kongoumon, digimon.net/reference_en)"
-    },
-    "gokimon>pucchiemon": {
-     "digimental": "kindness",
-     "rule": "representative",
-     "official": "Digi-Egg of Kindness (pucchiemon, digimon.net/reference_en)"
     }
    },
    "notes": []
@@ -2157,16 +2117,6 @@
      "digimental": "friendship",
      "rule": "pair",
      "official": "Digi-Egg of Friendship (lighdramon, digimon.net/reference_en)"
-    },
-    "holyangemon>magnamon": {
-     "digimental": "miracles",
-     "rule": "representative",
-     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
-    },
-    "paildramon>magnamon": {
-     "digimental": "miracles",
-     "rule": "representative",
-     "official": "Digi-Egg of Miracles (magnamon, digimon.net/reference_en)"
     }
    },
    "notes": []
@@ -2521,21 +2471,6 @@
      "digimental": "light",
      "rule": "representative",
      "official": "Digi-Egg of Light (harpymon, digimon.net/reference_en)"
-    },
-    "rapidmonperfect>rapidmonarmor": {
-     "digimental": "fate",
-     "rule": "representative",
-     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
-    },
-    "makuramon>rapidmonarmor": {
-     "digimental": "fate",
-     "rule": "representative",
-     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
-    },
-    "pajiramon>rapidmonarmor": {
-     "digimental": "fate",
-     "rule": "representative",
-     "official": "Digi-Egg of Destiny (rapidmon_gold, digimon.net/reference_en)"
     }
    },
    "notes": []
@@ -2857,6 +2792,272 @@
      "official": "Digi-Egg of Friendship (thunderbirmon, digimon.net/reference_en)"
     }
    },
+   "notes": []
+  },
+  "tinkermon": {
+   "card": "Fairimon",
+   "chart": "https://humulos.com/digimon/vbdm/ex/#fairi_ex_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "peacockmon"
+   ],
+   "cardStages": {
+    "peacockmon": "perfect"
+   },
+   "edges": [
+    {
+     "from": "fairimon",
+     "to": "peacockmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Adult",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Data Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=fairi&device=13",
+     "note": null
+    },
+    {
+     "from": "cockatrimon",
+     "to": "peacockmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=cockatri&device=13",
+     "note": null
+    },
+    {
+     "from": "arbormon",
+     "to": "peacockmon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Virus Adult",
+      "jogressPartnerAttributes": [
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Virus Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=arbor&device=13",
+     "note": null
+    },
+    {
+     "from": "zassoumon",
+     "to": "peacockmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 8,
+      "vitalValues": 2000,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "8+ Trophies, 2,000+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=zassou&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "ancientirismon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 20,
+      "vitalValues": 5500,
+      "battles": 20,
+      "winRatio": 70
+     },
+     "raw": "20+ Trophies, 5,500+ Vital Values, 20+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "lotusmon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "ancienttroiamon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    },
+    {
+     "from": "peacockmon",
+     "to": "lordknightmon",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=peacock&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {},
+   "notes": []
+  },
+  "gabumonblack": {
+   "card": "Dim Card Set vol. 0.5: Mad Black Roar & True Shadow Howl",
+   "chart": "https://humulos.com/digimon/vbdm/vol/#tsh_anchor",
+   "device": "13",
+   "armorOnCard": [
+    "rhinomon"
+   ],
+   "cardStages": {
+    "rhinomon": "perfect"
+   },
+   "edges": [
+    {
+     "from": "garurumon",
+     "to": "rhinomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=garuru&device=13",
+     "note": "humulos card heading: \"True Shadow Howl\""
+    },
+    {
+     "from": "drimogemon",
+     "to": "rhinomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=drimoge&device=13",
+     "note": "humulos card heading: \"True Shadow Howl\""
+    },
+    {
+     "from": "dorulumon",
+     "to": "rhinomon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 2500,
+      "battles": 10,
+      "winRatio": 50
+     },
+     "raw": "Choose one: 10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio OR Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dorulu&device=13",
+     "note": "humulos card heading: \"True Shadow Howl\""
+    },
+    {
+     "from": "dorulumon",
+     "to": "rhinomon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Free Adult",
+      "jogressPartnerAttributes": [
+       "Free"
+      ],
+      "jogressPartnerLevel": "Adult"
+     },
+     "raw": "Choose one: 10+ Trophies, 2,500+ Vital Values, 10+ Battles, 50%+ Win Ratio OR Jogress with Free Adult",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=dorulu&device=13",
+     "note": "humulos card heading: \"True Shadow Howl\""
+    },
+    {
+     "from": "rhinomon",
+     "to": "zdgarurumon",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 10,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 50
+     },
+     "raw": "10+ Trophies, 4,500+ Vital Values, 15+ Battles, 50%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhino&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinomon",
+     "to": "metalgarurumonblack",
+     "kind": "normal",
+     "requirements": {
+      "trophies": 15,
+      "vitalValues": 4500,
+      "battles": 15,
+      "winRatio": 70
+     },
+     "raw": "15+ Trophies, 4,500+ Vital Values, 15+ Battles, 70%+ Win Ratio",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhino&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinomon",
+     "to": "omegamonzwart",
+     "kind": "jogress",
+     "requirements": {
+      "adventureStage": 15,
+      "jogressPartner": "Vaccine or Virus Perfect",
+      "jogressPartnerAttributes": [
+       "Vaccine",
+       "Virus"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Stage 15 cleared, Jogress with Vaccine or Virus Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhino&device=13",
+     "note": null
+    },
+    {
+     "from": "rhinomon",
+     "to": "mercurymon",
+     "kind": "jogress",
+     "requirements": {
+      "jogressPartner": "Data Perfect",
+      "jogressPartnerAttributes": [
+       "Data"
+      ],
+      "jogressPartnerLevel": "Perfect"
+     },
+     "raw": "Jogress with Data Perfect",
+     "source": "https://humulos.com/digimon/php/details.php?digimon=rhino&device=13",
+     "note": null
+    }
+   ],
+   "digimentals": {},
    "notes": []
   }
  }

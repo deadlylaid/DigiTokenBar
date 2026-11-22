@@ -43,6 +43,13 @@ struct DigimentalBag: Codable, Sendable, Equatable {
     func fragments(_ d: Digimental) -> Int { fragments[d.rawValue] ?? 0 }
     func owned(_ d: Digimental) -> Int { owned[d.rawValue] ?? 0 }
     /// Fragments of the kinds this version knows.
+    /// The kinds the dex shows: the ones that can still be collected (`EvolutionEngine.fragmentKinds`), and
+    /// any other kind already held. Since only a Child armor-evolves with a Digimental (2026-11-21),
+    /// Kindness, Miracles and Fate have no route; a save from before may still hold them, so they stay
+    /// shown and kept (only nothing new of them drops).
+    func shownKinds(collectable: [Digimental]) -> [Digimental] {
+        Digimental.allCases.filter { collectable.contains($0) || owned($0) > 0 || fragments($0) > 0 }
+    }
     var fragmentTotal: Int { Digimental.allCases.reduce(0) { $0 + fragments($1) } }
     var ownedTotal: Int { Digimental.allCases.reduce(0) { $0 + owned($1) } }
 

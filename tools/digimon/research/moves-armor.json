@@ -300,5 +300,20 @@
    "https://wikimon.net/thunderbirmon"
   ],
   "note": null
+ },
+ {
+  "key": "rhinomon",
+  "ko": "아토믹 버스트",
+  "en": "Atomic Burst",
+  "what": "Charges into the enemy; whatever it strikes breaks down into ones and zeroes.",
+  "koSpecies": "리노몬",
+  "kind": "melee",
+  "sources": [
+   "https://digimon.net/reference_ko/detail.php?directory_name=rhinomon",
+   "https://digimon.net/reference_en/detail.php?directory_name=rhinomon",
+   "https://digimon.net/reference/detail.php?directory_name=rhinomon",
+   "https://wikimon.net/rhinomon"
+  ],
+  "note": "Added 2026-11-21 with Rhinomon on the Gabumon (Black) card. The official reference lists Ain Soph Aur first, but that is a barrier of light around itself; Atomic Burst is its attack (a charge), so the scene shows that one."
  }
 ]

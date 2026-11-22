@@ -455,14 +455,17 @@ def main():
         if dropped:
             print(f"{line_id}: Digimental step(s) not on the line, left out: {', '.join(dropped)}")
         DIGIMENTAL_STEPS[line_id] = own
-        # A normal route into an Armor Digimon from another level needs its Digimental: growth alone
-        # must never take it.
+        # A normal route from a Child into an Armor Digimon needs its Digimental: growth alone must never
+        # take it (the anime and the D-3 toy armor-evolve a Child). From an Adult or a Perfect the card's
+        # route is an ordinary one, as on the Vital Bracelet (user decision 2026-11-21).
         for a, b in sorted(steps_of[line_id] - merges_of[line_id]):
-            if is_armor(b) and not is_armor(a) and (a, b) not in own:
+            if is_armor(b) and not is_armor(a) and level_of[a] == "child" and (a, b) not in own:
                 raise SystemExit(f"{line_id}: {a}>{b} goes into an Armor Digimon without a Digimental")
         for (a, b), d in own.items():
             if d not in DIGIMENTALS:
                 raise SystemExit(f"{line_id}: {a}>{b}: unknown Digimental {d!r}")
+            if level_of[a] != "child":
+                raise SystemExit(f"{line_id}: {a}>{b}: a Digimental on a step that does not start at a Child")
             # The Armor Digimon grows on like the rest of the card (an Ultimate graduates).
             if level_of[b] != "ultimate" and not any(x == b and (x, y) not in merges_of[line_id]
                                                      for x, y in steps_of[line_id]):

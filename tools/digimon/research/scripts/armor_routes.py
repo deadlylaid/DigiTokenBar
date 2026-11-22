@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Collect the Armor Digimon routes of ten Vital Bracelet cards into research/armor-routes.json.
+"""Collect the Armor Digimon routes of eleven Vital Bracelet cards into research/armor-routes.json.
 
 Step 13 (Digimentals and Armor evolution, docs/digimon/step13-digimental-armor.md). The first card
-research left the Armor Digimon out ("they need Digimentals"); this script brings back, for the ten
+research left the Armor Digimon out ("they need Digimentals"); this script brings back, for the
 cards whose roster has them, every route with an Armor Digimon at either end that stays on the card,
 the stage column each Armor Digimon stands in, and the Digimental each Child -> Armor step asks for.
+Only a Child's step takes a Digimental; an Adult's or a Perfect's route into an Armor Digimon is an
+ordinary card route (user decision 2026-11-21).
 
 Downloaded pages go to the cache dir (keep it outside the repository). The charts must be in it
 already (vbdm.html, vbdm_ex.html, vbdm_vol.html, vbbe_anime.html, vbbe_special.html); detail pages
@@ -60,13 +62,19 @@ CARDS = [
     # Jellymon -> Manbomon route is from another device.
     ("sunarizamon", "Titan of Dust", None, "vbdm_vol.html", "tdu", "13", "Titan of Dust"),
     ("piyomon", "BEMemory Holy Wings Dim", None, "vbbe_special.html", "hwi", "14", "Holy Wing"),
+    # Added 2026-11-21 (user decision): Peacockmon on the Fairimon EX card and Rhinomon on the
+    # Gabumon (Black) card, both reached from an Adult by the card's own routes.
+    ("tinkermon", "Fairimon", None, "vbdm_ex.html", "fairi_ex", "13", ("Fairimon EX", "Fairi EX")),
+    ("gabumonblack", "Dim Card Set vol. 0.5: Mad Black Roar & True Shadow Howl", None, "vbdm_vol.html", "tsh", "13",
+     "True Shadow Howl"),
 ]
 COLUMN = {"baby": "babyI", "babyII": "babyII", "child": "child", "adult": "adult",
           "perfect": "perfect", "ultimate": "ultimate", "super": "ultimate"}
 STAGE = {"I": "babyI", "II": "babyII", "III": "child", "IV": "adult", "V": "perfect", "VI": "ultimate"}
 # humulos titles that do not match a Wikimon name on the data card -> species key
 HUMULOS_KEYS = {"tail_c": "tailmonchild", "archne": "archnemon", "rapid_a": "rapidmonarmor", "rapid": "rapidmonperfect",
-                "sakuya_x": "sakuyamonxantibody"}
+                "sakuya_x": "sakuyamonxantibody", "tuno": "tunomon", "weregaruru_s": "weregarurumonsagittariusmode",
+                "jaegerdorulu": "yaegerdorulumon"}
 # The chart's column names -> Digimental raw values (Sources/PokeTokenBar/Digimon/Digimental.swift)
 DIGIMENTALS = ["courage", "friendship", "love", "knowledge", "purity", "reliability", "hope", "light",
                "kindness", "miracles", "fate"]
@@ -220,14 +228,15 @@ def main():
             pair_digimental.setdefault((b, a), d)
     result = {
         "system": {
-            "description": "Armor Digimon routes on ten Vital Bracelet cards (step 13). Collected 2026-11-21 by "
+            "description": "Armor Digimon routes on eleven Vital Bracelet cards (step 13). Collected 2026-11-21 by "
                            "tools/digimon/research/scripts/armor_routes.py from the humulos.com charts and detail pages "
                            "(device 13 = VB DIM, 14 = VB BE; BE cards count PP where DIM cards count Trophies). For each "
                            "card: `cardStages` is the chart column each Armor Digimon stands in; `edges` are the card's "
                            "routes with an Armor Digimon at either end that stay on the card, in the format of the "
-                           "vb-conditions-*.json files; `digimentals` gives each Child (non-Armor) -> Armor step the "
-                           "Digimental that opens it in the app. Third-party quotes: review before a public release "
-                           "(see README).",
+                           "vb-conditions-*.json files; `digimentals` gives each Child -> Armor step the Digimental that "
+                           "opens it in the app. A route into an Armor Digimon from an Adult or a Perfect is an ordinary "
+                           "card route without a Digimental (user decision 2026-11-21: the anime and the D-3 toy "
+                           "armor-evolve a Child only). Third-party quotes: review before a public release (see README).",
             "kinds": {"normal": "stat requirements", "fallback": "taken when nothing else is met",
                       "jogress": "needs a partner Digimon", "adventure": "stat requirements after an Adventure stage"},
             "digimentalRule": "pair: Wikimon's Digimental Evolution Chart lists that Digimon with that Armor under "
@@ -272,7 +281,8 @@ def main():
                 to_key = ids.get(to_hid)
                 if key not in armor_on_card and to_key not in armor_on_card:
                     continue
-                if h is not None and heading not in [p.strip() for p in h.split(",")]:
+                headings = (heading,) if isinstance(heading, str) else heading
+                if h is not None and not set(headings) & {p.strip() for p in h.split(",")}:
                     notes.append(f"{key} -> {to_name} ({raw}) is under \"{h}\", not this card")
                     continue
                 if to_key is None:
@@ -283,9 +293,12 @@ def main():
                     edges.append({"from": key, "to": to_key, "kind": kind, "requirements": req, "raw": raw,
                                   "source": DETAIL_URL.format(hid, device),
                                   "note": None if h is None else f'humulos card heading: "{h}"'})
-                # Into an Armor Digimon from another level: a Digimental opens it in the app. A Jogress
-                # needs its partner instead.
-                if key not in armor_on_card and to_key in armor_on_card and any(k != "jogress" for k, _ in kinds):
+                # Into an Armor Digimon from a Child: a Digimental opens it in the app (the anime and the
+                # D-3 toy armor-evolve a Child only). From an Adult or a Perfect it is an ordinary route
+                # with the card's requirements, as on the Vital Bracelet (user decision 2026-11-21). A
+                # Jogress needs its partner instead.
+                if (key not in armor_on_card and to_key in armor_on_card and col_of.get(key) == "child"
+                        and any(k != "jogress" for k, _ in kinds)):
                     d, rule = pair_digimental.get((key, to_key)), "pair"
                     if d is None:
                         d, rule = representative.get(to_key), "representative"

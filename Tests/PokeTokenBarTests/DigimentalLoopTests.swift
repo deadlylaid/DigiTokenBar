@@ -86,7 +86,10 @@ final class DigimentalLoopTests: XCTestCase {
         let weight = Double(DigimentalRules.preferredWeight)
         XCTAssertEqual(Double(preferred) / Double(draws), weight / (weight + 10), accuracy: 0.02, "a usable kind three times as often")
         XCTAssertEqual(Double(plain) / Double(draws), 1.0 / 11, accuracy: 0.015)
-        XCTAssertEqual(engine.fragmentKinds(), Digimental.allCases, "every kind until the armor data narrows it")
+        // Only a Child armor-evolves with a Digimental (2026-11-21), so the routes use eight kinds;
+        // Kindness, Miracles and Fate belong to Armor Digimon the cards reach from an Adult or a Perfect.
+        XCTAssertEqual(engine.fragmentKinds(), [.courage, .friendship, .love, .knowledge, .purity, .reliability, .hope, .light],
+                       "only the kinds some route uses")
     }
 
     func testOneVisitInTenLeavesAFragmentAndANewFaceAlwaysDoes() throws {
@@ -218,7 +221,7 @@ final class DigimentalLoopTests: XCTestCase {
         XCTAssertEqual(reopened.digimentalBag.fragmentTotal, 1)
         XCTAssertEqual(DigimonText(.ko).digimentalMadeTitle(.courage), "용기의 디지멘탈을 만들었어요!")
         XCTAssertEqual(DigimonText(.en).digimentalMadeTitle(.hope), "You made the Digimental of Hope!")
-        XCTAssertEqual(reopened.fragmentChoices, Digimental.allCases)
+        XCTAssertEqual(reopened.fragmentChoices, [.courage, .friendship, .love, .knowledge, .purity, .reliability, .hope, .light])
     }
 }
 

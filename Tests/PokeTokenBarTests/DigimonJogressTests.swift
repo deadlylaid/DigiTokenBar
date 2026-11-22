@@ -51,8 +51,9 @@ final class DigimonJogressTests: XCTestCase {
         let all = catalog.lines.values.flatMap(\.jogress)
         // 352, then 363 (2026-11-19): eleven "Stage 15 cleared, Jogress ..." routes were Adventure routes.
         // 476 with the six Frontier cards. 515 with the cards' Armor routes (step 13): merges into and
-        // out of Armor Digimon (Fladramon -> Paildramon, Stingmon -> Kongoumon, ...).
-        XCTAssertEqual(all.count, 515)
+        // out of Armor Digimon (Fladramon -> Paildramon, Stingmon -> Kongoumon, ...). 523 with Peacockmon
+        // (Fairimon card) and Rhinomon (Gabumon (Black) card): eight more merges into and out of them.
+        XCTAssertEqual(all.count, 523)
         for line in catalog.lines.values {
             for route in line.jogress {
                 XCTAssertTrue(line.steps?.contains(route.step) ?? false, "\(line.id): \(route.step) is one of its steps")

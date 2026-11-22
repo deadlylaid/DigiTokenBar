@@ -3768,6 +3768,12 @@
    "en": "Spark Wing",
    "kind": "electric",
    "koSpecies": "썬더버드몬"
+  },
+  "rhinomon": {
+   "ko": "아토믹 버스트",
+   "en": "Atomic Burst",
+   "kind": "melee",
+   "koSpecies": "리노몬"
   }
  }
 }
