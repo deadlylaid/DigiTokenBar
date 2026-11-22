@@ -1,4 +1,4 @@
-<!-- Use an English Conventional Commits title, e.g. fix(home): retain idle usage history. Write this description in English (see CONTRIBUTING.md). -->
+<!-- Use an English Conventional Commits title, e.g. fix(home): retain idle usage history. Write this description in English. -->
 
 ## Summary
 
@@ -40,5 +40,5 @@ section only if there is no visible UI change.
 - [ ] `swift build` and `swift test` pass locally
 - [ ] PR title follows Conventional Commits and title/description are written in English
 - [ ] UI changes include embedded images (before/after for existing screens; image of a new screen), or there is no visible UI change
-- [ ] No copyrighted assets, secrets, or private tooling references are committed (see [CONTRIBUTING](../CONTRIBUTING.md))
+- [ ] No copyrighted assets (no Digimon or other third-party artwork), secrets, or private tooling references are committed
 - [ ] Tests were added or updated for this change

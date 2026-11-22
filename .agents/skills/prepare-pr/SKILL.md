@@ -12,7 +12,7 @@ Run commands from the repository root. Paths below are relative to that root.
 
 ## Title and body
 
-Read `CONTRIBUTING.md` and `.github/PULL_REQUEST_TEMPLATE.md` before preparing or
+Read `.github/PULL_REQUEST_TEMPLATE.md` before preparing or
 updating the PR. Resolve the actual target repository and base branch, then read
 the complete `base...HEAD` diff and `base..HEAD` commit range. Do not summarize
 only the last commit or use unrelated work already on the branch as new work.

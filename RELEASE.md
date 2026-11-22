@@ -1,5 +1,9 @@
 # 릴리스 프로세스
 
+> **DigiTokenBar 참고:** 아래는 원본 PokeTokenBar의 배포 절차(Homebrew cask, 웹페이지, README 스크린샷)다.
+> DigiTokenBar는 아직 배포판이 없고 직접 빌드해서 쓴다. 원본 시절 스크린샷(`assets/`)은 공개 전 정리 때 지웠다(2026-11-22).
+> 첫 배포판을 낼 때 이 절차와 `scripts/release.sh`의 스크린샷 검사를 디지몬판에 맞게 다시 정한다.
+
 버전 배포 시 **코드뿐 아니라 문서(README·웹페이지·cask)까지 일관되게** 갱신하기 위한 런북.
 기계적 단계는 `scripts/release.sh` 가 자동화하고, 내용 판단이 필요한 부분은 아래 체크리스트로 검토한다.
 
