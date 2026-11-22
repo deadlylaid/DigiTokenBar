@@ -308,8 +308,8 @@ struct DigimonText {
     }
     func bugsCaught(_ n: Int) -> String { ko ? "이번 단계에 잡은 버그 \(n)마리" : "\(n) bugs caught this stage" }
     var evolutionByCare: String {
-        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피, 배틀)에 따라 달라지고, 운도 조금 따라요"
-           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies, battles), with a little luck"
+        ko ? "키우는 방식과 카드 조건, 약간의 운으로 모습이 정해져요"
+           : "How you raise it, the card and a little luck decide its form"
     }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
@@ -595,6 +595,7 @@ struct DigimonStatusView: View {
             }
             if !digimon.isEgg, digimon.state.partner.level != .ultimate {
                 Text(t.evolutionByCare).font(.caption2).foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)   // wraps instead of being cut off
             }
             HStack {
                 let cap = digimon.engine.growth.dailyExpCap
