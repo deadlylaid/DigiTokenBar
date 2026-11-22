@@ -20,15 +20,35 @@ final class DigimonJogressHintTests: XCTestCase {
         XCTAssertEqual(ko.labeledCode(code, species: nil), code, "an egg's code stays bare")
     }
 
-    func testTheNeededPartnerComesWithExamplesTheUserHasMet() {
+    /// The partner is said in words ("백신 또는 프리 속성의 성숙기 디지몬"), not a bare "프리·백신 성숙기" that did not
+    /// read as "whose code to get" (user report, 2026-11-22).
+    func testThePartnerIsSaidInWords() {
+        let vaccineOrFree = DigimonJogress("namakemon>boutmon", level: .adult, attributes: [.free, .vaccine])
+        XCTAssertEqual(ko.jogressNeed(vaccineOrFree, catalog: catalog), "백신 또는 프리 속성의 성숙기 디지몬")
+        XCTAssertEqual(en.jogressNeed(vaccineOrFree, catalog: catalog), "a Vaccine or Free Adult")
+        XCTAssertEqual(ko.jogressPartnerRow("백신 또는 프리 속성의 성숙기 디지몬", results: ["???"]),
+                       "짝: 백신 또는 프리 속성의 성숙기 디지몬  →  ???")
+    }
+
+    /// Three examples always: met ones first, then well-known ones, each fitting the level and attributes.
+    func testThreeExamplesThatFitMetOnesFirst() {
         let vaccineOrFree = DigimonJogress("namakemon>boutmon", level: .adult, attributes: [.free, .vaccine])
         let data = DigimonJogress("namakemon>divemon", level: .adult, attributes: [.data])
-        let met: Set<String> = ["greymon", "leomon", "garurumon", "birdramon", "togemon", "agumon"]
-        XCTAssertEqual(ko.jogressPartnerWithExamples(vaccineOrFree, catalog: catalog, met: met),
-                       "프리·백신 성숙기 (예: 가루몬, 그레이몬, 레오몬)", "three at most, in 가나다 order, Adults of those attributes only")
-        XCTAssertEqual(ko.jogressPartnerWithExamples(data, catalog: catalog, met: met), "데이터 성숙기 (예: 니드몬)")
-        XCTAssertEqual(ko.jogressPartnerWithExamples(data, catalog: catalog, met: ["greymon"]), "아무 데이터 성숙기",
-                       "none met yet: any Digimon of that kind")
-        XCTAssertEqual(en.jogressPartnerWithExamples(data, catalog: catalog, met: met), "Data Adult (e.g. Togemon)")
+        let cases: [(DigimonJogress, Set<String>)] = [(vaccineOrFree, ["leomon", "togemon", "agumon"]), (vaccineOrFree, []),
+                                                        (data, ["greymon"])]
+        for (jogress, met) in cases {
+            let names = ko.jogressExamples(jogress, catalog: catalog, met: met)
+            XCTAssertEqual(names.count, 3, "\(jogress.step) \(met)")
+            XCTAssertEqual(Set(names).count, 3, "no repeats")
+            for n in names {
+                let s = catalog.species.values.first { ko.name($0) == n }
+                XCTAssertEqual(s?.level, DigimonLevel.adult, n)
+                XCTAssertTrue(s.map { jogress.attributes.contains($0.attribute) } ?? false, "\(n) fits \(jogress.attributes)")
+            }
+        }
+        XCTAssertEqual(ko.jogressExamples(vaccineOrFree, catalog: catalog, met: ["leomon", "togemon"]).first, "레오몬",
+                       "a Digimon the user has met comes first")
+        XCTAssertEqual(ko.jogressExamples(DigimonJogress("x>y", species: "greymon"), catalog: catalog, met: []), [],
+                       "a named partner needs no examples")
     }
 }

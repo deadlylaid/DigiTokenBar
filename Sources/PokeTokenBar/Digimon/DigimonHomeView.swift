@@ -52,8 +52,8 @@ struct DigimonText {
         return h > 0 ? "\(h) h \(m) min left" : "\(m) min left"
     }
     var jogressExplain: String {
-        ko ? "아래 짝에 맞는 디지몬을 키우는 친구에게 코드를 받아 복사한 뒤 '받은 코드로 합체'를 눌러 주세요. 친구는 배틀 칸의 '내 코드 복사'로 코드를 만들어요. 시간이 지나면 평소처럼 진화하고, 기다리는 동안 쌓인 경험치는 다음 단계로 넘어가요."
-           : "Get a code from a friend whose Digimon fits a partner below, copy it and press 'Jogress with a code'. Friends make one with 'Copy my code' under Battle. When time runs out it evolves as usual; EXP earned while waiting carries over."
+        ko ? "합체하려면 위 짝 조건에 맞는 디지몬을 키우는 친구의 코드가 필요해요. 친구 앱 홈의 이름 옆에 단계와 속성이 나와요. 친구가 배틀 칸의 '내 코드 복사'로 보낸 코드를 복사한 뒤 '받은 코드로 합체'를 눌러 주세요. 안 맞는 코드는 써도 없어지지 않아요. 시간이 지나면 평소처럼 진화하고, 기다리는 동안 쌓인 경험치는 다음 단계로 넘어가요."
+           : "A Jogress needs a code from a friend raising a Digimon that fits a partner above. Their home shows its level and attribute next to its name. Copy the code they made with 'Copy my code' under Battle, then press 'Jogress with a code'. A code that does not fit is not used up. When time runs out it evolves as usual; EXP earned while waiting carries over."
     }
     /// The partner a route needs: a named Digimon, or attributes and a level ("백신·프리 성숙기").
     func jogressPartner(_ jogress: DigimonJogress, catalog: DigimonCatalog) -> String {
@@ -62,6 +62,12 @@ struct DigimonText {
         return attributes.joined(separator: ko ? "·" : "/") + " " + (jogress.level.map(level) ?? "")
     }
     var jogressCodeButton: String { ko ? "받은 코드로 합체" : "Jogress with a code" }
+    func jogressPartnerRow(_ need: String, results: [String]) -> String {
+        ko ? "짝: \(need)  →  \(results.joined(separator: ", "))" : "Partner: \(need)  →  \(results.joined(separator: ", "))"
+    }
+    func jogressExampleLine(_ names: [String]) -> String {
+        ko ? "예: \(names.joined(separator: ", "))" : "e.g. \(names.joined(separator: ", "))"
+    }
     /// The text "Copy my code" puts on the clipboard: who the code is ("그레이몬 · 성숙기 · 백신") before
     /// the code, so a friend can tell whether it fits a Jogress before trying. Reading a code skips the
     /// words around it (`BattleCode.decode`).
@@ -71,20 +77,32 @@ struct DigimonText {
             .joined(separator: " · ")
         return "\(label) | \(code)"
     }
-    /// A Jogress partner as the home lists it, with up to three examples the user has met (raised or seen
-    /// as a visitor) so they can ask friends for one: "백신·프리 성숙기 (예: 그레이몬, 레오몬)". With none
-    /// met yet: "아무 백신·프리 성숙기". A named partner is just its name.
-    func jogressPartnerWithExamples(_ jogress: DigimonJogress, catalog: DigimonCatalog, met: Set<String>) -> String {
-        let partner = jogressPartner(jogress, catalog: catalog)
-        guard jogress.species == nil, let level = jogress.level else { return partner }
+    /// What a Jogress partner must be, in words: "백신 또는 프리 속성의 성숙기 디지몬" / "a Vaccine or Free Adult".
+    /// A named partner is its name.
+    func jogressNeed(_ jogress: DigimonJogress, catalog: DigimonCatalog) -> String {
+        if let key = jogress.species { return name(catalog.species(key)) }
+        let order: [DigimonAttribute] = [.vaccine, .data, .virus, .free]
+        let attributes = order.filter(jogress.attributes.contains).compactMap(attribute)
+        let lv = jogress.level.map(level) ?? ""
+        return ko ? "\(attributes.joined(separator: " 또는 ")) 속성의 \(lv) 디지몬"
+                  : "a \(attributes.joined(separator: " or ")) \(lv)"
+    }
+    /// Three Digimon that fit a partner kind, so the user knows whose code to ask for: ones they have met
+    /// first (raised or seen as a visitor, 가나다 order), then well-known ones from the first lines (Agumon,
+    /// Gabumon, Piyomon, Tentomon, Palmon, V-mon, Guilmon). Empty for a named partner.
+    func jogressExamples(_ jogress: DigimonJogress, catalog: DigimonCatalog, met: Set<String>, count: Int = 3) -> [String] {
+        guard jogress.species == nil, let lv = jogress.level else { return [] }
+        let fits = { (s: DigimonSpecies) in s.level == lv && jogress.attributes.contains(s.attribute) }
         let locale = Locale(identifier: ko ? "ko_KR" : "en_US")
-        let examples = met.compactMap(catalog.species)
-            .filter { $0.level == level && jogress.attributes.contains($0.attribute) }
-            .map(name)
-            .sorted { $0.compare($1, options: [.caseInsensitive], range: nil, locale: locale) == .orderedAscending }
-            .prefix(3)
-        guard !examples.isEmpty else { return ko ? "아무 \(partner)" : "Any \(partner)" }
-        return ko ? "\(partner) (예: \(examples.joined(separator: ", ")))" : "\(partner) (e.g. \(examples.joined(separator: ", ")))"
+        var keys = met.compactMap(catalog.species).filter(fits)
+            .sorted { name($0).compare(name($1), options: [.caseInsensitive], range: nil, locale: locale) == .orderedAscending }
+            .map(\.key)
+        for line in ["agumon", "gabumon", "piyomon", "tentomon", "palmon", "vmon", "guilmon"] {
+            for key in catalog.lines[line]?.members ?? [] where !keys.contains(key) {
+                if let s = catalog.species(key), fits(s) { keys.append(key) }
+            }
+        }
+        return keys.prefix(count).map { name(catalog.species($0)) }
     }
     func skipJogressButton(_ level: DigimonLevel) -> String {
         level == .ultimate ? (ko ? "합체 없이 졸업" : "Graduate without it") : (ko ? "합체 없이 진화" : "Evolve without it")
@@ -343,7 +361,7 @@ struct DigimonStatusView: View {
         var rows: [(partner: String, results: [String])] = []
         let met = digimon.state.dex.union(digimon.state.sightings ?? [])
         for option in digimon.jogressOptions {
-            let partner = t.jogressPartnerWithExamples(option, catalog: catalog, met: met)
+            let partner = t.jogressNeed(option, catalog: catalog)
             let result = digimon.state.dex.contains(option.to) ? t.name(catalog.species(option.to)) : t.unknownName
             if let i = rows.firstIndex(where: { $0.partner == partner }) {
                 if !rows[i].results.contains(result) { rows[i].results.append(result) }
@@ -360,7 +378,15 @@ struct DigimonStatusView: View {
                 }
             }
             ForEach(rows, id: \.partner) { row in
-                Text("\(row.partner)  →  \(row.results.joined(separator: ", "))").font(.caption)
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(t.jogressPartnerRow(row.partner, results: row.results)).font(.caption)
+                    if let option = digimon.jogressOptions.first(where: { t.jogressNeed($0, catalog: catalog) == row.partner }) {
+                        let examples = t.jogressExamples(option, catalog: catalog, met: met)
+                        if !examples.isEmpty {
+                            Text(t.jogressExampleLine(examples)).font(.caption2).foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
             HStack(spacing: 6) {
                 Button(t.jogressCodeButton) {
