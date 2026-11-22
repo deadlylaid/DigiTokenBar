@@ -8,6 +8,8 @@
 /// Calls from the app: app.sprite(key, uri) · app.apply({key, line, stage, sleeping, lang}) · app.cmd({type, ...})
 /// Desk only: app.cmd({type: 'scale', value}) sets the pet's size (scene units -> points), app.cmd({type: 'pat', text})
 /// is a stroke (hearts, a little hop, maybe a bubble). Touches (pat, clicks, drags) reset the boredom clock.
+/// app.cmd({type: 'evolve', key, golden}) plays an evolution; `golden` (an armor evolution with a golden
+/// Digimental) adds gold twinkles.
 enum DigimonSceneHTML {
     static let page = #"""
 <!doctype html>
@@ -153,6 +155,10 @@ const BUG = [[
 const BUG_C = {k: '#2a2233', w: '#ffffff', p: '#8e5bd6', r: '#ff5a6a'};
 // A golden bug (it drops a Digimental fragment; how often comes from the app as S.golden).
 const BUG_GOLD = {k: '#6b4a00', w: '#fffbe6', p: '#ffc93a', r: '#ff9a2a'};
+// Sparkle colors: the usual white and yellow, and gold only for an armor evolution with a golden
+// Digimental (Miracles, Fate; step 16).
+const SPARK = ['#ffffff', '#ffd84a'];
+const GOLD_SPARK = ['#ffc93a', '#ffe27a', '#fff3b0'];
 
 function makeCoin() {
   const c = document.createElement('canvas'); c.width = c.height = 12;
@@ -389,10 +395,11 @@ class Pet {
     if (dir !== this.facing) { this.facing = dir; this.enter('turn', {tx, dir}); }
     else this.enter('walk', {x0: this.x, tx, dir});
   }
-  sparkle(cx, cy, n) {
+  sparkle(cx, cy, n, colors) {
+    const cs = colors || SPARK;
     for (let i = 0; i < n; i++) {
       const a = TAU * i / n + rand(-.3, .3), sp = rand(22, 50);
-      this.parts.push({x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 10, t: 0, life: rand(600, 1000), c: Math.random() < .5 ? '#ffffff' : '#ffd84a', s: Math.random() < .5 ? 2 : 1});
+      this.parts.push({x: cx, y: cy, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 10, t: 0, life: rand(600, 1000), c: cs[Math.floor(rand(0, cs.length)) % cs.length], s: Math.random() < .5 ? 2 : 1});
     }
   }
   // ---- commands ----
@@ -463,12 +470,14 @@ class Pet {
     post({cmd: 'petHome', offset: this.x - this.center()});
   }
   place(offset) { this.x = this.center() + offset; this.clampX(); this.home = this.x; }
-  evolve(to) {
-    if (this.state === 'evolve') { this.d.to = to; return; }
+  // `golden`: an armor evolution with a golden Digimental. The same evolution, with a few gold twinkles
+  // while it flickers and a gold burst at the change.
+  evolve(to, golden) {
+    if (this.state === 'evolve') { this.d.to = to; this.d.golden = this.d.golden || !!golden; return; }
     if (this.key === to) return;
     this.chip = null; this.zs = [];
     if (this.isEgg(to)) this.bug = null;
-    this.enter('evolve', {from: this.key, to, show: false, acc: 0, swapped: false});
+    this.enter('evolve', {from: this.key, to, show: false, acc: 0, swapped: false, golden: !!golden, gacc: 0});
   }
   setNow(key) { if (!assets[key] || this.key === key) return; this.key = key; this.clampX(); }
   // ---- battle (decided by the app; this only plays it) ----
@@ -857,9 +866,18 @@ class Pet {
         if (this.t < T1) {
           const iv = 260 - 220 * (this.t / T1); d.acc += dt; if (d.acc >= iv) { d.acc = 0; d.show = !d.show; }
           const pulse = 1 + .05 * Math.sin(this.t / 50) * (this.t / T1); this.sx = pulse; this.sy = pulse;
+          if (d.golden) {
+            d.gacc += dt;
+            if (d.gacc >= 320) {
+              d.gacc = 0;
+              const b = this.bb(); this.sparkle(this.x + rand(b.l, b.r), this.ground() - 64 + rand(b.t, b.b), 3, GOLD_SPARK);
+            }
+          }
         } else if (!d.swapped) {
           d.swapped = true; this.key = d.to; this.clampX(); this.flash = 1;
-          const b = this.bb(); this.sparkle(this.x + (b.l + b.r) / 2, this.ground() - 64 + (b.t + b.b) / 2, 18);
+          const b = this.bb(), cx = this.x + (b.l + b.r) / 2, cy = this.ground() - 64 + (b.t + b.b) / 2;
+          this.sparkle(cx, cy, 18);
+          if (d.golden) this.sparkle(cx, cy, 14, GOLD_SPARK);
         } else if (this.t > T1 + 600) {
           this.enter('hop', {h: this.hopH});
           if (S.sleeping) this.d.then = () => this.sleep();
@@ -1343,7 +1361,7 @@ window.app = {
     if (S.sleeping) pet.sleep(); else pet.wake();
   },
   cmd(c) {
-    if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key); }); return; }
+    if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key, !!c.golden); }); return; }
     if (c.type === 'battle') { whenAsset(c.foe, () => { if (pet) pet.duel(c); }); return; }
     if (c.type === 'jogress') { whenAsset(c.partner, () => { if (pet) pet.merge(c); }); return; }
     if (c.type === 'visit') { whenAsset(c.visitor, () => { if (pet) pet.visit(c); else earlyGuests.push(c); }); return; }

@@ -178,24 +178,27 @@ final class DigimonArmorEvolutionTests: XCTestCase {
 
     // MARK: Saves
 
-    /// Kindness, Miracles and Fate lost their routes when only a Child kept its Digimental (2026-11-21). A
-    /// save from before may hold some: they are kept, still shown in the dex and survive an import, but
-    /// no new fragment of them drops and nothing can spend them.
-    func testOldKindnessMiraclesAndFateItemsAreKeptAndStillShown() throws {
+    /// Kindness, Miracles and Fate had no route from 2026-11-21 until the Digimental chart routes (step 16).
+    /// A save from that time may hold some: they are kept, survive an import and can now be spent. Kindness
+    /// is a fragment kind again; the golden ones are shown apart and never come as fragments, and an old
+    /// golden fragment never turns into a Digimental (docs/digimon/step16-golden-digimentals.md).
+    func testOldKindnessMiraclesAndFateItemsAreKeptAndCanNowBeSpent() throws {
         let collectable = engine.fragmentKinds()
-        XCTAssertTrue(Set(collectable).isDisjoint(with: [.kindness, .miracles, .fate]))
-        XCTAssertEqual(DigimentalBag().shownKinds(collectable: collectable), collectable, "a new player sees the eight")
+        XCTAssertTrue(collectable.contains(.kindness))
+        XCTAssertTrue(Set(collectable).isDisjoint(with: Digimental.golden))
+        XCTAssertEqual(DigimentalBag().shownKinds(collectable: collectable), collectable, "a new player sees the nine")
         var bag = DigimentalBag()
         bag.owned[Digimental.miracles.rawValue] = 1
         bag.fragments[Digimental.fate.rawValue] = 2
-        XCTAssertEqual(bag.shownKinds(collectable: collectable), collectable + [.miracles, .fate])
+        XCTAssertEqual(bag.shownKinds(collectable: collectable), collectable, "the golden ones are shown apart")
         var s = full("vmon", "vmon")
         s.digimentals = bag
         let decoded = try JSONDecoder().decode(DigimonState.self, from: JSONEncoder().encode(s))
         let imported = try DigimonSaveIO.sanitized(decoded, catalog: catalog, growth: engine.growth)
         XCTAssertEqual(imported.digimentals?.owned(.miracles), 1)
         XCTAssertEqual(imported.digimentals?.fragments(.fate), 2)
-        XCTAssertTrue(engine.usableArmorOptions(for: imported).isEmpty, "nothing spends them")
+        XCTAssertEqual(engine.usableArmorOptions(for: imported), [ArmorOption(to: "magnamon", digimental: .miracles)],
+                       "the old Miracles now opens V-mon > Magnamon")
     }
 
     func testOldSavesDecodeAndAnOpenWaitIsSaved() throws {
@@ -232,26 +235,29 @@ final class DigimonArmorEvolutionTests: XCTestCase {
 
     // MARK: Seams for the fragment loop
 
+    /// Fragments are the kinds some route uses, but never a golden one (step 16).
     func testFragmentsAreOnlyKindsSomeRouteUses() {
-        let used = Set(catalog.lines.values.flatMap(\.digimentalSteps.values))
+        let used = Set(catalog.lines.values.flatMap(\.digimentalSteps.values).joined())
         XCTAssertFalse(used.isEmpty)
-        XCTAssertEqual(Set(engine.fragmentKinds()), used)
+        XCTAssertEqual(Set(engine.fragmentKinds()), used.subtracting(Digimental.golden))
     }
 
     func testPreferredKindsAreTheOnesThisLifeCanStillUse() {
         let egg = engine.preferredDigimentals(for: .newEgg(lineID: "vmon"))
-        XCTAssertEqual(egg, [.courage, .friendship], "V-mon's two; the line's later Armors grow by the card")
+        XCTAssertEqual(egg, [.courage, .friendship, .miracles, .fate],
+                       "V-mon's two, and its golden chart routes; the line's later Armors grow by the card")
         XCTAssertTrue(engine.preferredDigimentals(for: .newEgg(lineID: "agumon")).isEmpty, "no armor on the Agumon line")
         XCTAssertFalse(catalog.lines["agumon"]!.hasArmor)
         XCTAssertFalse(catalog.lines["tinkermon"]!.hasArmor, "Peacockmon grows from an Adult: no Digimental, no mark")
         XCTAssertFalse(catalog.lines["gabumonblack"]!.hasArmor, "so does Rhinomon")
         let child = full("vmon", "vmon")
-        XCTAssertEqual(engine.digimentalsUsableNow(for: child), [.courage, .friendship])
-        XCTAssertEqual(engine.preferredDigimentals(for: child), [.courage, .friendship])
+        XCTAssertEqual(engine.digimentalsUsableNow(for: child), [.courage, .friendship, .miracles, .fate])
+        XCTAssertEqual(engine.preferredDigimentals(for: child), [.courage, .friendship, .miracles, .fate])
         let adult = full("vmon", "vdramon")
         XCTAssertTrue(engine.preferredDigimentals(for: adult).isEmpty, "V-mon's routes are behind it; nothing later needs one")
         let armadimon = engine.preferredDigimentals(for: .newEgg(lineID: "armadimon"))
-        XCTAssertEqual(armadimon, [.knowledge, .reliability, .hope, .courage, .friendship], "three Children on that card")
+        XCTAssertEqual(armadimon, [.knowledge, .reliability, .hope, .courage, .friendship, .miracles],
+                       "three Children on that card; V-mon > Magnamon with Miracles")
     }
 
     // MARK: Text

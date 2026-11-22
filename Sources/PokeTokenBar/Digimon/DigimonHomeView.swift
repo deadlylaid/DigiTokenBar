@@ -421,10 +421,13 @@ struct DigimonStatusView: View {
                     Text(t.jogressTimeLeft(deadline.timeIntervalSinceNow)).font(.caption).foregroundStyle(.secondary).monospacedDigit()
                 }
             }
-            ForEach(digimon.armorChoices, id: \.to) { option in
+            // One button per Armor and Digimental: Kongoumon opens with Miracles or with Fate, so a user
+            // holding both picks which one to spend. A golden one is drawn in gold (step 16).
+            ForEach(digimon.armorChoices) { option in
                 let met = digimon.state.dex.contains(option.to)
+                let golden = option.digimental.isGolden
                 Button {
-                    do { try digimon.useDigimental(to: option.to) } catch { battleMessage = t.armorError }
+                    do { try digimon.useDigimental(to: option.to, with: option.digimental) } catch { battleMessage = t.armorError }
                 } label: {
                     HStack(spacing: 6) {
                         PixelSprite(data: hub.icons[option.to], silhouette: !met).frame(width: 24, height: 24)
@@ -432,12 +435,16 @@ struct DigimonStatusView: View {
                                  : t.armorUse(option.digimental))
                             .font(.caption.weight(.semibold))
                         Spacer(minLength: 0)
-                        Text(t.ownedCount(held.owned(option.digimental))).font(.caption2).foregroundStyle(.orange).monospacedDigit()
+                        if golden { Image(systemName: "sparkles").font(.caption2).foregroundStyle(Color.digimentalGold) }
+                        Text(t.ownedCount(held.owned(option.digimental))).font(.caption2)
+                            .foregroundStyle(golden ? Color.digimentalGold : .orange).monospacedDigit()
                     }
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.bordered)
+                .tint(golden ? Color.digimentalGold : nil)
                 .controlSize(.small)
+                .help(golden ? t.goldenTitle : "")
                 .task(id: option.to) { _ = await hub.image(for: option.to) }
             }
             Button(digimon.isJogressOpen ? t.armorSkipKeepWaiting : t.armorSkip) { digimon.skipArmor() }

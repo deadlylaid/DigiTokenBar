@@ -184,14 +184,14 @@ final class DigimonStore {
     /// A full stage is waiting for the user to use a Digimental (or to grow as usual).
     var isArmorOpen: Bool { engine.isArmorOpen(state) }
     /// What the open wait can armor-evolve into, with the Digimental each spends.
-    var armorChoices: [(to: String, digimental: Digimental)] { isArmorOpen ? engine.usableArmorOptions(for: state) : [] }
+    var armorChoices: [ArmorOption] { isArmorOpen ? engine.usableArmorOptions(for: state) : [] }
     /// When the wait ends and it grows as usual (the Digimental is kept).
     var armorDeadline: Date? { engine.armorDeadline(state) }
 
-    /// Spends one Digimental and armor-evolves into `key`.
-    func useDigimental(to key: String) throws {
+    /// Spends one Digimental (`digimental` when given) and armor-evolves into `key`.
+    func useDigimental(to key: String, with digimental: Digimental? = nil) throws {
         var next = saved
-        let events = try engine.useDigimental(&next.digimon, to: key, at: clock())
+        let events = try engine.useDigimental(&next.digimon, to: key, with: digimental, at: clock())
         commit(next, events)
     }
 
@@ -275,6 +275,18 @@ final class DigimonStore {
     func exchangeSurprise(for kind: Digimental) -> Bool {
         var next = saved
         let events = engine.exchangeSurprise(&next.digimon, for: kind)
+        commit(next, events)
+        return !events.isEmpty
+    }
+
+    /// Enough surprise points for a golden Digimental (step 16).
+    var canTradeForGolden: Bool { surprisePoints >= DigimentalRules.goldenTradeCost }
+
+    /// Thirty surprise points for the golden Digimental the user picked. False when there are not enough.
+    @discardableResult
+    func tradeForGolden(_ kind: Digimental) -> Bool {
+        var next = saved
+        let events = engine.tradeForGolden(&next.digimon, kind)
         commit(next, events)
         return !events.isEmpty
     }

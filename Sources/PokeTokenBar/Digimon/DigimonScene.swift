@@ -158,6 +158,12 @@ final class DigimonSceneHub {
         }
     }
 
+    /// The scene's evolve command. `golden`: an armor evolution with a golden Digimental (step 16)
+    /// adds a golden sparkle.
+    nonisolated static func evolveCommand(key: String, golden: Bool) -> [String: Any] {
+        golden ? ["type": "evolve", "key": key, "golden": true] : ["type": "evolve", "key": key]
+    }
+
     /// Play what just happened in every scene, then show the current look.
     func play(_ events: [DigimonEvent], fed: Bool) {
         guard !events.isEmpty || fed else { return }
@@ -165,6 +171,7 @@ final class DigimonSceneHub {
             if fed { hub.broadcast(["type": "feed"]) }
             for event in events {
                 let target: String?
+                var golden = false
                 switch event {
                 case .hatched(let species): target = species
                 case .evolved(_, let to): target = to
@@ -186,16 +193,18 @@ final class DigimonSceneHub {
                     let gift = hub.digimon.visitorsToday.last { $0.species == species }?.gift != nil
                     await hub.playVisit(species, tier: tier, firstSeen: firstSeen, gift: gift, in: hub.liveScenes)
                     target = nil
-                case .stampCardFull, .digimentalMade:
+                case .stampCardFull, .digimentalMade, .goldenDigimental:
                     hub.broadcast(["type": "jump"])
                     target = nil
                 case .fragmentFound: target = nil   // the scene already showed the golden bug or the gift
                 case .choiceOffered, .jogressOffered, .armorOffered: target = nil
-                case .armorEvolved(_, let to, _): target = to   // the usual evolution, into the Armor
+                case .armorEvolved(_, let to, let digimental):
+                    target = to   // the usual evolution, into the Armor; a golden one with a golden sparkle
+                    golden = digimental.isGolden
                 }
                 guard let target, let data = await hub.image(for: target) else { continue }
                 hub.liveScenes.forEach { $0.sprite(key: target, dataURI: Self.dataURI(data)) }
-                hub.broadcast(["type": "evolve", "key": target])
+                hub.broadcast(Self.evolveCommand(key: target, golden: golden))
             }
             hub.pushState()
         }

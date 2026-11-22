@@ -331,8 +331,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             case .armorOffered:
                 let hours = Int(digimon.engine.growth.armorWait / 3600)
                 DigimonNotifier.post(t.armorWaitTitle, t.armorOfferBody(hours: hours))
+            case .goldenDigimental(let kind, let source):
+                // A full stamp card brought it; one bought with surprise points was the user's own click.
+                if source != .surprise { DigimonNotifier.post(t.goldenGotTitle, t.goldenGotBody(kind, from: source)) }
             case .armorEvolved(let from, let to, let kind):
-                DigimonNotifier.post(t.armorEvolvedTitle, t.armorEvolvedBody(kind, from: name(from), to: name(to)))
+                DigimonNotifier.post(kind.isGolden ? t.goldenArmorEvolvedTitle : t.armorEvolvedTitle,
+                                     t.armorEvolvedBody(kind, from: name(from), to: name(to)))
             case .newEgg, .stampCardFull, .fragmentFound:
                 break
             }

@@ -8,8 +8,11 @@ import Foundation
 //   user's choice) and surprise points (5 for one of the user's choice).
 // - Random kinds are seeded like the day's luck (player, day, ...), so a restore gives the same ones.
 // - Digimentals are spent by armor evolution (not here).
+// - Golden Digimentals (Miracles, Fate; step 16, docs/digimon/step16-golden-digimentals.md) never come as
+//   fragments. They come whole: a full stamp card brings one 1 time in 4 (seeded like the rest), and
+//   30 surprise points buy the one the user picks. Golden fragments an old save holds stay as they are.
 
-/// Where a fragment came from.
+/// Where a fragment (or a whole golden Digimental) came from.
 enum FragmentSource: String, Codable, Sendable {
     case goldenBug, visitor, stampCard, surprise
 }
@@ -42,21 +45,21 @@ struct DigimentalBag: Codable, Sendable, Equatable {
 
     func fragments(_ d: Digimental) -> Int { fragments[d.rawValue] ?? 0 }
     func owned(_ d: Digimental) -> Int { owned[d.rawValue] ?? 0 }
-    /// Fragments of the kinds this version knows.
-    /// The kinds the dex shows: the ones that can still be collected (`EvolutionEngine.fragmentKinds`), and
-    /// any other kind already held. Since only a Child armor-evolves with a Digimental (2026-11-21),
-    /// Kindness, Miracles and Fate have no route; a save from before may still hold them, so they stay
-    /// shown and kept (only nothing new of them drops).
+    /// The fragment kinds the dex shows: the ones that can still be collected
+    /// (`EvolutionEngine.fragmentKinds`), and any other kind already held. The golden ones are not among
+    /// them: the dex shows those apart, always (step 16).
     func shownKinds(collectable: [Digimental]) -> [Digimental] {
-        Digimental.allCases.filter { collectable.contains($0) || owned($0) > 0 || fragments($0) > 0 }
+        Digimental.allCases.filter { !$0.isGolden && (collectable.contains($0) || owned($0) > 0 || fragments($0) > 0) }
     }
     var fragmentTotal: Int { Digimental.allCases.reduce(0) { $0 + fragments($1) } }
     var ownedTotal: Int { Digimental.allCases.reduce(0) { $0 + owned($1) } }
+    var goldenTotal: Int { Digimental.golden.reduce(0) { $0 + owned($1) } }
 
     /// Turns every three fragments of a kind into one Digimental. Returns one entry per Digimental made.
+    /// Golden fragments (only an old save holds them) never combine: a golden Digimental comes whole.
     mutating func combine() -> [Digimental] {
         var made: [Digimental] = []
-        for d in Digimental.allCases {
+        for d in Digimental.allCases where !d.isGolden {
             let n = fragments(d) / DigimentalRules.fragmentsPerDigimental
             guard n > 0 else { continue }
             fragments[d.rawValue] = fragments(d) % DigimentalRules.fragmentsPerDigimental
@@ -82,17 +85,21 @@ enum DigimentalRules {
     static let preferredWeight = 3
     static let maxOwned = 99
     static let maxStampRewards = 99
+    /// A full stamp card also brings a golden Digimental 1 time in this many (Miracles or Fate, half each).
+    static let goldenStampOneIn: UInt64 = 4
+    /// Surprise points for a golden Digimental of the user's choice.
+    static let goldenTradeCost = 30
 }
 
 // MARK: Integration seam (armor data fills these from the catalog's Digimental routes)
 
 extension EvolutionEngine {
-    /// The Digimentals a random fragment can be: the ones some line's Digimental route uses (every one
-    /// if the catalog had none).
+    /// The Digimentals a fragment can be: the ones some line's Digimental route uses (every one if the
+    /// catalog had none), never a golden one (step 16).
     func fragmentKinds() -> [Digimental] {
-        let used = Set(catalog.lines.values.flatMap(\.digimentalSteps.values))
+        let used = Set(catalog.lines.values.flatMap(\.digimentalSteps.values).joined())
         let kinds = Digimental.allCases.filter(used.contains)
-        return kinds.isEmpty ? Digimental.allCases : kinds
+        return (kinds.isEmpty ? Digimental.allCases : kinds).filter { !$0.isGolden }
     }
 
     /// The Digimentals the partner can use now or later in this life: the Digimental routes out of its
@@ -107,8 +114,8 @@ extension EvolutionEngine {
                 frontier.append(evo.to)
             }
         }
-        return Set(line.digimentalSteps.compactMap { step, d in
-            reach.contains(String(step.split(separator: ">").first ?? "")) ? d : nil
+        return Set(line.digimentalSteps.flatMap { step, ds in
+            reach.contains(String(step.split(separator: ">").first ?? "")) ? ds : []
         })
     }
 
@@ -182,6 +189,37 @@ extension EvolutionEngine {
     }
 }
 
+// MARK: Golden Digimentals (step 16)
+
+extension EvolutionEngine {
+    /// Adds one whole golden Digimental. `.goldenDigimental`.
+    @discardableResult
+    func giveGolden(_ state: inout DigimonState, _ kind: Digimental, from source: FragmentSource) -> [DigimonEvent] {
+        var bag = state.digimentals ?? DigimentalBag()
+        bag.owned[kind.rawValue] = min(DigimentalRules.maxOwned, bag.owned(kind) + 1)
+        state.digimentals = bag
+        return [.goldenDigimental(kind, from: source)]
+    }
+
+    /// The golden Digimental the `cards`-th full stamp card brings, if any: 1 card in `goldenStampOneIn`,
+    /// Miracles or Fate half each. Seeded by the player, the day and the card, so a restore gives the same.
+    func stampGolden(_ state: DigimonState, day: String, cards: Int) -> Digimental? {
+        var rng = SeededGenerator(seed: DigimonBattle.fnv1a("golden-stamp|\(state.playerID ?? "")|\(day)|\(cards)"))
+        guard rng.next() % DigimentalRules.goldenStampOneIn == 0 else { return nil }
+        return Digimental.golden[Int(rng.next() % UInt64(Digimental.golden.count))]
+    }
+
+    /// Trades `goldenTradeCost` surprise points for the golden Digimental `kind` (one of
+    /// `Digimental.golden`, the only ones the dex offers). Nothing with fewer points.
+    @discardableResult
+    func tradeForGolden(_ state: inout DigimonState, _ kind: Digimental) -> [DigimonEvent] {
+        guard var book = state.luck, book.surprise >= DigimentalRules.goldenTradeCost else { return [] }
+        book.surprise -= DigimentalRules.goldenTradeCost
+        state.luck = book
+        return giveGolden(&state, kind, from: .surprise)
+    }
+}
+
 // MARK: Text
 
 extension DigimonText {
@@ -226,6 +264,24 @@ extension DigimonText {
     /// The pet's callout when a visitor leaves a fragment, and when a golden bug drops one.
     var giftCallout: String { ko ? "선물이다!" : "A gift!" }
     var goldenCallout: String { ko ? "디지멘탈 조각!" : "A fragment!" }
+    // Golden Digimentals (step 16).
+    var goldenTitle: String { ko ? "황금 디지멘탈" : "Golden Digimentals" }
+    /// The folded Digimental line's golden count: "황금 1".
+    func goldenShort(_ n: Int) -> String { ko ? "황금 \(n)" : "\(n) golden" }
+    var goldenHelp: String {
+        ko ? "황금 디지멘탈(기적·운명)은 조각으로 모을 수 없어요. 출석 도장 카드를 다 채우면 \(DigimentalRules.goldenStampOneIn)번에 1번꼴로 함께 오고, 놀람 점수 \(DigimentalRules.goldenTradeCost)점으로도 받을 수 있어요."
+           : "Golden Digimentals (Miracles, Fate) never come as fragments. A full stamp card brings one about 1 time in \(DigimentalRules.goldenStampOneIn), and \(DigimentalRules.goldenTradeCost) surprise points buy one."
+    }
+    var goldenTrade: String { ko ? "\(DigimentalRules.goldenTradeCost)점으로 받기" : "Get for \(DigimentalRules.goldenTradeCost) points" }
+    func goldenTradeHelp(_ points: Int) -> String {
+        ko ? "놀람 점수 \(DigimentalRules.goldenTradeCost)점으로 원하는 황금 디지멘탈 하나를 받아요. (지금 \(points)점)"
+           : "Trade \(DigimentalRules.goldenTradeCost) surprise points for the golden Digimental you pick (you have \(points))."
+    }
+    var goldenGotTitle: String { ko ? "황금 디지멘탈을 받았어요!" : "A golden Digimental!" }
+    func goldenGotBody(_ d: Digimental, from source: FragmentSource) -> String {
+        "\(digimental(d)) · \(fragmentSourceName(source))"
+    }
+    var goldenArmorEvolvedTitle: String { ko ? "황금 아머 진화!" : "Golden armor evolution!" }
     func fragmentSourceName(_ s: FragmentSource) -> String {
         switch s {
         case .goldenBug: return ko ? "황금 버그" : "Golden bug"

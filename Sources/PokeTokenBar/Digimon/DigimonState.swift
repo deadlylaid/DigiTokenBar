@@ -160,6 +160,8 @@ enum DigimonEvent: Equatable, Sendable {
     case fragmentFound(Digimental, from: FragmentSource)
     /// Three fragments made a Digimental.
     case digimentalMade(Digimental)
+    /// A whole golden Digimental came (a full stamp card, or surprise points; step 16).
+    case goldenDigimental(Digimental, from: FragmentSource)
     /// A full stage can armor-evolve with a Digimental the user owns: it waits for the user (the
     /// possible results, with the Digimental each needs).
     case armorOffered(options: [String])

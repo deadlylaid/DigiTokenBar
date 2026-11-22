@@ -25,9 +25,10 @@ struct DigimonSpecies: Sendable, Hashable {
     let colorSprite: String
 }
 
-/// Where an evolution is attested. Only device sources are kept in the catalog.
+/// Where an evolution is attested. Device sources, and Wikimon's Digimental Evolution Chart for the
+/// armor evolutions no card has (step 16, tools/digimon/research/digimental-chart-routes.json).
 enum EvolutionSource: String, Codable, Sendable {
-    case vitalBracelet, digitalMonsterColor, pendulumColor
+    case vitalBracelet, digitalMonsterColor, pendulumColor, digimentalChart
 }
 
 struct DigimonEvolution: Sendable, Hashable {
@@ -54,18 +55,25 @@ struct DigimonLine: Sendable, Hashable {
     /// Who each Jogress route on the card merges with (a step can also have a normal route). A friend's
     /// code that fits takes it (`EvolutionEngine.jogressOptions`).
     var jogress: [DigimonJogress] = []
-    /// Steps into an Armor Digimon ("from>to") and the Digimental each needs (step 13). Growth never
-    /// takes one by itself (`EvolutionRules.isLocked`); only using the Digimental does.
-    var digimentalSteps: [String: Digimental] = [:]
+    /// Steps from a Child into an Armor Digimon ("from>to") and the Digimentals that open each, any one
+    /// of them (Wormmon > Kongoumon: Miracles or Fate; the others have one). Growth never takes one by
+    /// itself (`EvolutionRules.isLocked`); only using a Digimental does (steps 13 and 16). A step from the
+    /// Digimental chart can skip stages: the Armor keeps its card stage (V-mon > Magnamon, an Ultimate).
+    var digimentalSteps: [String: [Digimental]] = [:]
     /// What the card requires for each step (not for merges). Empty = no card data (test catalogs).
     var conditions: [DigimonStepCondition] = []
 
-    /// The Digimental this step needs, nil for a step growth can take (or a merge).
     /// The line has a route that a Digimental opens (armor evolution, step 13).
     var hasArmor: Bool { !digimentalSteps.isEmpty }
 
+    /// The Digimentals that open this step (any one of them), empty for a step growth can take (or a merge).
+    func digimentals(from: String, to: String) -> [Digimental] {
+        digimentalSteps["\(from)>\(to)"] ?? []
+    }
+
+    /// The first Digimental that opens this step, nil for a step growth can take (or a merge).
     func digimental(from: String, to: String) -> Digimental? {
-        digimentalSteps["\(from)>\(to)"]
+        digimentals(from: from, to: to).first
     }
 }
 

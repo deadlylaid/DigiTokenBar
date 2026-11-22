@@ -13,8 +13,9 @@ struct DigimonDex {
         case friendJogress(routes: [DigimonJogress])
         /// A named Jogress the app does: raise both partners (e.g. War Greymon and Metal Garurumon).
         case specialJogress(partners: [String])
-        /// An Armor Digimon: this Digimental opens the step into it (step 13).
-        case digimental(Digimental)
+        /// An Armor Digimon: this Digimental opens the step into it (step 13), or the other one
+        /// (Kongoumon: Miracles or Fate, step 16).
+        case digimental(Digimental, or: Digimental? = nil)
     }
 
     struct Link: Equatable, Identifiable {
@@ -57,14 +58,16 @@ struct DigimonDex {
         let allSteps = members.flatMap { catalog.nextEvolutions(from: $0.key, in: line) }
         func entry(_ species: DigimonSpecies) -> Entry {
             let incoming = allSteps.filter { $0.to == species.key }
-            let digimental = incoming.lazy.compactMap { line.digimental(from: $0.from, to: $0.to) }.first
+            // The Digimentals that open a step into it (an Armor reached by the card too still hints at them).
+            let ways = incoming.flatMap { line.digimentals(from: $0.from, to: $0.to) }.orderedUnique()
+            let digimental = ways.first
             let mergeOnly = species.key != line.firstBaby && !incoming.isEmpty
                 && incoming.allSatisfy { rules.isLocked($0.from, $0.to, in: line) }
             let jogressFrom = rules.specialJogress.filter { $0.to == species.key }.map(\.from)
             let friendRoutes = rules.friendJogress ? line.jogress.filter { $0.to == species.key } : []
             let secret: Secret? = !jogressFrom.isEmpty ? .specialJogress(partners: Array(Set(jogressFrom)).sorted())
                 : rules.locked.contains(species.key) ? .locked
-                : digimental.map { .digimental($0) }
+                : digimental.map { .digimental($0, or: ways.dropFirst().first) }
                 ?? (mergeOnly ? (friendRoutes.isEmpty ? .mergeOnly : .friendJogress(routes: friendRoutes))
                     : rules.hidden[species.key].map { .hidden($0) })
             let link = { (from: String, to: String, other: String) in
@@ -220,9 +223,14 @@ extension DigimonText {
             let names = partners.map { name(catalog.species($0)) }.joined(separator: ", ")
             return ko ? "\(names)를 모두 키워 본 적이 있으면, 궁극체를 다 채운 뒤 친구의 짝 디지몬 코드로 합체 진화해요."
                       : "Once you have raised \(names), a full Ultimate merges into this with a friend's code for its partner."
-        case .digimental(let d):
+        case .digimental(let d, let other):
             // "디지멘탈" ends in ㄹ, so the subject particle is 이.
-            return ko ? "\(digimental(d))이 있으면 진화할 수 있어요." : "Evolves with the \(digimental(d))."
+            guard let other else { return ko ? "\(digimental(d))이 있으면 진화할 수 있어요." : "Evolves with the \(digimental(d))." }
+            // "기적이나 운명의 디지멘탈": 이나 after a final consonant, 나 after a vowel.
+            let word = digimentalWord(d)
+            let or = word.unicodeScalars.last.map { (0xAC00...0xD7A3).contains($0.value) && ($0.value - 0xAC00) % 28 != 0 } == true ? "이나" : "나"
+            return ko ? "\(word)\(or) \(digimental(other))이 있으면 진화할 수 있어요."
+                      : "Evolves with the Digimental of \(word) or of \(digimentalWord(other))."
         case .hidden(.bugsDefeated): return ko ? "버그를 많이 잡은 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says bug hunters turn into this."
         case .hidden(.limitHits): return ko ? "한도를 자주 넘긴 디지몬이 이 모습이 된다는 소문이 있어요." : "Rumor says hitting your limits often leads here."
         }

@@ -2,9 +2,15 @@ import Foundation
 
 /// The eleven Digimentals (Digimon Adventure 02, the D-3 toy; columns of Wikimon's Digimental Evolution
 /// Chart). A Child holding the right one armor-evolves on the routes the Vital Bracelet cards give
-/// (docs/digimon/step13-digimental-armor.md). The raw values are the ones the catalog and saves use.
+/// (docs/digimon/step13-digimental-armor.md) and on a few chart routes no card has (step 16). The raw
+/// values are the ones the catalog and saves use.
 enum Digimental: String, Codable, Sendable, CaseIterable, Hashable {
     case courage, friendship, love, knowledge, purity, reliability, hope, light, kindness, miracles, fate
+
+    /// The golden Digimentals (Miracles and Fate, golden in Adventure 02). They never come as fragments,
+    /// only whole: a full stamp card sometimes brings one, or surprise points buy one (step 16).
+    static let golden: [Digimental] = [.miracles, .fate]
+    var isGolden: Bool { Self.golden.contains(self) }
 }
 
 extension DigimonText {

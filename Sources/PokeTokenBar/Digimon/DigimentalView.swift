@@ -1,12 +1,25 @@
 import SwiftUI
 
-/// The Dex tab's Digimental area: what the user holds, fragments toward each Digimental, and the two
-/// fragments of the user's choice (a full stamp card, surprise points). Folded to one line by default.
+extension Color {
+    /// The golden Digimentals (Miracles, Fate; step 16): their chips, armor buttons and count.
+    static let digimentalGold = Color(red: 0.85, green: 0.64, blue: 0.08)
+}
+
+/// The Dex tab's Digimental area: what the user holds, fragments toward each Digimental, the two
+/// fragments of the user's choice (a full stamp card, surprise points), and apart from them the two
+/// golden Digimentals with their 30-point trade (step 16). Folded to one line by default.
 @MainActor
 struct DigimentalPanel: View {
     let digimon: DigimonStore
     let t: DigimonText
-    @State private var expanded = false
+    @State private var expanded: Bool
+
+    /// `expanded`: open from the start (for a capture of the whole area); the dex starts folded.
+    init(digimon: DigimonStore, t: DigimonText, expanded: Bool = false) {
+        self.digimon = digimon
+        self.t = t
+        _expanded = State(initialValue: expanded)
+    }
 
     var body: some View {
         let bag = digimon.digimentalBag
@@ -21,6 +34,11 @@ struct DigimentalPanel: View {
                         Text(t.digimentalsTitle).font(.caption.weight(.semibold))
                         Text(t.digimentalsSummary(owned: bag.ownedTotal, fragments: bag.fragmentTotal))
                             .font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                        if bag.goldenTotal > 0 {
+                            Image(systemName: "sparkles").font(.caption2).foregroundStyle(Color.digimentalGold)
+                            Text(t.goldenShort(bag.goldenTotal)).font(.caption.weight(.semibold))
+                                .foregroundStyle(Color.digimentalGold).monospacedDigit()
+                        }
                     }
                     .lineLimit(1)
                     .fixedSize()
@@ -47,6 +65,10 @@ struct DigimentalPanel: View {
                     Spacer(minLength: 0)
                 }
                 .padding(.leading, 14)
+            }
+            // The golden ones, apart and in gold: shown while open, or when 30 points can buy one.
+            if expanded || digimon.canTradeForGolden {
+                goldenRow(bag).padding(.leading, 14)
             }
             let now = digimon.digimentalsUsableNow.filter { bag.owned($0) > 0 }
             if expanded || !now.isEmpty {
@@ -90,6 +112,67 @@ struct DigimentalPanel: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(t.digimental(d))
         .accessibilityValue("\(parts)/\(DigimentalRules.fragmentsPerDigimental) \(t.ownedCount(held))")
+    }
+
+    /// "✦ 황금 디지멘탈  기적 ×1  운명 ×0  [30점으로 받기]": one line, or the trade on a line of its own
+    /// when it does not fit (English).
+    private func goldenRow(_ bag: DigimentalBag) -> some View {
+        let held = HStack(spacing: 6) {
+            Image(systemName: "sparkles").font(.caption).foregroundStyle(Color.digimentalGold)
+            Text(t.goldenTitle).font(.caption.weight(.semibold)).foregroundStyle(Color.digimentalGold)
+                .lineLimit(1).fixedSize()
+            ForEach(Digimental.golden, id: \.self) { goldenChip($0, bag) }
+        }
+        return ViewThatFits(in: .horizontal) {
+            HStack(spacing: 6) {
+                held
+                if digimon.canTradeForGolden { goldenTradeMenu }
+                Spacer(minLength: 0)
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                held
+                if digimon.canTradeForGolden { goldenTradeMenu }
+            }
+        }
+        .help(t.goldenHelp)
+    }
+
+    /// Thirty surprise points for the golden Digimental the user picks (shown only when affordable).
+    private var goldenTradeMenu: some View {
+        Menu {
+            ForEach(Digimental.golden, id: \.self) { d in
+                Button(t.digimental(d)) { digimon.tradeForGolden(d) }
+            }
+        } label: {
+            Label(t.goldenTrade, systemImage: "exclamationmark.bubble.fill").font(.caption)
+        }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .fixedSize()
+        .tint(Color.digimentalGold)
+        .help(t.goldenTradeHelp(digimon.surprisePoints))
+    }
+
+    /// "기적 ×1" in gold. Fragments only an old save holds still show as dots (they never fill).
+    private func goldenChip(_ d: Digimental, _ bag: DigimentalBag) -> some View {
+        let held = bag.owned(d), parts = bag.fragments(d)
+        return HStack(spacing: 3) {
+            Text(t.digimentalWord(d)).font(.caption2.weight(.bold)).lineLimit(1)
+            if parts > 0 {
+                HStack(spacing: 1) {
+                    ForEach(0..<parts, id: \.self) { _ in Image(systemName: "circle.fill").font(.system(size: 5)) }
+                }
+            }
+            Text(t.ownedCount(held)).font(.caption2.weight(.semibold)).monospacedDigit()
+        }
+        .foregroundStyle(held > 0 ? Color.digimentalGold : Color.secondary)
+        .padding(.horizontal, 6).padding(.vertical, 3)
+        .background(RoundedRectangle(cornerRadius: 6).fill(Color.digimentalGold.opacity(held > 0 ? 0.16 : 0.06)))
+        .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.digimentalGold.opacity(held > 0 ? 0.8 : 0.35)))
+        .fixedSize()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(t.goldenTitle): \(t.digimental(d))")
+        .accessibilityValue(t.ownedCount(held))
     }
 
     private func sorted(_ set: Set<Digimental>) -> [Digimental] { Digimental.allCases.filter(set.contains) }

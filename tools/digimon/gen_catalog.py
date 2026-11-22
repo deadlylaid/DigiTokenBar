@@ -78,13 +78,18 @@ ORDER = ["babyI", "babyII", "child", "adult", "perfect", "ultimate"]
 # Wikimon levels that growth does not set on its own: a card's research gives their stage
 # (`cardStages`). Hybrid Digimon on the Frontier cards grow by training like the rest of the card.
 # Armor Digimon take their card's stage from research/armor-routes.json (step 13); a step into one
-# from another level opens only with a Digimental (`digimentalSteps`), so growth never takes it alone.
+# from a Child opens only with a Digimental (`digimentalSteps`), so growth never takes it alone.
 # Cards without that research keep their Armor Digimon out.
 CARD_STAGE_LEVELS = {"Hybrid", "Armor"}
 ARMOR = json.loads((HERE / "research" / "armor-routes.json").read_text())["cards"]
 DIGIMENTALS = ("courage", "friendship", "love", "knowledge", "purity", "reliability", "hope", "light",
                "kindness", "miracles", "fate")
-DIGIMENTAL_STEPS = {}   # line id -> {(from, to): digimental}
+DIGIMENTAL_STEPS = {}   # line id -> {(from, to): [digimental, ...]}: any one of them opens the step
+# Child -> Armor routes that no card has (step 16): pairs of Wikimon's Digimental Evolution Chart, on a
+# line that has both Digimon. They skip stages (the Armor keeps its card stage) and open only with a
+# Digimental. Each is checked against the chart pairs copied in research/armor-routes.json.
+CHART_ROUTES = json.loads((HERE / "research" / "digimental-chart-routes.json").read_text())["cards"]
+CHART_PAIRS = json.loads((HERE / "research" / "armor-routes.json").read_text())["system"]["digimentalChart"]["pairs"]
 CARD_LEVEL = {}   # species key -> stage from its card's research (one stage per species)
 CARD_ATTR = {}    # species key -> attribute from its card's research (a Hybrid is "Variable" on Wikimon)
 ATTR = {"Vaccine": "vaccine", "Data": "data", "Virus": "virus", "Free": "free"}
@@ -210,7 +215,7 @@ def research_cards():
                 if d["digimental"] not in DIGIMENTALS:
                     raise SystemExit(f"{line_id}: {step}: unknown Digimental {d['digimental']!r}")
                 a, b = step.split(">")
-                DIGIMENTAL_STEPS.setdefault(line_id, {})[(a, b)] = d["digimental"]
+                DIGIMENTAL_STEPS.setdefault(line_id, {})[(a, b)] = [d["digimental"]]
             partners = PARTNERS.setdefault(line_id, {})
             for e in edges:
                 if e.get("onCard", True) is not False and edge_kind(e) == "jogress":
@@ -298,6 +303,27 @@ def write_moves(keys):
         "}",
         "",
     ]))
+
+
+def chart_routes(line_id, members):
+    """[(from, to, [digimental, ...])]: the line's Digimental chart routes (step 16). Each Digimental
+    must make a pair of the chart with the two Digimon, and both must be on the line: a route quietly
+    left out would lose a Digimental's only use."""
+    norm = lambda name: re.sub(r"[^a-z0-9]", "", name.lower())
+    pairs = {(norm(p["base"]), p["digimental"], norm(p["armor"])) for p in CHART_PAIRS}
+    name_of = {k: norm(n["name"]) for k, n in DATA["nodes"].items()}
+    out = []
+    for r in CHART_ROUTES.get(line_id, {}).get("routes", []):
+        a, b, ds = r["from"], r["to"], list(r["digimentals"])
+        for d in ds:
+            if d not in DIGIMENTALS:
+                raise SystemExit(f"{line_id}: {a}>{b}: unknown Digimental {d!r}")
+            if (name_of.get(a), d, name_of.get(b)) not in pairs:
+                raise SystemExit(f"{line_id}: {a}>{b} with {d} is not a pair of the Digimental chart")
+        if a not in members or b not in members:
+            raise SystemExit(f"{line_id}: {a}>{b}: a Digimental chart route off the line")
+        out.append((a, b, ds))
+    return out
 
 
 def swift_str(s):
@@ -388,7 +414,20 @@ def main():
             dropped = sorted(f"{a}>{b}" for (a, b) in wikimon if a in members and b in members and (a, b) not in steps)
             if dropped:
                 print(f"{line_id}: not on the card, left out: {', '.join(dropped)}")
+            for a, b, ds in chart_routes(line_id, members):
+                if (a, b) in steps:
+                    raise SystemExit(f"{line_id}: {a}>{b} is already a card route; a chart route only adds a new one")
+                up = ORDER.index(level_of[b]) - ORDER.index(level_of[a])
+                if up <= 0:
+                    raise SystemExit(f"{line_id}: {a}>{b} does not go up a level")
+                print(f"{line_id}: {a}>{b} from the Digimental chart ({' or '.join(ds)})"
+                      + (f", skips {up - 1} level(s)" if up > 1 else ""))
+                evo.setdefault((a, b), (["chart"], False, False))
+                steps.add((a, b))
+                DIGIMENTAL_STEPS.setdefault(line_id, {})[(a, b)] = ds
         else:
+            if line_id in CHART_ROUTES:
+                raise SystemExit(f"{line_id}: Digimental chart routes need the card's research")
             steps = {(a, b) for (a, b) in wikimon if a in members and b in members}
             merges = {(a, b) for (a, b) in steps if wikimon[(a, b)][2]}
             print(f"{line_id}: no card research, using every Wikimon device route")
@@ -445,8 +484,9 @@ def main():
                              "fix the data or leave the line out")
         pruned.append((line_id, card_name, egg, baby1, [k for k in roster if k in reach]))
     lines = pruned
-    # Digimental steps (step 13). Only those still on the line count (a Child left out of the line,
-    # e.g. Tailmon (Child) on the D-3 White and Red card, takes its Armor's step with it).
+    # Digimental steps (steps 13 and 16). Only those still on the line count (a Child left out of the
+    # line, e.g. Tailmon (Child) on the D-3 White and Red card, takes its Armor's step with it). A chart
+    # route (step 16) is held by the same guards: it starts at a Child and its Armor grows on or graduates.
     is_armor = lambda k: nodes[k]["level"] == "Armor"
     for line_id, *_ in lines:
         own = {ab: d for ab, d in DIGIMENTAL_STEPS.get(line_id, {}).items()
@@ -461,9 +501,12 @@ def main():
         for a, b in sorted(steps_of[line_id] - merges_of[line_id]):
             if is_armor(b) and not is_armor(a) and level_of[a] == "child" and (a, b) not in own:
                 raise SystemExit(f"{line_id}: {a}>{b} goes into an Armor Digimon without a Digimental")
-        for (a, b), d in own.items():
-            if d not in DIGIMENTALS:
-                raise SystemExit(f"{line_id}: {a}>{b}: unknown Digimental {d!r}")
+        for (a, b), ds in own.items():
+            for d in ds:
+                if d not in DIGIMENTALS:
+                    raise SystemExit(f"{line_id}: {a}>{b}: unknown Digimental {d!r}")
+            if not ds or len(set(ds)) != len(ds):
+                raise SystemExit(f"{line_id}: {a}>{b}: Digimentals {ds} (none, or one twice)")
             if level_of[a] != "child":
                 raise SystemExit(f"{line_id}: {a}>{b}: a Digimental on a step that does not start at a Child")
             # The Armor Digimon grows on like the rest of the card (an Ultimate graduates).
@@ -504,7 +547,8 @@ def main():
     used = set().union(*steps_of.values())
     for (a, b) in sorted(used, key=lambda ab: (keys.index(ab[0]), keys.index(ab[1]))):
         srcs, canon, _ = evo[(a, b)]
-        src = ", ".join("." + {"vb": "vitalBracelet", "dmc": "digitalMonsterColor", "dpc": "pendulumColor"}[s]
+        src = ", ".join("." + {"vb": "vitalBracelet", "dmc": "digitalMonsterColor", "dpc": "pendulumColor",
+                               "chart": "digimentalChart"}[s]
                         for s in srcs)
         out.append(f"        DigimonEvolution(from: {swift_str(a)}, to: {swift_str(b)}, sources: [{src}], canon: {str(canon).lower()}),")
     out += ["    ]", "",
@@ -537,7 +581,7 @@ def main():
                     rows.append(f".init({step(ab)}, level: .{p[1]}, attributes: [{attrs}])")
         out.append(f"                    jogress: [{', '.join(rows)}],")
         digimentals = DIGIMENTAL_STEPS.get(line_id, {})
-        rows = [f"{step(ab)}: .{digimentals[ab]}" for ab in sorted(digimentals, key=order)]
+        rows = [f"{step(ab)}: [{', '.join('.' + d for d in digimentals[ab])}]" for ab in sorted(digimentals, key=order)]
         out.append(f"                    digimentalSteps: [{', '.join(rows) if rows else ':'}],")
         conds = CONDITIONS.get(line_id, {})
         rows = []

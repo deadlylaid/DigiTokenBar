@@ -1,0 +1,35 @@
+{
+  "system": {
+    "description": "Child -> Armor routes that no Vital Bracelet card has (step 16, docs/digimon/step16-golden-digimentals.md). Each one is a pair of Wikimon's Digimental Evolution Chart (the Child with that Armor under that Digimental), kept only on a line that already has both Digimon. The Armor keeps its card stage (research/armor-routes.json `cardStages`), so these routes skip stages: a Child lands straight on a Perfect or an Ultimate. Growth never takes them; only the Digimental does. An Ultimate Armor graduates; a Perfect one grows on by its card's routes. The card's own routes into these Armors stay as they are.",
+    "source": "https://wikimon.net/Template:DigimentalEvoList1 (shown on https://wikimon.net/Digimental_Evolution_Chart), fetched 2026-11-21. Text licensed CC BY-SA 3.0. The pairs are copied in research/armor-routes.json `system.digimentalChart.pairs`; gen_catalog.py checks every route below against them.",
+    "decided": "user, 2026-11-22: Miracles and Fate are golden (never as fragments); Kindness comes from fragments like the other eight.",
+    "golden": ["miracles", "fate"],
+    "routes": "`digimentals`: every Digimental that opens the step (either one does). `chart`: the chart pair(s), as Wikimon writes the names."
+  },
+  "cards": {
+    "vmon": {
+      "routes": [
+        {"from": "vmon", "to": "magnamon", "digimentals": ["miracles"], "chart": ["V-mon / miracles / Magnamon"]},
+        {"from": "vmon", "to": "goldvdramon", "digimentals": ["fate"], "chart": ["V-mon / fate / Gold V-dramon"]}
+      ]
+    },
+    "armadimon": {
+      "routes": [
+        {"from": "vmon", "to": "magnamon", "digimentals": ["miracles"], "chart": ["V-mon / miracles / Magnamon"]}
+      ]
+    },
+    "terriermon": {
+      "routes": [
+        {"from": "terriermon", "to": "rapidmonarmor", "digimentals": ["fate"], "chart": ["Terriermon / fate / Rapidmon Armor"]}
+      ]
+    },
+    "wormmon": {
+      "routes": [
+        {"from": "wormmon", "to": "kongoumon", "digimentals": ["miracles", "fate"],
+         "chart": ["Wormmon / miracles / Kongoumon", "Wormmon / fate / Kongoumon"]},
+        {"from": "wormmon", "to": "pucchiemon", "digimentals": ["kindness"], "chart": ["Wormmon / kindness / Pucchiemon"]},
+        {"from": "wormmon", "to": "pucchiemongreen", "digimentals": ["kindness"], "chart": ["Wormmon / kindness / Pucchiemon (Green)"]}
+      ]
+    }
+  }
+}

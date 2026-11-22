@@ -165,6 +165,10 @@ extension EvolutionEngine {
                 var bag = state.digimentals ?? DigimentalBag()
                 bag.stampRewards = min(DigimentalRules.maxStampRewards, bag.stampRewards + 1)
                 state.digimentals = bag
+                // Sometimes a whole golden Digimental too (step 16).
+                if let golden = stampGolden(state, day: day, cards: book.cardsCompleted) {
+                    events += giveGolden(&state, golden, from: .stampCard)
+                }
                 if let visit = specialVisit(state, visitsToday: book.visits, cards: book.cardsCompleted, day: day, at: now) {
                     book.visits.append(visit)
                 }

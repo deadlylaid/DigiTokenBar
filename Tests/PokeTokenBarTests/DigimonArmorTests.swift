@@ -27,7 +27,8 @@ final class DigimonArmorTests: XCTestCase {
         XCTAssertEqual(armor.subtracting(members), [], "every Armor Digimon of the research is on a line")
         XCTAssertTrue(catalog.lines["tinkermon"]!.members.contains("peacockmon"), "Peacockmon, Fairimon card")
         XCTAssertTrue(catalog.lines["gabumonblack"]!.members.contains("rhinomon"), "Rhinomon, Gabumon (Black) card")
-        XCTAssertEqual(lines.reduce(0) { $0 + $1.digimentalSteps.count }, 19)
+        // 19 card routes from a Child (step 13) and 7 from the Digimental chart (step 16).
+        XCTAssertEqual(lines.reduce(0) { $0 + $1.digimentalSteps.count }, 26)
         XCTAssertEqual(lines.filter { !$0.digimentalSteps.isEmpty }.map(\.id),
                        ["armadimon", "blucomon", "hawkmon", "piyomon", "renamon", "sunarizamon", "terriermon", "vmon", "wormmon"])
         let vmon = catalog.lines["vmon"]!
@@ -47,8 +48,8 @@ final class DigimonArmorTests: XCTestCase {
                 XCTAssertEqual(catalog.species(split(step).0)?.level, .child, "\(line.id): \(step)")
             }
         }
-        XCTAssertEqual(Set(lines.flatMap(\.digimentalSteps.values)),
-                       [.courage, .friendship, .love, .knowledge, .purity, .reliability, .hope, .light])
+        // Kindness, Miracles and Fate came back with the Digimental chart routes (step 16).
+        XCTAssertEqual(Set(lines.flatMap(\.digimentalSteps.values).joined()), Set(Digimental.allCases))
     }
 
     /// From an Adult or a Perfect the card's own route grows into the Armor Digimon like any other:
@@ -97,22 +98,27 @@ final class DigimonArmorTests: XCTestCase {
                 XCTAssertNotNil(line.digimentalSteps[step], "\(line.id): \(step) reaches an Armor Digimon without a Digimental")
             }
         }
-        XCTAssertEqual(checked, 19, "every Child's Armor route was looked at")
+        XCTAssertEqual(checked, 26, "every Child's Armor route was looked at (19 card routes, 7 chart routes)")
     }
 
-    func testEachArmorDigimonAsksForOneDigimentalOnEveryLine() {
-        var seen: [String: Digimental] = [:]
+    func testEachArmorDigimonAsksForTheSameDigimentalsOnEveryLine() {
+        var seen: [String: [Digimental]] = [:]
         for line in lines {
-            for (step, d) in line.digimentalSteps {
+            for (step, ds) in line.digimentalSteps {
                 let to = split(step).1
-                XCTAssertEqual(seen[to, default: d], d, "\(to) asks for two Digimentals")
-                seen[to] = d
+                XCTAssertEqual(seen[to, default: ds], ds, "\(to) asks for other Digimentals on \(line.id)")
+                seen[to] = ds
             }
         }
-        XCTAssertEqual(seen["digmon"], .knowledge)
-        XCTAssertEqual(seen["nefertimon"], .light)
-        XCTAssertNil(seen["magnamon"], "reached from a Perfect on the cards: no Digimental")
-        XCTAssertNil(seen["goldvdramon"], "reached from an Adult on the cards: no Digimental")
+        XCTAssertEqual(seen["digmon"], [.knowledge])
+        XCTAssertEqual(seen["nefertimon"], [.light])
+        // From the Digimental chart (step 16); the cards' own routes into them (from an Adult or a Perfect)
+        // still need nothing.
+        XCTAssertEqual(seen["magnamon"], [.miracles], "V-mon's, on the V-mon and Armadimon cards")
+        XCTAssertEqual(seen["goldvdramon"], [.fate])
+        XCTAssertEqual(seen["kongoumon"], [.miracles, .fate], "either one opens it")
+        XCTAssertNil(catalog.lines["vmon"]!.digimental(from: "vdramon", to: "goldvdramon"))
+        XCTAssertNil(catalog.lines["wormmon"]!.digimental(from: "shadramon", to: "kongoumon"))
     }
 
     /// Until the user uses a Digimental, nothing changes: the stage's candidates never hold an Armor
@@ -156,11 +162,19 @@ final class DigimonArmorTests: XCTestCase {
         XCTAssertEqual(DigimonText(.ko).secretHint(.digimental(.courage), catalog: catalog), "용기의 디지멘탈이 있으면 진화할 수 있어요.")
         XCTAssertEqual(DigimonText(.en).secretHint(.digimental(.courage), catalog: catalog), "Evolves with the Digimental of Courage.")
         XCTAssertEqual(DigimonDexView.secretIcon(.digimental(.courage)), "shield.lefthalf.filled")
-        // Shadramon is the Wormmon line's Child Armor; Kongoumon comes from Gokimon and Shadramon by the card.
+        // Shadramon is the Wormmon line's Child Armor. Kongoumon also comes from Gokimon and Shadramon by the
+        // card, and since step 16 Wormmon reaches it with Miracles or Fate: the hint names both.
         let wormmon = DigimonDex.rows(for: catalog.lines["wormmon"]!, state: .newEgg(lineID: "wormmon"), catalog: catalog,
                                       rules: engine.rules).flatMap(\.entries)
         XCTAssertEqual(wormmon.first { $0.id == "shadramon" }?.secret, .digimental(.courage))
-        XCTAssertNotEqual(wormmon.first { $0.id == "kongoumon" }?.secret, .digimental(.miracles))
+        XCTAssertEqual(wormmon.first { $0.id == "kongoumon" }?.secret, .digimental(.miracles, or: .fate))
+        XCTAssertEqual(DigimonText(.ko).secretHint(.digimental(.miracles, or: .fate), catalog: catalog),
+                       "기적이나 운명의 디지멘탈이 있으면 진화할 수 있어요.")
+        XCTAssertEqual(DigimonText(.ko).secretHint(.digimental(.courage, or: .love), catalog: catalog),
+                       "용기나 사랑의 디지멘탈이 있으면 진화할 수 있어요.", "나 after a vowel")
+        XCTAssertEqual(DigimonText(.en).secretHint(.digimental(.miracles, or: .fate), catalog: catalog),
+                       "Evolves with the Digimental of Miracles or of Fate.")
+        XCTAssertEqual(wormmon.first { $0.id == "pucchiemon" }?.secret, .digimental(.kindness))
     }
 
     func testEveryArmorDigimonHasANameAndAMove() {

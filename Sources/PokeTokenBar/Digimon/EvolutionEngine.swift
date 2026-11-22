@@ -315,14 +315,14 @@ struct EvolutionEngine: Sendable {
     }
 
     /// The Armor evolutions the current partner could take with a Digimental, in the line's order
-    /// (step 13). Growth never takes them (`rankedOptions` leaves them out); using the Digimental is
+    /// (step 13): one per Digimental that opens a step (Wormmon > Kongoumon comes twice, with Miracles
+    /// and with Fate). Growth never takes them (`rankedOptions` leaves them out); using the Digimental is
     /// the only way. Card conditions are not checked here: the Digimental opens the step.
-    func armorOptions(for state: DigimonState) -> [(to: String, digimental: Digimental)] {
+    func armorOptions(for state: DigimonState) -> [ArmorOption] {
         guard let current = state.partner.speciesKey, let line = catalog.lines[state.partner.lineID] else { return [] }
-        return catalog.nextEvolutions(from: current, in: line).compactMap { evo in
-            guard let d = line.digimental(from: current, to: evo.to), !rules.locked.contains(evo.to),
-                  !rules.lockedEdges.contains("\(current)>\(evo.to)") else { return nil }
-            return (evo.to, d)
+        return catalog.nextEvolutions(from: current, in: line).flatMap { evo -> [ArmorOption] in
+            guard !rules.locked.contains(evo.to), !rules.lockedEdges.contains("\(current)>\(evo.to)") else { return [] }
+            return line.digimentals(from: current, to: evo.to).map { ArmorOption(to: evo.to, digimental: $0) }
         }
     }
 
@@ -773,6 +773,13 @@ extension EvolutionEngine {
     }
 }
 
+/// An armor evolution and the Digimental it spends.
+struct ArmorOption: Hashable, Identifiable, Sendable {
+    let to: String
+    let digimental: Digimental
+    var id: String { "\(to)|\(digimental.rawValue)" }
+}
+
 enum ArmorError: Error, Equatable {
     /// No armor evolution is waiting: the stage is not full, or the wait is over.
     case notOpen
@@ -788,7 +795,7 @@ enum ArmorError: Error, Equatable {
 
 extension EvolutionEngine {
     /// The armor evolutions the current Digimon could take now with a Digimental the user owns.
-    func usableArmorOptions(for state: DigimonState) -> [(to: String, digimental: Digimental)] {
+    func usableArmorOptions(for state: DigimonState) -> [ArmorOption] {
         let bag = state.digimentals ?? DigimentalBag()
         return armorOptions(for: state).filter { bag.owned($0.digimental) > 0 }
     }
@@ -801,10 +808,14 @@ extension EvolutionEngine {
         return wait.openedAt.addingTimeInterval(growth.armorWait)
     }
 
-    /// Spends one Digimental and armor-evolves into `key`.
-    func useDigimental(_ state: inout DigimonState, to key: String, at now: Date) throws -> [DigimonEvent] {
+    /// Spends one Digimental and armor-evolves into `key`: `digimental` when given (a step two open,
+    /// Wormmon > Kongoumon), else the first one the user owns for it. A Digimental chart route skips
+    /// stages: the Armor's own stage is taken as it is (V-mon > Magnamon lands on an Ultimate).
+    func useDigimental(_ state: inout DigimonState, to key: String, with digimental: Digimental? = nil,
+                       at now: Date) throws -> [DigimonEvent] {
         guard isArmorOpen(state), let current = state.partner.speciesKey else { throw ArmorError.notOpen }
-        guard let option = usableArmorOptions(for: state).first(where: { $0.to == key }) else { throw ArmorError.notOffered }
+        guard let option = usableArmorOptions(for: state).first(where: { $0.to == key && (digimental ?? $0.digimental) == $0.digimental })
+        else { throw ArmorError.notOffered }
         var bag = state.digimentals ?? DigimentalBag()
         bag.owned[option.digimental.rawValue] = bag.owned(option.digimental) - 1
         state.digimentals = bag
