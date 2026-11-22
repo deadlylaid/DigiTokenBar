@@ -6,6 +6,8 @@
 /// Messages to the app (`window.webkit.messageHandlers.app`):
 ///   {cmd: 'ready'} · {cmd: 'bugDefeated', count, golden} · {cmd: 'petRect', x, y, w, h} (desk only)
 /// Calls from the app: app.sprite(key, uri) · app.apply({key, line, stage, sleeping, lang}) · app.cmd({type, ...})
+/// Desk only: app.cmd({type: 'scale', value}) sets the pet's size (scene units -> points), app.cmd({type: 'pat', text})
+/// is a stroke (hearts, a little hop, maybe a bubble). Touches (pat, clicks, drags) reset the boredom clock.
 enum DigimonSceneHTML {
     static let page = #"""
 <!doctype html>
@@ -110,6 +112,8 @@ function linePal(line) {
   return (firePals[S.lineColor] = [hex(mix(mid, 255, .78)), hex(mid), hex(mix(mid, 0, .38))]);
 }
 const HEART = ['.##.##.', '#######', '#######', '.#####.', '..###..', '...#...'];
+// Desktop pet left without a touch (stroke, click, drag) this long gets bored now and then.
+const BORED_AFTER = 20 * 60 * 1000;
 // A three-tier pile with its tip curled over (Poop Throw).
 const POOP = ['....#..', '..###..', '.#####.', '..###..', '.#####.', '#######'];
 // Shapes without muzzle sparks or a generic trail (they draw their own).
@@ -194,6 +198,7 @@ class Pet {
     this.note = null; this.working = false;   // coding agent: lasting bubble, "busy" dots
     this.guest = null; this.guests = [];   // visitors: the one walking through, the ones waiting
     this.stars = []; this.starIn = rand(1500, 4000);   // shooting stars on a meteor shower
+    this.loves = []; this.clock = 0; this.touched = 0;  // hearts from a stroke; scene time and the last touch (ms)
     this.resize(); this.x = this.center(); this.enter('idle', {dur: 900});
   }
   canAct() { return ['idle', 'walk', 'turn', 'stretch', 'alert'].includes(this.state); }
@@ -338,7 +343,8 @@ class Pet {
   center() { const b = this.bb(); return this.worldW / 2 - (b.l + b.r) / 2; }
   ground() { return this.worldH - (this.desk ? 4 : 9); }
   resize() {
-    this.scale = 2;
+    // The desktop pet's size (Settings) is its scale: the scene keeps 220 x 90 units at every size.
+    this.scale = (this.desk && S.scale) || 2;
     this.cssW = window.innerWidth || 320; this.cssH = window.innerHeight || 168;
     this.worldW = this.cssW / this.scale; this.worldH = this.cssH / this.scale;
     this.cv.style.width = this.cssW + 'px'; this.cv.style.height = this.cssH + 'px';
@@ -354,6 +360,12 @@ class Pet {
       const sleepy = S.mood === 'sleepy', ko = S.lang === 'ko';
       this.callout = {text: sleepy ? (ko ? '하암…' : 'Yawn…') : (ko ? '으으…' : 'Ugh…'), t: 0, life: 1400};
       this.enter(sleepy ? 'stretch' : 'idle', {dur: sleepy ? 1400 : 1800});
+      return;
+    }
+    // Left alone a long time on the desktop, it now and then yawns, rarely saying so.
+    if (this.bored() && Math.random() < .12) {
+      if (Math.random() < .25) this.callout = {text: S.lang === 'ko' ? '심심해…' : 'So bored…', t: 0, life: 1700};
+      this.enter('stretch', {dur: 1500});
       return;
     }
     // Staying in place (Settings): no walks; once a battle or a Jogress moved it, it walks back home (where it
@@ -398,6 +410,17 @@ class Pet {
   sleep() { if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('sleep', {zacc: 700}); }
   wake() { if (this.state !== 'sleep') return; this.excl = 750; this.enter('hop', {h: this.hopH * .7, dur: 480}); }
   jump() { if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('hop', {h: this.hopH}); }
+  touch() { this.touched = this.clock; }
+  bored() { return this.desk && !S.mood && !S.sleeping && this.clock - this.touched > BORED_AFTER; }
+  // Stroked on the desktop: hearts rise from its head; awake and free, it hops a little and may say so.
+  pat(text) {
+    this.touch();
+    const b = this.bb(), cx = this.x + (b.l + b.r) / 2, top = this.ground() - (b.b - b.t) - this.y;
+    for (let i = 0; i < 3; i++) this.loves.push({x: cx + rand(-9, 9), y: top + rand(0, 6), vx: rand(-5, 5), t: -i * 140, life: 1100});
+    if (this.state === 'sleep' || this.isEgg() || !this.canAct()) return;
+    this.enter('hop', {h: this.hopH * .45, dur: 360});
+    if (text) this.callout = {text, t: 0, life: 1500};
+  }
   notice() { if (this.state === 'evolve' || this.state === 'held') return; if (this.state === 'sleep') { this.wake(); return; } this.excl = 700; this.jump(); }
   // A coding agent finished: a double hop with sparkles (an egg wobbles instead).
   cheer() {
@@ -430,7 +453,12 @@ class Pet {
   // Where it lands is its home for "stay in place", and the app keeps it for the next launch.
   drop(shift = 0) {
     if (this.state === 'held') this.enter('hop', {h: 3, dur: 420});
-    if (shift) { this.x += shift; this.clampX(); }
+    this.shiftBy(shift);
+  }
+  // Moves the Digimon `u` scene units inside the window (the window moved the other way) and keeps the
+  // spot as its home; the app saves it for the next launch.
+  shiftBy(u) {
+    if (u) { this.x += u; this.clampX(); }
     this.home = this.x;
     post({cmd: 'petHome', offset: this.x - this.center()});
   }
@@ -636,6 +664,8 @@ class Pet {
     dt = Math.min(dt, 50);
     const T = performance.now();
     this.t += dt;
+    this.clock += dt;
+    this.loves = this.loves.filter(h => { h.t += dt; if (h.t > 0) { h.y -= 16 * dt / 1000; h.x += h.vx * dt / 1000; } return h.t < h.life; });
     this.sx = 1; this.sy = 1; this.lean = 0; this.y = 0; this.breath = 0; this.sway = 0; this.rot = 0;
     const target = this.facing === -1 ? 1 : -1, fstep = dt / 90;
     this.flipX = this.flipX < target ? Math.min(target, this.flipX + fstep) : Math.max(target, this.flipX - fstep);
@@ -1224,6 +1254,7 @@ class Pet {
       c.fillStyle = '#e0452c'; c.fillRect(ex - 1, ey, 2, 6); c.fillRect(ex - 1, ey + 8, 2, 2);
     }
     for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; c.fillStyle = p.c; c.fillRect(p.x, p.y, p.s, p.s); }
+    for (const h of this.loves) if (h.t > 0) { c.globalAlpha = Math.min(1, 2.2 * (1 - h.t / h.life)); this.drawHeart(c, h.x, h.y, PAL.heart, 1); }
     c.globalAlpha = 1;
     if (!desk && this.flash > 0) { c.fillStyle = `rgba(255,255,250,${this.flash})`; c.fillRect(0, 0, W, H); }
     if (this.callout) this.drawCallout(c, cx, gy - this.y - hgt, dark);
@@ -1318,7 +1349,11 @@ window.app = {
     if (c.type === 'visit') { whenAsset(c.visitor, () => { if (pet) pet.visit(c); else earlyGuests.push(c); }); return; }
     // Agent state is kept, so a pet created later (sprite still loading) shows it too.
     if (c.type === 'agent') { S.agent = c; if (pet) pet.setAgent(c); return; }
+    // The desktop pet's size: kept, so a pet created later takes it too.
+    if (c.type === 'scale') { S.scale = c.value; if (pet) pet.resize(); return; }
     if (!pet) return;
+    // A hand on the desktop pet (stroke, click, drag) resets its boredom.
+    if (['pat', 'attack', 'grab', 'drag', 'drop'].includes(c.type) || c.touch) pet.touch();
     if (c.type === 'feed') { if (pet.state === 'sleep') pet.wake(); setTimeout(() => pet.feed(), pet.state === 'hop' ? 500 : 0); }
     else if (c.type === 'jump') pet.jump();
     else if (c.type === 'notice') pet.notice();
@@ -1329,6 +1364,8 @@ window.app = {
     else if (c.type === 'drag') pet.dragMove(c.dx || 0);
     else if (c.type === 'drop') pet.drop((c.shift || 0) / pet.scale);
     else if (c.type === 'place') pet.place(c.offset || 0);
+    else if (c.type === 'pat') pet.pat(c.text);
+    else if (c.type === 'shift') pet.shiftBy((c.shift || 0) / pet.scale);
   },
 };
 

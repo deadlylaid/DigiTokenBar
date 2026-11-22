@@ -337,13 +337,29 @@ struct SettingsView: View {
         digimonDeskPetGroup(store)
     }
 
-    /// The Digimon desktop pet has a fixed size and no back view or speech bubbles.
+    /// The Digimon desktop pet: shown or not, its size (saved per Mac), agent reactions.
     @ViewBuilder
     private func digimonDeskPetGroup(_ store: UsageStore) -> some View {
         @Bindable var store = store
         settingsSection(dt.deskPetTitle) {
             toggleRow(dt.deskPetShow, $store.floatingPetEnabled, hint: dt.deskPetHint)
             if store.floatingPetEnabled {
+                if let digimonHub {
+                    Divider()
+                    groupRow {
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(dt.deskPetSizeLabel)
+                            Text(dt.deskPetTouchHint).font(.caption2).foregroundStyle(.tertiary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        Spacer()
+                        Picker(dt.deskPetSizeLabel, selection: Binding(get: { digimonHub.deskSize },
+                                                                      set: { digimonHub.setDeskSize($0) })) {
+                            ForEach(DeskPetSize.allCases, id: \.self) { Text(dt.deskPetSize($0)).tag($0) }
+                        }
+                        .labelsHidden().pickerStyle(.segmented).fixedSize()
+                    }
+                }
                 Divider()
                 toggleRow(l.floatingPetAgentActivityLabel, $store.floatingPetAgentActivity, hint: dt.agentActivityHint)
             }
