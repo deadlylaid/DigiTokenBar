@@ -112,6 +112,8 @@ final class DigimonSceneHub {
     static let stayInPlaceKey = "digimonStayInPlace"
     /// The pet stays in the middle of every scene instead of walking around (Settings).
     private(set) var stayInPlace = false
+    /// The desktop pet's size (Settings, saved per Mac). The desktop pet watches it.
+    private(set) var deskSize: DeskPetSize = .medium
     @ObservationIgnored private var scenes: [WeakScene] = []
     @ObservationIgnored private var loading: [String: Task<Data?, Never>] = [:]
     /// Event playback runs one step at a time so an evolution never arrives before its sprite.
@@ -200,6 +202,12 @@ final class DigimonSceneHub {
     }
 
     /// Settings: stay in place (saved per Mac) or walk around. Every scene follows at once.
+    func setDeskSize(_ size: DeskPetSize, defaults: UserDefaults = .standard) {
+        defaults.set(size.rawValue, forKey: DeskPetSize.defaultsKey)
+        guard size != deskSize else { return }
+        deskSize = size
+    }
+
     func setStayInPlace(_ still: Bool, defaults: UserDefaults = .standard) {
         defaults.set(still, forKey: Self.stayInPlaceKey)
         guard still != stayInPlace else { return }

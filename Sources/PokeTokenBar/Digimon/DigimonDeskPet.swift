@@ -22,8 +22,13 @@ final class DigimonDeskPet {
     private let language: () -> AppLanguage
     private var tracking = false, dragging = false
     private var dragStartMouse = NSPoint.zero, dragStartOrigin = NSPoint.zero, lastMouse = NSPoint.zero
+    /// The size the shown panel has now (the hub holds the setting).
+    private var shownSize: DeskPetSize = .medium
+    private var strokes = StrokeDetector()
+    private var strokeCount = 0
 
-    static let size = NSSize(width: 440, height: 180)
+    /// The medium size, the one the pet always had.
+    static let size = DeskPetSize.medium.panelSize
     /// Where the Digimon was last dropped inside the window (scene units from its middle).
     static let petOffsetKey = "digimonDeskPetOffset"
 
@@ -91,6 +96,7 @@ final class DigimonDeskPet {
         withObservationTracking {
             _ = store.floatingPetEnabled
             _ = store.floatingPetAgentActivity
+            _ = hub.deskSize
         } onChange: { [weak self] in
             Task { @MainActor in
                 self?.sync()
@@ -102,6 +108,7 @@ final class DigimonDeskPet {
 
     private func sync() {
         if store.floatingPetEnabled && displayAwake { show() } else { hide() }
+        applySize()
         if !store.floatingPetAgentActivity, !agents.agents.isEmpty {
             agents.reset()
             pushAgents(react: nil)
@@ -110,7 +117,9 @@ final class DigimonDeskPet {
 
     private func show() {
         guard panel == nil else { return }
-        let panel = NSPanel(contentRect: NSRect(origin: initialOrigin(), size: Self.size),
+        shownSize = hub.deskSize
+        let size = shownSize.panelSize
+        let panel = NSPanel(contentRect: NSRect(origin: initialOrigin(size), size: size),
                             styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         panel.isOpaque = false
         panel.backgroundColor = .clear
@@ -119,7 +128,8 @@ final class DigimonDeskPet {
         panel.ignoresMouseEvents = true
         panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
         let scene = DigimonScene(mode: .desk)
-        scene.webView.frame = NSRect(origin: .zero, size: Self.size)
+        scene.webView.frame = NSRect(origin: .zero, size: size)
+        scene.command(["type": "scale", "value": Double(shownSize.scale)])
         scene.onPetRect = { [weak self] rect in
             self?.petRect = rect
             self?.updateHitTest()
@@ -152,10 +162,33 @@ final class DigimonDeskPet {
         petRect = .zero
         tracking = false
         dragging = false
+        strokes = StrokeDetector()
     }
 
-    private func initialOrigin() -> NSPoint {
-        let size = Self.size
+    /// The Settings size changed while the pet is shown: the window takes the new size around the
+    /// Digimon's feet, stays inside the screen, and the Digimon keeps its spot (like a drop).
+    private func applySize() {
+        let size = hub.deskSize
+        guard let panel, let scene, size != shownSize else { return }
+        let old = shownSize
+        shownSize = size
+        var frame = Self.resizedFrame(window: panel.frame, petRect: petRect, to: size, from: old)
+        let mid = NSPoint(x: frame.midX, y: frame.midY)
+        var shift: CGFloat = 0
+        if let screen = NSScreen.screens.first(where: { $0.frame.contains(mid) }) ?? NSScreen.main {
+            let placed = Self.dropPlacement(window: frame, visible: screen.visibleFrame)
+            frame.origin = placed.origin
+            shift = placed.shift
+        }
+        scene.command(["type": "scale", "value": Double(size.scale)])
+        panel.setFrame(frame, display: true)
+        petRect = .zero   // the scene reports it again at the new size
+        if shift != 0 { scene.command(["type": "shift", "shift": Double(shift)]) }
+        defaults.set(Double(frame.minX), forKey: "digimonDeskX")
+        defaults.set(Double(frame.minY), forKey: "digimonDeskY")
+    }
+
+    private func initialOrigin(_ size: NSSize) -> NSPoint {
         if let x = defaults.object(forKey: "digimonDeskX") as? Double,
            let y = defaults.object(forKey: "digimonDeskY") as? Double {
             let saved = NSRect(x: x, y: y, width: size.width, height: size.height)
@@ -189,8 +222,18 @@ final class DigimonDeskPet {
         guard let panel, !tracking else { return }
         let f = panel.frame, r = petRect.insetBy(dx: -6, dy: -6)
         let onScreen = NSRect(x: f.minX + r.minX, y: f.maxY - r.maxY, width: r.width, height: r.height)
-        let over = !petRect.isEmpty && onScreen.contains(NSEvent.mouseLocation)
+        let mouse = NSEvent.mouseLocation
+        let over = !petRect.isEmpty && onScreen.contains(mouse)
         if panel.ignoresMouseEvents == over { panel.ignoresMouseEvents = !over }
+        // Stroking: the same poll, no button down (dragging stops this poll through `tracking`).
+        if strokes.feed(mouse, over: over, at: ProcessInfo.processInfo.systemUptime) {
+            strokeCount += 1
+            let bubbles = DigimonText(language()).strokeBubbles
+            var cmd: [String: Any] = ["type": "pat"]
+            // A bubble every other stroke, in turn; the hearts every time.
+            if strokeCount % 2 == 1 { cmd["text"] = bubbles[(strokeCount / 2) % bubbles.count] }
+            scene?.command(cmd)
+        }
     }
 
     /// true when the event was handled here and must not reach the web view.
@@ -226,7 +269,10 @@ final class DigimonDeskPet {
             } else {
                 // A click answers the agents' questions and acknowledges results (work goes on).
                 if agents.dismissBubble() { pushAgents(react: nil) }
-                scene?.command(["type": "attack"])
+                switch Self.clickAction(clickCount: event.clickCount) {
+                case .attack: scene?.command(["type": "attack"])
+                case .jump: scene?.command(["type": "jump", "touch": true])
+                }
             }
         default:
             return false
