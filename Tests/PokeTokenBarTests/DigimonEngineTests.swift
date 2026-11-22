@@ -125,14 +125,19 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Choosing an evolution
 
-    /// The default, like a V-Pet: no choice, the best match for how it was raised.
-    func testAFullStageEvolvesStraightIntoTheBestMatch() {
+    /// The default, like a V-Pet: no choice, it evolves at once. Which of the open routes it takes is
+    /// drawn by weight since step 14 (DigimonChanceEvolutionTests). This test used to expect the best
+    /// match and passed only because this stage's draw happened to land on it (two other seeds failed).
+    func testAFullStageEvolvesStraightWithoutAChoice() {
         let engine = tendencyEngine
         var s = DigimonState.newEgg(lineID: "agumon")
         engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
-        let best = engine.candidates(for: s).first   // still Agumon with 0 experience: same candidates
+        let routes = engine.rankedOptions(for: s)   // Agumon's routes (card conditions are off here)
         let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 2))
-        XCTAssertEqual(events, [.evolved(from: "agumon", to: best!)])
+        XCTAssertEqual(events.count, 1, "\(events)")
+        guard case let .evolved(from, to)? = events.first else { return XCTFail("\(events)") }
+        XCTAssertEqual(from, "agumon")
+        XCTAssertTrue(routes.contains(to), "\(to) is one of Agumon's routes \(routes)")
         XCTAssertNil(s.pendingChoice)
         XCTAssertFalse(events.contains { if case .choiceOffered = $0 { return true } else { return false } })
         XCTAssertEqual(s.partner.stageExp, 60, "30 left from day 1 + 150 - 120: what the stage did not need carries over")

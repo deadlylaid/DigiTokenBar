@@ -249,9 +249,10 @@ struct DigimonText {
         ko ? "고를 때까지 부화하지 않아요. 그동안 쓴 경험치는 모아 둬요. \(hours)시간이 지나면 자동으로 정해져요."
            : "It won't hatch until you pick, and keeps the experience meanwhile. After \(hours)h it picks for you."
     }
+    /// The strongest lean of the stage. Not a promise: since step 14 the open routes are drawn by weight.
     func tendencyTitle(_ attribute: DigimonAttribute) -> String {
         let name = self.attribute(attribute) ?? "?"
-        return ko ? "지금은 \(name) 쪽으로 자라고 있어요" : "Growing toward \(name)"
+        return ko ? "이번 단계는 \(name) 쪽으로 기울어 있어요" : "Leaning toward \(name) this stage"
     }
     /// What this stage has seen so far: the inputs of the tendency.
     func tendencyReasons(_ s: GrowthSignals) -> String {
@@ -265,8 +266,8 @@ struct DigimonText {
     }
     func bugsCaught(_ n: Int) -> String { ko ? "이번 단계에 잡은 버그 \(n)마리" : "\(n) bugs caught this stage" }
     var evolutionByCare: String {
-        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피, 배틀)으로 정해져요"
-           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies, battles)"
+        ko ? "어떤 모습이 될지는 키우는 방식(시간대, 도구, 한도, 버그 사냥)과 카드 조건(코딩 시간, 트로피, 배틀)에 따라 달라지고, 운도 조금 따라요"
+           : "What it becomes depends on how you raise it (hours, tools, limits, bug hunting) and the card (coding time, trophies, battles), with a little luck"
     }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
 }
