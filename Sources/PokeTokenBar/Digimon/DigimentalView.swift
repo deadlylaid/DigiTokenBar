@@ -59,7 +59,7 @@ struct DigimentalPanel: View {
             }
             if expanded {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 4)], alignment: .leading, spacing: 4) {
-                    ForEach(Digimental.allCases, id: \.self) { chip($0, bag) }
+                    ForEach(bag.shownKinds(collectable: digimon.engine.fragmentKinds()), id: \.self) { chip($0, bag) }
                 }
                 Text(t.digimentalsHelp).font(.caption2).foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

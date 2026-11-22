@@ -121,49 +121,82 @@ final class DigimonArmorEvolutionTests: XCTestCase {
 
     // MARK: With a friend's Jogress
 
-    /// V-dramon (Adult, V-mon line) has both: a Digimental route (Hope: Sagittarimon) and Jogress routes.
-    /// Both waits open together and run side by side; it grows as usual once neither is open.
+    /// Both waits open together and run side by side; it grows as usual once neither is open. Since only
+    /// a Child armor-evolves with a Digimental (2026-11-21), no Digimon on the cards has both a Digimental
+    /// route and a friend's Jogress any more (Child Jogress routes do not exist on these cards). The order
+    /// still matters if a card ever has one, so the test gives V-mon a Jogress route of its own.
     func testTheArmorAndJogressWaitsOpenTogetherAndNeitherHoldsTheOtherBack() throws {
-        var s = full("vmon", "vdramon", owned: [.hope: 1])
-        let events = engine.settle(&s, at: now)
-        XCTAssertTrue(engine.isJogressOpen(s))
-        XCTAssertTrue(engine.isArmorOpen(s))
-        XCTAssertTrue(events.contains(.armorOffered(options: ["sagittarimon"])))
+        let base = DigimonCatalog.mvp
+        let lines = base.lines.values.map { line -> DigimonLine in
+            guard line.id == "vmon" else { return line }
+            var l = line
+            l.jogress.append(DigimonJogress("vmon>vdramon", level: .child, attributes: [.vaccine]))
+            return l
+        }
+        let merging = EvolutionEngine(catalog: DigimonCatalog(species: DigimonCatalogData.species,
+                                                              evolutions: DigimonCatalogData.evolutions, lines: lines))
+        let real = engine.jogressOptions(for: full("vmon", "vmon"))
+        XCTAssertTrue(real.isEmpty, "the real V-mon has no Jogress route: this case is made up for the test")
+        var s = full("vmon", "vmon", owned: [.courage: 1])
+        let events = merging.settle(&s, at: now)
+        XCTAssertTrue(merging.isJogressOpen(s))
+        XCTAssertTrue(merging.isArmorOpen(s))
+        XCTAssertTrue(events.contains(.armorOffered(options: ["fladramon"])))
         XCTAssertTrue(events.contains { if case .jogressOffered = $0 { return true }; return false })
 
         // Not using the Digimental still waits for a friend; then skipping that grows as usual.
         var a = s
-        engine.skipArmor(&a, at: now)
-        XCTAssertEqual(a.partner.speciesKey, "vdramon")
-        XCTAssertTrue(engine.isJogressOpen(a))
-        engine.skipJogress(&a, at: now)
-        XCTAssertNotEqual(a.partner.speciesKey, "vdramon")
-        XCTAssertFalse(isArmor("vdramon", a.partner.speciesKey ?? "", on: "vmon"))
-        XCTAssertEqual(a.digimentals?.owned(.hope), 1)
+        merging.skipArmor(&a, at: now)
+        XCTAssertEqual(a.partner.speciesKey, "vmon")
+        XCTAssertTrue(merging.isJogressOpen(a))
+        merging.skipJogress(&a, at: now)
+        XCTAssertNotEqual(a.partner.speciesKey, "vmon")
+        XCTAssertFalse(isArmor("vmon", a.partner.speciesKey ?? "", on: "vmon"))
+        XCTAssertEqual(a.digimentals?.owned(.courage), 1)
 
         // Skipping the friend first, the Digimental can still be used.
         var b = s
-        engine.skipJogress(&b, at: now)
-        XCTAssertEqual(b.partner.speciesKey, "vdramon")
-        XCTAssertTrue(engine.isArmorOpen(b))
-        _ = try engine.useDigimental(&b, to: "sagittarimon", at: now)
-        XCTAssertEqual(b.partner.speciesKey, "sagittarimon")
-        XCTAssertEqual(b.digimentals?.owned(.hope), 0)
+        merging.skipJogress(&b, at: now)
+        XCTAssertEqual(b.partner.speciesKey, "vmon")
+        XCTAssertTrue(merging.isArmorOpen(b))
+        _ = try merging.useDigimental(&b, to: "fladramon", at: now)
+        XCTAssertEqual(b.partner.speciesKey, "fladramon")
+        XCTAssertEqual(b.digimentals?.owned(.courage), 0)
 
         // Using the Digimental right away ends both waits.
         var c = s
-        _ = try engine.useDigimental(&c, to: "sagittarimon", at: now)
+        _ = try merging.useDigimental(&c, to: "fladramon", at: now)
         XCTAssertNil(c.jogressWait)
         XCTAssertNil(c.armorWait)
 
         // Both time out together after a day.
         var d = s
-        engine.tick(&d, now: now.addingTimeInterval(max(engine.growth.armorWait, engine.growth.jogressWait)))
-        XCTAssertNotEqual(d.partner.speciesKey, "vdramon")
-        XCTAssertEqual(d.digimentals?.owned(.hope), 1)
+        merging.tick(&d, now: now.addingTimeInterval(max(merging.growth.armorWait, merging.growth.jogressWait)))
+        XCTAssertNotEqual(d.partner.speciesKey, "vmon")
+        XCTAssertEqual(d.digimentals?.owned(.courage), 1)
     }
 
     // MARK: Saves
+
+    /// Kindness, Miracles and Fate lost their routes when only a Child kept its Digimental (2026-11-21). A
+    /// save from before may hold some: they are kept, still shown in the dex and survive an import, but
+    /// no new fragment of them drops and nothing can spend them.
+    func testOldKindnessMiraclesAndFateItemsAreKeptAndStillShown() throws {
+        let collectable = engine.fragmentKinds()
+        XCTAssertTrue(Set(collectable).isDisjoint(with: [.kindness, .miracles, .fate]))
+        XCTAssertEqual(DigimentalBag().shownKinds(collectable: collectable), collectable, "a new player sees the eight")
+        var bag = DigimentalBag()
+        bag.owned[Digimental.miracles.rawValue] = 1
+        bag.fragments[Digimental.fate.rawValue] = 2
+        XCTAssertEqual(bag.shownKinds(collectable: collectable), collectable + [.miracles, .fate])
+        var s = full("vmon", "vmon")
+        s.digimentals = bag
+        let decoded = try JSONDecoder().decode(DigimonState.self, from: JSONEncoder().encode(s))
+        let imported = try DigimonSaveIO.sanitized(decoded, catalog: catalog, growth: engine.growth)
+        XCTAssertEqual(imported.digimentals?.owned(.miracles), 1)
+        XCTAssertEqual(imported.digimentals?.fragments(.fate), 2)
+        XCTAssertTrue(engine.usableArmorOptions(for: imported).isEmpty, "nothing spends them")
+    }
 
     func testOldSavesDecodeAndAnOpenWaitIsSaved() throws {
         var s = full("vmon", "vmon", owned: [.courage: 1])
@@ -207,15 +240,18 @@ final class DigimonArmorEvolutionTests: XCTestCase {
 
     func testPreferredKindsAreTheOnesThisLifeCanStillUse() {
         let egg = engine.preferredDigimentals(for: .newEgg(lineID: "vmon"))
-        XCTAssertTrue(egg.isSuperset(of: [.courage, .friendship, .hope, .fate, .miracles]), "\(egg)")
+        XCTAssertEqual(egg, [.courage, .friendship], "V-mon's two; the line's later Armors grow by the card")
         XCTAssertTrue(engine.preferredDigimentals(for: .newEgg(lineID: "agumon")).isEmpty, "no armor on the Agumon line")
         XCTAssertFalse(catalog.lines["agumon"]!.hasArmor)
+        XCTAssertFalse(catalog.lines["tinkermon"]!.hasArmor, "Peacockmon grows from an Adult: no Digimental, no mark")
+        XCTAssertFalse(catalog.lines["gabumonblack"]!.hasArmor, "so does Rhinomon")
         let child = full("vmon", "vmon")
         XCTAssertEqual(engine.digimentalsUsableNow(for: child), [.courage, .friendship])
-        XCTAssertTrue(engine.preferredDigimentals(for: child).isSuperset(of: [.courage, .friendship, .hope]))
+        XCTAssertEqual(engine.preferredDigimentals(for: child), [.courage, .friendship])
         let adult = full("vmon", "vdramon")
-        XCTAssertFalse(engine.preferredDigimentals(for: adult).contains(.courage), "V-mon's routes are behind it")
-        XCTAssertTrue(engine.preferredDigimentals(for: adult).contains(.hope))
+        XCTAssertTrue(engine.preferredDigimentals(for: adult).isEmpty, "V-mon's routes are behind it; nothing later needs one")
+        let armadimon = engine.preferredDigimentals(for: .newEgg(lineID: "armadimon"))
+        XCTAssertEqual(armadimon, [.knowledge, .reliability, .hope, .courage, .friendship], "three Children on that card")
     }
 
     // MARK: Text

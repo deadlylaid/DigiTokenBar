@@ -1,4 +1,4 @@
-"""Break research/armor-routes.json three ways and check that gen_catalog.py stops each time (step 13).
+"""Break research/armor-routes.json four ways and check that gen_catalog.py stops each time (step 13).
 
 Restores the research and the generated files afterwards.
 
@@ -33,6 +33,11 @@ try:
     def unknown(d):
         d["cards"]["vmon"]["digimentals"]["vmon>fladramon"]["digimental"] = "bravery"
     run("(c) unknown Digimental", unknown, "unknown Digimental")
+    # Only a Child armor-evolves with a Digimental (user decision 2026-11-21); an Adult's route into an
+    # Armor Digimon is an ordinary card route.
+    def adult(d):
+        d["cards"]["vmon"]["digimentals"]["vdramon>sagittarimon"] = {"digimental": "hope", "rule": "pair"}
+    run("(d) a Digimental on V-dramon > Sagittarimon (an Adult)", adult, "does not start at a Child")
 finally:
     P.write_text(backup)
     cat.write_text(cat_backup)
