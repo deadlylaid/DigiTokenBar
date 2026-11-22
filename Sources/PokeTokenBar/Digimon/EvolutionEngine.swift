@@ -476,6 +476,54 @@ struct EvolutionEngine: Sendable {
         }
     }
 
+    // MARK: Chance (step 14)
+
+    /// The draw among the open routes (docs/digimon/step14-chance-evolution.md, user decisions
+    /// 2026-11-21): a base, the stage's tendency toward the candidate's attribute (`pull`), a bonus
+    /// for keeping the current Digimon's attribute, and a little more for a canon route.
+    static let drawBase = 0.2
+    static let sameAttributeBonus = 0.5
+    static let canonBonus = 0.15
+
+    /// How strongly a candidate pulls in the draw.
+    func drawWeight(_ key: String, for state: DigimonState) -> Double {
+        guard let target = catalog.species(key) else { return Self.drawBase }
+        var weight = Self.drawBase + pull(target.attribute, signals: state.partner.stageSignals,
+                                          baseline: state.lifetimeSignals)
+        if let current = state.partner.speciesKey {
+            if catalog.species(current)?.attribute == target.attribute { weight += Self.sameAttributeBonus }
+            if let line = catalog.lines[state.partner.lineID],
+               catalog.nextEvolutions(from: current, in: line).first(where: { $0.to == key })?.canon == true {
+                weight += Self.canonBonus
+            }
+        }
+        return weight
+    }
+
+    /// The form growth takes among `options` (the routes the card opened, best first), drawn by
+    /// `drawWeight` instead of always the best. Certain as before: a single route, an earned hidden
+    /// evolution, and a stage without a start time (it began before stages were timed). The draw is
+    /// seeded from the player, the stage's start and the current Digimon, so restarting the app,
+    /// growing again later or restoring a backup gives the same Digimon.
+    func drawEvolution(from options: [String], for state: DigimonState) -> String {
+        guard let first = options.first else { return "" }
+        if let hidden = options.first(where: { rules.hidden[$0] != nil }) { return hidden }
+        guard options.count > 1, let started = state.partner.stageStartedAt,
+              let current = state.partner.speciesKey else { return first }
+        let weights = options.map { drawWeight($0, for: state) }
+        let total = weights.reduce(0, +)
+        guard total > 0 else { return first }
+        var rng = SeededGenerator(seed: DigimonBattle.fnv1a(
+            "evolve|\(state.playerID ?? "")|\(started.timeIntervalSinceReferenceDate)|\(current)"))
+        let roll = Double(rng.next() >> 11) / Double(UInt64(1) << 53) * total
+        var sum = 0.0
+        for (key, weight) in zip(options, weights) {
+            sum += weight
+            if roll < sum { return key }
+        }
+        return options[options.count - 1]
+    }
+
     // MARK: Growth
 
     private func advance(_ state: inout DigimonState, at date: Date) -> [DigimonEvent] {
@@ -516,13 +564,16 @@ struct EvolutionEngine: Sendable {
                 }
             }
             if waiting { break }
-            let options = Array(growthOptions(for: state, at: date).prefix(growth.maxChoices))
+            let open = growthOptions(for: state, at: date)
+            let options = Array(open.prefix(growth.maxChoices))
             if !rules.friendJogress, let jogress = rules.specialJogress(for: state, in: catalog) {
                 events += evolve(&state, to: jogress.to, at: date)   // instead of graduating
             } else if state.partner.level == .ultimate || options.isEmpty {
                 events += graduate(&state, at: date)
-            } else if options.count == 1 || !growth.userPicksEvolution {
-                events += evolve(&state, to: options[0], at: date)   // best match first
+            } else if !growth.userPicksEvolution {
+                events += evolve(&state, to: drawEvolution(from: open, for: state), at: date)
+            } else if options.count == 1 {
+                events += evolve(&state, to: options[0], at: date)
             } else {
                 state.pendingChoice = PendingChoice(candidates: options, offeredAt: date)
                 state.partner.stageExp = growth.threshold(for: state.partner.level)
