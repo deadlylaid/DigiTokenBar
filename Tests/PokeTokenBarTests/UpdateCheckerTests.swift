@@ -220,8 +220,28 @@ final class UpdateCheckerTests: XCTestCase {
     func testDetachedUpgradeScriptUsesPositionalParameters() {
         let script = UpdateChecker.detachedUpgradeScript
         XCTAssertTrue(script.contains("\"$1\" update"), "must execute brew via $1 positional arg")
-        XCTAssertTrue(script.contains("\"$1\" upgrade"), "must execute brew upgrade via $1 positional arg")
+        XCTAssertTrue(script.contains("\"$1\" upgrade --cask \"$4\""), "must upgrade the cask passed as $4")
         XCTAssertTrue(script.contains("open \"$2\""), "must open bundlePath via $2 positional arg")
+        XCTAssertFalse(script.contains("poke-token-bar"), "the upstream cask is another app")
+    }
+
+    /// DigiTokenBar's releases are its own, and it has no Homebrew cask: "Update" must open the release
+    /// page and never upgrade the upstream `poke-token-bar` cask, which on a Mac with both apps would
+    /// replace and reopen PokeTokenBar while quitting DigiTokenBar.
+    func testUpdatesComeFromThisRepositoryAndNeverFromAHomebrewCask() {
+        XCTAssertEqual(AppIdentity.updateRepo, "deadlylaid/DigiTokenBar")
+        XCTAssertNil(AppIdentity.homebrewCask)
+        // A Mac where brew exists and reports every cask as installed (e.g. PokeTokenBar from Homebrew).
+        var asked: [String] = []
+        let everythingInstalled = UpdateChecker.brewCaskPath(
+            cask: AppIdentity.homebrewCask,
+            findBrew: { asked.append("find"); return "/fake/brew" },
+            isInstalled: { _, cask in asked.append(cask); return true })
+        XCTAssertNil(everythingInstalled, "no cask → release page")
+        XCTAssertEqual(asked, [], "brew is not even asked, so no other app's cask can be upgraded")
+        // With a cask of its own, the brew path still works.
+        XCTAssertEqual(UpdateChecker.brewCaskPath(cask: "some-cask", findBrew: { "/fake/brew" },
+                                                  isInstalled: { _, cask in cask == "some-cask" }), "/fake/brew")
     }
 
     func testDetachedUpgradeReopensAppEvenWhenLegacyJobCanBeSubmitted() throws {

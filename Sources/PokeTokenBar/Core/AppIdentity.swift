@@ -12,6 +12,10 @@ enum AppIdentity {
     static let logFileStem = "DigiTokenBar"
     static let urlScheme = "digitokenbar"
     static let loginAgentLabel = "io.github.deadlylaid.digitokenbar.login"
-    /// Update checks are off: the upstream repository publishes PokeTokenBar releases, not ours.
-    static let updateRepo: String? = nil
+    /// GitHub repository whose latest release the update check reads (its release page opens on update).
+    static let updateRepo: String? = "deadlylaid/DigiTokenBar"
+    /// Homebrew cask that "Update" may upgrade. DigiTokenBar has none: the old hard-coded value,
+    /// `poke-token-bar`, is the upstream app, so on a Mac with PokeTokenBar from Homebrew the update
+    /// button would have upgraded and reopened the wrong app. nil makes every update open the release page.
+    static let homebrewCask: String? = nil
 }
