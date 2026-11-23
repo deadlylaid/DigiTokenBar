@@ -8,7 +8,7 @@
 
 ## 저장소 상태
 
-- 비공개 저장소: https://github.com/deadlylaid/digimon-tokenbar
+- 비공개 저장소: https://github.com/deadlylaid/DigiTokenBar
   - GitHub에서는 공개 저장소의 포크를 비공개로 만들 수 없다. 그래서 원본 기록을 통째로 옮긴 새 비공개 저장소로 만들었다.
 - 원격 저장소
   - `origin` = 우리 비공개 저장소
