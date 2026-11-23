@@ -24,9 +24,10 @@ macOS 14 or later, Apple Silicon or Intel.
 **With Homebrew** (recommended):
 
 ```sh
-brew install --cask deadlylaid/tap/digitokenbar
+brew install --cask deadlylaid/tap/digitokenbar && open -a DigiTokenBar
 ```
 
+This installs the app and opens it. It lives in the menu bar (top right), with no window or Dock icon.
 Homebrew clears the download quarantine, so the app opens without the warning in step 3 below. Then
 continue with step 4.
 

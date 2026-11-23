@@ -22,9 +22,10 @@ macOS 14 以降が必要です。Apple シリコンと Intel のどちらの Mac
 **Homebrew でインストール**(おすすめ):
 
 ```sh
-brew install --cask deadlylaid/tap/digitokenbar
+brew install --cask deadlylaid/tap/digitokenbar && open -a DigiTokenBar
 ```
 
+インストールしてそのまま起動します。ウィンドウや Dock アイコンはなく、画面右上のメニューバーにアイコンが出ます。
 Homebrew がダウンロードの検疫属性を外すので、下の 3 の警告なしで開けます。そのあとは 4 だけ確認してください。
 
 **または直接ダウンロード:**
