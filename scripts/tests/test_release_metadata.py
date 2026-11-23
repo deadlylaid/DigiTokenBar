@@ -30,9 +30,9 @@ Thank you all.
 
 ---
 
-**Install:** `brew install --cask chattymin/tap/poke-token-bar` — or download `PokeTokenBar.zip` below.
+**Install:** download `DigiTokenBar.zip` below and move the app to Applications. On first open click **Open Anyway** in System Settings › Privacy & Security, or run `xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app`.
 
-**Upgrade:** `brew upgrade --cask poke-token-bar`
+**Upgrade:** replace the app with the one in the new `DigiTokenBar.zip`.
 """
 
 
@@ -62,11 +62,31 @@ class ReleaseMetadataTests(unittest.TestCase):
             self.check()
 
     def test_all_sections_and_install_instructions_are_required(self):
-        for value in ("## New", "## Fixed", "## Other", "## Contributors", "brew upgrade --cask poke-token-bar"):
+        for value in ("## New", "## Fixed", "## Other", "## Contributors", "**Install:**", "`DigiTokenBar.zip`",
+                      "Open Anyway", "xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app", "**Upgrade:**"):
             with self.subTest(value=value):
                 self.notes.write_text(NOTES.replace(value, "removed"))
                 with self.assertRaises(ValueError):
                     self.check()
+
+    def test_homebrew_instructions_are_rejected(self):
+        # DigiTokenBar has no cask; the upstream lines would install PokeTokenBar instead.
+        for line in ("brew install --cask chattymin/tap/poke-token-bar", "brew upgrade --cask poke-token-bar"):
+            with self.subTest(line=line):
+                self.notes.write_text(NOTES + "\n" + line + "\n")
+                with self.assertRaisesRegex(ValueError, "Homebrew"):
+                    self.check()
+
+    def test_template_install_lines_pass_the_check(self):
+        # The fixed Install/Upgrade lines in the template are exactly what the checker asks for.
+        template = (ROOT / "docs/reference/release-notes-template.md").read_text()
+        tail = template.split("\n---\n", 1)[1]
+        self.notes.write_text(NOTES.split("\n---\n", 1)[0] + "\n---\n" + tail)
+        self.check()
+
+    def test_owner_mention_does_not_require_a_contributor_entry(self):
+        self.notes.write_text(NOTES.replace("A bug is fixed (#124, @Bob).", "A bug is fixed (#124, @Bob, @deadlylaid)."))
+        self.check()
 
     def test_unfilled_template_fails(self):
         self.notes.write_text((ROOT / "docs/reference/release-notes-template.md").read_text())
@@ -114,6 +134,52 @@ class ReleaseMetadataTests(unittest.TestCase):
         authors.write_text("Co-Authored-By: guessed model")
         with self.assertRaises(ValueError):
             metadata.commit_message("2.5.4", str(authors))
+
+    def test_previous_release_is_ours_not_an_upstream_tag(self):
+        # The repository still carries upstream PokeTokenBar's v2.x tags. "Since the last release" must
+        # start at DigiTokenBar's own tag, never at an upstream one before the fork point.
+        repo = self.root / "repo"
+        (repo / "scripts").mkdir(parents=True)
+        (repo / "assets").mkdir()
+        (repo / "Sources").mkdir()
+        (repo / "scripts" / "release.sh").write_text((ROOT / "scripts" / "release.sh").read_text())
+        (repo / "assets" / "AppIcon.icns").write_text("icon")
+        for name in ("README.md", "README.ko.md", "README.ja.md"):
+            (repo / name).write_text("`DigiTokenBar.zip` from https://github.com/deadlylaid/DigiTokenBar/releases/latest\n")
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("PTB_", "GIT_"))}
+        env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1", GIT_AUTHOR_NAME="t",
+                   GIT_AUTHOR_EMAIL="t@example.com", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@example.com")
+
+        def git(*args):
+            return subprocess.run(["git", *args], cwd=repo, env=env, check=True,
+                                  capture_output=True, text=True).stdout.strip()
+
+        def commit(message, path):
+            (repo / path).write_text(message)
+            git("add", "-A")
+            git("commit", "-q", "-m", message)
+
+        git("init", "-q", "-b", "main")
+        commit("feat: upstream feature", "Sources/upstream.swift")
+        git("tag", "v2.5.7")
+        commit("fix: last upstream commit", "Sources/upstream2.swift")
+        env["PTB_FORK_POINT"] = git("rev-parse", "HEAD")
+        commit("feat(digimon): first fork feature", "Sources/digimon.swift")
+
+        def check_only():
+            return subprocess.run(["bash", "scripts/release.sh", "--check-only"], cwd=repo, env=env,
+                                  capture_output=True, text=True).stdout
+
+        first = check_only()
+        self.assertIn("첫 릴리스", first)
+        self.assertNotIn("v2.5.7", first, "an upstream tag is not our previous release")
+
+        git("tag", "v0.1.0")
+        commit("feat(digimon): second fork feature", "Sources/digimon2.swift")
+        second = check_only()
+        self.assertIn("v0.1.0 이후 새 기능", second)
+        self.assertIn("second fork feature", second)
+        self.assertNotIn("first fork feature", second)
 
     def test_release_stops_before_side_effects_when_notes_are_missing(self):
         # Run the real shell entry point inside a disposable fixture. No git writes,

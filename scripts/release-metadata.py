@@ -5,6 +5,18 @@ import sys
 from pathlib import Path
 
 
+# Install/Upgrade text every release note must carry (see docs/reference/release-notes-template.md).
+INSTALL_REQUIRED = (
+    "**Install:**",
+    "`DigiTokenBar.zip`",
+    "Open Anyway",
+    "xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app",
+    "**Upgrade:**",
+)
+# The repository owner is not listed as an external contributor.
+OWNER = "deadlylaid"
+
+
 def read_file(path, label):
     if not path or not Path(path).is_file():
         raise ValueError(f"{label} file is required: {path or '(not set)'}")
@@ -21,9 +33,12 @@ def check_notes(notes_path, contributors_path):
     for name in ("New", "Fixed", "Other", "Contributors"):
         if not sections.get(name):
             raise ValueError(f"Release notes need a nonempty '## {name}' section")
-    for command in ("brew install --cask chattymin/tap/poke-token-bar", "brew upgrade --cask poke-token-bar"):
-        if command not in visible:
-            raise ValueError(f"Release notes are missing: {command}")
+    # DigiTokenBar ships a zip and is not notarized: the notes must say how to get past the first-open block.
+    for required in INSTALL_REQUIRED:
+        if required not in visible:
+            raise ValueError(f"Release notes are missing: {required}")
+    if "brew install" in visible or "brew upgrade" in visible:
+        raise ValueError("Release notes mention Homebrew, but DigiTokenBar has no cask")
 
     roster = read_file(contributors_path, "PTB_CONTRIBUTORS_FILE")
     expected = set()
@@ -38,7 +53,7 @@ def check_notes(notes_path, contributors_path):
         return {name.lower() for name, bot in re.findall(
             r"@([A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)(\[bot\])?", text, re.I) if not bot}
     # Also catch a credited contributor accidentally omitted from the final roster.
-    expected |= mentions("\n".join(sections[name] for name in ("New", "Fixed", "Other"))) - {"chattymin"}
+    expected |= mentions("\n".join(sections[name] for name in ("New", "Fixed", "Other"))) - {OWNER}
     actual = mentions(sections["Contributors"])
     missing = expected - actual
     if missing:
