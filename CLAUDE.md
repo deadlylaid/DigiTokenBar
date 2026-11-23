@@ -8,7 +8,7 @@
 
 | 문서 | 언제 읽나 |
 |---|---|
-| `docs/reference/release-workflow.md` | 버전을 배포할 때, `release.sh` 게이트에 막혔을 때, UI 변경으로 스크린샷·랜딩을 갱신할 때 |
+| `docs/reference/release-workflow.md` | 버전을 배포할 때, `release.sh` 게이트에 막혔을 때, 기능 변경으로 README(en/ko/ja)를 갱신할 때 |
 | `docs/reference/provider-extension.md` | 새 사용량 소스·버전매니저·로그 루트를 추가할 때, 프로바이더 분기를 리뷰할 때 |
 | `docs/reference/defect-log.md` | 결함·회귀를 고치는 중(부류 스윕 근거), 동시성·캐시·외부 로그 포맷·대용량 파일 읽기·상시 애니메이션·세이브 이전을 건드릴 때 |
 
@@ -56,8 +56,10 @@ Claude Code는 `.claude/skills/prepare-pr`의 symlink를 통해
 - 버전을 직접 명시하면("2.4.1 배포") 그 값 그대로.
 - 세그먼트 지정 없이 "배포/릴리스"만 말하면: 변경 성격 기준으로 제안 후 확인받고 진행.
 
-**문서·스크린샷·랜딩 갱신은 매 릴리스 필수다 — "할까요?" 묻지 말고 무조건 한다.**
-실행 절차·에셋 게이트·함정은 `docs/reference/release-workflow.md`, 체크리스트는 `RELEASE.md`.
+**README(en/ko/ja) 갱신은 매 릴리스 필수다 — "할까요?" 묻지 말고 무조건 한다.** 이 포크는 원본과 달리
+스크린샷·랜딩·Homebrew cask 가 없다(디지몬 그림은 우리 것이 아니라 저장소에 넣지 않는다). 배포판은 GitHub
+Release 의 `DigiTokenBar.zip` 이다. 실행 절차·게이트·함정은 `docs/reference/release-workflow.md`, 체크리스트는
+`RELEASE.md`.
 
 릴리스는 외부 공개(비가역)이므로 실행 직전 **적용할 버전과 노트 요약을 한 번 보여준 뒤** 진행한다.
 

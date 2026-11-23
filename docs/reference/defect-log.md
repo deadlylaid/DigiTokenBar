@@ -9,6 +9,7 @@ read_when:
   - 세이브 이전/병합·외부 파일 입력 경로를 만들 때
   - 기능을 다른 것으로 갈아 끼우거나 통째로 지울 때(잔재 소비자·문구)
   - 작업 기록·설계 문서에 근거 숫자나 결정 경위를 적을 때(개인 기록 노출)
+  - 배포·빌드·검사 스크립트를 고치거나 포크에서 처음 배포할 때(원본 저장소·이름·툴체인에 묶인 잔재)
 ---
 
 # 결함 대응 축적 규칙
@@ -1456,3 +1457,23 @@ read_when:
   ② 사용자 의견·결정은 **풀어 쓴 한 줄**로 남기고 말을 그대로 옮기지 않는다.
   ③ 경로는 저장소 기준 상대 경로만 쓴다. 가드: `RepositoryPrivacyTests`(실제 홈 경로·임시 폴더·저장소 밖
   폴더). 테스트 가짜 홈(`/Users/x` 등)은 허용 목록에 있다. 일부러 넣어 실패하는 것을 확인했다.
+
+## 원본에 묶인 스크립트 (포크)
+
+- **포크의 스크립트는 처음 쓰기 전에 끝까지 돌려 본다 — 앱 이름만 바꾸고 스크립트·업데이트 경로는 원본을 가리킨 채
+  남기 쉽다.** 첫 배포판을 준비하며 보니(2026-11-23) `release.sh` 는 원본 저장소(`chattymin/PokeTokenBar`),
+  원본 Homebrew tap·Pages, 원본 서명 인증서 지문, `build/PokeTokenBar.app`, 포켓몬 스크린샷 검사를 그대로
+  가리켰고, 노트 검사기는 원본 brew 설치 문구를 요구했다. `e2e.sh`·`parity-check.sh` 는 원본 앱 경로·로그·저장
+  폴더·프로세스 이름을 봤다. `test-gate.sh` 는 Xcode 27 에서 테스트 실행 파일 이름이 바뀌어
+  (`PokeTokenBarTests.xctest`, 예전 `PokeTokenBarPackageTests`) 아무것도 못 찾고 멈췄다. 업데이트 확인의 brew
+  경로는 원본 cask(`poke-token-bar`)를 올리게 되어 있어, 업데이트 확인을 켜는 순간 두 앱을 깐 Mac 에서 원본 앱을
+  올리고 DigiTokenBar 를 끌 뻔했다. **못 잡은 이유:** CI 는 Xcode 16 이라 test-gate 가 통과했고, 포크에서 배포
+  스크립트를 한 번도 돌리지 않았다. 앱 이름은 `AppIdentity` 로 모았지만 스크립트와 brew 경로는 그 값을 쓰지 않고
+  문자열을 따로 들고 있었다. 규율은 셋이다:
+  ① 이름·저장소·서명·cask 처럼 포크마다 다른 값은 한곳(`AppIdentity`, 스크립트 머리의 변수)에 두고 다시 적지 않는다.
+  ② 도구가 아는 경로는 이름을 추측하지 말고 도구에 묻는다(`swift test --show-codecov-path`,
+  `swift build --show-bin-path`).
+  ③ "직전 릴리스"처럼 기록을 거슬러 찾는 것은 원본 태그를 건너뛴다(우리 첫 커밋을 품은 태그만 우리 것).
+  가드: `UpdateCheckerTests.testUpdatesComeFromThisRepositoryAndNeverFromAHomebrewCask`(cask 가 없으면 brew 를
+  묻지도 않음), `scripts/tests/test_release_metadata.py` 의 `test_previous_release_is_ours_not_an_upstream_tag`·
+  `test_homebrew_instructions_are_rejected`. 앞의 둘은 결함을 되돌리면 실패하는 것을 확인했다.
