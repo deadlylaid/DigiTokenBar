@@ -9,12 +9,36 @@
 </div>
 
 > **Status:** a personal fork of [PokeTokenBar](https://github.com/chattymin/PokeTokenBar), in development.
-> There is no release yet: build it from source (below).
+> Download the [latest release](https://github.com/deadlylaid/DigiTokenBar/releases/latest), or build it
+> from source.
 
 DigiTokenBar reads the AI coding tokens you already use (Claude Code, Codex, Gemini CLI and the
 other tools below) from local logs and turns them into experience for a Digimon companion.
 Underneath, it is PokeTokenBar's usage tracker: today's tokens, cost, and official 5-hour / weekly
 limits.
+
+## Install
+
+macOS 14 or later, Apple Silicon or Intel.
+
+1. Download **DigiTokenBar.zip** from the
+   [latest release](https://github.com/deadlylaid/DigiTokenBar/releases/latest) and unzip it.
+2. Move **DigiTokenBar.app** to Applications and open it.
+3. The first time, macOS says it cannot verify the developer and does not open the app. DigiTokenBar is
+   a free fan project and is not notarized by Apple. Open **System Settings → Privacy & Security**,
+   scroll down and click **Open Anyway** next to DigiTokenBar. Or run this in Terminal:
+
+   ```sh
+   xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app
+   ```
+
+4. For Claude Code's official limits, the app reads Claude Code's login from the Keychain, so macOS
+   asks once. Choose **Always Allow**: every release is signed the same way, so it keeps working after
+   updates.
+
+**Upgrade:** when a new version is out, the app tells you and opens its release page. Quit DigiTokenBar,
+replace the app with the one in the new `DigiTokenBar.zip`, and open it again. Your Digimon, saves and
+settings stay.
 
 ## How it works
 
@@ -22,30 +46,39 @@ limits.
    have raised to graduation can always be picked again. Without a pick, one is chosen after a day.
 2. **Code as usual.** 200,000 tokens make 1 experience point, up to 150 a day. A whole life, from
    egg to graduation, takes at least about a week.
-3. **Evolve.** Each line is a Vital Bracelet card: 40 lines and 614 Digimon, Baby I to Ultimate.
+3. **Evolve.** Each line is a Vital Bracelet card: 40 lines and 636 Digimon (22 of them Armor), Baby I
+   to Ultimate.
    Growth follows the card's own routes. The card's requirements open them: Vital Values count your
    coding hours a day, trophies your good days (coding, staying within limits, using two tools), and
    battles and win ratio your battles.
-   Among the open routes, how you code picks one: steady daytime use leans Vaccine, many tools over
-   many days Data, more late nights or full limits Virus. With nothing met, it takes the easy route.
-   A few forms are hidden (catch 20 bugs, or fill 3 usage limits).
-4. **Jogress with a friend.** When a stage that has a Jogress on its card is full, your Digimon waits
+   Among the open routes, a weighted draw picks one, and how you code tilts it: steady daytime use
+   leans Vaccine, many tools over many days Data, more late nights or full limits Virus. A route that
+   keeps the current attribute weighs a little more. Each stage draws once; reopening the app does not
+   reroll it. With nothing met, it takes the easy route. A few forms are hidden (catch 20 bugs, or fill
+   3 usage limits); earning one always wins the draw.
+4. **Armor evolution.** Some Child Digimon can take a Digimental instead of growing as usual and become
+   an Armor Digimon. Collect fragments (a rare golden bug, a visitor's gift, a full stamp card, or
+   surprise points); three of a kind make a Digimental. The golden Digimentals of Miracles and Fate
+   come whole, rarely, and skip stages (V-mon → Magnamon).
+5. **Jogress with a friend.** When a stage that has a Jogress on its card is full, your Digimon waits
    up to 24 hours for a friend's code (the same code as for battles). If the friend's Digimon fits a
    partner the card names ("a Virus Perfect", or "Angemon"), they merge, and the scene shows the
    friend's Digimon walking in. Without a code, or with "Evolve without it", it grows as usual; EXP
    earned while waiting carries over. Named Ultimate merges (War Greymon + Metal Garurumon = Omegamon,
    and ten more) also need the partner raised before.
-5. **Graduate.** A full Ultimate graduates into your dex, and a new egg arrives.
+6. **Graduate.** A full Ultimate graduates into your dex, and a new egg arrives.
 
 ## Features
 
 - **Scene:** the Digimon walks, sleeps and attacks bugs with its signature move. Big bugs take
   three hits. It looks sick while a usage limit is full and sleepy late at night.
 - **Dex:** every line by stage. Digimon you have raised are shown; the rest are silhouettes, with
-  hints for hidden forms and for the Jogress partners of merge-only forms.
+  hints for hidden forms, Digimentals and the Jogress partners of merge-only forms. Search by name,
+  filter and sort across all lines.
 - **Desktop pet and menu bar:** the Digimon on your desktop (Settings → Desktop pet) and in the
-  menu bar, with its growth %. Settings → Digimon → Stay in place keeps it in the middle instead of
-  walking around.
+  menu bar, with its growth %. Rub it with the pointer for hearts, double-click to make it jump, and
+  pick a small, medium or large size. Settings → Digimon → Stay in place keeps it in the middle instead
+  of walking around.
 - **Agent activity:** the desktop pet reacts to Claude Code: dots while it works, a bubble when it
   needs you, a cheer when it is done. Set it up once with `sh tools/digimon/install-agent-hooks.sh`
   (it backs up `~/.claude/settings.json` and keeps your existing hooks). Any other agent can open
@@ -74,7 +107,7 @@ Claude Code, Codex, Antigravity, OpenCode Go and Grok. This part is unchanged fr
 PokeTokenBar; see its [data sources](https://github.com/chattymin/PokeTokenBar#data-sources) for
 where each tool's usage is read from.
 
-## Build and install
+## Build from source
 
 macOS 14 or later, Xcode with Swift 6.
 
@@ -97,20 +130,21 @@ swift test --parallel                          # tests
 ## Privacy
 
 - Token usage is read on your Mac and never uploaded.
-- Outbound requests: wikimon.net for sprites, plus PokeTokenBar's official-limit and status
-  requests. The update check is off, and nothing is downloaded from PokéAPI.
+- Outbound requests: wikimon.net for sprites, PokeTokenBar's official-limit and status requests,
+  and GitHub's latest-release page of this repository for the update check. Nothing is downloaded
+  from PokéAPI.
 - Claude Code hooks are installed only when you run the installer yourself.
 - The Digimon save and its backups live in `~/Library/Application Support/DigiTokenBar/`.
 
 ## Credits and license
 
 - Forked from [PokeTokenBar](https://github.com/chattymin/PokeTokenBar) by chattymin. The usage
-  tracking, providers, limits and most of the app are theirs. PokeTokenBar's Pokémon features are
-  still in the source but turned off.
+  tracking, providers, limits and most of the app are theirs. PokeTokenBar's Pokémon features were
+  removed.
 - **MIT**, see [LICENSE](LICENSE); the original copyright notice is kept. The license covers this
   project's source code only. It grants no rights to third-party trademarks, artwork or data.
 - DigiTokenBar is an **unofficial, non-commercial fan project**. It is not affiliated with, endorsed
   or sponsored by Bandai, Toei Animation or Bandai Namco. "Digimon" and all related names,
   characters and images belong to their owners. The app bundles no Digimon artwork.
-- `tools/digimon/research` keeps short quotes of third-party sites for checking. Review them before
-  making this repository public.
+- `tools/digimon/research` keeps short quotes of third-party sites, with their sources, for checking
+  the data.
