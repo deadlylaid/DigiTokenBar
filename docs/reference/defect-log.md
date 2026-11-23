@@ -1486,3 +1486,16 @@ read_when:
     (`LocalUsageCache.defaultFileURL`)를 그대로 쓰고 그 폴더가 `AppIdentity.stateFolder` 인지 확인한다.
     남겨 둔 것: Swift 타깃·모듈·소스 폴더 이름(`PokeTokenBar`, 원본 변경을 받기 쉽게), 테스트 임시 폴더 이름,
     원본 출처 표기, 원본 시절 기록.
+
+### `pipefail` 아래 `… | grep -q` — 맞는 결과를 실패로 판정 (DigiTokenBar v0.1.0 배포 중단, 2026-11-23)
+
+- **증상:** `release.sh` 5단계가 `DigiTokenBar Local` 로 제대로 서명된 빌드를 "서명되지 않았습니다"로 막았다.
+- **직접원인:** `codesign -dv … 2>&1 | grep -qF "Authority=…"`. `grep -q` 는 찾자마자 끝나고, 아직 쓰던
+  `codesign` 이 SIGPIPE(141)로 끝난다. `set -o pipefail` 이라 파이프 전체가 실패가 된다. 이 Mac 에서는 5번 중 5번.
+  `e2e.sh` 의 `tail … | grep -q` 도 같은 모양이었다(출력이 작아 우연히 덜 드러남).
+- **못 잡은 이유:** 배포 준비 때 `release.sh --check-only` 만 돌렸다. 5단계는 앱을 다시 까는 단계라 실제 배포 전에는
+  아무도 돌리지 않았고, 스크립트 테스트는 노트 검사기만 봤다.
+- **규율:** `pipefail` 셸(그리고 `-eo pipefail` 로 도는 GitHub Actions 단계)에서는 파이프 끝에 조용한 grep 을 두지 않는다.
+  출력을 변수에 담은 뒤 `[[ "$out" == *pattern* ]]` 로 맞춘다.
+- **가드:** `scripts/tests/test_shell_pipefail.py` 가 추적 중인 `.sh`(pipefail 을 켠 것)와 워크플로를 훑는다.
+  원래 줄로 되돌리면 실패하는 것을 확인했다. 스크립트 테스트는 이제 CI(`script-tests`)에서도 돈다.

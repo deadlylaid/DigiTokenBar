@@ -179,8 +179,10 @@ for arch in arm64 x86_64; do
     || { echo "✗ universal 바이너리 아님: $(lipo -archs "$APP/Contents/MacOS/$APP_NAME") (arm64 + x86_64 필요)"; exit 1; }
 done
 codesign --verify --strict "$APP" || { echo "✗ 서명 검증 실패"; exit 1; }
-codesign -dv --verbose=2 "$APP" 2>&1 | grep -qF "Authority=$SIGN_IDENTITY" \
-  || { echo "✗ '$SIGN_IDENTITY' 로 서명되지 않았습니다"; exit 1; }
+# Capture first, then match: `codesign … | grep -q` under pipefail fails whenever grep -q quits at the first
+# match and codesign gets SIGPIPE (141), so a correctly signed app was reported as unsigned (v0.1.0).
+SIGNATURE=$(codesign -dv --verbose=2 "$APP" 2>&1)
+[[ "$SIGNATURE" == *"Authority=$SIGN_IDENTITY"* ]] || { echo "✗ '$SIGN_IDENTITY' 로 서명되지 않았습니다"; exit 1; }
 echo "  ✓ $ZIP ($(du -h "$ZIP" | cut -f1 | tr -d ' ')) — v$BUILT, arm64 + x86_64, '$SIGN_IDENTITY' 서명"
 
 echo "▶ 6/7 커밋 + push (빌드 성공 후)"

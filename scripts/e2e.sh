@@ -54,7 +54,8 @@ assert s.get("lastError", "") == "", f"lastError: {s['lastError']}"
 print(f"    today={s['todayTotalTokens']:,} providers={[p['id'] for p in s['providers']]}")
 PY
 then ok "스냅샷 구조·값 유효 + lastError 없음"; else bad "스냅샷 구조/에러 검증 실패"; fi
-if tail -n 100 "$LOG" 2>/dev/null | grep -q "phase1 done"; then ok "AppLog phase1 done"; else bad "AppLog 에 phase1 done 없음"; fi
+RECENT_LOG=$(tail -n 100 "$LOG" 2>/dev/null || true)   # capture, then match (a quiet grep on a pipe gets SIGPIPE under pipefail)
+if [[ "$RECENT_LOG" == *"phase1 done"* ]]; then ok "AppLog phase1 done"; else bad "AppLog 에 phase1 done 없음"; fi
 
 echo "▶ 4/5 메뉴바 status item (window server)"
 cat > /tmp/ptb-e2e-win.swift <<'SWIFT'
