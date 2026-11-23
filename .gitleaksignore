@@ -1,0 +1,4 @@
+# gitleaks false positives. Format: <commit>:<file>:<rule>:<line>
+# A Claude plan tier name ("default_claude_max_20x") in an upstream test, not a key. Only a full-history
+# scan (manual run) reaches this commit; push and pull request scans cover new commits only.
+df6252462c816edb1587e1a77b7092ece48bb235:Tests/PokeTokenBarTests/PokeTokenBarTests.swift:generic-api-key:256
