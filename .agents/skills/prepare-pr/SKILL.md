@@ -1,9 +1,9 @@
 ---
 name: prepare-pr
-description: Prepare, create, or update a PokeTokenBar pull request with an English Conventional Commits title, the repository PR template, and mandatory images for visible UI changes. Use for requests such as "PR 올려줘", "PR 만들어줘", "PR 본문 작성", "PR 수정", "create PR", or "update PR" in this repository.
+description: Prepare, create, or update a DigiTokenBar pull request with an English Conventional Commits title, the repository PR template, and mandatory images for visible UI changes. Use for requests such as "PR 올려줘", "PR 만들어줘", "PR 본문 작성", "PR 수정", "create PR", or "update PR" in this repository.
 ---
 
-# Prepare a PokeTokenBar PR
+# Prepare a DigiTokenBar PR
 
 Use this repository's title and template rules even when a personal PR skill is
 also active. The shared instructions live here; Claude Code discovers them via

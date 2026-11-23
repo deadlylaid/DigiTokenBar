@@ -7,12 +7,12 @@ if [[ -d /Applications/Xcode.app/Contents/Developer ]]; then
   export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 fi
 
-SCRATCH_PATH="$(mktemp -d "${TMPDIR:-/tmp}/poketokenbar-perf.XXXXXX")"
+SCRATCH_PATH="$(mktemp -d "${TMPDIR:-/tmp}/digitokenbar-perf.XXXXXX")"
 trap 'rm -rf "$SCRATCH_PATH"' EXIT
 
 swift build --scratch-path "$SCRATCH_PATH" -c release
 
-POKETOKENBAR_RUN_LARGE_PERF=1 /usr/bin/time -l \
+DIGITOKENBAR_RUN_LARGE_PERF=1 /usr/bin/time -l \
   swift test --scratch-path "$SCRATCH_PATH" -c release \
   --filter 'CodexLargeRolloutPerformanceTests/testCodexLargeRolloutStaysWithinMemoryBudget'
 

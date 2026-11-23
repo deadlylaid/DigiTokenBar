@@ -15,7 +15,7 @@ import Foundation
 ///    2MB 회전(rename)이 pre-open fd 를 무효화해 크래시 라인이 엉뚱한 파일로 새던 문제 회피.
 /// 3) **NSException 핸들러** — 잡히지 않은 Obj-C 예외 기록.
 ///
-/// crash.log 의 기록은 **다음 실행 때 메인 로그로 합쳐 비운다**(사용자는 PokeTokenBar.log 한 곳만 봐도 됨).
+/// crash.log 의 기록은 **다음 실행 때 메인 로그로 합쳐 비운다**(사용자는 DigiTokenBar.log 한 곳만 봐도 됨).
 enum CrashReporter {
     private static let logsDir: URL =
         FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]
@@ -36,10 +36,10 @@ enum CrashReporter {
         // 1) 직전 세션 비정상 종료 감지 — 마커가 남아 있으면 정상 종료되지 않은 것.
         if FileManager.default.fileExists(atPath: markerURL.path) {
             AppLog.write("⚠️ 직전 세션이 정상 종료되지 않았습니다(크래시·OOM·강제종료 추정). "
-                + "원인 스택은 ~/Library/Logs/DiagnosticReports/PokeTokenBar-*.ips 참조.")
+                + "원인 스택은 ~/Library/Logs/DiagnosticReports/\(AppIdentity.name)-*.ips 참조.")
         }
         try? Data().write(to: markerURL, options: .atomic)   // 이번 세션 running 마커
-        AppLog.write("launch: PokeTokenBar \(version) 시작")
+        AppLog.write("launch: \(AppIdentity.name) \(version) 시작")
 
         // 3) 정상 종료 시 마커 제거(다음 실행이 '비정상'으로 오인하지 않게).
         NotificationCenter.default.addObserver(

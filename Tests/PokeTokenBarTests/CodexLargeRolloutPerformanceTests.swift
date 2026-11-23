@@ -9,8 +9,8 @@ final class CodexLargeRolloutPerformanceTests: XCTestCase {
     private let rssGrowthBudgetBytes: UInt64 = 192 * 1024 * 1024
 
     func testCodexLargeRolloutStaysWithinMemoryBudget() throws {
-        guard ProcessInfo.processInfo.environment["POKETOKENBAR_RUN_LARGE_PERF"] == "1" else {
-            throw XCTSkip("Set POKETOKENBAR_RUN_LARGE_PERF=1 or run scripts/perf-codex-large-rollout.sh")
+        guard ProcessInfo.processInfo.environment["DIGITOKENBAR_RUN_LARGE_PERF"] == "1" else {
+            throw XCTSkip("Set DIGITOKENBAR_RUN_LARGE_PERF=1 or run scripts/perf-codex-large-rollout.sh")
         }
 
         let root = try makeTempDirectory()

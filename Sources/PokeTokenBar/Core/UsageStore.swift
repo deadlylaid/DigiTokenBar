@@ -169,7 +169,7 @@ final class UsageStore {
     var floatingPetEnabled: Bool {
         didSet { defaults.set(floatingPetEnabled, forKey: "floatingPetEnabled") }
     }
-    /// Let coding agents drive the floating pet through `poketokenbar://agent` URLs. Default on —
+    /// Let coding agents drive the floating pet through `digitokenbar://agent` URLs. Default on —
     /// nothing happens until the user wires an agent hook.
     var floatingPetAgentActivity: Bool {
         didSet { defaults.set(floatingPetAgentActivity, forKey: "floatingPetAgentActivity") }
@@ -1013,7 +1013,7 @@ final class UsageStore {
         clearStaleSuspension(reason: "refresh")
         // App Nap 방지 — 백그라운드 스로틀로 로그 파싱·codex 조회가 타임아웃되는 것을 막는다 (시스템 슬립은 허용)
         let activity = ProcessInfo.processInfo.beginActivity(
-            options: .userInitiatedAllowingIdleSystemSleep, reason: "PokeTokenBar usage refresh")
+            options: .userInitiatedAllowingIdleSystemSleep, reason: "\(AppIdentity.name) usage refresh")
         defer {
             ProcessInfo.processInfo.endActivity(activity)
             isRefreshing = false

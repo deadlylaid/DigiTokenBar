@@ -1,6 +1,6 @@
 import Foundation
 
-/// Application Support state directory for PokeTokenBar files.
+/// Application Support state directory for DigiTokenBar files (`AppIdentity.stateFolder`).
 /// `PTB_STATE_DIR` overrides the default for development/QA isolation.
 enum AppStatePaths {
     static func directory() -> URL {

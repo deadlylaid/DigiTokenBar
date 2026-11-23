@@ -216,7 +216,8 @@ actor LocalUsageCache {
         self.codexProbe = codexProbe
     }
 
-    private static let defaultFileURL: URL = {
+    /// The user's real cache file. Internal so the isolation test checks this exact path, not a copy of it.
+    static let defaultFileURL: URL = {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent(AppIdentity.stateFolder)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)

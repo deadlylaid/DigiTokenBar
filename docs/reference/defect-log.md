@@ -1477,3 +1477,12 @@ read_when:
   가드: `UpdateCheckerTests.testUpdatesComeFromThisRepositoryAndNeverFromAHomebrewCask`(cask 가 없으면 brew 를
   묻지도 않음), `scripts/tests/test_release_metadata.py` 의 `test_previous_release_is_ours_not_an_upstream_tag`·
   `test_homebrew_instructions_are_rejected`. 앞의 둘은 결함을 되돌리면 실패하는 것을 확인했다.
+  - **같은 부류 스윕(2026-11-23):** 남은 `PokeTokenBar`/`poketokenbar` 를 전수 분류했다. 고친 것: 자동 시작
+    안내 문구(8개 언어)가 원본 앱 이름을 보여 줌, 크래시 안내·실행 로그·절전 방지 사유, `poketokenbar://` 주석,
+    큐 이름·임시 파일 접두어, 원본 포켓볼 아이콘 생성기(`generate-icon.swift`·`generate-icns.sh`, 돌리면 우리 아이콘을
+    덮어씀 → 삭제), CLAUDE.md·PR 스킬 제목. **조용히 무력해진 테스트:** `LocalUsageCacheTests` 의 "사용자 실제
+    캐시를 안 건드림" 검사가 손으로 적은 `PokeTokenBar/usage-cache.json` 을 보고 있었다. 저장 폴더가
+    DigiTokenBar 로 바뀐 뒤 그 파일은 없어서 수정 시각 비교가 늘 nil == nil 로 통과했다. 이제 앱의 기본 경로
+    (`LocalUsageCache.defaultFileURL`)를 그대로 쓰고 그 폴더가 `AppIdentity.stateFolder` 인지 확인한다.
+    남겨 둔 것: Swift 타깃·모듈·소스 폴더 이름(`PokeTokenBar`, 원본 변경을 받기 쉽게), 테스트 임시 폴더 이름,
+    원본 출처 표기, 원본 시절 기록.

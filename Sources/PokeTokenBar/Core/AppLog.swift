@@ -1,6 +1,6 @@
 import Foundation
 
-/// ~/Library/Logs/PokeTokenBar.log 단순 append 로거 (디버깅/장애 추적용)
+/// ~/Library/Logs/DigiTokenBar.log 단순 append 로거 (디버깅/장애 추적용)
 enum AppLog {
     /// 로그 파일 경로 — 설정의 "로그 파일 보기"(Finder 표시)에서 사용.
     static var logFileURL: URL { url }
@@ -17,7 +17,7 @@ enum AppLog {
     /// 레퍼런스(size-capped 회전, 수 MB)에 맞춤 — 일자별 폴더는 무한 성장/정리 필요라 채택 안 함.
     private static let maxBytes = 2 * 1024 * 1024
 
-    private static let backend = AsyncLineLog(queue: DispatchQueue(label: "poketokenbar.log")) { line in
+    private static let backend = AsyncLineLog(queue: DispatchQueue(label: "digitokenbar.log")) { line in
         if let size = try? FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int,
            size > maxBytes {
             let old = url.deletingPathExtension().appendingPathExtension("old.log")

@@ -1,6 +1,6 @@
 import Foundation
 
-/// What an external coding agent last reported through `poketokenbar://agent?state=…`.
+/// What an external coding agent last reported through `digitokenbar://agent?state=…`.
 /// Agent-agnostic: any tool that can open a URL drives the same states.
 enum AgentActivity: Equatable, Sendable {
     case idle
@@ -9,7 +9,7 @@ enum AgentActivity: Equatable, Sendable {
     case done(message: String?)
 }
 
-/// One parsed `poketokenbar://agent?state=<working|waiting|done|idle>[&message=<text>][&label=<name>]` URL.
+/// One parsed `digitokenbar://agent?state=<working|waiting|done|idle>[&message=<text>][&label=<name>]` URL.
 struct AgentActivityEvent: Equatable, Sendable {
     static let scheme = AppIdentity.urlScheme
     static let host = "agent"
