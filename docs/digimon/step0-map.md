@@ -8,10 +8,10 @@
 
 ## 저장소 상태
 
-- 비공개 저장소: https://github.com/deadlylaid/DigiTokenBar
-  - GitHub에서는 공개 저장소의 포크를 비공개로 만들 수 없다. 그래서 원본 기록을 통째로 옮긴 새 비공개 저장소로 만들었다.
+- 저장소: https://github.com/deadlylaid/DigiTokenBar (처음엔 비공개, 2026-11-23 공개)
+  - GitHub에서는 공개 저장소의 포크를 비공개로 만들 수 없다. 그래서 원본 기록을 통째로 옮긴 새 저장소로 만들었다(포크로 표시되지 않는다).
 - 원격 저장소
-  - `origin` = 우리 비공개 저장소
+  - `origin` = 우리 저장소(DigiTokenBar)
   - `upstream` = 원본 chattymin/PokeTokenBar. 받기만 되고 올리기는 막아뒀다(`DISABLE`).
   - 원본 업데이트 받기: `git fetch upstream && git merge upstream/main`
 - 빌드: `swift build` 성공 (이 맥의 Command Line Tools, Swift 6.2.3, 약 70초)
