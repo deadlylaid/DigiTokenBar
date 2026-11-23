@@ -19,6 +19,16 @@ DigiTokenBar는 이미 쓰고 있는 AI 코딩 도구(Claude Code, Codex, Gemini
 
 macOS 14 이상이 필요해요. Apple 실리콘과 인텔 Mac 모두 돼요.
 
+**Homebrew로 설치하기** (추천):
+
+```sh
+brew install --cask deadlylaid/tap/digitokenbar
+```
+
+Homebrew가 "인터넷에서 받은 파일" 표시를 지워 줘서, 아래 3번의 경고 없이 바로 열려요. 그다음 4번만 보면 돼요.
+
+**또는 직접 내려받기:**
+
 1. [최신 배포판](https://github.com/deadlylaid/DigiTokenBar/releases/latest)에서 **DigiTokenBar.zip**을 받아
    압축을 풀어요.
 2. **DigiTokenBar.app**을 응용 프로그램 폴더로 옮기고 열어요.
@@ -33,8 +43,9 @@ macOS 14 이상이 필요해요. Apple 실리콘과 인텔 Mac 모두 돼요.
 4. Claude Code의 공식 사용 한도를 보여 주려고 앱이 키체인에서 Claude Code 로그인 정보를 읽어요. 그래서 macOS가
    한 번 물어봐요. **항상 허용**을 눌러 주세요. 배포판은 늘 같은 서명을 써서, 업데이트한 뒤에도 그대로 돼요.
 
-**업데이트:** 새 버전이 나오면 앱이 알려 주고 배포 페이지를 열어 줘요. DigiTokenBar를 끄고, 새
-`DigiTokenBar.zip`의 앱으로 바꾼 뒤 다시 열면 돼요. 디지몬, 저장, 설정은 그대로 남아요.
+**업데이트:** 새 버전이 나오면 앱이 알려 줘요. 업데이트를 누르면 Homebrew로 깐 앱은 알아서 올라가요
+(`brew upgrade --cask deadlylaid/tap/digitokenbar`와 같아요). 직접 내려받아 깐 앱은 배포 페이지가 열리니, 새
+`DigiTokenBar.zip`의 앱으로 바꾸면 돼요. 디지몬, 저장, 설정은 그대로 남아요.
 
 ## 어떻게 키우나요
 

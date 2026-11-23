@@ -57,8 +57,8 @@ Claude Code는 `.claude/skills/prepare-pr`의 symlink를 통해
 - 세그먼트 지정 없이 "배포/릴리스"만 말하면: 변경 성격 기준으로 제안 후 확인받고 진행.
 
 **README(en/ko/ja) 갱신은 매 릴리스 필수다 — "할까요?" 묻지 말고 무조건 한다.** 이 포크는 원본과 달리
-스크린샷·랜딩·Homebrew cask 가 없다(디지몬 그림은 우리 것이 아니라 저장소에 넣지 않는다). 배포판은 GitHub
-Release 의 `DigiTokenBar.zip` 이다. 실행 절차·게이트·함정은 `docs/reference/release-workflow.md`, 체크리스트는
+스크린샷·랜딩이 없다(디지몬 그림은 우리 것이 아니라 저장소에 넣지 않는다). 배포판은 GitHub Release 의
+`DigiTokenBar.zip` 과 우리 탭의 cask(`brew install --cask deadlylaid/tap/digitokenbar`)다. 실행 절차·게이트·함정은 `docs/reference/release-workflow.md`, 체크리스트는
 `RELEASE.md`.
 
 릴리스는 외부 공개(비가역)이므로 실행 직전 **적용할 버전과 노트 요약을 한 번 보여준 뒤** 진행한다.

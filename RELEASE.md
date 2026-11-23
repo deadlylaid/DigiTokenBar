@@ -6,8 +6,11 @@ DigiTokenBar 배포판(GitHub Release 의 `DigiTokenBar.zip`)을 내는 런북�
 
 원본 PokeTokenBar 와 다른 점:
 
-- **Homebrew cask 가 없다.** 사용자는 릴리스에서 zip 을 받는다. 앱의 업데이트 알림은 릴리스 페이지를 연다
-  (`AppIdentity.homebrewCask = nil` — brew 를 묻지 않는다).
+- **Homebrew cask 는 우리 탭에 있다.** `brew install --cask deadlylaid/tap/digitokenbar`
+  (github.com/deadlylaid/homebrew-tap, `Casks/digitokenbar.rb`). 설치 뒤 다운로드 격리 표시를 지워
+  (`postflight_steps` 의 `xattr -cr`) 첫 실행 경고가 없다. 8단계가 cask 의 version·sha256 을 새 zip 으로 바꾼다.
+  앱의 업데이트 버튼은 brew 로 깐 경우 `brew upgrade --cask deadlylaid/tap/digitokenbar`, 아니면 릴리스 페이지를
+  연다(`AppIdentity.homebrewCask`, 탭까지 붙인 이름 — 원본 `poke-token-bar` 는 다른 앱).
 - **랜딩 페이지(GitHub Pages)가 없다.** README(en/ko/ja)가 소개 페이지다.
 - **스크린샷을 저장소에 두지 않는다.** 디지몬 그림은 우리 것이 아니다. 앱도 그림을 담지 않고 실행 중에
   Wikimon 에서 받는다. `assets/` 에는 앱 아이콘만 있다.
@@ -28,7 +31,7 @@ PTB_NOTES_FILE=/tmp/notes.md PTB_CONTRIBUTORS_FILE=/tmp/contributors.txt ./scrip
 
 `scripts/release.sh <version>` 가 순서대로 수행:
 
-0. **노트·Contributors 검사** — 필수 섹션, zip 설치·첫 실행·업그레이드 안내, Homebrew 안내 없음, 확인한 기여자
+0. **노트·Contributors 검사** — 필수 섹션, brew·zip 설치, 첫 실행, 업그레이드 안내, 원본 cask 안내 없음, 확인한 기여자
    목록 대조. 누락 시 빌드·앱 교체·push 전에 중단.
 1. **test-gate** (`./scripts/test-gate.sh`) — 전체 테스트 + 로직 커버리지. 실패 시 중단.
 2. **문서 검토 + 버전 확인** — 아래 자동 경고. 경고가 있으면 터미널에서는 진행 여부를 묻고, 터미널이 아니면
@@ -41,6 +44,8 @@ PTB_NOTES_FILE=/tmp/notes.md PTB_CONTRIBUTORS_FILE=/tmp/contributors.txt ./scrip
 6. **커밋 + push** — 범프가 있으면 `release: bump version to X.Y.Z` 커밋. `build-app.sh` 가 이미 그 버전이면
    (첫 릴리스 0.1.0) 커밋 없이 HEAD 를 push 한다.
 7. **GitHub Release** — `vX.Y.Z` 태그를 지금 HEAD 에 만들고 zip 을 붙인다(`PTB_NOTES_FILE` 원문 사용).
+8. **Homebrew cask** — `deadlylaid/homebrew-tap` 의 `Casks/digitokenbar.rb` 에서 version 과 sha256 을 새 zip 으로
+   바꿔 커밋한다(`gh api`). 바뀐 내용을 확인하지 못하면 손으로 고치라는 안내와 함께 멈춘다(릴리스는 이미 게시됨).
 
 > `main` 브랜치에서만 실행(스크립트가 가드). 비-main 에서 실행 시 즉시 중단.
 
@@ -56,7 +61,8 @@ PTB_NOTES_FILE=/tmp/notes.md PTB_CONTRIBUTORS_FILE=/tmp/contributors.txt ./scrip
 
 - README 에 정적 버전 배지, 제거된 도구(`ccusage`) 흔적.
 - README.md / .ko / .ja 중 zip 설치 안내(`DigiTokenBar.zip`, `releases/latest` 링크)가 없는 것, 설치 안내에 버전
-  번호를 박은 것, Homebrew cask 안내가 남은 것.
+  번호를 박은 것, 우리 brew 설치 안내(`brew install --cask deadlylaid/tap/digitokenbar`)가 없는 것, 원본 cask
+  (`chattymin/tap`, `poke-token-bar`) 안내가 남은 것.
 - `assets/` 에 앱 아이콘 말고 다른 파일(스크린샷 등)이 있는 것.
 - 직전 DigiTokenBar 릴리스 이후 `feat` 커밋이 있는데 README 가 그대로인 것, README 가 세 언어 중 일부만 바뀐 것.
   "직전 릴리스"는 우리 태그만 본다. 저장소에 남은 원본의 v2.x 태그는 갈라진 지점 이전이라 건너뛴다.
@@ -123,6 +129,14 @@ lipo -archs <임시 폴더>/DigiTokenBar.app/Contents/MacOS/DigiTokenBar   # x86
 ```
 
 그다음 브라우저로 받은 zip(격리 표시가 붙는다)을 풀어 한 번 열어 보고, "그래도 열기"로 열리는지 본다.
+
+Homebrew 로도 확인한다(cask 가 새 버전·sha256 을 가리키는지, 격리 표시가 지워지는지):
+
+```bash
+brew update && brew upgrade --cask deadlylaid/tap/digitokenbar   # 처음이면 brew install --cask …
+brew list --cask --versions deadlylaid/tap/digitokenbar            # 새 버전
+xattr /Applications/DigiTokenBar.app                               # com.apple.quarantine 없음
+```
 
 ## 서명
 

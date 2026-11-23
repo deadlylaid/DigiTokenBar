@@ -11,9 +11,9 @@ read_when:
 버전 결정 규칙과 트리거는 `CLAUDE.md` §릴리스에 있다. 이 문서는 그 다음의 *실행 세부*를 담는다.
 체크리스트 원본은 `RELEASE.md`.
 
-DigiTokenBar 는 GitHub Release 에 `DigiTokenBar.zip` 을 올리는 것으로 배포한다. 원본 PokeTokenBar 의
-Homebrew cask, 랜딩 페이지(gh-pages), README 스크린샷은 없다 — cask·랜딩을 만들지 않았고, 디지몬 그림은
-우리 것이 아니라 저장소에 넣지 않는다.
+DigiTokenBar 는 GitHub Release 에 `DigiTokenBar.zip` 을 올리고, 우리 탭(`deadlylaid/homebrew-tap`)의 cask 를
+그 zip 으로 맞추는 것으로 배포한다. 원본 PokeTokenBar 의 랜딩 페이지(gh-pages), README 스크린샷은 없다 — 랜딩을
+만들지 않았고, 디지몬 그림은 우리 것이 아니라 저장소에 넣지 않는다.
 
 ## 1. 문서 갱신 (매 릴리스 필수 — "할까요?" 묻지 말고 무조건 한다)
 

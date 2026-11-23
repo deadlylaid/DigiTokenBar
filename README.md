@@ -21,6 +21,17 @@ limits.
 
 macOS 14 or later, Apple Silicon or Intel.
 
+**With Homebrew** (recommended):
+
+```sh
+brew install --cask deadlylaid/tap/digitokenbar
+```
+
+Homebrew clears the download quarantine, so the app opens without the warning in step 3 below. Then
+continue with step 4.
+
+**Or download it:**
+
 1. Download **DigiTokenBar.zip** from the
    [latest release](https://github.com/deadlylaid/DigiTokenBar/releases/latest) and unzip it.
 2. Move **DigiTokenBar.app** to Applications and open it.
@@ -36,9 +47,9 @@ macOS 14 or later, Apple Silicon or Intel.
    asks once. Choose **Always Allow**: every release is signed the same way, so it keeps working after
    updates.
 
-**Upgrade:** when a new version is out, the app tells you and opens its release page. Quit DigiTokenBar,
-replace the app with the one in the new `DigiTokenBar.zip`, and open it again. Your Digimon, saves and
-settings stay.
+**Upgrade:** when a new version is out, the app tells you. Click Update: a Homebrew install upgrades
+itself (`brew upgrade --cask deadlylaid/tap/digitokenbar` does the same); otherwise the release page opens,
+and you replace the app with the one in the new `DigiTokenBar.zip`. Your Digimon, saves and settings stay.
 
 ## How it works
 

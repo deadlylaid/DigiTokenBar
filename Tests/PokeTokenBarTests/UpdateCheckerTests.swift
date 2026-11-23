@@ -225,23 +225,28 @@ final class UpdateCheckerTests: XCTestCase {
         XCTAssertFalse(script.contains("poke-token-bar"), "the upstream cask is another app")
     }
 
-    /// DigiTokenBar's releases are its own, and it has no Homebrew cask: "Update" must open the release
-    /// page and never upgrade the upstream `poke-token-bar` cask, which on a Mac with both apps would
-    /// replace and reopen PokeTokenBar while quitting DigiTokenBar.
-    func testUpdatesComeFromThisRepositoryAndNeverFromAHomebrewCask() {
+    /// DigiTokenBar's releases are its own, and "Update" only ever upgrades its own cask from its own tap:
+    /// never the upstream `poke-token-bar`, which on a Mac with both apps would replace and reopen
+    /// PokeTokenBar while quitting DigiTokenBar. A zip install (cask not installed) opens the release page.
+    func testUpdatesComeFromThisRepositoryAndOnlyItsOwnCask() {
         XCTAssertEqual(AppIdentity.updateRepo, "deadlylaid/DigiTokenBar")
-        XCTAssertNil(AppIdentity.homebrewCask)
-        // A Mac where brew exists and reports every cask as installed (e.g. PokeTokenBar from Homebrew).
+        XCTAssertEqual(AppIdentity.homebrewCask, "deadlylaid/tap/digitokenbar", "tap-qualified, not a bare name")
+        // A Mac where brew reports every cask as installed (e.g. PokeTokenBar from Homebrew as well).
         var asked: [String] = []
-        let everythingInstalled = UpdateChecker.brewCaskPath(
+        let brewInstall = UpdateChecker.brewCaskPath(
             cask: AppIdentity.homebrewCask,
-            findBrew: { asked.append("find"); return "/fake/brew" },
+            findBrew: { "/fake/brew" },
             isInstalled: { _, cask in asked.append(cask); return true })
-        XCTAssertNil(everythingInstalled, "no cask → release page")
-        XCTAssertEqual(asked, [], "brew is not even asked, so no other app's cask can be upgraded")
-        // With a cask of its own, the brew path still works.
-        XCTAssertEqual(UpdateChecker.brewCaskPath(cask: "some-cask", findBrew: { "/fake/brew" },
-                                                  isInstalled: { _, cask in cask == "some-cask" }), "/fake/brew")
+        XCTAssertEqual(brewInstall, "/fake/brew")
+        XCTAssertEqual(asked, ["deadlylaid/tap/digitokenbar"], "only our own cask is asked about")
+        // Installed from the zip: brew knows only other casks → release page.
+        XCTAssertNil(UpdateChecker.brewCaskPath(cask: AppIdentity.homebrewCask, findBrew: { "/fake/brew" },
+                                                isInstalled: { _, cask in cask == "poke-token-bar" }))
+        // No cask at all: brew is not even asked.
+        var askedWithoutCask = false
+        XCTAssertNil(UpdateChecker.brewCaskPath(cask: nil, findBrew: { askedWithoutCask = true; return "/fake/brew" },
+                                                isInstalled: { _, _ in true }))
+        XCTAssertFalse(askedWithoutCask)
     }
 
     func testDetachedUpgradeReopensAppEvenWhenLegacyJobCanBeSubmitted() throws {

@@ -8,11 +8,15 @@ from pathlib import Path
 # Install/Upgrade text every release note must carry (see docs/reference/release-notes-template.md).
 INSTALL_REQUIRED = (
     "**Install:**",
+    "brew install --cask deadlylaid/tap/digitokenbar",
     "`DigiTokenBar.zip`",
     "Open Anyway",
     "xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app",
     "**Upgrade:**",
+    "brew upgrade --cask deadlylaid/tap/digitokenbar",
 )
+# Upstream PokeTokenBar's cask would install the other app.
+UPSTREAM_CASK = ("chattymin/tap", "poke-token-bar")
 # The repository owner is not listed as an external contributor.
 OWNER = "deadlylaid"
 
@@ -37,8 +41,8 @@ def check_notes(notes_path, contributors_path):
     for required in INSTALL_REQUIRED:
         if required not in visible:
             raise ValueError(f"Release notes are missing: {required}")
-    if "brew install" in visible or "brew upgrade" in visible:
-        raise ValueError("Release notes mention Homebrew, but DigiTokenBar has no cask")
+    if any(name in visible for name in UPSTREAM_CASK):
+        raise ValueError("Release notes mention upstream PokeTokenBar's Homebrew cask, which installs another app")
 
     roster = read_file(contributors_path, "PTB_CONTRIBUTORS_FILE")
     expected = set()

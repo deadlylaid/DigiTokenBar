@@ -19,6 +19,16 @@ Mac のローカルログから読み取り、デジモンの経験値に変え�
 
 macOS 14 以降が必要です。Apple シリコンと Intel のどちらの Mac でも動きます。
 
+**Homebrew でインストール**(おすすめ):
+
+```sh
+brew install --cask deadlylaid/tap/digitokenbar
+```
+
+Homebrew がダウンロードの検疫属性を外すので、下の 3 の警告なしで開けます。そのあとは 4 だけ確認してください。
+
+**または直接ダウンロード:**
+
 1. [最新リリース](https://github.com/deadlylaid/DigiTokenBar/releases/latest)から **DigiTokenBar.zip** を
    ダウンロードして展開します。
 2. **DigiTokenBar.app** をアプリケーションフォルダに移して開きます。
@@ -35,8 +45,9 @@ macOS 14 以降が必要です。Apple シリコンと Intel のどちらの Mac
    macOS が一度確認します。**常に許可** を選んでください。リリースは毎回同じ署名なので、アップデート後も
    そのまま使えます。
 
-**アップデート:** 新しいバージョンが出るとアプリが知らせて、リリースページを開きます。DigiTokenBar を終了し、
-新しい `DigiTokenBar.zip` のアプリに置き換えてから開き直してください。デジモン、セーブ、設定はそのまま残ります。
+**アップデート:** 新しいバージョンが出るとアプリが知らせます。アップデートを押すと、Homebrew で入れたアプリは
+自動で更新されます(`brew upgrade --cask deadlylaid/tap/digitokenbar` と同じ)。直接ダウンロードした場合は
+リリースページが開くので、新しい `DigiTokenBar.zip` のアプリに置き換えてください。デジモン、セーブ、設定はそのまま残ります。
 
 ## 育て方
 

@@ -25,6 +25,6 @@ When there are none, write exactly: No external contributors in this release. --
 
 ---
 
-**Install:** download `DigiTokenBar.zip` below, unzip it and move `DigiTokenBar.app` to Applications (macOS 14 or later, Apple Silicon or Intel). The app is not notarized, so macOS blocks the first open: go to System Settings › Privacy & Security and click **Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app` in Terminal.
+**Install:** `brew install --cask deadlylaid/tap/digitokenbar` — or download `DigiTokenBar.zip` below, unzip it and move `DigiTokenBar.app` to Applications (macOS 14 or later, Apple Silicon or Intel). The app is not notarized. Homebrew clears the download quarantine for you; with the zip, macOS blocks the first open: go to System Settings › Privacy & Security and click **Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app` in Terminal.
 
-**Upgrade:** the app tells you when a new version is out and opens this page. Quit DigiTokenBar, replace the app with the one in the new `DigiTokenBar.zip`, and open it again. Your Digimon and settings stay.
+**Upgrade:** `brew upgrade --cask deadlylaid/tap/digitokenbar`, or click Update when the app says a new version is out (it upgrades a Homebrew install by itself and opens this page otherwise). With the zip, quit DigiTokenBar, replace the app with the one in the new `DigiTokenBar.zip` and open it again. Your Digimon and settings stay.

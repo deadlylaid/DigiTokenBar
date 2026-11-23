@@ -3,7 +3,7 @@ import Observation
 
 /// GitHub 릴리스 최신 버전을 확인해 새 버전이 있으면 팝오버에 알린다.
 /// 실제 설치는 이 앱의 cask 로 설치한 brew 사용자면 `brew upgrade`, 그 외엔 릴리스 페이지 열기(저위험·인프라 0).
-/// DigiTokenBar 는 cask 가 없어(`AppIdentity.homebrewCask == nil`) 항상 릴리스 페이지를 연다.
+/// DigiTokenBar 의 cask 는 `AppIdentity.homebrewCask`(deadlylaid/tap/digitokenbar). zip 설치본은 릴리스 페이지를 연다.
 @MainActor
 @Observable
 final class UpdateChecker {

@@ -20,6 +20,9 @@ REPO="deadlylaid/DigiTokenBar"
 APP_NAME="DigiTokenBar"
 APP="build/$APP_NAME.app"
 ZIP="build/$APP_NAME.zip"
+# Homebrew cask (github.com/deadlylaid/homebrew-tap). Step 8 sets its version and sha256 to the new zip.
+TAP_REPO="deadlylaid/homebrew-tap"
+CASK_PATH="Casks/digitokenbar.rb"
 # 원본 PokeTokenBar 에서 갈라진 지점. 이 저장소에는 원본의 v2.x 태그도 남아 있는데, 그 태그들은 우리
 # 첫 커밋(갈라진 지점 바로 다음)을 품지 않는다. 원본을 나중에 다시 합쳐도 마찬가지다.
 FORK_POINT="${PTB_FORK_POINT:-38e3e5532846d407ae1a80fe15c4e49a0c263d65}"   # 변수는 테스트용
@@ -50,7 +53,7 @@ doc_check() {
     fi
   done
   # 설치 안내: 세 언어 README 모두 내려받기(zip)와 최신 릴리스 링크를 안내하고, 버전 번호를 박지 않는다.
-  # cask 가 없으므로 Homebrew 설치 안내가 남아 있으면 안 된다.
+  # Homebrew 안내는 우리 cask(deadlylaid/tap/digitokenbar)여야 한다 — 원본 cask 는 다른 앱을 깐다.
   for f in README.md README.ko.md README.ja.md; do
     if ! grep -q "$APP_NAME.zip" "$f" || ! grep -q "github.com/$REPO/releases/latest" "$f"; then
       echo "  ⚠ $f 에 내려받기 설치 안내($APP_NAME.zip, releases/latest 링크)가 없습니다."; warn=1
@@ -58,8 +61,11 @@ doc_check() {
     if grep -nE "releases/download/v[0-9]|$APP_NAME[ -]v?[0-9]+\.[0-9]+\.[0-9]+" "$f"; then
       echo "  ⚠ $f 설치 안내에 버전 번호가 박혀 있습니다 — 릴리스마다 낡습니다(releases/latest 로)."; warn=1
     fi
-    if grep -nE "brew (install|upgrade).*--cask" "$f"; then
-      echo "  ⚠ $f 에 Homebrew cask 안내가 있습니다 — DigiTokenBar 는 cask 가 없습니다."; warn=1
+    if ! grep -q "brew install --cask deadlylaid/tap/digitokenbar" "$f"; then
+      echo "  ⚠ $f 에 Homebrew 설치 안내(brew install --cask deadlylaid/tap/digitokenbar)가 없습니다."; warn=1
+    fi
+    if grep -nE "chattymin/tap|poke-token-bar" "$f"; then
+      echo "  ⚠ $f 에 원본 PokeTokenBar 의 cask 안내가 있습니다 — 다른 앱을 깝니다."; warn=1
     fi
   done
   # 디지몬 그림(스크린샷)을 저장소에 넣지 않는다 — 앱 아이콘만 둔다.
@@ -112,11 +118,11 @@ NOTES_FILE="${PTB_NOTES_FILE:-}"
 python3 scripts/release-metadata.py check-notes "$NOTES_FILE" "${PTB_CONTRIBUTORS_FILE:-}"
 COMMIT_MESSAGE=$(python3 scripts/release-metadata.py commit-message "$VERSION" "${PTB_COAUTHORS_FILE:-}")
 
-echo "▶ 1/7 릴리스 전 테스트 게이트"
+echo "▶ 1/8 릴리스 전 테스트 게이트"
 ./scripts/test-gate.sh >/dev/null || { echo "✗ test-gate 실패 — 중단"; exit 1; }
 echo "  ✓ 통과"
 
-echo "▶ 2/7 문서 검토 + 버전 확인"
+echo "▶ 2/8 문서 검토 + 버전 확인"
 # set -e 하에서 `doc_check; rc=$?` 는 실패 즉시 종료돼 rc 를 못 읽는다.
 doc_rc=0; doc_check || doc_rc=$?
 if [[ $doc_rc -ne 0 ]]; then
@@ -138,7 +144,7 @@ if [[ -n "$LAST_TAG" ]]; then
 fi
 echo "  ✓ 직전 릴리스: ${LAST_TAG:-없음(첫 릴리스)}"
 
-echo "▶ 3/7 코드서명 신원 게이트 (ad-hoc 릴리스 차단으로 사용자 Keychain '항상 허용' 유지)"
+echo "▶ 3/8 코드서명 신원 게이트 (ad-hoc 릴리스 차단으로 사용자 Keychain '항상 허용' 유지)"
 # 릴리스가 ad-hoc(빌드마다 cdhash 변경) 또는 다른 인증서로 나가면, 기존 사용자의 Keychain "항상 허용"이
 # 앱의 지정요구(DR: identifier + certificate leaf)와 안 맞아 매 업그레이드마다 깨진다 → Claude 한도 조회 시
 # macOS 키체인 접근 다이얼로그가 재프롬프트된다. 안정적 자체서명 신원(고정 leaf)으로만 배포되게 강제한다.
@@ -163,10 +169,10 @@ fi
 echo "  ✓ '$SIGN_IDENTITY' leaf=$LEAF — 안정적 서명으로 배포(사용자 재프롬프트 없음)"
 export PTB_REQUIRE_STABLE_SIGN=1   # build-app.sh 방어선: ad-hoc 폴백으로 새면 즉시 실패
 
-echo "▶ 4/7 VERSION 범프 $PREV → $VERSION (아직 미커밋)"
+echo "▶ 4/8 VERSION 범프 $PREV → $VERSION (아직 미커밋)"
 perl -pi -e "s/VERSION=\"[0-9.]+\"/VERSION=\"$VERSION\"/" scripts/build-app.sh
 
-echo "▶ 5/7 빌드 + zip (push 전 검증 — 실패해도 범프 미커밋이라 origin/main 무손상)"
+echo "▶ 5/8 빌드 + zip (push 전 검증 — 실패해도 범프 미커밋이라 origin/main 무손상)"
 ./scripts/build-app.sh >/dev/null
 rm -f "$ZIP"
 ditto -c -k --keepParent "$APP" "$ZIP"
@@ -185,7 +191,7 @@ SIGNATURE=$(codesign -dv --verbose=2 "$APP" 2>&1)
 [[ "$SIGNATURE" == *"Authority=$SIGN_IDENTITY"* ]] || { echo "✗ '$SIGN_IDENTITY' 로 서명되지 않았습니다"; exit 1; }
 echo "  ✓ $ZIP ($(du -h "$ZIP" | cut -f1 | tr -d ' ')) — v$BUILT, arm64 + x86_64, '$SIGN_IDENTITY' 서명"
 
-echo "▶ 6/7 커밋 + push (빌드 성공 후)"
+echo "▶ 6/8 커밋 + push (빌드 성공 후)"
 if git diff --quiet -- scripts/build-app.sh; then
   echo "  (build-app.sh 가 이미 $VERSION — 범프 커밋 없이 현재 HEAD 를 배포)"
 else
@@ -194,9 +200,21 @@ else
 fi
 git push -q origin main
 
-echo "▶ 7/7 GitHub Release v$VERSION"
+echo "▶ 7/8 GitHub Release v$VERSION"
 gh release create "v$VERSION" "$ZIP" --repo "$REPO" \
   --title "$APP_NAME v$VERSION" --target "$(git rev-parse HEAD)" --notes-file "$NOTES_FILE"
 
+echo "▶ 8/8 Homebrew cask $VERSION ($TAP_REPO)"
+SHA256=$(shasum -a 256 "$ZIP" | cut -d' ' -f1)
+CASK_SHA=$(gh api "repos/$TAP_REPO/contents/$CASK_PATH" --jq '.sha')
+TMP_CASK=$(mktemp)
+gh api "repos/$TAP_REPO/contents/$CASK_PATH" --jq '.content' | base64 -d \
+  | perl -pe "s/^(\s*version )\"[0-9.]+\"/\$1\"$VERSION\"/; s/^(\s*sha256 )\"[0-9a-f]+\"/\$1\"$SHA256\"/" > "$TMP_CASK"
+grep -q "version \"$VERSION\"" "$TMP_CASK" && grep -q "sha256 \"$SHA256\"" "$TMP_CASK" \
+  || { echo "✗ cask 갱신 내용 확인 실패 — 릴리스는 게시됨. $TAP_REPO 의 $CASK_PATH 를 손으로 $VERSION / $SHA256 로 고치세요."; exit 1; }
+gh api -X PUT "repos/$TAP_REPO/contents/$CASK_PATH" -f message="cask: digitokenbar $VERSION" \
+  -f content="$(base64 -i "$TMP_CASK")" -f sha="$CASK_SHA" --jq '.commit.html_url'
+rm -f "$TMP_CASK"
+
 echo "✓ v$VERSION 배포 완료: https://github.com/$REPO/releases/tag/v$VERSION"
-echo "  확인: 릴리스에서 $APP_NAME.zip 을 받아 풀고 codesign -dv · lipo -archs · 실행 (RELEASE.md §배포 후 검증)"
+echo "  확인: brew upgrade --cask deadlylaid/tap/digitokenbar, 그리고 릴리스의 $APP_NAME.zip 을 받아 codesign -dv · lipo -archs · 실행 (RELEASE.md §배포 후 검증)"

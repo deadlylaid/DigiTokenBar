@@ -30,9 +30,9 @@ Thank you all.
 
 ---
 
-**Install:** download `DigiTokenBar.zip` below and move the app to Applications. On first open click **Open Anyway** in System Settings › Privacy & Security, or run `xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app`.
+**Install:** `brew install --cask deadlylaid/tap/digitokenbar` — or download `DigiTokenBar.zip` below, unzip it and move `DigiTokenBar.app` to Applications (macOS 14 or later, Apple Silicon or Intel). The app is not notarized. Homebrew clears the download quarantine for you; with the zip, macOS blocks the first open: go to System Settings › Privacy & Security and click **Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app` in Terminal.
 
-**Upgrade:** replace the app with the one in the new `DigiTokenBar.zip`.
+**Upgrade:** `brew upgrade --cask deadlylaid/tap/digitokenbar`, or click Update when the app says a new version is out (it upgrades a Homebrew install by itself and opens this page otherwise). With the zip, quit DigiTokenBar, replace the app with the one in the new `DigiTokenBar.zip` and open it again. Your Digimon and settings stay.
 """
 
 
@@ -63,18 +63,20 @@ class ReleaseMetadataTests(unittest.TestCase):
 
     def test_all_sections_and_install_instructions_are_required(self):
         for value in ("## New", "## Fixed", "## Other", "## Contributors", "**Install:**", "`DigiTokenBar.zip`",
-                      "Open Anyway", "xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app", "**Upgrade:**"):
+                      "Open Anyway", "xattr -dr com.apple.quarantine /Applications/DigiTokenBar.app", "**Upgrade:**",
+                      "brew install --cask deadlylaid/tap/digitokenbar",
+                      "brew upgrade --cask deadlylaid/tap/digitokenbar"):
             with self.subTest(value=value):
                 self.notes.write_text(NOTES.replace(value, "removed"))
                 with self.assertRaises(ValueError):
                     self.check()
 
-    def test_homebrew_instructions_are_rejected(self):
-        # DigiTokenBar has no cask; the upstream lines would install PokeTokenBar instead.
+    def test_upstream_homebrew_instructions_are_rejected(self):
+        # The upstream lines would install PokeTokenBar instead of DigiTokenBar.
         for line in ("brew install --cask chattymin/tap/poke-token-bar", "brew upgrade --cask poke-token-bar"):
             with self.subTest(line=line):
                 self.notes.write_text(NOTES + "\n" + line + "\n")
-                with self.assertRaisesRegex(ValueError, "Homebrew"):
+                with self.assertRaisesRegex(ValueError, "upstream"):
                     self.check()
 
     def test_template_install_lines_pass_the_check(self):
