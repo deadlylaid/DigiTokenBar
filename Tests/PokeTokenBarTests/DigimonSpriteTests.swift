@@ -127,4 +127,39 @@ final class DigimonSpriteTests: XCTestCase {
         XCTAssertTrue(DigimonSpriteStore.isImage(gif([sprite(["R"], scale: 1)])), "GIF sprites still count")
         try? FileManager.default.removeItem(at: dir)
     }
+
+    /// A failed or blocked check waits `maxAge` like a successful one: with wikimon.net blocked, asking on
+    /// every load would make each sprite wait on the network (user decision, 2026-11-23: "30일 단위로").
+    func testAFailedCheckIsRetriedOnlyAfterAnotherMaxAge() async throws {
+        actor Log { var count = 0; func add() { count += 1 } }
+        let log = Log()
+        let png = PixelArt.png(sprite(["RG"], scale: 3))!
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("sprites-\(UUID().uuidString)")
+        final class Clock: @unchecked Sendable { var now = Date() }
+        let clock = Clock()
+        final class Mode: @unchecked Sendable { var blocked = false }
+        let mode = Mode()
+        let store = DigimonSpriteStore(directory: dir, maxAge: 100, now: { clock.now }) { request in
+            await log.add()
+            if mode.blocked { throw URLError(.cannotConnectToHost) }
+            return (png, HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        }
+        _ = await store.original("Test_vpet_vb.png")                 // downloaded: 1 request
+        mode.blocked = true
+        clock.now = clock.now.addingTimeInterval(150)                  // older than maxAge: checks and fails
+        let kept = await store.original("Test_vpet_vb.png")
+        XCTAssertEqual(kept, png)
+        var count = await log.count
+        XCTAssertEqual(count, 2)
+        clock.now = clock.now.addingTimeInterval(50)                   // within maxAge of the failed check
+        _ = await store.original("Test_vpet_vb.png")
+        _ = await store.original("Test_vpet_vb.png")
+        count = await log.count
+        XCTAssertEqual(count, 2, "no new request until maxAge after the failed check")
+        clock.now = clock.now.addingTimeInterval(100)                  // maxAge later: asks again
+        _ = await store.original("Test_vpet_vb.png")
+        count = await log.count
+        XCTAssertEqual(count, 3)
+        try? FileManager.default.removeItem(at: dir)
+    }
 }

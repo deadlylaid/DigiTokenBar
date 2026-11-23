@@ -134,8 +134,9 @@ enum PixelArt {
 
 /// Downloads Digimon sprites from Wikimon the first time they are needed and keeps them in the
 /// app's state folder. Nothing is bundled with the app (see docs/digimon criteria, principle 8).
-/// Cached files older than `maxAge` are re-checked with If-Modified-Since, because Wikimon still
-/// updates sprites from time to time.
+/// Cached files older than `maxAge` (30 days) are re-checked with If-Modified-Since, because Wikimon
+/// still updates sprites from time to time. Whatever the answer (unchanged, failed, blocked), a cached
+/// copy is never dropped and the next check is `maxAge` later.
 actor DigimonSpriteStore {
     typealias Fetch = @Sendable (URLRequest) async throws -> (Data, URLResponse)
 
@@ -202,12 +203,16 @@ actor DigimonSpriteStore {
             // wikimon.net) can answer 200 with its HTML block page, which would overwrite a good sprite.
             guard status == 200, Self.isImage(data) else {
                 if status == 200 { AppLog.write("digimon sprite download not an image file=\(file)") }
+                if cached != nil { touch(local) }   // checked: ask again in `maxAge`, not on every load
                 return cached
             }
             try data.write(to: local, options: .atomic)
             return data
         } catch {
             AppLog.write("digimon sprite download failed file=\(file): \(error)")
+            // A failed check counts as a check: with wikimon.net blocked (a corporate proxy) every load
+            // would otherwise wait on the network again. The copy stays; the next try is in `maxAge`.
+            if cached != nil { touch(local) }
             return cached
         }
     }
