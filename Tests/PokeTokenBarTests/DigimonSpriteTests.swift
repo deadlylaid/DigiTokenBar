@@ -99,4 +99,32 @@ final class DigimonSpriteTests: XCTestCase {
         XCTAssertEqual(frames, [])
         try? FileManager.default.removeItem(at: dir)
     }
+
+    /// A corporate proxy blocking wikimon.net (reported: Zscaler on a work Mac) can answer 200 with an HTML
+    /// block page. That page must never replace a good sprite, nor become one on a first download.
+    func testABlockPageAnsweredWith200NeverReplacesASprite() async throws {
+        let png = PixelArt.png(sprite(["RG"], scale: 3))!
+        let blockPage = Data("<html><body>Website blocked by your organization</body></html>".utf8)
+        let dir = FileManager.default.temporaryDirectory.appendingPathComponent("sprites-\(UUID().uuidString)")
+        final class Clock: @unchecked Sendable { var now = Date() }
+        let clock = Clock()
+        final class Answer: @unchecked Sendable { var body = Data() }
+        let answer = Answer()
+        answer.body = png
+        let store = DigimonSpriteStore(directory: dir, maxAge: 100, now: { clock.now }) { request in
+            (answer.body, HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
+        }
+        let first = await store.original("Test_vpet_vb.png")
+        XCTAssertEqual(first, png)
+        answer.body = blockPage
+        clock.now = clock.now.addingTimeInterval(1_000)   // old enough to ask again: the proxy answers
+        let afterBlock = await store.original("Test_vpet_vb.png")
+        XCTAssertEqual(afterBlock, png, "the cached sprite is kept")
+        XCTAssertEqual(try Data(contentsOf: dir.appendingPathComponent("Test_vpet_vb.png")), png, "and not overwritten on disk")
+        let neverSeen = await store.original("Other_vpet_vb.png")
+        XCTAssertNil(neverSeen, "a block page is not a sprite")
+        XCTAssertFalse(FileManager.default.fileExists(atPath: dir.appendingPathComponent("Other_vpet_vb.png").path))
+        XCTAssertTrue(DigimonSpriteStore.isImage(gif([sprite(["R"], scale: 1)])), "GIF sprites still count")
+        try? FileManager.default.removeItem(at: dir)
+    }
 }

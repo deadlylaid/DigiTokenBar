@@ -1499,3 +1499,15 @@ read_when:
   출력을 변수에 담은 뒤 `[[ "$out" == *pattern* ]]` 로 맞춘다.
 - **가드:** `scripts/tests/test_shell_pipefail.py` 가 추적 중인 `.sh`(pipefail 을 켠 것)와 워크플로를 훑는다.
   원래 줄로 되돌리면 실패하는 것을 확인했다. 스크립트 테스트는 이제 CI(`script-tests`)에서도 돈다.
+
+### 받은 응답을 확인 없이 캐시에 씀 — 회사 프록시의 차단 페이지가 그림을 덮을 수 있음 (2026-11-23)
+
+- **발견:** 회사 Mac 에서 Zscaler 가 wikimon.net 을 막아, 그림을 다른 Mac 에서 옮겨 넣기로 했다. 그런데
+  `DigimonSpriteStore.original` 은 30일이 지난 그림을 다시 물어보고, 200 이면 내용을 보지 않고 그대로 저장했다.
+  프록시가 차단 안내 HTML 을 200 으로 돌려주면 멀쩡한 그림이 웹페이지로 바뀐다(처음 받는 그림이면 웹페이지가
+  그림 자리에 저장된다).
+- **못 잡은 이유:** 테스트는 성공(200 + 그림), 304, 연결 실패만 봤다. "성공처럼 보이는 엉뚱한 내용"은 없었다.
+- **고침:** GIF/PNG 서명(`DigimonSpriteStore.isImage`)이 맞을 때만 저장하고, 아니면 가진 그림을 그대로 쓴다.
+- **가드:** `DigimonSpriteTests.testABlockPageAnsweredWith200NeverReplacesASprite` — 고친 줄을 되돌리면 실패.
+- **부류 스윕:** 인터넷 응답을 파일로 쓰는 곳은 이것뿐이다. 나머지(Cursor 사용량, 한도, 상태, 업데이트 확인)는
+  응답을 해석한 뒤 앱이 만든 값만 저장하거나 저장하지 않는다.

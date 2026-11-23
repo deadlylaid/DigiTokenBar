@@ -198,13 +198,23 @@ actor DigimonSpriteStore {
                 touch(local)
                 return cached
             }
-            guard status == 200, !data.isEmpty else { return cached }
+            // Only an image replaces the cache: a filtering proxy (e.g. a corporate one blocking
+            // wikimon.net) can answer 200 with its HTML block page, which would overwrite a good sprite.
+            guard status == 200, Self.isImage(data) else {
+                if status == 200 { AppLog.write("digimon sprite download not an image file=\(file)") }
+                return cached
+            }
             try data.write(to: local, options: .atomic)
             return data
         } catch {
             AppLog.write("digimon sprite download failed file=\(file): \(error)")
             return cached
         }
+    }
+
+    /// GIF or PNG by its signature, the two formats Wikimon serves for sprites.
+    static func isImage(_ data: Data) -> Bool {
+        data.starts(with: Array("GIF8".utf8)) || data.starts(with: [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
     }
 
     private func touch(_ url: URL) {
