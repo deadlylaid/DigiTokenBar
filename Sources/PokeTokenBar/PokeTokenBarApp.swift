@@ -26,6 +26,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private var digimon: DigimonStore!
     private var digimonHub: DigimonSceneHub!
     private var deskPet: DigimonDeskPet!
+    /// The home in a window, for when the menu bar icon is hidden (`HomeWindowController`).
+    private var homeWindow: HomeWindowController!
     /// The menu sprite being downloaded; `menuSpriteKey` is set only once it is shown.
     private var menuLoadingKey: String?
     private let navigation = PopoverNavigation()
@@ -140,6 +142,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
         popover.behavior = .transient
         popover.delegate = self   // didShow: outside-click monitor; didClose: 호스팅 해제 + 모니터 제거
+
+        // Its own navigation, so the window and the popover can show different screens at once.
+        let windowNavigation = PopoverNavigation()
+        homeWindow = HomeWindowController { [unowned self] in
+            AnyView(VStack(spacing: 0) {
+                MenuBarHint()
+                PopoverView()
+            }
+            .environment(store).environment(languageStore).environment(updater).environment(windowNavigation)
+            .environment(digimon).environment(digimonHub))
+        }
+        if AppEnv.isBundledApp, HomeWindowController.opensOnLaunch(.standard) { homeWindow.show() }
 
         observeStore()
         observeMenuSprite()
@@ -636,6 +650,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
             rootView: PopoverView()
                 .environment(store).environment(languageStore).environment(updater).environment(navigation)
                 .environment(digimon).environment(digimonHub))
+    }
+
+    /// Opening the app while it runs (Finder, Spotlight, `open -a`) shows the home window: the menu bar
+    /// icon may be hidden behind the notch, and this is the way back in.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        homeWindow.show()
+        return false
     }
 
     @objc private func statusItemClicked() {

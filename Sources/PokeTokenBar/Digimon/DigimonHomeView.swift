@@ -312,6 +312,11 @@ struct DigimonText {
            : "How you raise it, the card and a little luck decide its form"
     }
     var eggReady: String { ko ? "알을 고르면 바로 부화해요" : "Pick an egg and it hatches right away" }
+    /// The home window's first line (`MenuBarHint`).
+    var menuBarHint: String {
+        ko ? "DigiTokenBar는 화면 오른쪽 위 메뉴 막대에 살아요. 아이콘이 안 보이면 메뉴 막대가 꽉 차서 노치 뒤에 숨은 거예요. 다른 메뉴 막대 앱을 줄이거나, 언제든 이 앱을 다시 열면(Spotlight, 응용 프로그램 폴더) 이 창이 떠요."
+           : "DigiTokenBar lives in the menu bar, top right. If its icon is missing, a full menu bar has pushed it behind the notch: close a few other menu bar apps, or open this app again any time (Spotlight, Applications) to get this window."
+    }
 }
 
 /// The pet scene at the top of the popover Home. It stays outside the scroll view: a web view
