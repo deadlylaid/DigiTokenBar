@@ -36,9 +36,14 @@ LOGIC_CORE=(
 echo "▶ swift test (--enable-code-coverage)"
 swift test --enable-code-coverage
 
-PROF=$(find .build -name 'default.profdata' | head -1)
-# dSYM 안에도 같은 이름의 DWARF 바이너리가 있어 head -1 이 그걸 집으면 llvm-cov 가 실패한다 → 제외.
-BIN=$(find .build -name 'PokeTokenBarPackageTests' -type f ! -path '*.dSYM/*' | head -1)
+# Ask SwiftPM where this toolchain put the profile and the test binary instead of guessing names: Xcode 27
+# writes .build/out/Products/Debug/{codecov/default.profdata, PokeTokenBarTests.xctest/Contents/MacOS/
+# PokeTokenBarTests}, older toolchains .build/<triple>/debug/{codecov, PokeTokenBarPackageTests.xctest}.
+# A `find .build` for the old name found nothing on Xcode 27, or a stale binary from an older build.
+PROF="$(dirname "$(swift test --show-codecov-path)")/default.profdata"
+[[ -f "$PROF" ]] || PROF=""
+# dSYM 안에도 같은 이름의 DWARF 바이너리가 있어 그걸 집으면 llvm-cov 가 실패한다 → 제외.
+BIN=$(find "$(swift build --show-bin-path)" -path '*.xctest/Contents/MacOS/*' -type f ! -path '*.dSYM/*' | head -1)
 if [[ -z "$PROF" || -z "$BIN" ]]; then
   echo "✗ 커버리지 산출물(profdata/binary)을 찾지 못했습니다." >&2
   exit 1
