@@ -123,4 +123,69 @@ final class DigimonSceneBugTests: XCTestCase {
         XCTAssertEqual(splatY, ground - 2, accuracy: 1, "it lands on the ground and splats there")
         XCTAssertEqual((r["x"] as? Double ?? 0) - (r["ox"] as? Double ?? 0), 70, accuracy: 12, "about 70 px ahead")
     }
+
+    /// Issue #3: grabbing the desktop pet mid-battle turned it into 'held', which took over the state that
+    /// plays the battle, so the battle stopped for good. Grabbing (and dropping, even with a shift back inside
+    /// the screen) must leave a battle and a Jogress running, as it already left an evolution.
+    func testGrabbingMidBattleOrJogressDoesNotStopIt() async throws {
+        let scene = DigimonScene(mode: .desk)
+        let window = NSWindow(contentRect: NSRect(x: -10000, y: -10000, width: 360, height: 168), styleMask: .borderless,
+                              backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        scene.webView.frame = NSRect(x: 0, y: 0, width: 360, height: 168)
+        window.contentView = scene.webView
+        window.orderFront(nil)
+        defer { window.close() }
+        scene.sprite(key: "agumon", dataURI: try blockSprite(height: 30))
+        scene.sprite(key: "greymon", dataURI: try blockSprite(height: 40))
+        scene.apply(["key": "agumon", "line": "agumon", "stage": 4, "sleeping": false, "lang": "ko"])
+        var ready = false
+        for _ in 0..<100 where !ready {
+            try await Task.sleep(for: .milliseconds(100))
+            ready = (try? await js(scene, "typeof pet !== 'undefined' && !!pet && !!assets['agumon'] && !!assets['greymon']")) as? Bool ?? false
+        }
+        XCTAssertTrue(ready, "the scene did not start")
+        let battle = try await js(scene, """
+        (() => {
+          pet.bug = null; pet.bugIn = 1e9; pet.shots = []; pet.booms = []; pet.x = 140; pet.enter('idle', {dur: 99999});
+          pet.duel({foe: 'greymon', rounds: [{a: 'me', hit: true}, {a: 'foe', hit: false}, {a: 'me', hit: true}], won: true});
+          const xFoe = pet.fight.fx; let x0 = null, held = false, decided = false;
+          for (let i = 0; i < 3000 && pet.fight; i++) {
+            if (i === 60) {
+              x0 = pet.x;
+              pet.grab();
+              for (let k = 0; k < 10; k++) { pet.dragMove(5); pet.update(16); held = held || pet.state === 'held'; }
+              pet.drop(30);
+            }
+            pet.update(16);
+            held = held || pet.state === 'held';
+            // Reached the end of its rounds and showed the result, rather than the fight being dropped.
+            decided = decided || (!!pet.fight && pet.fight.done > 0 && pet.fight.i === pet.fight.rounds.length);
+          }
+          return JSON.stringify({finished: !pet.fight, decided, held, state: pet.state,
+                                 callout: pet.callout ? pet.callout.text : null, xFoe});
+        })()
+        """) as? String
+        let b = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(battle).utf8)) as? [String: Any])
+        XCTAssertEqual(b["held"] as? Bool, false, "a grab mid-battle does not lift the Digimon out of the fight")
+        XCTAssertEqual(b["decided"] as? Bool, true, "every round plays and the result shows: \(b)")
+        XCTAssertEqual(b["finished"] as? Bool, true, "then the fight ends: \(b)")
+
+        let jogress = try await js(scene, """
+        (() => {
+          pet.shots = []; pet.booms = []; pet.enter('idle', {dur: 99999});
+          pet.merge({partner: 'greymon'});
+          for (let i = 0; i < 20; i++) pet.update(16);
+          const before = pet.state;
+          pet.grab(); pet.update(16);
+          const during = pet.state;
+          pet.drop(30);
+          return JSON.stringify({before, during, fight: !!pet.fight});
+        })()
+        """) as? String
+        let j = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(XCTUnwrap(jogress).utf8)) as? [String: Any])
+        XCTAssertEqual(j["before"] as? String, "merge")
+        XCTAssertEqual(j["during"] as? String, "merge", "a grab mid-Jogress leaves the merge running")
+        XCTAssertEqual(j["fight"] as? Bool, true)
+    }
 }

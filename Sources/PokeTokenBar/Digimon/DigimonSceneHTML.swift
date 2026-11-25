@@ -453,13 +453,18 @@ class Pet {
     if (a.react === 'done') this.cheer();
     else if (a.react === 'waiting') this.notice();
   }
-  grab() { if (this.state === 'evolve') return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
+  // Not while evolving, battling or merging (`fight` covers both): 'held' would take over the state that
+  // plays them, and a battle grabbed mid-round stopped for good (issue #3). The window still follows the mouse.
+  grab() { if (this.state === 'evolve' || this.fight) return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
   dragMove(dx) { if (this.state === 'held') this.d.v += dx * .004; }
   // `shift` (scene units): how far the app pulled the window back inside the screen. The Digimon keeps
   // its spot on the screen, so it can be dropped at the very edge though the window cannot go past it.
   // Where it lands is its home for "stay in place", and the app keeps it for the next launch.
   drop(shift = 0) {
     if (this.state === 'held') this.enter('hop', {h: 3, dur: 420});
+    // Mid-fight both Digimon (and the shots between them) stay where they are in the window; moving only
+    // ours would pull it away from the foe. After the fight it walks back home as usual.
+    if (this.fight) return;
     this.shiftBy(shift);
   }
   // Moves the Digimon `u` scene units inside the window (the window moved the other way) and keeps the
