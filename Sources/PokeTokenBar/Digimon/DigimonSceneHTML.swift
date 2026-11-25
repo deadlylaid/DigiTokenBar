@@ -159,6 +159,23 @@ const BUG_GOLD = {k: '#6b4a00', w: '#fffbe6', p: '#ffc93a', r: '#ff9a2a'};
 // Digimental (Miracles, Fate; step 16).
 const SPARK = ['#ffffff', '#ffd84a'];
 const GOLD_SPARK = ['#ffc93a', '#ffe27a', '#fff3b0'];
+// Idle activities (issue #5): now and then, from an idle pick (`next()`, about every 3.5 s of idle life),
+// one small activity with props drawn in code. The chance per pick and the quiet time after one give on
+// average one every ~3 minutes on the desktop (60 s quiet + 1/.03 picks x ~3.5 s) and one every ~70 s in
+// the popover, which is open only briefly. Everything runs in the frame loop; nothing ticks without one.
+const ACT_CHANCE = {desk: .03, popover: .07};
+const ACT_GAP = {desk: 60000, popover: 20000};
+// Props, our own pixel art (one character = one prop pixel, scaled with the stage like attacks).
+const BOWL = ['.cccccccccc.', 'cwwwwwwwwwwc', 'cWWWWWWWWWWc', '.cWWWWWWWWc.', '..cccccccc..'];
+const BOWL_C = {c: '#7d8798', w: '#d6f2ff', W: '#6cc2f0'};
+const POT = ['.dddddddddd.', 'dssssssssssd', 'hdggggggggdh', '.dggggggggd.', '.dGggggggGd.', '..dddddddd..'];
+const POT_C = {d: '#3b3f4a', s: '#e0903a', g: '#5b616c', G: '#7a808c', h: '#3b3f4a'};
+const MEAT = ['..mmmmmmm..', 'BBmMMMMMmBB', 'BbmMMhMMmbB', '..mmmmmmm..'];
+const MEAT_C = {m: '#8a4a22', M: '#c96a2e', h: '#e8955a', B: '#fbf6e8', b: '#d9d0bc'};
+const LAPTOP = ['.kkkkkkkkk.', '.ksssssssk.', '.ksssssssk.', '.ksssssssk.', '.ksssssssk.', '.kkkkkkkkk.', 'kpppppppppk', '.kkkkkkkkk.'];
+const LAPTOP_C = {k: '#3a3f4a', s: '#1e2533', p: '#a7adb8'};
+const CODE_C = ['#7cff9a', '#7cc8ff', '#ffd84a', '#ff9fc8'];
+const HOLDS = ['#ff5a6a', '#ffc93a', '#59b4ff', '#7cd66b'];
 
 function makeCoin() {
   const c = document.createElement('canvas'); c.width = c.height = 12;
@@ -205,12 +222,13 @@ class Pet {
     this.guest = null; this.guests = [];   // visitors: the one walking through, the ones waiting
     this.stars = []; this.starIn = rand(1500, 4000);   // shooting stars on a meteor shower
     this.loves = []; this.clock = 0; this.touched = 0;  // hearts from a stroke; scene time and the last touch (ms)
+    this.act = null; this.actAt = -1e9;   // an idle activity (state 'act') and when the last one ended
     this.resize(); this.x = this.center(); this.enter('idle', {dur: 900});
   }
   canAct() { return ['idle', 'walk', 'turn', 'stretch', 'alert'].includes(this.state); }
   attack() {
     if (this.isEgg()) { if (this.canAct() || this.state === 'wobble') this.enter('wobble', {dur: 700}); return; }
-    if (!this.canAct() && this.state !== 'hop' && this.state !== 'eat') return;
+    if (!this.canAct() && this.state !== 'hop' && this.state !== 'eat' && this.state !== 'act') return;
     this.chip = null;
     if (this.bug && !this.bug.dead) this.facing = (this.bug.x + 5) < (this.x + 32) ? -1 : 1;
     const atk = moveOf(this.key);
@@ -356,9 +374,15 @@ class Pet {
     this.cv.style.width = this.cssW + 'px'; this.cv.style.height = this.cssH + 'px';
     this.cv.width = Math.round(this.cssW * DPR); this.cv.height = Math.round(this.cssH * DPR);
     if (this.x !== undefined) this.clampX();
+    if (this.act) this.enter('idle');
   }
   clampX() { const b = this.bb(); this.x = Math.max(-b.l + 2, Math.min(this.worldW - b.r - 2, this.x)); }
-  enter(s, d = {}) { this.state = s; this.t = 0; this.d = d; if (s === 'idle' && !d.dur) d.dur = rand(1400, 3400); }
+  // Leaving 'act' for any state (a bug, a battle, a visitor, a grab, sleep, food ...) ends the activity and
+  // drops its props with it: they live only in `this.act`, so nothing can be left standing.
+  enter(s, d = {}) {
+    if (this.act && s !== 'act') { this.act = null; this.actAt = this.clock; }
+    this.state = s; this.t = 0; this.d = d; if (s === 'idle' && !d.dur) d.dur = rand(1400, 3400);
+  }
   next() {
     const r = Math.random();
     if (this.isEgg()) { r < .45 ? this.enter('wobble', {dur: 900}) : this.enter('idle'); return; }
@@ -378,6 +402,7 @@ class Pet {
     // was last dropped, the middle at first).
     const home = this.home === undefined ? this.center() : this.home;
     if (S.still && Math.abs(this.x - home) > 3) { this.startWalk(home); return; }
+    if (this.tryActivity()) return;
     const walk = S.still ? 0 : (this.desk ? .58 : .5) * (S.mood ? .45 : 1);
     if (r < walk) this.startWalk();
     else if (r < walk + .17) { this.facing = -this.facing; this.enter('idle', {dur: rand(900, 1800)}); }
@@ -470,6 +495,7 @@ class Pet {
   // Moves the Digimon `u` scene units inside the window (the window moved the other way) and keeps the
   // spot as its home; the app saves it for the next launch.
   shiftBy(u) {
+    if (u && this.act) this.enter('idle');   // its props stand where they were put
     if (u) { this.x += u; this.clampX(); }
     this.home = this.x;
     post({cmd: 'petHome', offset: this.x - this.center()});
@@ -617,7 +643,7 @@ class Pet {
   greet(G) {
     const gb = assets[G.key].bb;
     if (G.rare) this.sparkle(G.x + (gb.l + gb.r) / 2, this.ground() - 64 + (gb.t + gb.b) / 2, 18);
-    if (this.state === 'sleep' || this.isEgg() || !(this.canAct() || this.state === 'hop')) return;
+    if (this.state === 'sleep' || this.isEgg() || !(this.canAct() || this.state === 'hop' || this.state === 'act')) return;
     const b = this.bb();
     this.facing = (G.x + (gb.l + gb.r) / 2) < (this.x + (b.l + b.r) / 2) ? -1 : 1;
     if (G.greet) this.callout = {text: G.greet, t: 0, life: 1800};
@@ -671,6 +697,343 @@ class Pet {
     const img = F.white ? A.sil[(dark && !this.desk) ? 1 : 0] : flash ? A.sil[1] : A.img;
     c.drawImage(img, -(bb.l + bb.r) / 2, -bb.b, 64, 64);
     c.restore();
+    c.globalAlpha = 1;
+  }
+  // ---- idle activities (issue #5): wash, cook, climb, nap, ball, code ----
+  // Prop pixel size (whole pixels): 1 for a baby, 2 from Child up, where single pixels read as crumbs.
+  actP() { return S.stage <= 2 ? 1 : 2; }
+  // Where a prop `w` wide stands in front of the pet, `gap` away; it turns around when that side has no room.
+  actSpot(w, gap = 2) {
+    const b = this.bb(), W = this.worldW;
+    for (const f of [this.facing, -this.facing]) {
+      const x = f < 0 ? this.x + b.l - gap - w : this.x + b.r + gap;
+      if (x >= 2 && x + w <= W - 2) return {x, f};
+    }
+    return null;
+  }
+  // What it may start now, with weights: nothing for an egg, while asleep, or with anything else going on.
+  // Staying in place (Settings) leaves out the ball, the only one that runs around.
+  actChoices() {
+    if (this.isEgg() || S.sleeping || this.state !== 'idle' || this.fight || this.chip || this.guest || this.guests.length) return [];
+    if (this.bug && !this.bug.dead) return [];
+    const P = this.actP(), b = this.bb(), out = [];
+    if (this.actSpot(12 * P)) out.push(['wash', 1]);
+    if (this.actSpot(12 * P, 11 * P + 3)) out.push(['cook', 1]);
+    if (this.actSpot(7 * P, -2 * P) && this.ground() - (b.b - b.t) - 2 >= 10) out.push(['climb', 1]);
+    out.push(['nap', S.mood === 'sleepy' ? 3 : 1]);
+    if (!S.still && this.worldW - (b.r - b.l) >= 70 && this.actSpot(4 * P + 2, 1)) out.push(['ball', 1]);
+    if (this.working && this.actSpot(11 * P, 0)) out.push(['code', 3]);
+    return out;
+  }
+  // From next(): now and then (ACT_CHANCE a pick, never within ACT_GAP of the last one) start one.
+  // `force` (tests) skips the dice and the quiet time, never the rules. Returns what started, or null.
+  tryActivity(force = false) {
+    if (!force) {
+      if (this.clock - this.actAt < ACT_GAP[VIEW]) return null;
+      const chance = ACT_CHANCE[VIEW] * (S.mood === 'sick' ? .5 : 1) * (this.working ? 2 : 1);
+      if (Math.random() >= chance) return null;
+    }
+    const ch = this.actChoices();
+    if (!ch.length) return null;
+    let r = Math.random() * ch.reduce((n, c) => n + c[1], 0);
+    const kind = (ch.find(c => (r -= c[1]) < 0) || ch[ch.length - 1])[0];
+    return this.startActivity(kind) ? kind : null;
+  }
+  startActivity(kind) {
+    if (!this.actChoices().some(c => c[0] === kind)) return false;
+    const P = this.actP(), b = this.bb(), hgt = b.b - b.t, gy = this.ground(), a = {kind, P, fade: 0};
+    const place = (w, gap) => { const sp = this.actSpot(w, gap); this.facing = sp.f; a.px = sp.x; a.pw = w; };
+    if (kind === 'wash') place(12 * P, 2);
+    else if (kind === 'cook') { place(12 * P, 11 * P + 3); a.steam = []; a.steamIn = 0; }
+    else if (kind === 'code') { place(11 * P, 0); a.dur = rand(14000, 20000); a.tick = 0; }
+    else if (kind === 'climb') {
+      place(7 * P, -2 * P);   // the wall stands a little into its front, so it holds on to it
+      a.lift = Math.min(20, gy - hgt - 2);
+      a.wallH = Math.min(gy - 2, a.lift + Math.round(hgt * .75));
+      a.fade = 1;
+    } else if (kind === 'ball') {
+      const r = 2 * P + 1, sp = this.actSpot(2 * r, 1);
+      this.facing = sp.f;
+      a.ball = {x: sp.x + r, y: gy - r, vx: 0, vy: 0, r, rot: 0};
+      a.kicks = 0; a.phase = 'kick'; a.pt = 0; a.kicked = false;
+    } else if (kind === 'nap') a.bub = 0;
+    this.enter('act', {});
+    this.act = a;
+    return true;
+  }
+  // The nose bubble of a nap: in front of the face, growing and breathing.
+  noseAt() {
+    const a = this.act, b = this.bb(), f = this.facing, hgt = b.b - b.t, P = a ? a.P : 1;
+    const r = (1.2 + 4.3 * (a && a.bub || 0)) * P * (1 + .18 * Math.sin(this.t / 325));
+    // Just inside the front edge (arms and tails often stick out past the face), hanging off the nose.
+    return {x: (f < 0 ? this.x + b.l : this.x + b.r) + this.lean - f * (b.r - b.l) * .08 + f * r * .6, y: this.ground() - this.y - hgt * .58, r};
+  }
+  updateAct(dt, idleBreath) {
+    const a = this.act;
+    if (!a) { this.enter('idle'); return; }
+    const t = this.t, f = this.facing, P = a.P, b = this.bb(), hgt = b.b - b.t, gy = this.ground();
+    const front = f < 0 ? this.x + b.l : this.x + b.r;
+    if (a.kind === 'wash') {
+      // Two dips to the water, a good shake with droplets flying off, a sparkle; the bowl fades away.
+      const bx = a.px + a.pw / 2, by = gy - BOWL.length * P;
+      if (t < 1400) {
+        const ph = (t % 700) / 700, dip = Math.sin(Math.PI * ph);
+        this.lean = f * 2.4 * dip; this.sway = -2 * dip; this.sy = 1 - .05 * dip; this.sx = 1 / this.sy; this.breath = .02;
+        const n = Math.floor(t / 700);
+        if (ph > .5 && a.dips !== n + 1) {
+          a.dips = n + 1;
+          for (let i = 0; i < 5; i++) this.parts.push({x: bx + rand(-3, 3) * P, y: by, vx: rand(-18, 18), vy: rand(-55, -30), t: 0, life: rand(350, 600), c: Math.random() < .5 ? '#8fd0ff' : '#ffffff', s: P});
+        }
+      } else if (t < 2800) {
+        this.sway = 3.2 * Math.sin(t / 26); this.lean = -this.sway * .5; this.sy = 1 + .03 * Math.sin(t / 19); this.breath = .02;
+        a.drop = (a.drop || 0) + dt;
+        if (a.drop >= 70) {
+          a.drop = 0;
+          const cx = this.x + (b.l + b.r) / 2, side = Math.random() < .5 ? -1 : 1;
+          this.parts.push({x: cx + side * (b.r - b.l) * .45, y: gy - rand(.3, .9) * hgt, vx: side * rand(30, 65), vy: rand(-45, -15), t: 0, life: rand(300, 520), c: Math.random() < .7 ? '#5fb8e6' : '#bfe8ff', s: P});
+        }
+      } else {
+        idleBreath();
+        if (!a.shone) { a.shone = true; this.sparkle(this.x + (b.l + b.r) / 2, gy - hgt + 2, 8); }
+        a.fade = Math.min(1, (t - 2800) / 600);
+        if (t >= 3400) this.enter('idle', {dur: rand(900, 1800)});
+      }
+      return;
+    }
+    if (a.kind === 'cook') {
+      // Stirring a pot on a little fire (steam rising), a ding, a piece of meat hops out and is eaten in three bites.
+      const potTop = gy - (POT.length + 3) * P;
+      a.steam = a.steam.filter(w => { w.t += dt; w.y -= 12 * dt / 1000; w.x += w.vx * dt / 1000; return w.t < w.life; });
+      if (t < 3000) {
+        a.steamIn -= dt;
+        if (a.steamIn <= 0) { a.steamIn = 260; a.steam.push({x: a.px + rand(2, a.pw - 2), y: potTop, vx: rand(-4, 4), t: 0, life: rand(700, 1100)}); }
+        const st = Math.sin(t / 240);
+        this.lean = f * 1.4 * st; this.sway = .9 * st; this.rot = .035 * st; this.breath = .02;
+        return;
+      }
+      if (!a.meat) {
+        this.excl = 600;
+        const mw = MEAT[0].length * P;
+        a.meat = {x0: a.px + a.pw / 2, y0: potTop - 2 * P, x1: front + f * (mw / 2 + 1), y1: gy - MEAT.length * P, t: 0, bites: 0, x: 0, y: 0};
+      }
+      const m = a.meat; m.t += dt;
+      const fly = Math.min(1, m.t / 450);
+      m.x = m.x0 + (m.x1 - m.x0) * fly; m.y = m.y0 + (m.y1 - m.y0) * fly - 16 * Math.sin(Math.PI * fly);
+      a.fade = Math.min(1, m.t / 900);   // the pot goes; the meat stays until eaten
+      const k = m.t - 600;
+      if (k < 0) { idleBreath(); return; }
+      const bite = 420, n = Math.floor(k / bite), kk = k % bite;
+      if (n >= 3) { this.enter('hop', {h: this.hopH * .6, dur: 460, then: () => this.enter('hop', {h: this.hopH * .4, dur: 380})}); return; }
+      const dip = kk < 160 ? Math.sin(Math.PI * kk / 160) : 0;
+      this.lean = 1.6 * dip * f; this.sway = -2.4 * dip; this.sy = 1 - .04 * dip; this.breath = .02;
+      const bites = n + (kk >= 160 ? 1 : 0);
+      if (bites > m.bites) {
+        m.bites = bites;
+        for (let i = 0; i < 3; i++) this.parts.push({x: m.x, y: m.y + 2 * P, vx: rand(-15, 15), vy: rand(-30, -10), t: 0, life: rand(250, 420), c: MEAT_C.M, s: 1});
+      }
+      return;
+    }
+    if (a.kind === 'climb') {
+      // A little climbing wall in front: it fades in, three pulls up, a wobble at the top, a slide down, a landing.
+      a.fade = t < 300 ? 1 - t / 300 : t > 3950 ? Math.min(1, (t - 3950) / 300) : 0;
+      if (t < 300) { idleBreath(); return; }
+      if (t < 2700) {
+        const k = t - 300, st = Math.floor(k / 800), p = (k % 800) / 800, from = a.lift * st / 3, to = a.lift * (st + 1) / 3;
+        if (p < .3) { this.y = from; this.sy = 1 - .1 * Math.sin(Math.PI * p / .3); this.sx = 1 / this.sy; }
+        else { const e = easeIO((p - .3) / .7); this.y = from + (to - from) * e; this.sy = 1 + .05 * Math.sin(Math.PI * e); this.sx = 1 / this.sy; }
+        this.lean = f * 1.2; this.rot = f * .07; this.breath = .02;
+        if (p >= .3 && a.pull !== st + 1) {
+          a.pull = st + 1;
+          for (let i = 0; i < 2; i++) this.parts.push({x: a.px + rand(0, a.pw), y: gy - this.y, vx: rand(-10, 10), vy: rand(-12, 4), t: 0, life: 380, c: '#9a8a72', s: 1});
+        }
+        return;
+      }
+      if (t < 3300) { this.y = a.lift; this.rot = f * .07; this.sway = 2.2 * Math.sin(t / 80); this.lean = f * 1.2 + .8 * Math.sin(t / 110); this.breath = .02; return; }
+      if (t < 3700) {
+        const p = (t - 3300) / 400; this.y = a.lift * (1 - p * p); this.sy = 1.06; this.sx = .95; this.lean = f * .8;
+        return;
+      }
+      if (!a.landed) {
+        a.landed = true;
+        for (let i = 0; i < 6; i++) this.parts.push({x: front + rand(-4, 4), y: gy - 1, vx: rand(-22, 22), vy: rand(-18, -6), t: 0, life: rand(250, 420), c: '#c9b99c', s: 1});
+      }
+      if (t < 3950) { this.sy = .88; this.sx = 1.08; return; }
+      idleBreath();
+      if (t >= 4250) this.enter('idle', {dur: rand(900, 1800)});
+      return;
+    }
+    if (a.kind === 'nap') {
+      // It nods off, a nose bubble swells with each breath, pops, and it wakes with a start.
+      const e = easeIO(Math.min(1, t / 900)), slow = t > 900 ? Math.sin((t - 900) / 650) : 0;
+      this.lean = f * (1.3 * e + .4 * slow); this.sy = 1 - .03 * e; this.sx = 1 / this.sy;
+      this.breath = .02 + (t > 900 ? .04 * (.5 + .5 * slow) : 0);
+      if (t > 900) a.bub = Math.min(1, (t - 900) / 4400);
+      if (t >= 5300) {
+        const nb = this.noseAt();
+        for (let i = 0; i < 10; i++) {
+          const ang = TAU * i / 10;
+          this.parts.push({x: nb.x + Math.cos(ang) * nb.r, y: nb.y + Math.sin(ang) * nb.r, vx: Math.cos(ang) * 30, vy: Math.sin(ang) * 30 - 10, t: 0, life: rand(250, 400), c: Math.random() < .5 ? '#ffffff' : '#bfe8ff', s: 1});
+        }
+        this.excl = 700;
+        this.enter('hop', {h: this.hopH * .9, dur: 480});
+      }
+      return;
+    }
+    if (a.kind === 'ball') {
+      // A ball with gravity, bounces that lose speed, rolling friction and the scene's edges for walls.
+      const B = a.ball, W = this.worldW;
+      B.vy += 320 * dt / 1000; B.x += B.vx * dt / 1000; B.y += B.vy * dt / 1000;
+      if (B.y >= gy - B.r) { B.y = gy - B.r; B.vy = Math.abs(B.vy) > 25 ? -B.vy * .5 : 0; B.vx *= Math.max(0, 1 - 1.6 * dt / 1000); }
+      if (B.x - B.r < 1) { B.x = 1 + B.r; B.vx = Math.abs(B.vx) * .6; }
+      if (B.x + B.r > W - 1) { B.x = W - 1 - B.r; B.vx = -Math.abs(B.vx) * .6; }
+      if (Math.abs(B.vx) < 3 && B.vy === 0) B.vx = 0;
+      B.rot += B.vx * dt / 1000 / B.r;
+      const still = B.vx === 0 && B.vy === 0;
+      const dir = Math.sign(B.x - (this.x + (b.l + b.r) / 2)) || f;
+      a.pt += dt;
+      if (a.phase === 'kick') {
+        // Wind up, kick: the third kick goes high, and then it watches the ball come to rest.
+        if (a.pt < 220) { const p = a.pt / 220; this.lean = -f * 2 * p; this.sy = 1 - .08 * p; this.sx = 1 / this.sy; }
+        else if (a.pt < 340) {
+          this.lean = f * 4; this.sx = 1.06; this.sy = .95;
+          if (!a.kicked) {
+            a.kicked = true; a.kicks++;
+            const last = a.kicks >= 3;
+            B.vx = f * (last ? rand(45, 60) : rand(60, 95)); B.vy = -(last ? rand(120, 140) : rand(60, 100));
+            for (let i = 0; i < 3; i++) this.parts.push({x: B.x, y: gy - 1, vx: rand(-12, 12), vy: rand(-14, -4), t: 0, life: 300, c: '#c9b99c', s: 1});
+          }
+        } else { a.phase = 'chase'; a.pt = 0; a.kicked = false; }
+        return;
+      }
+      if (a.phase === 'end') {
+        idleBreath();
+        a.fade = Math.min(1, a.pt / 500);
+        if (a.pt >= 500) this.enter('hop', {h: this.hopH * 1.1, dur: 520});
+        return;
+      }
+      if (this.t > 15000 || (a.kicks >= 3 && still && a.pt > 400)) { a.phase = 'end'; a.pt = 0; return; }
+      // Run after it: stop with its front just behind the ball, then kick once it lies still.
+      const tx = dir > 0 ? B.x - B.r - 1 - b.r : B.x + B.r + 1 - b.l;
+      const goal = Math.max(-b.l + 2, Math.min(W - b.r - 2, tx)), gap = goal - this.x;
+      if (Math.abs(gap) > 1) {
+        this.facing = Math.sign(gap);
+        this.x += Math.sign(gap) * Math.min(this.speed * 1.4 * dt / 1000, Math.abs(gap));
+        const ph = (this.t % 300) / 300, lift = Math.sin(Math.PI * ph);
+        this.y = 1.6 * lift; this.sy = 1 - .035 * (1 - lift); this.sx = 1 / this.sy; this.sway = -1.6; this.breath = .02;
+      } else {
+        idleBreath();
+        if (still && a.kicks < 3 && a.pt > 250) { this.facing = dir; a.phase = 'kick'; a.pt = 0; }
+      }
+      return;
+    }
+    if (a.kind === 'code') {
+      // At a little laptop while the coding agent works: typing in bursts, keys clicking.
+      if (!this.working || t >= a.dur) { this.enter('stretch', {dur: 1100}); return; }
+      const k = Math.floor(t / 110) % 2, burst = Math.sin(t / 900) > -.3;
+      this.breath = .02; this.lean = f * (1 + (burst ? .5 * k : 0)); this.sy = 1 - (burst ? .02 * k : 0); this.sx = 1 / this.sy;
+      a.tick += dt;
+      if (burst && a.tick > 260) {
+        a.tick = 0;
+        this.parts.push({x: a.px + rand(2, a.pw - 2), y: gy - 2 * P, vx: rand(-6, 6), vy: rand(-26, -14), t: 0, life: 260, c: '#ffffff', s: 1});
+      }
+      return;
+    }
+  }
+  // An activity's props: those behind the pet (`front` false) and those in front of it.
+  drawAct(c, gy, dark, front) {
+    const a = this.act, P = a.P, desk = this.desk;
+    const bits = (rows, col, x, y, skip) => rows.forEach((row, r) => [...row].forEach((v, k) => {
+      if (v === '.' || !col[v] || (skip && skip(k))) return;
+      c.fillStyle = col[v]; c.fillRect(Math.round(x) + k * P, Math.round(y) + r * P, P, P);
+    }));
+    const shadow = (cx, w) => {
+      c.fillStyle = desk ? 'rgba(0,0,0,.2)' : (dark ? 'rgba(0,0,0,.3)' : 'rgba(60,50,30,.12)');
+      c.beginPath(); c.ellipse(cx, gy + .5, w / 2, desk ? 1.6 : 2, 0, 0, TAU); c.fill();
+    };
+    const alpha = 1 - (a.fade || 0);
+    if (!front && a.kind === 'wash') {
+      c.globalAlpha = alpha;
+      shadow(a.px + a.pw / 2, a.pw);
+      bits(BOWL, BOWL_C, a.px, gy - BOWL.length * P);
+      // A glint drifting across the water.
+      const gx = Math.round(a.px) + P * (2 + Math.floor(performance.now() / 160) % 8);
+      c.fillStyle = '#ffffff'; c.fillRect(gx, gy - (BOWL.length - 1) * P, P, P);
+    }
+    if (!front && a.kind === 'cook') {
+      const top = gy - (POT.length + 3) * P;
+      c.globalAlpha = alpha;
+      shadow(a.px + a.pw / 2, a.pw);
+      // Logs and a flickering fire under the pot.
+      c.fillStyle = '#7a4a2a'; c.fillRect(Math.round(a.px + 2 * P), gy - P, 8 * P, P);
+      const fl = Math.floor(performance.now() / 120) % 2;
+      for (let i = 0; i < 3; i++) {
+        const fx = Math.round(a.px + (3 + i * 2.5) * P), h = ((i + fl) % 2 ? 2 : 1) * P;
+        c.fillStyle = '#ff7a2a'; c.fillRect(fx, gy - P - h, P, h);
+        c.fillStyle = '#ffd84a'; c.fillRect(fx, gy - P - h, P, P);
+      }
+      bits(POT, POT_C, a.px, top);
+      c.fillStyle = desk || dark ? '#f1f3f7' : '#c8cfd9';
+      for (const w of a.steam) {
+        c.globalAlpha = alpha * .8 * (1 - w.t / w.life);
+        c.fillRect(Math.round(w.x), Math.round(w.y), P, P);
+        c.fillRect(Math.round(w.x) + (Math.sin(w.t / 120) > 0 ? P : -P), Math.round(w.y) - P, P, P);
+      }
+      c.globalAlpha = 1;
+      const m = a.meat;
+      if (m) {
+        // Bitten from the side that faces the pet: three columns a bite, the far bone stays to the end.
+        const cols = MEAT[0].length, cut = m.bites * 3, nearLeft = this.facing > 0;
+        bits(MEAT, MEAT_C, m.x - cols * P / 2, m.y, k => nearLeft ? k < cut : k >= cols - cut);
+      }
+    }
+    if (!front && a.kind === 'climb') {
+      const H = a.wallH, x = Math.round(a.px), w = a.pw, top = gy - H;
+      c.globalAlpha = alpha;
+      shadow(x + w / 2, w + 2);
+      c.fillStyle = '#6e604c'; c.fillRect(x, top, w, H);
+      c.fillStyle = '#9a8a72'; c.fillRect(x + P, top + P, w - 2 * P, H - P);
+      c.fillStyle = '#bfae92'; c.fillRect(x + P, top + P, P, H - P);
+      c.fillStyle = '#857660';
+      for (let yy = top + 4 * P; yy < gy - P; yy += 4 * P) c.fillRect(x + P, yy, w - 2 * P, P);
+      // Colorful holds, the way a climbing wall has them.
+      for (let i = 0, yy = gy - 4 * P; yy > top + P; i++, yy -= 5 * P) {
+        c.fillStyle = HOLDS[i % HOLDS.length];
+        c.fillRect(x + (i % 2 ? w - 3 * P : P), yy, 2 * P, P);
+      }
+    }
+    if (!front && a.kind === 'ball') {
+      const B = a.ball;
+      c.globalAlpha = alpha;
+      shadow(B.x, B.r * 2 * (1 - Math.min(1, (gy - B.r - B.y) / 30) * .5));
+      this.pixBall(c, B.x, B.y, B.r, '#3a3f4a');
+      this.pixBall(c, B.x, B.y, B.r - .8, '#ffffff');
+      // Two stripes that turn as it rolls.
+      for (const [off, col] of [[0, '#ff5a6a'], [Math.PI / 2, '#59b4ff']]) {
+        c.fillStyle = col;
+        for (let k = -(B.r - 1.2); k <= B.r - 1.2; k += .5) {
+          c.fillRect(Math.round(B.x + Math.cos(B.rot + off) * k), Math.round(B.y + Math.sin(B.rot + off) * k), 1, 1);
+        }
+      }
+    }
+    if (front && a.kind === 'code') {
+      const top = gy - LAPTOP.length * P;
+      shadow(a.px + a.pw / 2, a.pw);
+      bits(LAPTOP, LAPTOP_C, a.px, top);
+      // Lines of code scrolling up the screen.
+      const scroll = Math.floor(performance.now() / 350);
+      for (let r = 0; r < 4; r++) {
+        const n = scroll + r, len = 2 + (n * 7 + r * 3) % 6;
+        c.fillStyle = CODE_C[n % CODE_C.length];
+        c.fillRect(Math.round(a.px) + 2 * P + ((n % 3) ? P : 0), top + (1 + r) * P, Math.min(len, 6) * P, P);
+      }
+    }
+    if (front && a.kind === 'nap' && a.bub > 0) {
+      const nb = this.noseAt();
+      c.globalAlpha = .85;
+      this.pixBall(c, nb.x, nb.y, nb.r, '#7cc0ea');
+      this.pixBall(c, nb.x, nb.y, Math.max(.5, nb.r - .9), '#d6f0ff');
+      c.fillStyle = '#ffffff'; c.fillRect(Math.round(nb.x - nb.r * .4), Math.round(nb.y - nb.r * .45), P, P);
+    }
     c.globalAlpha = 1;
   }
   // ---- update ----
@@ -768,12 +1131,12 @@ class Pet {
         if (g.dir > 0 && g.x + w > petL - 4 && g.x < petR) g.x = petL - 4 - w;
         if (g.dir < 0 && g.x < petR + 4 && g.x + w > petL) g.x = petR + 4;
       }
-    } else if (!this.isEgg() && this.canAct() && this.state !== 'alert') {
+    } else if (!this.isEgg() && (this.canAct() || this.state === 'act') && this.state !== 'alert') {
       this.bugIn -= dt;
       if (this.bugIn <= 0) { this.spawnBug(); this.bugIn = (this.desk ? rand(40000, 110000) : rand(25000, 60000)) * (S.fortune === 'bugSwarm' ? .5 : 1); }
     }
     const g0 = this.bug;
-    if (g0 && !g0.dead && !g0.noticed && g0.x > -4 && g0.x < this.worldW - 7 && this.canAct() && this.state !== 'alert' && !this.isEgg()) {
+    if (g0 && !g0.dead && !g0.noticed && g0.x > -4 && g0.x < this.worldW - 7 && (this.canAct() || this.state === 'act') && this.state !== 'alert' && !this.isEgg()) {
       g0.noticed = true; this.excl = 600; this.facing = (g0.x + 5) < (this.x + 32) ? -1 : 1; this.enter('alert', {});
     }
     const d = this.d;
@@ -781,6 +1144,7 @@ class Pet {
     switch (this.state) {
       case 'duel': idleBreath(); this.updateDuel(dt); break;
       case 'merge': idleBreath(); this.updateMerge(dt); break;
+      case 'act': this.updateAct(dt, idleBreath); break;
       case 'idle':
         idleBreath();
         if (this.bug && !this.bug.dead && this.bug.noticed && this.t > 350) { this.attack(); break; }
@@ -939,6 +1303,7 @@ class Pet {
       if (rem < 12) { if (ch.fromRight) c.drawImage(COIN, 0, 0, 12 - rem, 12, ch.x, ch.y, 12 - rem, 12); else c.drawImage(COIN, rem, 0, 12 - rem, 12, ch.x + rem, ch.y, 12 - rem, 12); }
       c.restore();
     }
+    if (this.act) this.drawAct(c, gy, dark, false);
     if (this.fight && this.fight.hurt > 0 && Math.floor(this.fight.hurt / 80) % 2 === 0 && !evolving) img = A.sil[1];
     if (this.state === 'merge' && this.d.white) img = A.sil[(dark && !desk) ? 1 : 0];
     c.save();
@@ -951,6 +1316,7 @@ class Pet {
     c.restore();
     if (this.fight) this.drawFoe(c, gy, dark);
     if (this.guest) this.drawGuest(c, gy, dark);
+    if (this.act) this.drawAct(c, gy, dark, true);
     if (S.mood === 'sick' && !evolving && this.state !== 'sleep') {
       // A sweat drop beside the head.
       const sx = Math.round(cx + (bb.r - bb.l) / 2 * (this.facing < 0 ? -1 : 1) * .6), sy = Math.round(gy - this.y - hgt + 3 + Math.sin(performance.now() / 260));
