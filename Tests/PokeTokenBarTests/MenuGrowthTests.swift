@@ -42,10 +42,10 @@ final class MenuGrowthTests: XCTestCase {
             XCTAssertEqual(MenuBarContent.lines(store: usage, digimon: digimon), ["0%"], "a new egg")
             digimon.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
             let grew = observe(usage, digimon)
-            digimon.update(todayTokensByProvider: ["claude_code": 2_000_001], todayDate: "d1", hasUsageData: true)
+            digimon.update(todayTokensByProvider: ["claude_code": 20_000_001], todayDate: "d1", hasUsageData: true)
             XCTAssertTrue(grew.changed)
             XCTAssertEqual(MenuBarContent.lines(store: usage, digimon: digimon), ["50%"],
-                           "2M tokens are 10 of the egg's 20 exp")
+                           "20M tokens are 100 of the egg's 200 exp")
 
             let toggle = observe(usage, digimon)
             usage.showGrowthInMenu = false

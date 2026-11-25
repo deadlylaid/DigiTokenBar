@@ -266,9 +266,28 @@ struct SettingsView: View {
         }
     }
 
-    /// Digimon options. Fast growth is for trying the app out: it is saved per Mac in UserDefaults.
+    /// Digimon options. The growth speed and fast growth (for trying the app out) are saved per Mac in
+    /// UserDefaults.
     private func digimonGroup(_ digimon: DigimonStore) -> some View {
         settingsSection(dt.digimonSectionTitle) {
+            groupRow {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(dt.growthSpeedLabel)
+                    Text(dt.growthSpeedHint).font(.caption2).foregroundStyle(.tertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer()
+                Picker(dt.growthSpeedLabel, selection: Binding(
+                    get: { digimon.growthSpeed },
+                    set: {
+                        UserDefaults.standard.set($0, forKey: DigimonStore.growthSpeedKey)
+                        digimon.setGrowthSpeed($0)
+                    })) {
+                    ForEach(DigimonStore.growthSpeeds, id: \.self) { Text(dt.growthSpeed($0)).tag($0) }
+                }
+                .labelsHidden().pickerStyle(.menu).fixedSize()
+            }
+            Divider()
             toggleRow(dt.fastGrowthLabel, Binding(
                 get: { digimon.isFastGrowth },
                 set: {

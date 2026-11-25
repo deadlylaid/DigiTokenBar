@@ -76,23 +76,31 @@ final class DigimonEngineTests: XCTestCase {
 
     // MARK: Experience
 
-    func testDailyCapStopsExperienceAt150() {
+    /// No daily cap since 2026-11-25 (issue #4): a big day counts in full. 300M tokens = 1,500 exp, ten
+    /// times the old cap, like the thresholds.
+    func testABigDayCountsInFull() {
         var s = DigimonState.newEgg(lineID: "agumon")
-        let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
-        XCTAssertEqual(s.expToday, 150)
-        // 150 exp = egg 20 + baby I 40 + baby II 60, with 30 left over at Child.
+        let events = engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 1))
+        XCTAssertEqual(s.expToday, 1_500)
+        // 1,500 exp = egg 200 + baby I 400 + baby II 600, with 300 left over at Child.
         XCTAssertEqual(events, [.hatched(species: "botamon"),
                                 .evolved(from: "botamon", to: "koromon"),
                                 .evolved(from: "koromon", to: "agumon")])
         XCTAssertEqual(s.partner.speciesKey, "agumon")
-        XCTAssertEqual(s.partner.stageExp, 30)
+        XCTAssertEqual(s.partner.stageExp, 300)
+        // Twice as much the next day gives twice as much: nothing past a cap is dropped.
+        engine.addUsage(&s, tokens: 600_000_000, provider: "claude_code", at: date(day: 2))
+        XCTAssertEqual(s.expToday, 3_000)
     }
 
-    func testTokensPastTheCapAreDroppedNotBanked() {
+    func testEveryTokenCountsAndTheRemainderCarriesIntoTheNextDay() {
         var s = DigimonState.newEgg(lineID: "agumon")
-        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
-        engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 2))
-        XCTAssertEqual(s.expToday, 1, "only today's 200k tokens count; yesterday's excess is gone")
+        engine.addUsage(&s, tokens: 100_100_000, provider: "claude_code", at: date(day: 1))
+        XCTAssertEqual(s.expToday, 500)
+        XCTAssertEqual(s.tokenRemainder, 100_000)
+        engine.addUsage(&s, tokens: 100_000, provider: "claude_code", at: date(day: 2))
+        XCTAssertEqual(s.expToday, 1, "yesterday's leftover 100k and today's 100k make one point")
+        XCTAssertEqual(s.tokenRemainder, 0)
     }
 
     func testSmallUsageAccumulatesUntilItIsWorthOnePoint() {
@@ -106,10 +114,35 @@ final class DigimonEngineTests: XCTestCase {
     func testGrowthMultiplierScalesThresholds() {
         var slow = GrowthRules.standard
         slow.growthMultiplier = 2
-        XCTAssertEqual(slow.threshold(for: .child), 240)
+        XCTAssertEqual(slow.threshold(for: .child), 2_400)
         var fast = GrowthRules.standard
         fast.growthMultiplier = 0.1
-        XCTAssertEqual(fast.threshold(for: .digitama), 2)
+        XCTAssertEqual(fast.threshold(for: .digitama), 20, "200 × 0.1 is 20, not 21 from a float rounding up")
+    }
+
+    /// The Settings speeds: threshold = base ÷ speed, rounded up, egg to graduation 10,200 at 1×.
+    func testEachGrowthSpeedDividesTheThresholds() {
+        let expected: [Double: [DigimonLevel: Int]] = [
+            0.5: [.digitama: 400, .child: 2_400, .ultimate: 6_000],
+            1: [.digitama: 200, .child: 1_200, .ultimate: 3_000],
+            1.5: [.digitama: 134, .babyI: 267, .child: 800, .perfect: 1_867, .ultimate: 2_000],
+            2: [.digitama: 100, .child: 600, .ultimate: 1_500],
+            5: [.digitama: 40, .child: 240, .ultimate: 600],
+        ]
+        for (speed, levels) in expected {
+            var rules = GrowthRules.standard
+            rules.speed = speed
+            for (level, threshold) in levels {
+                XCTAssertEqual(rules.threshold(for: level), threshold, "\(speed)× \(level)")
+            }
+        }
+        XCTAssertEqual(GrowthRules.standard.lifeThreshold, 10_200)
+        // The fast-growth switch multiplies on top of the speed.
+        var both = GrowthRules.standard
+        both.speed = 2
+        both.growthMultiplier = 0.1
+        XCTAssertEqual(both.threshold(for: .child), 60)
+        XCTAssertEqual(both.threshold(for: .digitama), 10)
     }
 
     func testDaysWithoutCodingChangeNothing() {
@@ -131,16 +164,16 @@ final class DigimonEngineTests: XCTestCase {
     func testAFullStageEvolvesStraightWithoutAChoice() {
         let engine = tendencyEngine
         var s = DigimonState.newEgg(lineID: "agumon")
-        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
+        engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 1))
         let routes = engine.rankedOptions(for: s)   // Agumon's routes (card conditions are off here)
-        let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 2))
+        let events = engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 2))
         XCTAssertEqual(events.count, 1, "\(events)")
         guard case let .evolved(from, to)? = events.first else { return XCTFail("\(events)") }
         XCTAssertEqual(from, "agumon")
         XCTAssertTrue(routes.contains(to), "\(to) is one of Agumon's routes \(routes)")
         XCTAssertNil(s.pendingChoice)
         XCTAssertFalse(events.contains { if case .choiceOffered = $0 { return true } else { return false } })
-        XCTAssertEqual(s.partner.stageExp, 60, "30 left from day 1 + 150 - 120: what the stage did not need carries over")
+        XCTAssertEqual(s.partner.stageExp, 600, "300 left from day 1 + 1,500 - 1,200: what the stage did not need carries over")
     }
 
     func testAChoiceSavedBeforeChoosingWasTurnedOffResolvesAtOnce() {
@@ -153,14 +186,14 @@ final class DigimonEngineTests: XCTestCase {
     func testFullChildStageOffersUpToThreeCandidatesAndHoldsTheBar() {
         let engine = choosingEngine
         var s = DigimonState.newEgg(lineID: "agumon")
-        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1))
-        let events = engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 2))
+        engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 1))
+        let events = engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 2))
         guard case .choiceOffered(let candidates)? = events.last else { return XCTFail("no choice: \(events)") }
         XCTAssertEqual(candidates.count, 3)
         XCTAssertEqual(s.pendingChoice?.candidates, candidates)
-        XCTAssertEqual(s.partner.stageExp, 120, "experience waits at the threshold instead of overflowing")
-        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 3))
-        XCTAssertEqual(s.partner.stageExp, 120)
+        XCTAssertEqual(s.partner.stageExp, 1_200, "experience waits at the threshold instead of overflowing")
+        engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 3))
+        XCTAssertEqual(s.partner.stageExp, 1_200)
         XCTAssertEqual(s.partner.speciesKey, "agumon")
     }
 
@@ -256,7 +289,7 @@ final class DigimonEngineTests: XCTestCase {
         var s = state(at: "wargreymon")
         s.partner.path = ["botamon", "koromon", "agumon", "greymon", "metalgreymon", "wargreymon"]
         s.dex = Set(s.partner.path)
-        s.partner.stageExp = 299
+        s.partner.stageExp = 2_999
         let events = engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: 5))
         let offer = try? XCTUnwrap(s.eggOffer)
         XCTAssertEqual(events, [.graduated(lineID: "agumon",
@@ -277,7 +310,7 @@ final class DigimonEngineTests: XCTestCase {
         var s = state(at: "wargreymon")
         s.graduates = graduates.dropLast().map { GraduateRecord(lineID: $0, path: [], graduatedAt: date(day: 1)) }
         s.partner.lineID = graduates.last ?? "agumon"
-        s.partner.stageExp = 299
+        s.partner.stageExp = 2_999
         engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: date(day: day))
         return s
     }
@@ -333,16 +366,16 @@ final class DigimonEngineTests: XCTestCase {
 
     func testANewEggWaitsForItsLineAndKeepsTheExperience() throws {
         var s = graduatedEgg(at: 5)
-        let events = engine.addUsage(&s, tokens: 6_000_000, provider: "claude_code", at: date(day: 5))
-        XCTAssertEqual(events, [], "30 experience, but no hatching before the user picks")
+        let events = engine.addUsage(&s, tokens: 60_000_000, provider: "claude_code", at: date(day: 5))
+        XCTAssertEqual(events, [], "300 experience, but no hatching before the user picks")
         XCTAssertNil(s.partner.speciesKey)
-        XCTAssertEqual(s.partner.stageExp, 30)
+        XCTAssertEqual(s.partner.stageExp, 300)
         let pick = try XCTUnwrap(s.eggOffer?[1])
         let baby = try XCTUnwrap(DigimonCatalog.mvp.lines[pick]?.firstBaby)
         XCTAssertEqual(engine.chooseEggLine(&s, pick, at: date(day: 5)), [.newEgg(lineID: pick), .hatched(species: baby)])
         XCTAssertNil(s.eggChoiceOfferedAt)
         XCTAssertNil(s.eggOffer, "hatching uses up the draw")
-        XCTAssertEqual(s.partner.stageExp, 10, "what the egg did not need carries into the baby")
+        XCTAssertEqual(s.partner.stageExp, 100, "what the egg did not need carries into the baby")
     }
 
     func testAnUnpickedEggTakesTheDrawnLineRaisedLeastAfterADay() {
@@ -358,7 +391,7 @@ final class DigimonEngineTests: XCTestCase {
 
     func testStateSurvivesAJSONRoundTrip() throws {
         var s = DigimonState.newEgg(lineID: "gabumon")
-        engine.addUsage(&s, tokens: 100_000_000, provider: "claude_code", at: date(day: 1, hour: 2))
+        engine.addUsage(&s, tokens: 300_000_000, provider: "claude_code", at: date(day: 1, hour: 2))
         engine.recordBugDefeated(&s)
         let data = try JSONEncoder().encode(s)
         XCTAssertEqual(try JSONDecoder().decode(DigimonState.self, from: data), s)

@@ -195,9 +195,9 @@ final class DigimonJogressTests: XCTestCase {
     func testExperienceWhileWaitingCarriesOverButNeverFillsTheNextStage() throws {
         var s = wait("greymon", line: "agumon")
         let adult = engine.growth.threshold(for: .adult)
-        engine.addUsage(&s, tokens: 149 * tokens, provider: "claude_code", at: t0.addingTimeInterval(3600))
-        XCTAssertEqual(s.partner.stageExp, adult + 149)
-        engine.addUsage(&s, tokens: 150 * tokens, provider: "claude_code", at: t0.addingTimeInterval(13 * 3600))   // the next day
+        engine.addUsage(&s, tokens: 1_490 * tokens, provider: "claude_code", at: t0.addingTimeInterval(3600))
+        XCTAssertEqual(s.partner.stageExp, adult + 1_490)
+        engine.addUsage(&s, tokens: 1_500 * tokens, provider: "claude_code", at: t0.addingTimeInterval(13 * 3600))   // the next day
         XCTAssertEqual(s.partner.stageExp, 2 * adult - 1, "at most one stage's worth past the bar")
         let (_, events) = try engine.jogress(&s, code: friendCode("devimon", at: t0), at: t0.addingTimeInterval(14 * 3600))
         XCTAssertEqual(events.count, 1, "no second evolution")

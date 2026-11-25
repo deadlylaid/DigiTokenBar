@@ -244,7 +244,7 @@ final class DigimonLinesTests: XCTestCase {
         }
         var s = state(at: "metalgarurumon", line: "gabumon")
         s.dex = ["wargreymon"]
-        s.partner.stageExp = 299
+        s.partner.stageExp = 2_999
         XCTAssertEqual(engine.addUsage(&s, tokens: 200_000, provider: "claude_code", at: Date()),
                        [.jogressOffered(options: ["omegamon"])], "Metal Garurumon waits the same way")
     }

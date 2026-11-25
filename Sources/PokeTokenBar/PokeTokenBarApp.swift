@@ -120,6 +120,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
         digimon.onBattle = { [weak self] foe, result in self?.digimonHub.playBattle(foe: foe.species, result: result) }
         digimon.onLookChanged = { [weak self] in self?.digimonHub.refresh() }
         digimon.setFastGrowth(UserDefaults.standard.bool(forKey: DigimonStore.fastGrowthKey))
+        digimon.setGrowthSpeed(DigimonStore.savedGrowthSpeed(.standard))
         updater = UpdateChecker()
         store.localizationLanguage = languageStore.language   // 알림 현지화용 미러 시드
         store.onRefresh = { [weak self] in self?.onStoreRefreshed() }   // after limits load: Digimon care mistakes

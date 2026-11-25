@@ -130,10 +130,10 @@ struct DigimonText {
         }
     }
     var jogressTitle: String { ko ? "합체 진화했어요" : "Jogress evolution" }
-    func todayExp(_ exp: Int, cap: Int) -> String { ko ? "오늘 \(exp)/\(cap) EXP" : "Today \(exp)/\(cap) EXP" }
-    func todayExpFull(cap: Int) -> String {
-        ko ? "오늘 받을 수 있는 경험치(\(cap))를 다 받았어요. 자정이 지나면 다시 쌓여요."
-           : "Today's \(cap) EXP are all earned. More after midnight."
+    /// Today's experience, without a cap: every token counts.
+    func todayExp(_ exp: Int) -> String {
+        let n = exp.formatted(.number.locale(Locale(identifier: ko ? "ko_KR" : "en_US")))
+        return ko ? "오늘 얻은 경험치 \(n)" : "Today +\(n) EXP"
     }
     /// The stage as the card counts it: coding hours a day (Vital Values), trophies and battles.
     func cardProgress(hoursPerDay: Double, trophies: Int, battles: Int, winPercent: Int) -> String {
@@ -213,6 +213,15 @@ struct DigimonText {
            : "Each stage needs a tenth of the experience: a busy day covers a whole life"
     }
     var fastGrowthOn: String { ko ? "빠른 성장 켜짐 (×10)" : "Fast growth on (×10)" }
+    var growthSpeedLabel: String { ko ? "성장 속도" : "Growth speed" }
+    var growthSpeedHint: String {
+        ko ? "하루에 쓰는 토큰이 적으면 빠르게, 많으면 느리게 골라 보세요. 1배는 하루 2억 토큰이면 알에서 졸업까지 열흘쯤이에요."
+           : "Pick faster if you use few tokens a day, slower if you use many. At 1×, 200 million tokens a day take about ten days from egg to graduation."
+    }
+    func growthSpeed(_ speed: Double) -> String {
+        let n = speed == speed.rounded() ? String(Int(speed)) : String(speed)
+        return ko ? "\(n)배" : "\(n)×"
+    }
     var growthPercent: String { ko ? "디지몬 성장률" : "Digimon growth %" }
     var growthPercentHint: String {
         ko ? "부화, 다음 진화, 졸업까지의 진행률" : "Progress toward hatching, the next evolution or graduation"
@@ -610,8 +619,7 @@ struct DigimonStatusView: View {
                     .fixedSize(horizontal: false, vertical: true)   // wraps instead of being cut off
             }
             HStack {
-                let cap = digimon.engine.growth.dailyExpCap
-                Text(digimon.expToday >= cap ? t.todayExpFull(cap: cap) : t.todayExp(digimon.expToday, cap: cap))
+                Text(t.todayExp(digimon.expToday))
                     .foregroundStyle(.tertiary)
                     .monospacedDigit()
                     .fixedSize(horizontal: false, vertical: true)

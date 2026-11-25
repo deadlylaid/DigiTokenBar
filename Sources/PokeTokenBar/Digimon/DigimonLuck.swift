@@ -3,7 +3,7 @@ import Foundation
 // Luck and surprise (step 12): the day's fortune, visitors and the stamp card.
 //
 // Rules taken from the research in docs/digimon/step12-luck.md:
-// - Luck never depends on how much the user codes (the daily experience cap's reason): the day is
+// - Luck never depends on how much the user codes (heavy and light users get the same luck): the day is
 //   rolled from the player's random number and the date, and a stamp is one per coding day.
 // - Nothing rerolls: restarting or restoring a backup rolls the same day again.
 // - Visitors are old faces: 99% come from the user's dex (raised or met), 1% are Digimon never seen

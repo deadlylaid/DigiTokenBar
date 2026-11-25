@@ -81,9 +81,12 @@ struct DigimonState: Codable, Sendable, Equatable {
     var partner: DigimonPartner
     var pendingChoice: PendingChoice?
     var lifetimeSignals = GrowthSignals()
-    /// Daily experience cap bookkeeping.
+    /// Today's experience, for the home (there is no daily cap any more).
     var expDay = ""
     var expToday = 0
+    /// The unit `partner.stageExp` and `expToday` are in (`GrowthRules.expScale`). nil in saves from
+    /// before 2026-11-25, when stages needed a tenth: `DigimonSaveIO.sanitized` scales those once.
+    var expScale: Int? = GrowthRules.expScale
     /// Tokens not yet worth one experience point.
     var tokenRemainder = 0
     /// Species the user has raised (the Digimon dex).

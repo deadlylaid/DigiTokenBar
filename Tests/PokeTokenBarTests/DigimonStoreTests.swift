@@ -116,7 +116,7 @@ final class DigimonStoreTests: XCTestCase {
         s.partner.path = ["botamon", "koromon", "agumon", "greymon"]
         s.dex = Set(s.partner.path)
         s.partner.stageStartedAt = now.addingTimeInterval(-3 * 24 * 3600)
-        s.partner.stageExp = 200
+        s.partner.stageExp = 2_000
         s.partner.stageSignals.bugsDefeated = bugs
         s.jogressWait = JogressWait(openedAt: now, over: false)
         try JSONEncoder().encode(DigimonStore.Saved(digimon: s)).write(to: dir.appendingPathComponent("digimon-state.json"))
@@ -194,12 +194,12 @@ final class DigimonStoreTests: XCTestCase {
         store.update(todayTokensByProvider: ["claude_code": 50_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.stageExp, 0, "the install baseline is not counted")
         XCTAssertTrue(activity.isEmpty, "seeding the baseline is not activity")
-        store.update(todayTokensByProvider: ["claude_code": 54_000_000], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 90_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.stageExp, 0)
-        XCTAssertEqual(store.state.partner.speciesKey, "botamon", "4M tokens = 20 exp hatches the egg")
+        XCTAssertEqual(store.state.partner.speciesKey, "botamon", "40M tokens = 200 exp hatches the egg")
         XCTAssertEqual(activity.map(\.0), [[.hatched(species: "botamon")]])
-        XCTAssertEqual(activity.map(\.1), [4_000_000])
-        store.update(todayTokensByProvider: ["claude_code": 54_000_000], todayDate: "d1", hasUsageData: true)
+        XCTAssertEqual(activity.map(\.1), [40_000_000])
+        store.update(todayTokensByProvider: ["claude_code": 90_000_000], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(activity.count, 1, "nothing new, nothing reported")
     }
 
@@ -253,10 +253,10 @@ final class DigimonStoreTests: XCTestCase {
     func testAFullStageEvolvesWithoutAChoiceAndSaves() {
         let store = makeStore()
         store.update(todayTokensByProvider: ["claude_code": 0 + 1], todayDate: "d1", hasUsageData: true)
-        // Two capped days: egg -> baby I -> baby II -> child, then a full child stage evolves.
-        store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
+        // Two big days (1,500 exp each): egg -> baby I -> baby II -> child, then a full child stage evolves.
+        store.update(todayTokensByProvider: ["claude_code": 300_000_001], todayDate: "d1", hasUsageData: true)
         now += 86_400
-        store.update(todayTokensByProvider: ["claude_code": 100_000_000], todayDate: "d2", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 300_000_000], todayDate: "d2", hasUsageData: true)
         XCTAssertEqual(store.state.partner.level, .adult)
         XCTAssertTrue(store.candidates.isEmpty, "nothing to pick")
         XCTAssertEqual(makeStore().state.partner.speciesKey, store.state.partner.speciesKey)
@@ -421,7 +421,7 @@ final class DigimonSaveIOTests: XCTestCase {
         store.chooseEggLine(other.id)
         XCTAssertEqual(store.state.partner.lineID, other.id)
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
-        store.update(todayTokensByProvider: ["claude_code": 4_000_001], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 40_000_001], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.speciesKey, other.firstBaby, "the egg hatches into its line's baby")
         XCTAssertNil(store.state.eggOffer)
         store.chooseEggLine("agumon")
@@ -461,21 +461,21 @@ final class DigimonFastGrowthTests: XCTestCase {
         let store = DigimonStore(fileURL: dir.appendingPathComponent("s.json"), clock: { now })
         var activity: [DigimonEvent] = []
         store.onActivity = { events, _ in activity += events }
-        // One capped day: Agumon with 30 of 120 experience.
+        // One big day: Agumon with 300 of 1,200 experience.
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
-        store.update(todayTokensByProvider: ["claude_code": 100_000_001], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 300_000_001], todayDate: "d1", hasUsageData: true)
         XCTAssertEqual(store.state.partner.speciesKey, "agumon")
-        XCTAssertEqual(store.threshold, 120)
+        XCTAssertEqual(store.threshold, 1_200)
         XCTAssertNil(store.state.pendingChoice)
 
         store.setFastGrowth(true)
         XCTAssertTrue(store.isFastGrowth)
-        XCTAssertEqual(store.state.partner.level, .adult, "30 of 12: it evolves at once")
+        XCTAssertEqual(store.state.partner.level, .adult, "300 of 120: it evolves at once")
         XCTAssertTrue(activity.contains { if case .evolved(from: "agumon", _) = $0 { return true } else { return false } })
         let adult = store.state.partner.speciesKey
 
         store.setFastGrowth(false)
-        XCTAssertEqual(store.threshold, 200)
+        XCTAssertEqual(store.threshold, 2_000)
         XCTAssertEqual(store.state.partner.speciesKey, adult, "switching back never takes progress away")
     }
 }
@@ -538,7 +538,7 @@ final class DigimonFirstEggTests: XCTestCase {
         XCTAssertEqual(quitBeforePicking.state.eggOffer, store.state.eggOffer, "reopening does not redraw")
         XCTAssertTrue(quitBeforePicking.isChoosingEgg)
         store.update(todayTokensByProvider: ["claude_code": 1], todayDate: "d1", hasUsageData: true)
-        store.update(todayTokensByProvider: ["claude_code": 5_000_001], todayDate: "d1", hasUsageData: true)
+        store.update(todayTokensByProvider: ["claude_code": 50_000_001], todayDate: "d1", hasUsageData: true)
         XCTAssertTrue(store.isEgg, "no hatching before the pick")
         XCTAssertEqual(store.eggOfferLines.count, 3, "the first egg draws three lines too")
         XCTAssertEqual(store.state.partner.lineID, store.eggOfferLines.first?.id)

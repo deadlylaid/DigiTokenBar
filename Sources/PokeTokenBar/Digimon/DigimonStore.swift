@@ -44,16 +44,16 @@ final class DigimonStore {
         self.backups = DigimonBackups(directory: fileURL.deletingLastPathComponent().appendingPathComponent("digimon-backups"))
         self.saved = Saved(digimon: .newEgg(lineID: firstLine))
         let freshInstall = !FileManager.default.fileExists(atPath: fileURL.path)
-        load()
+        let scaled = load()
         var digimon = saved.digimon
         if freshInstall, waitForFirstEgg {
             engine.offerEggLines(&digimon, at: clock())
         } else {
             ensureEggOffer(&digimon)
         }
-        if digimon != saved.digimon {
+        if digimon != saved.digimon || scaled {
             saved.digimon = digimon
-            save()   // the draw must not change if the app quits before the pick
+            save()   // the draw must not change if the app quits before the pick; an old save is rewritten scaled
         }
         lastBackupAt = backups.list().first?.file.savedAt
         backupIfDue()
@@ -332,6 +332,8 @@ final class DigimonStore {
     /// Fast growth needs a tenth of the experience per stage: a whole life fits in one busy day.
     static let fastGrowthMultiplier = 0.1
 
+    /// The fast-growth switch only. `growthMultiplier` holds nothing else (the speed is `growth.speed`),
+    /// so a 2× speed never reads as fast growth.
     var isFastGrowth: Bool { engine.growth.growthMultiplier < 1 }
 
     /// Switches the stage thresholds. A stage that is already full under the new ones evolves (or
@@ -341,6 +343,35 @@ final class DigimonStore {
         guard engine.growth.growthMultiplier != multiplier else { return }
         var growth = engine.growth
         growth.growthMultiplier = multiplier
+        apply(growth)
+    }
+
+    // MARK: Growth speed (Settings)
+
+    /// UserDefaults key for the Settings picker.
+    static let growthSpeedKey = "digimonGrowthSpeed"
+    /// The speeds Settings offers. 1× is the default; light users pick faster, heavy users slower.
+    static let growthSpeeds: [Double] = [0.5, 1, 1.5, 2, 5]
+
+    var growthSpeed: Double { engine.growth.speed }
+
+    /// The saved speed, or 1× when none (or an unknown value) is saved.
+    static func savedGrowthSpeed(_ defaults: UserDefaults) -> Double {
+        let value = defaults.double(forKey: growthSpeedKey)
+        return growthSpeeds.contains(value) ? value : 1
+    }
+
+    /// Like `setFastGrowth`: a stage already full under the new speed evolves at once, and progress
+    /// is kept as experience, so a slower speed only makes the bar look less full.
+    func setGrowthSpeed(_ speed: Double) {
+        let speed = Self.growthSpeeds.contains(speed) ? speed : 1
+        guard engine.growth.speed != speed else { return }
+        var growth = engine.growth
+        growth.speed = speed
+        apply(growth)
+    }
+
+    private func apply(_ growth: GrowthRules) {
         engine = EvolutionEngine(catalog: engine.catalog, rules: engine.rules, growth: growth, calendar: engine.calendar)
         var next = saved
         let events = engine.settle(&next.digimon, at: clock())
@@ -421,19 +452,24 @@ final class DigimonStore {
     /// A missing file is a fresh install. An unreadable one is kept aside before starting over,
     /// so a bad write never silently destroys progress. A readable one still goes through the
     /// sanitizing boundary: a hand-edited count must not crash every launch.
-    private func load() {
-        guard let data = try? Data(contentsOf: fileURL) else { return }
+    /// True when the file was in the old experience unit and was scaled (`DigimonSaveIO.sanitized`).
+    @discardableResult
+    private func load() -> Bool {
+        guard let data = try? Data(contentsOf: fileURL) else { return false }
         do {
             var loaded = try JSONDecoder().decode(Saved.self, from: data)
+            let fileScale = loaded.digimon.expScale
             loaded.digimon = try DigimonSaveIO.sanitized(loaded.digimon, catalog: engine.catalog, growth: engine.growth)
             loaded.ledger.claimedTodayByProvider = loaded.ledger.claimedTodayByProvider.mapValues { DigimonSaveIO.clamp($0) }
             saved = loaded
+            return loaded.digimon.expScale != fileScale
         } catch {
             let stamp = Int(clock().timeIntervalSince1970)
             let backup = fileURL.deletingLastPathComponent()
                 .appendingPathComponent("digimon-state.corrupt-\(stamp).json")
             try? FileManager.default.copyItem(at: fileURL, to: backup)
             AppLog.write("digimon save unreadable, backed up to \(backup.lastPathComponent): \(error)")
+            return false
         }
     }
 }

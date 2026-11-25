@@ -64,9 +64,17 @@ enum DigimonSaveIO {
         } else {
             state.partner.level = .digitama
         }
+        // Saves from before the ×10 thresholds: scale the experience once so the bar stays where it was.
+        let scale = max(1, state.expScale ?? 1)
+        if scale < GrowthRules.expScale {
+            let factor = GrowthRules.expScale / scale
+            state.partner.stageExp = clamp(state.partner.stageExp, max: maxCount / factor) * factor
+            state.expToday = clamp(state.expToday, max: maxCount / factor) * factor
+            state.expScale = GrowthRules.expScale
+        }
         // Up to a whole life: an egg waiting for its line keeps collecting experience.
         state.partner.stageExp = clamp(state.partner.stageExp, max: growth.lifeThreshold)
-        state.expToday = clamp(state.expToday, max: growth.dailyExpCap)
+        state.expToday = clamp(state.expToday)
         state.tokenRemainder = clamp(state.tokenRemainder, max: growth.tokensPerExp - 1)
         clampSignals(&state.partner.stageSignals)
         clampSignals(&state.lifetimeSignals)

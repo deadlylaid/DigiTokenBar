@@ -2,11 +2,12 @@ import Foundation
 
 /// Growth numbers. Defaults follow docs/digimon/step2-engine-design.md.
 struct GrowthRules: Sendable, Equatable {
-    /// 200,000 tokens = 1 experience point.
+    /// 200,000 tokens = 1 experience point. Every token counts: there is no daily cap (it was 150 until
+    /// 2026-11-25, issue #4). The thresholds and `speed` set the pace instead.
     var tokensPerExp = 200_000
-    /// Experience stops at this many points per day, so heavier token use earns nothing extra.
-    var dailyExpCap = 150
-    /// Same idea as PokeTokenBar's growth difficulty: 0.1 (fast) ... 2.0 (slow).
+    /// Growth speed picked in Settings (`DigimonStore.growthSpeeds`): 2 means each stage needs half.
+    var speed = 1.0
+    /// The "fast growth (testing)" switch: 0.1 means a tenth of the experience, on top of `speed`.
     var growthMultiplier = 1.0
     /// Local hours counted as "night".
     var nightHours = 0..<6
@@ -47,14 +48,20 @@ struct GrowthRules: Sendable, Equatable {
 
     static let standard = GrowthRules()
 
-    /// Experience needed to leave each stage (ultimate = graduation).
+    /// Experience needed to leave each stage at 1× (ultimate = graduation): 10,200 from egg to
+    /// graduation. Ten times the numbers before 2026-11-25, when the daily cap went away.
     static let baseThresholds: [DigimonLevel: Int] = [
-        .digitama: 20, .babyI: 40, .babyII: 60, .child: 120, .adult: 200, .perfect: 280, .ultimate: 300,
+        .digitama: 200, .babyI: 400, .babyII: 600, .child: 1200, .adult: 2000, .perfect: 2800, .ultimate: 3000,
     ]
+    /// The unit saves keep their experience in (`DigimonState.expScale`). Saves from before the ×10
+    /// thresholds have none and are scaled on load (`DigimonSaveIO.sanitized`).
+    static let expScale = 10
 
     func threshold(for level: DigimonLevel) -> Int {
-        let base = Double(Self.baseThresholds[level] ?? 100)
-        return max(1, Int((base * growthMultiplier).rounded(.up)))
+        let base = Double(Self.baseThresholds[level] ?? 1000)
+        // The small epsilon keeps a value like 200 × 0.1 = 20.000000000000004 at 20.
+        let needed = base / max(speed, 0.01) * growthMultiplier
+        return max(1, Int((needed - 1e-9).rounded(.up)))
     }
 
     /// Experience for a whole life, egg to graduation: more than this never means anything.
@@ -165,12 +172,11 @@ struct EvolutionEngine: Sendable {
             state[keyPath: keyPath].activeDays.insert(day)
         }
 
-        let room = max(0, growth.dailyExpCap - state.expToday)
+        // Every token counts, however many there are in a day; what is not yet a whole point carries.
         let total = state.tokenRemainder + tokens
-        let earned = min(total / growth.tokensPerExp, room)
-        // Tokens past the daily cap are dropped, not banked for tomorrow.
-        state.tokenRemainder = earned < room ? total % growth.tokensPerExp : 0
-        state.expToday += earned
+        let earned = total / growth.tokensPerExp
+        state.tokenRemainder = total % growth.tokensPerExp
+        state.expToday += earned   // shown on the home as today's experience
         state.partner.stageExp += earned
         if state.pendingChoice != nil {
             // Waiting for the user's pick: keep the bar full, don't overflow.
