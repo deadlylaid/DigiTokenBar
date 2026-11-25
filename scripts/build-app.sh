@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 APP_NAME="DigiTokenBar"
 PRODUCT="PokeTokenBar"   # SwiftPM executable name (kept from upstream)
 BUILD_DIR="build"
