@@ -87,7 +87,9 @@ and you replace the app with the one in the new `DigiTokenBar.zip`. Your Digimon
 ## Features
 
 - **Scene:** the Digimon walks, sleeps and attacks bugs with its signature move. Big bugs take
-  three hits. It looks sick while a usage limit is full and sleepy late at night.
+  three hits. It looks sick while a usage limit is full and sleepy late at night. Now and then it
+  washes up, cooks and eats, climbs a little wall, naps with a nose bubble, kicks a ball around, or
+  types on a tiny laptop while your coding agent works.
 - **Dex:** every line by stage. Digimon you have raised are shown; the rest are silhouettes, with
   hints for hidden forms, Digimentals and the Jogress partners of merge-only forms. Search by name,
   filter and sort across all lines.
