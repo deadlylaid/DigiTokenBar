@@ -62,7 +62,10 @@ final class ZeroUsageHomeRenderingTests: XCTestCase {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(suite, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
-        let digimon = DigimonStore(fileURL: directory.appendingPathComponent("digimon-state.json"))
+        // A minute after midnight: no visitor has arrived yet (they come 9–21 h), so the home's height does
+        // not depend on when the suite runs. Late in the day a visitor row pushed the period rows out.
+        let midnight = Calendar.current.startOfDay(for: Date()).addingTimeInterval(60)
+        let digimon = DigimonStore(fileURL: directory.appendingPathComponent("digimon-state.json"), clock: { midnight })
         digimon.update(todayTokensByProvider: [:], todayDate: LocalUsageReader.todayKey(), hasUsageData: false)
         // Offline sprites: the scene draws without downloading anything.
         let sprites = DigimonSpriteStore(directory: directory.appendingPathComponent("sprites"),
