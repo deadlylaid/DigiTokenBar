@@ -58,8 +58,10 @@ and you replace the app with the one in the new `DigiTokenBar.zip`. Your Digimon
 
 1. **Pick an egg.** Three eggs are drawn at random from the lines you have not raised yet. A line you
    have raised to graduation can always be picked again. Without a pick, one is chosen after a day.
-2. **Code as usual.** 200,000 tokens make 1 experience point, up to 150 a day. A whole life, from
-   egg to graduation, takes at least about a week.
+2. **Code as usual.** 200,000 tokens make 1 experience point, and every token counts: there is no daily
+   cap. A whole life, from egg to graduation, needs 10,200 points at 1×, about ten days at 200 million
+   tokens a day. Pick the pace in Settings (0.5×, 1×, 1.5×, 2× or 5×): faster if you code little,
+   slower if you code a lot.
 3. **Evolve.** Each line is a Vital Bracelet card: 40 lines and 636 Digimon (22 of them Armor), Baby I
    to Ultimate.
    Growth follows the card's own routes. The card's requirements open them: Vital Values count your
@@ -109,7 +111,8 @@ and you replace the app with the one in the new `DigiTokenBar.zip`. Your Digimon
   be rerolled.
 - **Saves:** automatic backups (at launch and every 12 hours, newest 10 kept), and export / import to
   move your Digimon to another Mac.
-- **Fast growth (testing):** a tenth of the experience per stage, to try the app out.
+- **Growth speed:** 0.5×, 1×, 1.5×, 2× or 5× in Settings; a stage already full at the new speed evolves at once.
+- **Fast growth (testing):** a tenth of the experience per stage on top of the speed, to try the app out.
 
 The Digimon screens are in Korean and English.
 
