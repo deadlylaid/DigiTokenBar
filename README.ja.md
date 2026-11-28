@@ -22,10 +22,10 @@ macOS 14 以降が必要です。Apple シリコンと Intel のどちらの Mac
 **Homebrew でインストール**(おすすめ):
 
 ```sh
-brew install --cask deadlylaid/tap/digitokenbar && open -a DigiTokenBar
+brew install --cask deadlylaid/tap/digitokenbar; open -a DigiTokenBar
 ```
 
-インストールしてそのまま起動します。初回は卵を選ぶウィンドウが開き、その後は Dock アイコンなしで画面右上のメニューバーに
+インストールしてそのまま起動します(brew がほかのことで警告を出してもアプリは起動します)。初回は卵を選ぶウィンドウが開き、その後は Dock アイコンなしで画面右上のメニューバーに
 常駐します。メニューバーがいっぱいだと macOS がアイコンをノッチの裏に隠します。そのときはアプリをもう一度開くと
 (Spotlight、アプリケーションフォルダ、`open -a DigiTokenBar`)ウィンドウが戻ります。
 Homebrew がダウンロードの検疫属性を外すので、下の 3 の警告なしで開けます。そのあとは 4 だけ確認してください。

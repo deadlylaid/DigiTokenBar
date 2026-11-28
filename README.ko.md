@@ -22,10 +22,10 @@ macOS 14 이상이 필요해요. Apple 실리콘과 인텔 Mac 모두 돼요.
 **Homebrew로 설치하기** (추천):
 
 ```sh
-brew install --cask deadlylaid/tap/digitokenbar && open -a DigiTokenBar
+brew install --cask deadlylaid/tap/digitokenbar; open -a DigiTokenBar
 ```
 
-설치하고 바로 켜요. 처음에는 알을 고르는 창이 뜨고, 그 뒤로는 Dock 아이콘 없이 화면 오른쪽 위 메뉴 막대에 살아요.
+설치하고 바로 켜요(brew가 다른 프로그램 일로 경고를 내도 앱은 켜져요). 처음에는 알을 고르는 창이 뜨고, 그 뒤로는 Dock 아이콘 없이 화면 오른쪽 위 메뉴 막대에 살아요.
 메뉴 막대가 꽉 차면 macOS가 아이콘을 노치 뒤에 숨겨요. 그럴 땐 앱을 다시 열면(Spotlight, 응용 프로그램 폴더,
 `open -a DigiTokenBar`) 창이 다시 떠요.
 Homebrew가 "인터넷에서 받은 파일" 표시를 지워 줘서, 아래 3번의 경고 없이 바로 열려요. 그다음 4번만 보면 돼요.

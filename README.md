@@ -24,10 +24,10 @@ macOS 14 or later, Apple Silicon or Intel.
 **With Homebrew** (recommended):
 
 ```sh
-brew install --cask deadlylaid/tap/digitokenbar && open -a DigiTokenBar
+brew install --cask deadlylaid/tap/digitokenbar; open -a DigiTokenBar
 ```
 
-This installs the app and opens it. The first time, a window with the egg picker opens; after that the app
+This installs the app and opens it (even if brew complains about something else). The first time, a window with the egg picker opens; after that the app
 lives in the menu bar (top right), with no Dock icon. If the menu bar is full, macOS hides the icon behind
 the notch: open the app again (Spotlight, Applications, `open -a DigiTokenBar`) and the window comes back.
 Homebrew clears the download quarantine, so the app opens without the warning in step 3 below. Then
