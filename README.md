@@ -114,6 +114,8 @@ and you replace the app with the one in the new `DigiTokenBar.zip`. Your Digimon
 - **Saves:** automatic backups (at launch and every 12 hours, newest 10 kept), and export / import to
   move your Digimon to another Mac.
 - **Growth speed:** 0.5×, 1×, 1.5×, 2× or 5× in Settings; a stage already full at the new speed evolves at once.
+- **Usage charts:** this month by day, the last 16 weeks, or today by hour with your usual day faintly
+  behind it. Pick the one the popover opens on in Settings; click the chart to look at the others.
 - **Fast growth (testing):** a tenth of the experience per stage on top of the speed, to try the app out.
 
 The Digimon screens are in Korean and English.
