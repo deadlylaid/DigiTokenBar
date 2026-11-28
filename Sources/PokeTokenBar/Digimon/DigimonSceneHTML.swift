@@ -45,6 +45,7 @@ const mq = window.matchMedia('(prefers-color-scheme: dark)');
 const isDark = () => mq.matches;
 const assets = {};
 const waiting = {};
+let battleSeq = 0;   // the latest battle command (see 'battle' below)
 let COIN = null;
 let S = {key: null, line: 'agumon', stage: 0, sleeping: false, lang: 'ko', mood: null};
 // Mood from the app: 'sleepy' in the small hours, 'sick' while a usage limit is full.
@@ -219,6 +220,7 @@ class Pet {
     this.parts = []; this.zs = []; this.chip = null; this.flash = 0; this.dim = 0; this.excl = 0;
     this.shots = []; this.booms = []; this.bug = null; this.bugIn = rand(8000, 20000);
     this.note = null; this.working = false;   // coding agent: lasting bubble, "busy" dots
+    this.later = [];   // what waits for a battle to end (`afterFight`)
     this.guest = null; this.guests = [];   // visitors: the one walking through, the ones waiting
     this.stars = []; this.starIn = rand(1500, 4000);   // shooting stars on a meteor shower
     this.loves = []; this.clock = 0; this.touched = 0;  // hearts from a stroke; scene time and the last touch (ms)
@@ -428,7 +430,19 @@ class Pet {
     }
   }
   // ---- commands ----
+  // A battle plays a result the app already decided (and recorded). Anything that would take the pet's state
+  // over while it plays (food, a coding agent's cheer or call, a jump, sleep, an evolution, a graduation) waits
+  // for its end and then runs in order: it used to cut the battle off before the result, and a cheer or a happy
+  // hop right after a hit looked like a win while the record said a loss (issue #7). A Jogress is not held up:
+  // its evolution is meant to follow at once.
+  afterFight(fn) {
+    if (!this.fight || this.fight.merge) return false;
+    this.later.push(fn);
+    return true;
+  }
+  runLater() { const later = this.later; this.later = []; later.forEach(fn => fn()); }
   feed() {
+    if (this.afterFight(() => this.feed())) return;
     if (this.state === 'evolve' || this.state === 'held' || this.chip) return;
     const b = this.bb(); let side = this.facing;
     const front = s => s < 0 ? this.x + b.l - 14 : this.x + b.r + 2;
@@ -439,9 +453,10 @@ class Pet {
     this.chip = {x: fx, y: -14, vy: 0, landed: false, bites: 0, fromRight: side < 0, shrink: 0};
     this.enter('eat', {});
   }
-  sleep() { if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('sleep', {zacc: 700}); }
+  // Mid-battle it does not lie down: the battle's end puts it to sleep if the app still says so.
+  sleep() { if (this.state === 'evolve' || this.state === 'sleep' || (this.fight && !this.fight.merge)) return; this.chip = null; this.enter('sleep', {zacc: 700}); }
   wake() { if (this.state !== 'sleep') return; this.excl = 750; this.enter('hop', {h: this.hopH * .7, dur: 480}); }
-  jump() { if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('hop', {h: this.hopH}); }
+  jump() { if (this.afterFight(() => this.jump())) return; if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('hop', {h: this.hopH}); }
   touch() { this.touched = this.clock; }
   bored() { return this.desk && !S.mood && !S.sleeping && this.clock - this.touched > BORED_AFTER; }
   // Stroked on the desktop: hearts rise from its head; awake and free, it hops a little and may say so.
@@ -453,9 +468,10 @@ class Pet {
     this.enter('hop', {h: this.hopH * .45, dur: 360});
     if (text) this.callout = {text, t: 0, life: 1500};
   }
-  notice() { if (this.state === 'evolve' || this.state === 'held') return; if (this.state === 'sleep') { this.wake(); return; } this.excl = 700; this.jump(); }
+  notice() { if (this.afterFight(() => this.notice())) return; if (this.state === 'evolve' || this.state === 'held') return; if (this.state === 'sleep') { this.wake(); return; } this.excl = 700; this.jump(); }
   // A coding agent finished: a double hop with sparkles (an egg wobbles instead).
   cheer() {
+    if (this.afterFight(() => this.cheer())) return;
     if (this.state === 'evolve' || this.state === 'held') return;
     this.chip = null;
     const b = this.bb();
@@ -465,6 +481,7 @@ class Pet {
   }
   // Graduation: a big hop, a burst of sparkles and a send-off before it becomes an egg again.
   graduate() {
+    if (this.afterFight(() => this.graduate())) return;
     if (this.state === 'evolve') return;
     this.chip = null; this.bug = null; this.note = null;
     this.callout = {text: S.lang === 'ko' ? '졸업 축하해요!' : 'Graduated!', t: 0, life: 1700};
@@ -504,6 +521,7 @@ class Pet {
   // `golden`: an armor evolution with a golden Digimental. The same evolution, with a few gold twinkles
   // while it flickers and a gold burst at the change.
   evolve(to, golden) {
+    if (this.afterFight(() => this.evolve(to, golden))) return;
     if (this.state === 'evolve') { this.d.to = to; this.d.golden = this.d.golden || !!golden; return; }
     if (this.key === to) return;
     this.chip = null; this.zs = [];
@@ -529,7 +547,7 @@ class Pet {
     if (F.done) {
       F.done += dt;
       if (F.won && F.done < 900) this.y = Math.abs(Math.sin(F.done / 900 * Math.PI * 2)) * 8;
-      if (F.done > 2500) { this.fight = null; if (S.sleeping) this.sleep(); else this.enter('idle', {dur: 900}); }
+      if (F.done > 2500) { this.fight = null; if (S.sleeping) this.sleep(); else this.enter('idle', {dur: 900}); this.runLater(); }
       return;
     }
     if (F.t < 0) return;
@@ -1052,7 +1070,8 @@ class Pet {
     if (this.excl > 0) this.excl -= dt;
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
     this.updateGuest(dt); this.updateStars(dt);
-    if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') this.fight = null;   // interrupted (sleep, evolution, ...)
+    // Interrupted anyway (a new egg, ...): drop the fight, and what waited for it runs now instead of never.
+    if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') { this.fight = null; this.runLater(); }
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
       if (this.moodT > 4200) {
@@ -1733,7 +1752,9 @@ window.app = {
   },
   cmd(c) {
     if (c.type === 'evolve') { whenAsset(c.key, () => { if (pet) pet.evolve(c.key, !!c.golden); }); return; }
-    if (c.type === 'battle') { whenAsset(c.foe, () => { if (pet) pet.duel(c); }); return; }
+    // Only the latest battle plays: one still waiting for its foe's sprite must not start after a newer one began,
+    // or the scene would show an older battle under the newer battle's result line (issue #7).
+    if (c.type === 'battle') { const n = ++battleSeq; whenAsset(c.foe, () => { if (pet && n === battleSeq) pet.duel(c); }); return; }
     if (c.type === 'jogress') { whenAsset(c.partner, () => { if (pet) pet.merge(c); }); return; }
     if (c.type === 'visit') { whenAsset(c.visitor, () => { if (pet) pet.visit(c); else earlyGuests.push(c); }); return; }
     // Agent state is kept, so a pet created later (sprite still loading) shows it too.
