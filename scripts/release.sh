@@ -76,6 +76,20 @@ doc_check() {
     echo "$extra_assets" | sed 's/^/       /'
     warn=1
   fi
+  # 가격표: 앱이 가격 없는 모델을 만나면 기록에 "Unpriced model: <id>"를 남기고 비용을 "계산 불가"로 보인다.
+  # 이 Mac 의 기록에 그런 모델이 있는데 가격표(ModelPricing.swift)에 아직 없으면 경고한다.
+  # (2026-11: Fable 5.2·Haiku 5.5 가 수십 번 찍혔는데 기록 한 줄로만 남아 아무도 못 봤다.)
+  local applog="$HOME/Library/Logs/$APP_NAME.log" model key unpriced=""
+  if [[ -f "$applog" ]]; then
+    while read -r model; do
+      [[ -n "$model" ]] || continue
+      key=$(printf '%s' "$model" | tr '[:upper:]' '[:lower:]' | sed -E 's#^(openai|anthropic|google|models)/##')
+      grep -qF "\"$key\"" Sources/PokeTokenBar/Core/ModelPricing.swift || unpriced+="$key "
+    done < <(grep -ho 'Unpriced model: [^ ]*' "$applog" 2>/dev/null | sed 's/^Unpriced model: //' | sort -u)
+  fi
+  if [[ -n "$unpriced" ]]; then
+    echo "  ⚠ 가격표에 없는 모델이 앱 기록에 있습니다: ${unpriced}— 공식 가격을 ModelPricing.table 에 넣으세요."; warn=1
+  fi
   # 직전 릴리스 이후 기능이 바뀌었는데 README(세 언어)가 그대로면 기능 목록이 낡았을 수 있다.
   local last_tag feats readmes
   last_tag=$(last_release_tag)

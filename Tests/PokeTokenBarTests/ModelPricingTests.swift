@@ -141,4 +141,38 @@ final class ModelPricingTests: XCTestCase {
         XCTAssertNil(ModelPricing.estimatedCost(model: "gpt-5.5", input: -1, output: 0, cacheWrite: 0, cacheRead: 0))
         XCTAssertEqual(ModelPricing.estimatedCost(model: "gpt-5.5", input: 0, output: 0, cacheWrite: 0, cacheRead: 0), 0)
     }
+
+    /// Models found unpriced on 2026-11-28 (their cost read "Unavailable"): rates from the official pages.
+    func testModelsAddedOn20261128MatchTheOfficialPrices() {
+        XCTAssertEqual(ModelPricing.rate(for: "claude-fable-5-2"), .perMillion(8, 40, 10, 0.2))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-mythos-5-2"), .perMillion(8, 40, 10, 0.2))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-mythos-5-1"), .perMillion(10, 50, 12.5, 0.25))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-mythos-5"), .perMillion(10, 50, 12.5, 1.0))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-opus-4-6"), .perMillion(5, 25, 6.25, 0.5))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-opus-4-5"), .perMillion(5, 25, 6.25, 0.5))
+        XCTAssertEqual(ModelPricing.rate(for: "claude-haiku-5-5"), .perMillion(0.1, 0.5, 0.125, 0.01))
+        XCTAssertEqual(ModelPricing.rate(for: "gpt-6.2-sol"), .perMillion(2, 10, 2.5, 0.1))
+    }
+
+    /// Haiku 5.5 is priced by prompt length per request: over 100,000 prompt tokens (input + cache reads
+    /// + cache writes) every rate is 5×, as the official table lists ($0.50 / $2.50, cache $0.625 / $0.05).
+    func testHaiku55PaysFiveTimesOverOneHundredThousandPromptTokens() throws {
+        let at = try XCTUnwrap(ModelPricing.estimatedCost(model: "claude-haiku-5-5", input: 40_000, output: 1_000_000,
+                                                          cacheWrite: 10_000, cacheRead: 50_000))
+        XCTAssertEqual(at, 40_000 * 0.1e-6 + 10_000 * 0.125e-6 + 50_000 * 0.01e-6 + 1_000_000 * 0.5e-6, accuracy: 1e-12,
+                       "exactly 100,000 prompt tokens is still the standard price")
+        let over = try XCTUnwrap(ModelPricing.estimatedCost(model: "claude-haiku-5-5", input: 40_001, output: 1_000_000,
+                                                            cacheWrite: 10_000, cacheRead: 50_000))
+        XCTAssertEqual(over, 40_001 * 0.5e-6 + 10_000 * 0.625e-6 + 50_000 * 0.05e-6 + 1_000_000 * 2.5e-6, accuracy: 1e-12)
+        XCTAssertEqual(ModelPricing.longContextMultipliers("claude-haiku-5-5", prompt: 100_001).input, 5)
+        XCTAssertEqual(ModelPricing.longContextMultipliers("claude-opus-5-5", prompt: 900_000).input, 1,
+                       "other current Claude models keep standard pricing across the 1M window")
+    }
+
+    /// GPT-6.2 Sol follows the GPT-6 long-context rule: over 272,000 prompt tokens input ×2, output ×1.5.
+    func testGpt62SolUsesTheLongContextRule() throws {
+        let long = try XCTUnwrap(ModelPricing.estimatedCost(model: "gpt-6.2-sol", input: 272_001, output: 1_000,
+                                                            cacheWrite: 0, cacheRead: 0))
+        XCTAssertEqual(long, 272_001 * 2e-6 * 2 + 1_000 * 10e-6 * 1.5, accuracy: 1e-12)
+    }
 }

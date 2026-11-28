@@ -1549,3 +1549,17 @@ read_when:
   빼면 실패). ③ 실제 배틀 160번을 공격 모양 15가지로 재생해 라운드마다 맞음·빗나감과 쪽, 마지막 문구, 승리
   점프가 기록과 같은지 본다(빗나감을 맞음으로 그리면 142건, 승패를 뒤집으면 160건 실패). ③은 처음 의심한
   "빗나감이 맞음처럼 보임"이 실제로는 없다는 것도 확인했다.
+
+### 새 모델이 가격표에 없어 비용이 "계산 불가" (2026-11-28)
+
+- **증상:** Claude Fable 5.2, Claude Haiku 5.5(이 Mac 에서 실제로 쓰는 모델)와 Codex 의 gpt-6.2-sol(원본 PokeTokenBar #497)이
+  `ModelPricing.table` 에 없어, 그 모델로 쓴 만큼의 비용이 "계산 불가"로 빠졌다. 공식 표에 있는 Opus 4.6·4.5, Mythos 5.2·5.1·5 도 없었다.
+- **못 잡은 이유:** 가격 없는 모델은 `ModelPricing.noteUnpriced` 가 앱 기록에 한 줄("Unpriced model: …")만 남긴다. 기록에
+  두 모델이 수십 번 찍혔지만 아무도 기록을 보지 않았다(Opus 5.5 때도 스크린샷으로 알았다).
+- **고침:** 공식 가격(2026-11-28)으로 행을 넣었다. Haiku 5.5 는 요청 하나의 프롬프트(입력 + 캐시 읽기·쓰기)가 10만 토큰을 넘으면
+  모든 단가가 5배다 — `longContextMultipliers` 로 GPT-6(27만 2천 초과 ×2/×1.5)·Gemini 규칙과 한곳에 모았다.
+- **가드(기계):** `release.sh --check-only`(배포 2단계)가 이 Mac 의 앱 기록에서 "Unpriced model:" 을 모아, 가격표에 아직 없는
+  모델이 있으면 경고하고 배포를 멈춘다. `scripts/tests/test_release_metadata.py` 의 `UnpricedModelCheckTests` — 점검을 빼면 실패.
+  가격 테스트(`ModelPricingTests`)는 새 행과 Haiku 경계(정확히 10만은 표준, 1 넘으면 5배)를 본다. 경계 규칙을 빼면 실패.
+- **덤:** 경고 문구를 처음에 `"$unpriced— 공식"` 처럼 썼더니, bash 가 변수 이름 바로 뒤의 줄표(—) 바이트를 이름의 일부로 읽어
+  `set -u` 에서 "unbound variable"로 죽었다. 변수 뒤에 한글·기호가 바로 붙으면 `${name}` 으로 감싼다(scripts 전수 확인: 다른 곳 없음).

@@ -214,5 +214,29 @@ class ReleaseMetadataTests(unittest.TestCase):
         self.assertEqual((scripts / "build-app.sh").read_text(), 'VERSION="2.5.3"\n')
 
 
+
+class UnpricedModelCheckTests(unittest.TestCase):
+    """release.sh warns when this Mac's app log saw a model the price table still lacks (2026-11:
+    Fable 5.2 and Haiku 5.5 showed "Unavailable" cost while only a log line said so)."""
+
+    def check_only(self, log_lines):
+        with tempfile.TemporaryDirectory() as home:
+            logs = Path(home) / "Library" / "Logs"
+            logs.mkdir(parents=True)
+            (logs / "DigiTokenBar.log").write_text("".join(line + "\n" for line in log_lines))
+            env = {**os.environ, "HOME": home}
+            return subprocess.run(["bash", "scripts/release.sh", "--check-only"], cwd=ROOT, env=env,
+                                  capture_output=True, text=True).stdout
+
+    def test_an_unpriced_model_in_the_log_is_reported(self):
+        out = self.check_only(["[t] Unpriced model: claude-test-unpriced-9 — its cost shows as Unavailable"])
+        self.assertIn("가격표에 없는 모델", out)
+        self.assertIn("claude-test-unpriced-9", out)
+
+    def test_a_model_already_in_the_table_is_not_reported(self):
+        out = self.check_only(["[t] Unpriced model: claude-fable-5-2 — its cost shows as Unavailable",
+                               "[t] Unpriced model: Anthropic/Claude-Haiku-5-5 — its cost shows as Unavailable"])
+        self.assertNotIn("가격표에 없는 모델", out)
+
 if __name__ == "__main__":
     unittest.main()

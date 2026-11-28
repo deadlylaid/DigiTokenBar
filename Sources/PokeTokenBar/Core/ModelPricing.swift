@@ -41,10 +41,22 @@ enum ModelPricing {
         "claude-fable-5":             .perMillion(10, 50, 12.5, 1.0), // LiteLLM 스냅샷 가격 등재됨(2026-08) — 기존 미가격 $0 플레이스홀더 대체
         // Fable 5.1: same base rates as Fable 5, cache read cut to $0.25/MTok (0.025× input).
         "claude-fable-5-1":           .perMillion(10, 50, 12.5, 0.25),
+        // Checked 2026-11-28 against the official pricing page above. Fable 5.2: cache read 0.025× input.
+        "claude-fable-5-2":           .perMillion(8, 40, 10, 0.2),
+        // Mythos (limited availability) is priced like the Fable of the same version.
+        "claude-mythos-5-2":          .perMillion(8, 40, 10, 0.2),
+        "claude-mythos-5-1":          .perMillion(10, 50, 12.5, 0.25),
+        "claude-mythos-5":            .perMillion(10, 50, 12.5, 1.0),
+        "claude-opus-4-6":            .perMillion(5, 25, 6.25, 0.5),
+        "claude-opus-4-5":            .perMillion(5, 25, 6.25, 0.5),
+        // Haiku 5.5 for prompts up to 100,000 tokens; over that every rate is 5× (`longContextMultipliers`).
+        "claude-haiku-5-5":           .perMillion(0.1, 0.5, 0.125, 0.01),
         "gpt-6-astra":                .perMillion(10, 50, 12.5, 1),
         // GPT-6 Sol variants and Luna rates checked 2026-09-30 against the official API pricing page above.
         "gpt-6-sol":                  .perMillion(2, 10, 2.5, 0.2),
         "gpt-6.1-sol":                .perMillion(2, 10, 2.5, 0.1),
+        // GPT-6.2 Sol, checked 2026-11-28 (upstream PokeTokenBar #497 reported it unpriced).
+        "gpt-6.2-sol":                .perMillion(2, 10, 2.5, 0.1),
         "gpt-6-luna":                 .perMillion(0.1, 0.5, 0.125, 0.01),
         "gpt-5.6-sol":                .perMillion(4, 20, 5, 0.4),
         "gpt-5.6-terra":              .perMillion(2, 12, 2.5, 0.2),
@@ -107,15 +119,22 @@ enum ModelPricing {
         // Zero in this column means no supported separate write rate, not free write tokens.
         guard cacheWrite == 0 || r.cacheWrite > 0 else { return nil }
         let prompt = Double(input) + Double(cacheRead) + Double(cacheWrite)
-        let longContext = ["gpt-6-astra", "gpt-6-sol", "gpt-6.1-sol", "gpt-6-luna",
-                           "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna",
-                           "gpt-5.5", "gpt-5.4"].contains(key) && prompt > 272_000
-            || key == "gemini-2.5-pro" && prompt > 200_000
-        let inputMultiplier = longContext ? 2.0 : 1.0
-        let outputMultiplier = longContext ? 1.5 : 1.0
+        let m = longContextMultipliers(key, prompt: prompt)
         return (Double(input) * r.input + Double(cacheWrite) * r.cacheWrite
-                + Double(cacheRead) * r.cacheRead) * inputMultiplier
-            + Double(output) * r.output * outputMultiplier
+                + Double(cacheRead) * r.cacheRead) * m.input
+            + Double(output) * r.output * m.output
+    }
+
+    /// Long-context pricing per request: a prompt (input + cache reads + cache writes) over the
+    /// model's threshold pays `input`× on every input bucket and `output`× on output.
+    static func longContextMultipliers(_ key: String, prompt: Double) -> (input: Double, output: Double) {
+        let gpt272k: Set<String> = ["gpt-6-astra", "gpt-6-sol", "gpt-6.1-sol", "gpt-6.2-sol", "gpt-6-luna",
+                                    "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4"]
+        if gpt272k.contains(key), prompt > 272_000 { return (2, 1.5) }
+        if key == "gemini-2.5-pro", prompt > 200_000 { return (2, 1.5) }
+        // Claude Haiku 5.5: $0.50 / $2.50 (cache 0.625 / 0.05) per MTok over 100,000 prompt tokens.
+        if key == "claude-haiku-5-5", prompt > 100_000 { return (5, 5) }
+        return (1, 1)
     }
 
     /// A model the table cannot price renders as "Unavailable" with no other trace — Opus 5.5
