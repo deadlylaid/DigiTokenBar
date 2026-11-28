@@ -220,7 +220,8 @@ class Pet {
     this.parts = []; this.zs = []; this.chip = null; this.flash = 0; this.dim = 0; this.excl = 0;
     this.shots = []; this.booms = []; this.bug = null; this.bugIn = rand(8000, 20000);
     this.note = null; this.working = false;   // coding agent: lasting bubble, "busy" dots
-    this.later = [];   // what waits for a battle to end (`afterFight`)
+    this.later = [];   // what waits for a battle or a Jogress to end (`afterFight`)
+    this.joining = null;   // a Jogress from the merge to the end of its evolution (`merge`, `endJoin`)
     this.guest = null; this.guests = [];   // visitors: the one walking through, the ones waiting
     this.stars = []; this.starIn = rand(1500, 4000);   // shooting stars on a meteor shower
     this.loves = []; this.clock = 0; this.touched = 0;  // hearts from a stroke; scene time and the last touch (ms)
@@ -433,12 +434,20 @@ class Pet {
   // A battle plays a result the app already decided (and recorded). Anything that would take the pet's state
   // over while it plays (food, a coding agent's cheer or call, a jump, sleep, an evolution, a graduation) waits
   // for its end and then runs in order: it used to cut the battle off before the result, and a cheer or a happy
-  // hop right after a hit looked like a win while the record said a loss (issue #7). A Jogress is not held up:
-  // its evolution is meant to follow at once.
+  // hop right after a hit looked like a win while the record said a loss (issue #7). A Jogress is held the same
+  // way from the merge to the end of its evolution (`joining`); only that evolution is not queued here, it plays
+  // right after the merge (see `evolve`).
   afterFight(fn) {
-    if (!this.fight || this.fight.merge) return false;
+    if (!(this.fight && !this.fight.merge) && !this.joining) return false;
     this.later.push(fn);
     return true;
+  }
+  // The Jogress is over (its evolution ended, or never came): what waited runs now, after a sleep the app asked for.
+  endJoin() {
+    if (!this.joining) return;
+    this.joining = null;
+    if (S.sleeping) this.sleep();
+    this.runLater();
   }
   runLater() { const later = this.later; this.later = []; later.forEach(fn => fn()); }
   feed() {
@@ -453,8 +462,8 @@ class Pet {
     this.chip = {x: fx, y: -14, vy: 0, landed: false, bites: 0, fromRight: side < 0, shrink: 0};
     this.enter('eat', {});
   }
-  // Mid-battle it does not lie down: the battle's end puts it to sleep if the app still says so.
-  sleep() { if (this.state === 'evolve' || this.state === 'sleep' || (this.fight && !this.fight.merge)) return; this.chip = null; this.enter('sleep', {zacc: 700}); }
+  // Mid-battle or mid-Jogress it does not lie down: their end puts it to sleep if the app still says so.
+  sleep() { if (this.state === 'evolve' || this.state === 'sleep' || this.fight || this.joining) return; this.chip = null; this.enter('sleep', {zacc: 700}); }
   wake() { if (this.state !== 'sleep') return; this.excl = 750; this.enter('hop', {h: this.hopH * .7, dur: 480}); }
   jump() { if (this.afterFight(() => this.jump())) return; if (this.state === 'evolve' || this.state === 'sleep') return; this.chip = null; this.enter('hop', {h: this.hopH}); }
   touch() { this.touched = this.clock; }
@@ -497,7 +506,7 @@ class Pet {
   }
   // Not while evolving, battling or merging (`fight` covers both): 'held' would take over the state that
   // plays them, and a battle grabbed mid-round stopped for good (issue #3). The window still follows the mouse.
-  grab() { if (this.state === 'evolve' || this.fight) return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
+  grab() { if (this.state === 'evolve' || this.fight || this.joining) return; this.chip = null; this.excl = 600; this.enter('held', {s: 0, v: 0}); }
   dragMove(dx) { if (this.state === 'held') this.d.v += dx * .004; }
   // `shift` (scene units): how far the app pulled the window back inside the screen. The Digimon keeps
   // its spot on the screen, so it can be dropped at the very edge though the window cannot go past it.
@@ -521,6 +530,15 @@ class Pet {
   // `golden`: an armor evolution with a golden Digimental. The same evolution, with a few gold twinkles
   // while it flickers and a gold burst at the change.
   evolve(to, golden) {
+    // A Jogress's own evolution (the app sends it about 2.2 s after the merge): it plays right after the merge,
+    // ahead of anything that waited. A second one before it starts only changes the target, as it would mid-evolution.
+    const j = this.joining;
+    if (j && j.phase !== 'evolve') {
+      j.to = to; j.golden = j.golden || !!golden;
+      if (j.phase === 'wait') this.startJoinEvolution();
+      return;
+    }
+    if (j && this.state === 'evolve') { this.d.to = to; this.d.golden = this.d.golden || !!golden; return; }
     if (this.afterFight(() => this.evolve(to, golden))) return;
     if (this.state === 'evolve') { this.d.to = to; this.d.golden = this.d.golden || !!golden; return; }
     if (this.key === to) return;
@@ -531,6 +549,9 @@ class Pet {
   setNow(key) { if (!assets[key] || this.key === key) return; this.key = key; this.clampX(); }
   // ---- battle (decided by the app; this only plays it) ----
   duel(c) {
+    // A battle waits for a Jogress or an evolution to finish: it used to cut them short (a practice battle pressed
+    // right as the Digimon evolved), and they would not show the look the battle is fought with.
+    if (this.joining || this.state === 'evolve') { this.later.push(() => this.duel(c)); return; }
     if (this.isEgg() || !assets[c.foe]) return;
     this.bug = null; this.chip = null; this.callout = null; this.note = null; this.guest = null;
     const W = this.worldW, onLeft = this.x + 32 < W / 2;
@@ -583,7 +604,10 @@ class Pet {
   }
   // ---- Jogress (merged with a friend's Digimon; the app sends the evolution right after) ----
   merge(c) {
+    // A Jogress arriving mid-battle waits for the battle's result; its evolution, sent later, queues behind it.
+    if (this.fight && !this.fight.merge) { this.later.push(() => this.merge(c)); return; }
     if (this.isEgg() || !assets[c.partner]) return;
+    this.joining = {phase: 'merge', to: null, golden: false, waited: 0};
     this.bug = null; this.chip = null; this.note = null; this.shots = []; this.guest = null;
     const W = this.worldW, onLeft = this.x + 32 < W / 2;
     this.x = onLeft ? W * .25 - 32 : W * .75 - 32; this.clampX();
@@ -595,7 +619,17 @@ class Pet {
   }
   updateMerge(dt) {
     const F = this.fight, d = this.d, t = this.t;
-    if (!F) { this.enter('idle', {dur: 600}); return; }
+    // The flash empties `fight`; the merge still stands for a moment after it (`t > 2300` below). Before, the next
+    // frame ended it here, so that ending never ran and a Jogress ended at its flash.
+    if (!F && !d.flashed) { this.enter('idle', {dur: 600}); return; }
+    if (F) this.mergeTogether(F, d, t);
+    if (t > 2300) {
+      // The evolution comes from the app; if it is already here it plays now, otherwise it is awaited (`updateJoin`).
+      if (this.joining && this.joining.to) this.startJoinEvolution();
+      else { this.enter('idle', {dur: 4000}); if (this.joining) this.joining.phase = 'wait'; }
+    }
+  }
+  mergeTogether(F, d, t) {
     // The friend's Digimon fades in, both walk to the middle, glow white faster and faster, then one flash.
     F.alpha = Math.min(1, t / 400);
     const mid = this.worldW / 2 - 32, k = Math.min(1, Math.max(0, (t - 450) / 900)), e = k * k * (3 - 2 * k);
@@ -610,14 +644,29 @@ class Pet {
       d.flashed = true; this.flash = 1; this.fight = null; d.white = false;
       const b = this.bb(); this.sparkle(this.x + (b.l + b.r) / 2, this.ground() - 64 + (b.t + b.b) / 2, 24);
     }
-    if (t > 2300) this.enter('idle', {dur: 1200});   // the evolution comes from the app
+  }
+  startJoinEvolution() {
+    const j = this.joining;
+    j.phase = 'evolve';
+    if (this.key === j.to || !assets[j.to]) { this.endJoin(); return; }
+    this.chip = null; this.zs = [];
+    this.enter('evolve', {from: this.key, to: j.to, show: false, acc: 0, swapped: false, golden: j.golden, gacc: 0});
+  }
+  // Ends the Jogress when its evolution has played, when it never comes (the app sends none if the sprite failed),
+  // or when something still took the merge over: what waited must run rather than never.
+  updateJoin(dt) {
+    const j = this.joining;
+    if (!j) return;
+    if (j.phase === 'wait') { j.waited += dt; if (j.waited > 3000) this.endJoin(); }
+    else if (j.phase === 'evolve' && this.state !== 'evolve') this.endJoin();
+    else if (j.phase === 'merge' && this.state !== 'merge') this.endJoin();
   }
   // ---- visitors (the app decides who comes and when; this walks them in, says hello, walks them out) ----
   // A visitor moves on its own, so it also comes by while the pet sleeps (it just looks and leaves).
   visit(c) { if (assets[c.visitor]) this.guests.push(c); }
   updateGuest(dt) {
     if (!this.guest) {
-      if (!this.guests.length || this.fight || this.state === 'evolve' || this.state === 'held') return;
+      if (!this.guests.length || this.fight || this.joining || this.state === 'evolve' || this.state === 'held') return;
       const c = this.guests.shift(), A = assets[c.visitor];
       if (!A) return;
       const W = this.worldW, b = this.bb(), gb = A.bb, fromRight = this.x + (b.l + b.r) / 2 < W / 2;
@@ -732,7 +781,7 @@ class Pet {
   // What it may start now, with weights: nothing for an egg, while asleep, or with anything else going on.
   // Staying in place (Settings) leaves out the ball, the only one that runs around.
   actChoices() {
-    if (this.isEgg() || S.sleeping || this.state !== 'idle' || this.fight || this.chip || this.guest || this.guests.length) return [];
+    if (this.isEgg() || S.sleeping || this.state !== 'idle' || this.fight || this.joining || this.chip || this.guest || this.guests.length) return [];
     if (this.bug && !this.bug.dead) return [];
     const P = this.actP(), b = this.bb(), out = [];
     if (this.actSpot(12 * P)) out.push(['wash', 1]);
@@ -1071,7 +1120,8 @@ class Pet {
     this.zs = this.zs.filter(z => (z.t += dt) < z.life);
     this.updateGuest(dt); this.updateStars(dt);
     // Interrupted anyway (a new egg, ...): drop the fight, and what waited for it runs now instead of never.
-    if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') { this.fight = null; this.runLater(); }
+    if (this.fight && this.state !== 'duel' && this.state !== 'attack' && this.state !== 'merge') { this.fight = null; if (!this.joining) this.runLater(); }
+    this.updateJoin(dt);
     if (S.mood === 'sleepy' && this.state !== 'sleep' && this.state !== 'evolve') {
       this.moodT = (this.moodT || 0) + dt;
       if (this.moodT > 4200) {
@@ -1269,6 +1319,8 @@ class Pet {
         } else if (this.t > T1 + 600) {
           this.enter('hop', {h: this.hopH});
           if (S.sleeping) this.d.then = () => this.sleep();
+          // A battle that arrived mid-evolution plays now (a Jogress's evolution hands over in `updateJoin`).
+          if (!this.joining && !this.fight) this.runLater();
         }
         break; }
     }

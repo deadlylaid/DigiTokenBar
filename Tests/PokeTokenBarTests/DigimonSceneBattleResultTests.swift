@@ -59,7 +59,7 @@ final class DigimonSceneBattleResultTests: XCTestCase {
         window.resetPet = () => {
           S.still = false; S.sleeping = false; S.mood = null;
           pet.bug = null; pet.bugIn = 1e9; pet.guests = []; pet.guest = null; pet.chip = null; pet.fight = null;
-          pet.parts = []; pet.callout = null; pet.working = false; pet.shots = []; pet.booms = []; pet.later = [];
+          pet.parts = []; pet.callout = null; pet.working = false; pet.shots = []; pet.booms = []; pet.later = []; pet.joining = null;
           pet.enter('idle', {dur: 1e9}); pet.x = pet.center() - 20; pet.facing = 1; pet.flipX = -1;
         };
         true
@@ -220,6 +220,166 @@ final class DigimonSceneBattleResultTests: XCTestCase {
             """)
             XCTAssertEqual(r["count"] as? Int, 0, "what is shown disagrees with the record: \(r["bad"] ?? "")")
             XCTAssertGreaterThan(ties + long, 0, "the set includes ties or the 12-attack limit")
+        }
+    }
+
+    // MARK: Jogress (merge) — the same protection, with its evolution first
+
+    /// Drives a Jogress the way the app sends it: the merge, then the evolution about 2.2 s later (`evolveAt`,
+    /// in 16 ms frames; earlier when the scene's frames lag behind the app's clock), with `cut` arriving at frame
+    /// `cutAt`. Returns the states in order (repeats folded) and the final look.
+    private func jogress(_ scene: DigimonScene, cut: String, cutAt: Int, evolveAt: Int, frames: Int = 900) async throws -> [String: Any] {
+        try await json(scene, """
+        (() => {
+          resetPet(); pet.key = 'agumon';
+          const cuts = {
+            none: () => {},
+            cheer: () => pet.setAgent({react: 'done'}),
+            notice: () => pet.setAgent({react: 'waiting'}),
+            jump: () => pet.jump(),
+            feed: () => pet.feed(),
+            sleep: () => { S.sleeping = true; pet.sleep(); },
+            graduate: () => pet.graduate(),
+            battle: () => pet.duel({foe: 'greymon', foeStage: 3, won: true, rounds: [{a: 'me', hit: true}]}),
+          };
+          pet.merge({partner: 'greymon'});
+          const states = [];
+          let flashed = false;
+          for (let i = 0; i < \(frames); i++) {
+            if (i === \(cutAt)) cuts['\(cut)']();
+            if (i === \(evolveAt)) pet.evolve('omnimon', false);
+            pet.update(16);
+            if (states[states.length - 1] !== pet.state) states.push(pet.state);
+            if (pet.state === 'merge' && pet.d.flashed) flashed = true;
+          }
+          const out = {states, key: pet.key, flashed, joining: !!pet.joining, later: pet.later.length};
+          S.sleeping = false;
+          return JSON.stringify(out);
+        })()
+        """)
+    }
+
+    private func withOmnimon(_ scene: DigimonScene) async throws {
+        scene.sprite(key: "omnimon", dataURI: try blockSprite(height: 40))
+        var loaded = false
+        for _ in 0..<50 where !loaded {
+            try await Task.sleep(for: .milliseconds(100))
+            loaded = (try? await js(scene, "!!assets['omnimon']")) as? Bool ?? false
+        }
+        XCTAssertTrue(loaded)
+    }
+
+    /// Anything the app or the coding agent sends mid-merge (food, cheer, call, jump, sleep, graduation, a battle)
+    /// used to cut the Jogress short. Now the merge plays to its flash, its evolution follows, and only then does
+    /// the thing that cut in happen.
+    func testAJogressPlaysThroughThenItsEvolutionThenWhatWaited() async throws {
+        try await scene { scene in
+            try await withOmnimon(scene)
+            let after = ["cheer": "hop", "notice": "hop", "jump": "hop", "feed": "eat", "sleep": "sleep",
+                         "graduate": "hop", "battle": "duel"]
+            for (cut, expected) in after {
+                let r = try await jogress(scene, cut: cut, cutAt: 60, evolveAt: 140)
+                let states = r["states"] as? [String] ?? []
+                XCTAssertEqual(states.first, "merge", "\(cut): \(r)")
+                XCTAssertEqual(r["flashed"] as? Bool, true, "\(cut): the merge reaches its flash: \(r)")
+                let evolve = try XCTUnwrap(states.firstIndex(of: "evolve"), "\(cut): \(r)")
+                XCTAssertEqual(Set(states[0..<evolve]).subtracting(["idle"]), ["merge"],
+                               "\(cut): nothing but the merge (and the wait for the app) before the evolution: \(r)")
+                let waited = try XCTUnwrap(states.lastIndex(of: expected), "\(cut): it happens in the end: \(r)")
+                XCTAssertGreaterThan(waited, evolve, "\(cut): only after the evolution: \(r)")
+                if cut != "battle" { XCTAssertEqual(r["key"] as? String, "omnimon", "\(cut): the Jogress result stays: \(r)") }
+                XCTAssertEqual(r["joining"] as? Bool, false, "\(cut): the Jogress is over: \(r)")
+            }
+        }
+    }
+
+    /// The Jogress's own evolution is never queued behind food or a cheer that came first: when the scene's
+    /// frames lag behind the app's 2.2 s and the evolution arrives mid-merge, it waits for the merge's end and
+    /// plays first; what came before it plays after it.
+    func testTheJogressEvolutionGoesFirstEvenWhenItArrivesMidMerge() async throws {
+        try await scene { scene in
+            try await withOmnimon(scene)
+            for cut in ["feed", "cheer"] {
+                let r = try await jogress(scene, cut: cut, cutAt: 30, evolveAt: 60)
+                let states = r["states"] as? [String] ?? []
+                let evolve = try XCTUnwrap(states.firstIndex(of: "evolve"), "\(cut): \(r)")
+                let waited = try XCTUnwrap(states.lastIndex(of: cut == "feed" ? "eat" : "hop"), "\(cut): \(r)")
+                XCTAssertLessThan(evolve, waited, "\(cut): the evolution before what arrived first: \(r)")
+                XCTAssertEqual(r["flashed"] as? Bool, true, "\(cut): the merge was not cut by its own early evolution: \(r)")
+                XCTAssertEqual(r["key"] as? String, "omnimon")
+            }
+        }
+    }
+
+    /// A Jogress sent while a battle plays waits for the battle's result (it used to replace the battle), and its
+    /// evolution queues behind it. If the evolution never comes (the app sends none when the sprite fails), what
+    /// waited still runs after a short wait.
+    func testAJogressWaitsForABattleAndNothingWaitsForever() async throws {
+        try await scene { scene in
+            try await withOmnimon(scene)
+            let r = try await json(scene, """
+            (() => {
+              resetPet(); pet.key = 'agumon';
+              pet.duel({foe: 'greymon', foeStage: 3, won: false, rounds: [{a: 'me', hit: false}, {a: 'foe', hit: true}]});
+              const states = []; let decided = false;
+              for (let i = 0; i < 1400; i++) {
+                if (i === 40) pet.merge({partner: 'greymon'});
+                if (i === 180) pet.evolve('omnimon', false);
+                pet.update(16);
+                if (pet.fight && !pet.fight.merge && pet.fight.done > 0) decided = true;
+                if (states[states.length - 1] !== pet.state) states.push(pet.state);
+              }
+              const battle = {states, decided, key: pet.key};
+              resetPet(); pet.key = 'agumon';
+              pet.merge({partner: 'greymon'});
+              const waits = [];
+              for (let i = 0; i < 700; i++) {
+                if (i === 30) pet.feed();
+                pet.update(16);
+                if (waits[waits.length - 1] !== pet.state) waits.push(pet.state);
+              }
+              return JSON.stringify({battle, noEvolution: {states: waits, joining: !!pet.joining, key: pet.key}});
+            })()
+            """)
+            let b = try XCTUnwrap(r["battle"] as? [String: Any]), states = b["states"] as? [String] ?? []
+            XCTAssertEqual(b["decided"] as? Bool, true, "the battle shows its result first: \(b)")
+            let duel = try XCTUnwrap(states.firstIndex(of: "duel"), "\(b)")
+            let merge = try XCTUnwrap(states.firstIndex(of: "merge"), "\(b)")
+            let evolve = try XCTUnwrap(states.firstIndex(of: "evolve"), "\(b)")
+            XCTAssertLessThan(duel, merge)
+            XCTAssertLessThan(merge, evolve)
+            XCTAssertEqual(b["key"] as? String, "omnimon")
+            let n = try XCTUnwrap(r["noEvolution"] as? [String: Any])
+            XCTAssertTrue((n["states"] as? [String] ?? []).contains("eat"), "food runs once the wait gives up: \(n)")
+            XCTAssertEqual(n["joining"] as? Bool, false)
+            XCTAssertEqual(n["key"] as? String, "agumon", "no evolution came, the look stays")
+        }
+    }
+
+    /// Same class, outside a Jogress: a battle pressed right as the Digimon evolves used to cut the evolution.
+    /// It now waits for the evolution, then plays through to its result.
+    func testABattleWaitsForAnEvolution() async throws {
+        try await scene { scene in
+            try await withOmnimon(scene)
+            let r = try await json(scene, """
+            (() => {
+              resetPet(); pet.key = 'agumon';
+              pet.evolve('omnimon', false);
+              const states = []; let decided = false;
+              for (let i = 0; i < 1400; i++) {
+                if (i === 30) pet.duel({foe: 'greymon', foeStage: 3, won: true, rounds: [{a: 'me', hit: true}, {a: 'foe', hit: false}]});
+                pet.update(16);
+                if (pet.fight && pet.fight.done > 0) decided = true;
+                if (states[states.length - 1] !== pet.state) states.push(pet.state);
+              }
+              return JSON.stringify({states, decided, key: pet.key});
+            })()
+            """)
+            let states = r["states"] as? [String] ?? []
+            let evolve = try XCTUnwrap(states.firstIndex(of: "evolve"), "\(r)"), duel = try XCTUnwrap(states.firstIndex(of: "duel"), "\(r)")
+            XCTAssertLessThan(evolve, duel, "the evolution first: \(r)")
+            XCTAssertEqual(r["key"] as? String, "omnimon", "the evolution finished: \(r)")
+            XCTAssertEqual(r["decided"] as? Bool, true, "then the battle reaches its result: \(r)")
         }
     }
 }
