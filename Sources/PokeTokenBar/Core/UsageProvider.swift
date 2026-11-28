@@ -33,6 +33,9 @@ struct ProviderEnrichment: Sendable {
     /// Rolling day-by-day totals (21 days → today, empty days as zeros).
     var recentDaily: [DailyUsage]?
     var periodsOK = false
+    /// Today by local hour, with the earlier days' same hours (#6). Gated by `periodsOK` like the
+    /// day series and built from the same entries.
+    var todayHourly: HourlySeries?
     /// Newest entry with tokens. Unlike week/month totals it does not reset at a calendar boundary,
     /// so it keeps the tab (and its official limits) of a provider used recently but not today (#336).
     var lastUsage: Date? = nil
@@ -71,6 +74,7 @@ extension ProviderEnrichment {
         result.monthTotal = month
         result.monthDaily = series
         result.recentDaily = recent
+        result.todayHourly = LocalUsageReader.hourlySeries(entries: entries, now: now)
         result.periodsOK = true
         // Zero-token `<synthetic>` records are not use: an installed-only provider stays hidden (#56).
         result.lastUsage = entries.lazy.filter { $0.total > 0 }.map(\.date).max()

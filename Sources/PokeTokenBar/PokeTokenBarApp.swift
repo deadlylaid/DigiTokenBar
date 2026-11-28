@@ -656,6 +656,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     /// Opening the app while it runs (Finder, Spotlight, `open -a`) shows the home window: the menu bar
     /// icon may be hidden behind the notch, and this is the way back in.
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        store.beginActivitySession()   // a new opening starts at the default chart
         homeWindow.show()
         return false
     }
@@ -706,6 +707,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     private func showPopover(route: (PopoverNavigation) -> Void = { _ in }) {
         guard let button = statusItem.button, !popover.isShown else { return }
         navigation.reset()   // 닫혔다 열리면 항상 Home 으로 (설정 화면 잔류 방지)
+        store.beginActivitySession()   // and the activity chart starts at the default again
         route(navigation)
         buildPopoverContent()   // 열 때 호스팅 트리 생성(닫힐 때 해제)
         // LSUIElement 앱이 비활성이면 팝오버 내부 버튼 클릭이 무시됨 — show 전에 활성화 보장

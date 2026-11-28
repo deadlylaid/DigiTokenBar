@@ -2110,6 +2110,52 @@ enum LocalUsageReader {
         return dailySeries(entries: entries, startDay: start, endDay: now, timeZone: timeZone)
     }
 
+    /// How many days before today the "Today by hour" chart averages. They lie well inside the
+    /// enrichment scan (`maxDailyTrendWindowDays`), so the average needs no extra read.
+    static let hourlyAverageDays = 7
+
+    /// Today's entries by local hour, plus the same hours over the `averageDays` days before today.
+    ///
+    /// The hour comes from the entry's own time in `timeZone` — the zone that made its `localDay` —
+    /// so an entry at 23:59 stays in hour 23 of its day and one at 00:00 opens the next day. On a DST
+    /// day an hour can be missing (spring forward) or happen twice (fall back); the chart keeps 24
+    /// fixed slots and a repeated hour adds up in its one slot. Today's slots sum to exactly
+    /// `daily(entries:localDay:)` for today: the same entries go through the same `Bucket`.
+    static func hourlySeries(entries: [Entry], now: Date, averageDays: Int = hourlyAverageDays,
+                             timeZone: TimeZone = .current) -> HourlySeries
+    {
+        var calendar = Calendar.current
+        calendar.timeZone = timeZone
+        let fmt = localDayFormatter(timeZone: timeZone)
+        let today = fmt.string(from: now)
+        let todayStart = calendar.startOfDay(for: now)
+        var earlierDays = Set<String>()
+        for back in stride(from: 1, through: max(0, averageDays), by: 1) {
+            if let day = calendar.date(byAdding: .day, value: -back, to: todayStart) {
+                earlierDays.insert(fmt.string(from: day))
+            }
+        }
+        var buckets = Array(repeating: Bucket(), count: 24)
+        var earlier = Array(repeating: 0, count: 24)
+        var active = Set<String>()
+        for e in entries {
+            let isToday = e.localDay == today
+            guard isToday || earlierDays.contains(e.localDay) else { continue }
+            let hour = min(23, max(0, calendar.component(.hour, from: e.date)))
+            if isToday {
+                buckets[hour].add(e)
+            } else if e.total > 0 {
+                earlier[hour] += e.total
+                active.insert(e.localDay)
+            }
+        }
+        let hours = buckets.enumerated().map { hour, bucket in
+            HourlyUsage(hour: hour, totalTokens: bucket.total, totalCost: bucket.cost,
+                        costCoverage: bucket.costCoverage)
+        }
+        return HourlySeries(day: today, hours: hours, earlierTokens: earlier, earlierActiveDays: active)
+    }
+
     /// 최근 5시간 롤링 윈도우 기반 활성 블록(번 레이트 추정용).
     static func activeBlock(entries: [Entry], now: Date) -> BlockUsage? {
         let windowStart = now.addingTimeInterval(-blockWindow)

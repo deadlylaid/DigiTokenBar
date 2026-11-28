@@ -48,23 +48,20 @@ final class ActivityVisualizationTests: XCTestCase {
         }
     }
 
-    /// Save and restore. An unknown rawValue falls back to the default — going back to a build
-    /// without that visualization, or a stray `defaults write`, must not leave the popover empty.
+    /// Save and restore of the default chart (Settings). An unknown rawValue falls back to the
+    /// default — going back to a build without that visualization, or a stray `defaults write`, must
+    /// not leave the popover empty. Session-only clicks and the carry-over: `DefaultActivityChartTests`.
     func testSelectionRoundTripsAndUnknownValuesFallBack() {
         let name = "vis-\(UUID().uuidString)"
         let suite = UserDefaults(suiteName: name)!
         defer { suite.removePersistentDomain(forName: name) }
 
-        suite.set(ActivityVisualization.recentHeatmap.rawValue, forKey: "activityVisualization")
-        XCTAssertEqual(stored(in: suite), .recentHeatmap)
+        suite.set(ActivityVisualization.recentHeatmap.rawValue, forKey: UsageStore.defaultActivityVisualizationKey)
+        XCTAssertEqual(UsageStore.storedDefaultActivityVisualization(suite), .recentHeatmap)
 
-        suite.set("someVisualizationFromTheFuture", forKey: "activityVisualization")
-        XCTAssertEqual(stored(in: suite), .default, "unknown values fall back to the default, never an empty popover")
-    }
-
-    private func stored(in suite: UserDefaults) -> ActivityVisualization {
-        ActivityVisualization(rawValue: suite.string(forKey: "activityVisualization") ?? "")
-            ?? .default
+        suite.set("someVisualizationFromTheFuture", forKey: UsageStore.defaultActivityVisualizationKey)
+        XCTAssertEqual(UsageStore.storedDefaultActivityVisualization(suite), .default,
+                       "unknown values fall back to the default, never an empty popover")
     }
 
     // MARK: Grid geometry

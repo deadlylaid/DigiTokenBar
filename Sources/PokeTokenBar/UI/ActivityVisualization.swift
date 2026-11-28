@@ -19,6 +19,9 @@ enum ActivityVisualization: String, CaseIterable, Sendable {
     /// The last 16 weeks as a calendar grid. Bars compare this month's amounts; the grid shows
     /// weekday patterns ("barely anything on weekends") at a glance, across months.
     case recentHeatmap
+    /// Today hour by hour, with the earlier days' same hours faintly behind (#6). The others answer
+    /// "which days"; this one answers "which hours" — the rhythm of a coding day.
+    case todayByHour
 
     static let `default` = ActivityVisualization.monthlyBars
 
@@ -34,6 +37,7 @@ enum ActivityVisualization: String, CaseIterable, Sendable {
         switch self {
         case .monthlyBars:    return l.dailyTrend
         case .recentHeatmap: return l.recentHeatmap
+        case .todayByHour:   return l.todayByHour
         }
     }
 }
@@ -60,6 +64,10 @@ struct ActivityPanel: View {
     let showsCost: Bool
     var window: Binding<DailyTrendWindow>? = nil
     var hasAvailableHistory = false
+    /// Today by hour across providers, for `todayByHour`. `UsageStore.todayHourlyTotals`.
+    var hourly: HourlySeries? = nil
+    /// The hour it is now (0–23), injected like `today` so the chart never reads the clock.
+    var currentHour = 0
     let today: String
     let l: L
     let onCycle: () -> Void
@@ -83,6 +91,10 @@ struct ActivityPanel: View {
             ActivityHeatmap(series: heatmapSeries ?? series, history: history,
                             showsCost: showsCost, today: today, l: l,
                             trailing: AnyView(PageDots(current: visualization)))
+        case .todayByHour:
+            TodayHourlyChart(series: hourly ?? .empty(day: today), showsCost: showsCost,
+                             currentHour: currentHour, l: l,
+                             trailing: AnyView(PageDots(current: visualization)))
         }
     }
 }

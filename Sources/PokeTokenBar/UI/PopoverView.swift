@@ -220,9 +220,11 @@ struct PopoverView: View {
                           showsCost: store.showsCost,
                           window: Binding(get: { store.dailyTrendWindow }, set: { store.dailyTrendWindow = $0 }),
                           hasAvailableHistory: store.hasDailyTrendHistory,
+                          hourly: store.todayHourlyTotals(),
+                          currentHour: Calendar.current.component(.hour, from: Date()),
                           today: LocalUsageReader.todayKey(),
                           l: l,
-                          onCycle: { store.activityVisualization = store.activityVisualization.next })
+                          onCycle: { store.cycleActivityVisualization() })
 
             // 연결된 서비스가 2개 이상이면 작은 탭으로 서비스별 상세를 넘나든다
             // (합계는 위에 유지 — 상세·한도만 탭 스코프).

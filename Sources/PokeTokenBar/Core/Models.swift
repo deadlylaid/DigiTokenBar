@@ -827,6 +827,48 @@ public struct GrokCreditStatus: Decodable, Sendable, Equatable {
     }
 }
 
+// MARK: - Today by hour (#6)
+
+/// One local hour of a day (0–23), summed like a `DailyUsage`.
+struct HourlyUsage: Sendable, Equatable {
+    let hour: Int
+    var totalTokens = 0
+    var totalCost = 0.0
+    var costCoverage: CostCoverage = .empty
+    var usageCost: UsageCost { UsageCost(amount: totalCost, coverage: costCoverage) }
+}
+
+/// A day's usage by local hour, plus what the same hours held on the days before it, for the
+/// "Today by hour" chart. Built once per refresh from entries the enrichment scan already loaded
+/// (`LocalUsageReader.hourlySeries`), never while drawing.
+///
+/// The earlier days travel as a sum and a set of days rather than a ready average: providers are
+/// added together first (`UsageStore.todayHourlyTotals`), and an average of averages would divide
+/// each provider by its own active days.
+struct HourlySeries: Sendable, Equatable {
+    /// The local day (`yyyy-MM-dd`) of `hours`. A series built before midnight is not today's.
+    var day: String
+    /// Always 24 slots, hour 0…23.
+    var hours: [HourlyUsage]
+    /// Tokens per hour summed over the earlier days (`LocalUsageReader.hourlyAverageDays` before `day`).
+    var earlierTokens: [Int]
+    /// The earlier days that had any usage: the average divides by these, so a day off does not
+    /// flatten the rhythm of the days you did code.
+    var earlierActiveDays: Set<String>
+
+    static func empty(day: String) -> HourlySeries {
+        HourlySeries(day: day, hours: (0..<24).map { HourlyUsage(hour: $0) },
+                     earlierTokens: Array(repeating: 0, count: 24), earlierActiveDays: [])
+    }
+
+    var totalTokens: Int { hours.reduce(0) { $0 + $1.totalTokens } }
+    /// Average tokens in each hour over the earlier active days; all zero when there were none.
+    var averageTokens: [Double] {
+        guard !earlierActiveDays.isEmpty else { return Array(repeating: 0, count: 24) }
+        return earlierTokens.map { Double($0) / Double(earlierActiveDays.count) }
+    }
+}
+
 // MARK: - Provider snapshot
 
 struct ProviderSnapshot: Sendable, Identifiable {
@@ -846,6 +888,8 @@ struct ProviderSnapshot: Sendable, Identifiable {
     var reportsCost: Bool = true
     /// Mirrors `ProviderEnrichment.lastUsage`.
     var lastUsage: Date? = nil
+    /// Today by local hour (`ProviderEnrichment.todayHourly`), or `nil` before phase 2 filled it.
+    var todayHourly: HourlySeries? = nil
 
     var id: String { providerID }
     var todayTotalTokens: Int { today?.totalTokens ?? 0 }

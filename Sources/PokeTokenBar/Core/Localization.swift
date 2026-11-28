@@ -84,6 +84,39 @@ struct L {
         t("최근 16주", "16 weeks", "16週間", "16 semanas", "16 semaines", "16 semanas", "16 Wochen",
           "16 недель")
     }
+    /// "Today by hour" chart title (#6). Short like the others: the caption also carries the hour's
+    /// readout and the peak.
+    var todayByHour: String {
+        t("오늘 시간대별", "Today by hour", "今日の時間別", "Hoy por hora", "Aujourd'hui par heure",
+          "Hoje por hora", "Heute nach Stunde", "Сегодня по часам")
+    }
+    /// The faint bars behind today's: the same hours on the earlier days that had usage.
+    /// `days` is how many of the last `window` days had any.
+    func hourlyAverageLegend(days: Int, window: Int) -> String {
+        t("지난 \(window)일 중 쓴 \(days)일의 평균", "Average of \(days) active of the last \(window) days",
+          "直近\(window)日のうち利用した\(days)日の平均", "Media de \(days) días con uso de los últimos \(window)",
+          "Moyenne de \(days) jours actifs sur les \(window) derniers", "Média de \(days) dias com uso dos últimos \(window)",
+          "Schnitt aus \(days) aktiven der letzten \(window) Tage", "Среднее за \(days) акт. дн. из последних \(window)")
+    }
+    /// Settings: which activity chart the popover opens on.
+    var defaultActivityView: String {
+        t("기본 그래프", "Default chart", "既定のグラフ", "Gráfico predeterminado", "Graphique par défaut",
+          "Gráfico padrão", "Standarddiagramm", "График по умолчанию")
+    }
+    var defaultActivityViewHint: String {
+        t("팝오버를 열 때마다 이 그래프로 시작해요. 그래프를 누르면 그때만 다음 그래프를 보여 줘요.",
+          "The popover opens on this chart. Clicking the chart shows the next one until it closes.",
+          "ポップオーバーは毎回このグラフで開きます。クリックすると閉じるまで次のグラフを表示します。",
+          "El panel se abre con este gráfico. Al hacer clic se muestra el siguiente hasta cerrarlo.",
+          "Le panneau s'ouvre sur ce graphique. Un clic affiche le suivant jusqu'à la fermeture.",
+          "O painel abre com este gráfico. Clicar mostra o próximo até fechar.",
+          "Das Popover öffnet mit diesem Diagramm. Ein Klick zeigt bis zum Schließen das nächste.",
+          "Панель открывается с этим графиком. Щелчок показывает следующий до закрытия.")
+    }
+    /// Hover tooltip: the earlier days' average for the hovered hour.
+    var hourlyAverageShort: String {
+        t("평균", "Avg", "平均", "Media", "Moy.", "Média", "Schnitt", "Сред.")
+    }
     /// 활동 시각화를 클릭으로 바꿀 수 있다는 안내(툴팁). 클릭 순환은 발견성이 낮아
     /// 점(`PageDots`)과 이 툴팁이 유일한 단서다.
     var activitySwitchHint: String {

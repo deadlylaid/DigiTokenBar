@@ -144,11 +144,39 @@ final class UsageStore {
     var animationQuality: AnimationQuality {
         didSet { defaults.set(animationQuality.rawValue, forKey: "animationQuality") }
     }
-    /// 팝오버가 그릴 활동 시각화. 저장된 rawValue 를 모르면 기본값으로 내려앉으므로, 시각화를
-    /// 덜어낸 빌드로 되돌아가거나 `defaults write` 로 아무 값이나 들어와도 팝오버가 비지 않는다
-    /// (`LimitDisplayMode` 와 같은 관대 복원).
-    var activityVisualization: ActivityVisualization {
-        didSet { defaults.set(activityVisualization.rawValue, forKey: "activityVisualization") }
+    /// The activity chart the popover opens on, picked in Settings. Saved; an unknown stored rawValue
+    /// falls back to `ActivityVisualization.default`, so a build without that chart, or any value from
+    /// `defaults write`, never leaves the popover empty (the same lenient restore as `LimitDisplayMode`).
+    /// Choosing it also shows it now.
+    var defaultActivityVisualization: ActivityVisualization {
+        didSet {
+            defaults.set(defaultActivityVisualization.rawValue, forKey: Self.defaultActivityVisualizationKey)
+            activityVisualization = defaultActivityVisualization
+        }
+    }
+    /// The chart shown right now. Each opening of the popover or the home window starts at the default
+    /// (`beginActivitySession`); a click moves on (`cycleActivityVisualization`) for that opening only
+    /// and is not saved.
+    private(set) var activityVisualization: ActivityVisualization
+    nonisolated static let defaultActivityVisualizationKey = "defaultActivityVisualization"
+    /// Before the default became a setting, the last clicked chart was saved here and reopened.
+    /// Read once, on the first launch without the new key, so an existing user's view does not change.
+    nonisolated static let legacyActivityVisualizationKey = "activityVisualization"
+
+    /// A new opening shows the default chart again.
+    func beginActivitySession() { activityVisualization = defaultActivityVisualization }
+    /// The click on the chart: the next chart, for this opening only.
+    func cycleActivityVisualization() { activityVisualization = activityVisualization.next }
+
+    /// The default chart from `defaults`: the setting when there is one, otherwise the old
+    /// last-clicked chart carried over (then written under the new key, so the carry-over runs once).
+    nonisolated static func storedDefaultActivityVisualization(_ d: UserDefaults) -> ActivityVisualization {
+        if let stored = d.string(forKey: defaultActivityVisualizationKey) {
+            return ActivityVisualization(rawValue: stored) ?? .default
+        }
+        let carried = ActivityVisualization(rawValue: d.string(forKey: legacyActivityVisualizationKey) ?? "") ?? .default
+        d.set(carried.rawValue, forKey: defaultActivityVisualizationKey)
+        return carried
     }
     // 알림(독립 토글)
     var limitNotifications: Bool {
@@ -539,6 +567,32 @@ final class UsageStore {
         return byDay.values.sorted { $0.date < $1.date }
     }
 
+    /// Today by local hour summed across providers (#6), for the "Today by hour" chart.
+    ///
+    /// Each provider bucketed its own entries once per refresh (`LocalUsageReader.hourlySeries`);
+    /// this only adds 24 slots per provider. A series from another day (phase 2 not yet rerun after
+    /// midnight) is left out rather than shown as today. Cost follows `monthDailyTotals`: tokens
+    /// from every provider, cost only from providers that report it. The earlier days are summed
+    /// and their active days united before averaging, so the average stays per active day.
+    func todayHourlyTotals(today: String = LocalUsageReader.todayKey()) -> HourlySeries {
+        var merged = HourlySeries.empty(day: today)
+        for snapshot in snapshots {
+            guard let series = snapshot.todayHourly, series.day == today else { continue }
+            for slot in series.hours where merged.hours.indices.contains(slot.hour) {
+                merged.hours[slot.hour].totalTokens += slot.totalTokens
+                if snapshot.reportsCost {
+                    merged.hours[slot.hour].totalCost += slot.totalCost
+                    merged.hours[slot.hour].costCoverage.merge(slot.costCoverage)
+                }
+            }
+            for (hour, tokens) in series.earlierTokens.enumerated() where merged.earlierTokens.indices.contains(hour) {
+                merged.earlierTokens[hour] += tokens
+            }
+            merged.earlierActiveDays.formUnion(series.earlierActiveDays)
+        }
+        return merged
+    }
+
     var dailyTrendTotals: [DailyUsage] {
         dailyTrendTotals(for: dailyTrendWindow)
     }
@@ -874,8 +928,9 @@ final class UsageStore {
         limitDisplayMode = LimitDisplayMode(rawValue: d.string(forKey: "limitDisplayMode") ?? "") ?? .used
         dailyTrendWindow = DailyTrendWindow(rawValue: d.string(forKey: "dailyTrendWindow") ?? "") ?? .d14
         menuLimitColorMode = MenuLimitColorMode(rawValue: d.string(forKey: "menuLimitColorMode") ?? "") ?? .gauge
-        activityVisualization = ActivityVisualization(
-            rawValue: d.string(forKey: "activityVisualization") ?? "") ?? .default
+        let startingVisualization = Self.storedDefaultActivityVisualization(d)
+        defaultActivityVisualization = startingVisualization
+        activityVisualization = startingVisualization
         limitNotifications = d.object(forKey: "limitNotifications") as? Bool ?? true
         companionNotifications = d.object(forKey: "companionNotifications") as? Bool ?? true
         updateNotificationsEnabled = d.object(forKey: "updateNotificationsEnabled") as? Bool ?? true
@@ -1071,8 +1126,11 @@ final class UsageStore {
             var prevMonthDaily: [DailyUsage]?
             var prevRecentDaily: [DailyUsage]?
             var prevLastUsage: Date?
+            var prevTodayHourly: HourlySeries?
             if let previous = snapshots.first(where: { $0.providerID == provider.id }) {
                 prevLastUsage = previous.lastUsage
+                // Same date guard as `prevToday`: yesterday's hours are not carried past midnight.
+                if previous.todayHourly?.day == todayKey { prevTodayHourly = previous.todayHourly }
                 if previous.today?.date == todayKey { prevToday = previous.today }
                 prevBlock = previous.activeBlock
                 // 주/월 누적도 이어받는다 — phase 2 가 다시 채우기 전까지 nil 로 비면
@@ -1106,7 +1164,8 @@ final class UsageStore {
                 recentDaily: prevRecentDaily,
                 fetchedAt: Date(),
                 reportsCost: provider.reportsCost,
-                lastUsage: prevLastUsage)
+                lastUsage: prevLastUsage,
+                todayHourly: prevTodayHourly)
             // Keep history visible while phase 2 refreshes it, including on idle days.
             if snapshot.hasDisplayableUsage { newSnapshots.append(snapshot) }
         }
@@ -1145,7 +1204,8 @@ final class UsageStore {
                             recentDaily: enrichment.periodsOK ? enrichment.recentDaily : nil,
                             fetchedAt: Date(),
                             reportsCost: provider.reportsCost,
-                            lastUsage: enrichment.periodsOK ? enrichment.lastUsage : nil)
+                            lastUsage: enrichment.periodsOK ? enrichment.lastUsage : nil,
+                            todayHourly: enrichment.periodsOK ? enrichment.todayHourly : nil)
                         if snapshot.hasDisplayableUsage { snapshots.append(snapshot) }
                     }
                     continue
@@ -1157,6 +1217,7 @@ final class UsageStore {
                     snapshots[index].monthDaily = enrichment.monthDaily
                     snapshots[index].recentDaily = enrichment.recentDaily
                     snapshots[index].lastUsage = enrichment.lastUsage
+                    snapshots[index].todayHourly = enrichment.todayHourly
                 }
             }
         }

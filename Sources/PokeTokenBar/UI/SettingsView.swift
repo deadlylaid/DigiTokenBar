@@ -236,6 +236,22 @@ struct SettingsView: View {
                 }
                 .labelsHidden().pickerStyle(.menu).fixedSize()
             }
+            Divider()
+            // The chart the popover opens on. `allCases`, so a chart added later is offered on its own.
+            groupRow {
+                VStack(alignment: .leading, spacing: 1) {
+                    Text(l.defaultActivityView)
+                    Text(l.defaultActivityViewHint).font(.caption2).foregroundStyle(.tertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer()
+                Picker(l.defaultActivityView, selection: $store.defaultActivityVisualization) {
+                    ForEach(ActivityVisualization.allCases, id: \.self) { visualization in
+                        Text(visualization.title(l)).tag(visualization)
+                    }
+                }
+                .labelsHidden().pickerStyle(.menu).fixedSize()
+            }
             if store.claudeAccounts.count > 1 {
                 Divider()
                 trackedAccountRow(store)
