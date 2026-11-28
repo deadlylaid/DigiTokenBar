@@ -51,7 +51,7 @@ struct TodayHourlyChart: View {
                 Text(l.peakDay)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
-                Text(TodayHourlyMetrics.stamp(peakHour))
+                Text("\(TodayHourlyMetrics.stamp(peakHour)) \(TokenFormatter.compact(series.hours[peakHour].totalTokens))")
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .monospacedDigit()

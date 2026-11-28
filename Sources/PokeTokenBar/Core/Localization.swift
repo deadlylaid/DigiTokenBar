@@ -93,7 +93,7 @@ struct L {
     /// The faint bars behind today's: the same hours on the earlier days that had usage.
     /// `days` is how many of the last `window` days had any.
     func hourlyAverageLegend(days: Int, window: Int) -> String {
-        t("지난 \(window)일 중 쓴 \(days)일의 평균", "Average of \(days) active of the last \(window) days",
+        t("지난 \(window)일 중 쓴 \(days)일의 평균", "Average of \(days) active days in the last \(window)",
           "直近\(window)日のうち利用した\(days)日の平均", "Media de \(days) días con uso de los últimos \(window)",
           "Moyenne de \(days) jours actifs sur les \(window) derniers", "Média de \(days) dias com uso dos últimos \(window)",
           "Schnitt aus \(days) aktiven der letzten \(window) Tage", "Среднее за \(days) акт. дн. из последних \(window)")
@@ -104,14 +104,14 @@ struct L {
           "Gráfico padrão", "Standarddiagramm", "График по умолчанию")
     }
     var defaultActivityViewHint: String {
-        t("팝오버를 열 때마다 이 그래프로 시작해요. 그래프를 누르면 그때만 다음 그래프를 보여 줘요.",
-          "The popover opens on this chart. Clicking the chart shows the next one until it closes.",
-          "ポップオーバーは毎回このグラフで開きます。クリックすると閉じるまで次のグラフを表示します。",
-          "El panel se abre con este gráfico. Al hacer clic se muestra el siguiente hasta cerrarlo.",
-          "Le panneau s'ouvre sur ce graphique. Un clic affiche le suivant jusqu'à la fermeture.",
-          "O painel abre com este gráfico. Clicar mostra o próximo até fechar.",
-          "Das Popover öffnet mit diesem Diagramm. Ein Klick zeigt bis zum Schließen das nächste.",
-          "Панель открывается с этим графиком. Щелчок показывает следующий до закрытия.")
+        t("팝오버는 늘 이 그래프로 열려요. 누르면 다른 그래프도 볼 수 있어요.",
+          "The popover always opens on it. Click the chart to see the others.",
+          "常にこのグラフで開きます。クリックで他のグラフも見られます。",
+          "Siempre se abre con este. Haz clic para ver los demás.",
+          "S'ouvre toujours sur celui-ci. Cliquez pour voir les autres.",
+          "Sempre abre com este. Clique para ver os outros.",
+          "Öffnet immer mit diesem. Klick zeigt die anderen.",
+          "Всегда открывается с ним. Щелчок покажет другие.")
     }
     /// Hover tooltip: the earlier days' average for the hovered hour.
     var hourlyAverageShort: String {
